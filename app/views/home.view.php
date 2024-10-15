@@ -1,29 +1,35 @@
-<?php require "components/navbar.php"?>
-<?php
-$Root=ROOT;
-// variables should pass to navbar component
-$currentPage = "home";
-$menuItems = [
-    "Home" => "$Root/home",
-    "About" => "$Root/home/about",
-    "Services" => "$Root/home/services",
-    "Contact" => "$Root/home/contact"
-];
-
-// Require the navbar and pass data
-require 'components/navbar.php';
-?>
-
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    
-    <title>MinuteMate</title>
-    <link rel="favicon" href="<?= ROOT ?>/img.png" type="image/png">
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minute Mate - Welcome</title>
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/home.style.css">
 </head>
 <body>
-<?php echo "$currentPath"; ?>
-<h1>Hello! I'm Home page</h1>
-<img src="<?= ROOT ?>/assets/images/img.png">
+
+    <div class="container">
+        <!-- Left Section -->
+        <div class="left-section">
+            <div class="left-container">
+            <img src="<?=ROOT?>/assets/images/img.png" alt="minutemate-logo" class="minutemate-img rotation">
+            <h1> <span class="welcome-txt">Welcome to </span>Minute Mate</h1>
+            
+            <p class="sub-heading">-The Meeting Minutes Management System of UCSC-</p>
+            <p class="description">
+                Minute Mate is here to help you streamline your meeting processes, 
+                making it easier to manage memos and keep track of minutes all in one place.
+            </p>
+            <a href="<?=ROOT?>/login" class="btn">Sign In</a>
+        </div>
+        </div>
+
+        <!-- Right Section (Image) -->
+        <div class="right-section">
+        <img src="<?=ROOT?>/assets/images/logo.jpg" alt="ucsc-logo" class="img ucsc-img">
+            <img src="<?=ROOT?>/assets/images/welcome.png" alt="Welcome-image" class="img">
+        </div>
+    </div>
+
 </body>
+</html>

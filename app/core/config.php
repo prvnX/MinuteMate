@@ -26,4 +26,4 @@ define("APP_VERSION","1.0.0");
 define("APP_AUTHOR","Minutemate Team");
 
 /*True -> show errors (debug mode on) */
-define("DEBUG",false);
+define("DEBUG",true);
