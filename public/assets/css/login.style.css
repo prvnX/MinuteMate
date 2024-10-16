@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    height: 100vh;
+    background-color: #ffffff;
+}
+/*Left Section*/
+.login-container .left-container{
+    display: flex;
+    flex:60%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    background-color: #ffffff;
+}
+.left-container .login-img{
+    width: 70%;
+}
+
+/*Right Section*/
+.right-container h1{
+    font-family:  ubuntu,sans-serif;
+    font-size: 3rem;
+    color: #0743A5;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+.login-container .right-container{
+    display: flex;
+    flex:40%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    background-color: #E3F5F9;
+    border-radius: 10rem 0 0 10rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+}
+.right-container .minutemate-logo{
+    width: 40%;
+}
+.right-container form{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 0rem;
+}
+.input-group{
+    width: 94%;
+}
+.right-container form label{
+    display: block;
+}
+.right-container form input{
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0.5px solid #0743A5;
+    border-radius: 2rem;
+    outline: none;
+    font-size: 1rem;
+    color:#0743A5;
+}
+form .btn-long{
+    background-color: #0743A5;
+    color: #ffffff;
+    padding: 1rem;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2rem;
+}
+.login-container a{
+    text-decoration: none;
+    color: #0743A5;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+@media screen and (max-width: 768px){
+    .login-container .left-container{
+        display: none;
+    }
+    .login-container .right-container{
+        border-radius: 0;
+    }
+}
+@media screen and (max-width: 480px){
+    .login-container .left-container{
+        display: none;
+    }
+    .login-container .right-container{
+        border-radius: 0;
+    }
+}
+ 
+ 
