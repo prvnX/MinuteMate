@@ -16,11 +16,11 @@
             <form action="<?=ROOT?>/login" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>
-                    <input type="text" name="username" id="username" required>
+                    <input type="text" name="username" id="username" placeholder="Enter Your Username" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" required>
+                    <input type="password" name="password" id="password" placeholder="Enter Your Password" required>
                 </div>
                 <button type="submit" class="btn-long">Sign In</button>
             </form>
