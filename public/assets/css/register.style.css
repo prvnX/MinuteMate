@@ -1,0 +1,64 @@
+@import url(MinuteMate_Css_Styles/common_styles.css);
+body{
+    background-color: #E3F5F9;
+}
+.flex-container{
+    background-color: #E3F5F9;
+}
+.register-right-container{
+    background-color: white;
+    padding: 1rem;
+    height: 85vh;
+    width: 60vh;
+    margin-left: 10rem;
+    border-radius: 3rem;
+    box-shadow: 0 1px 50px rgba(0, 0, 0, 0.2);
+}
+.register-left-container img{
+    width: 45rem;
+    margin-left: 0px;
+}
+.register-left-container{
+    padding: 2rem;
+    height: 80vh;
+    width: 60vh;
+}
+.sub-heading{
+    font-size: 2.5rem;
+    
+}
+.register-right-container form label{
+    display: block;
+}
+
+.radio-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 1rem;
+    margin-left: 3rem;
+}
+.radio-group .radio-btn{
+    font-size: large;
+    width: 20px;
+    height: 20px;
+    margin-right: 1rem;
+    cursor: pointer;
+    accent-color: #6949f4;
+}
+.radio-group label{
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+.register-right-container p{
+    margin-top: 1rem;
+}
+.roundedge-input-text{
+    height:10px;
+    padding: 0.9rem;
+    margin: 0.5rem;
+}
+.register-right-container .btn-long{
+    width: 95%;
+}
