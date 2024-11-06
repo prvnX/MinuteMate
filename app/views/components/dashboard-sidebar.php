@@ -5,7 +5,17 @@
     <body>
         <div class="sidebar">
             <div class="sidebar-header">
-                <h1>Good Morning</h1>
+                <?php
+                $currentTime = date("H:i");
+                if ($currentTime >= "06:00" && $currentTime < "12:00") {
+                    $greeting = "Good Morning";
+                } elseif ($currentTime >= "12:00" && $currentTime < "18:00") {
+                    $greeting = "Good Afternoon";
+                } else {
+                    $greeting = "Good Evening";
+                }
+                ?>
+                <h1><?= $greeting ?></h1>
                 <p><?= $name ?></p>
             </div>
             <div class="notifications">
