@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+nav {
+    background-color:#c5edf5;
+    padding: 10px;
+    display: flex;
+    height: 40px;
+    border-radius: 10px;
+    width: 100%;
+}
+nav h1 {
+    color: #0717A5;
+    margin: 0;
+    padding: 0;
+    display: inline;
+    font-family: "Kaushan Script", cursive;
+    cursor: pointer;
+    font-size: 2rem;
+    
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+}
+nav ul li {
+    margin: 0 15px;
+}
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+nav ul li a.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+nav ul li a:hover {
+    text-decoration: underline;
+}
+nav form button {
+    margin: 0px 0 10px 0px ;
+    background-color: white;
+    height: 30px;
+    position: relative;
+    top:5px;
+    right:4px;
+    border: solid 1px #0717A5;
+    border-radius: 5px;
+    cursor: pointer;
+}
+nav form{
+    
+    display: inline;
+}
+nav button .search-icon{
+    width: 20px;
+    display: inline;
+    margin: 0;
+    padding: 0;
+
+
+}
+nav form .search-bar{
+    display: inline;
+    width: 600px;
+    margin: 0px 0 10px 200px;
+    border: solid 1px #0717A5;
+    height: 32px;
+    border-radius: 5px ;
+}
+.nav-icon{
+    width:25px;
+    margin: 0 30px;
+    
+}
+.nav-icon-list{
+    margin-left: 100px;
+    position: relative;
+    bottom: 5px;
+}
+@media only screen and (max-width: 768px){
+    nav h1 {
+        font-size: 1.4rem;
+        position: relative;
+        bottom: 10px;
+
+    }
+    nav {
+        height: 50px;
+    }
+    nav form{
+        width: 100px;
+    }
+    nav form .search-bar{
+        width: 200px;
+        margin: 0px 0 10px 10px;
+    }
+    nav form button{
+        margin: 0;
+        display: inline;
+        position: relative;
+        top:-40px;
+        left:210px;
+
+    }
+}
+@media  screen and (max-width: 468px) {
+    nav h1 {
+        font-size: 1.2rem;
+        position: relative;
+        bottom: 10px;
+    }
+    nav {
+        height: 50px;
+        width: 768px;
+    }
+    nav form{
+        width: 100px;
+    }
+    nav form .search-bar{
+        width: 200px;
+        margin: 0px 0 10px 10px;
+    }
+    nav form button{
+        margin: 0;
+        display: inline;
+        position: relative;
+        top:-40px;
+        left:210px;
+
+    }
+    
+}
