@@ -1,9 +1,11 @@
 <?php
 class Secretary extends Controller {
     public function index() {
-        echo "This is Secretary Controller";
         $this->view("secretary/dashboard");
 
     }
+    public function search() {
+        echo "search";
+        $this->view("404");
+    }
 }
-echo "This is Secretary Controller";

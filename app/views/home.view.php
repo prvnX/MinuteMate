@@ -24,7 +24,7 @@
         </div>
         </div>
 
-        <!-- Right Section (Image) -->
+        <!-- Right Section -->
         <div class="right-section">
         <img src="<?=ROOT?>/assets/images/logo.jpg" alt="ucsc-logo" class="img ucsc-img">
             <img src="<?=ROOT?>/assets/images/welcome.png" alt="Welcome-image" class="img">

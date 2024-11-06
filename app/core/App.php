@@ -1,3 +1,4 @@
+
 <?php
 class App{ 
     private $controller='Home';
@@ -33,4 +34,5 @@ class App{
         call_user_func_array([$controller,$this->method],$URL);
     }
 }
+?>
 

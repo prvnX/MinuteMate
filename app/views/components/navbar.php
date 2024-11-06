@@ -1,42 +1,28 @@
+<head>
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/component-styles/navbar.style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
 <?php
 if (isset($menuItems)) {
 ?>
 <nav>
+    <h1>Minute Mate</h1>
+    <form action="<?=ROOT."/".$user?>/search" method="post">
+        <input type="text" name="search" placeholder="Search here..." autocomplete="off" class="search-bar" required>
+        <button type="submit" ><img src="<?=ROOT?>/assets/images/navbar-images/search.png" class="search-icon"></button>
+    </form>
+    <div class="nav-icon-list">
     <ul>
         <?php foreach ($menuItems as $name => $url) : ?>
             <li><a href="<?= $url ?>" class="<?= $currentPage == strtolower($name) ? 'active' : '' ?>">
-                <?= $name ?>
+                <img src="<?= ROOT."/assets/images/navbar-images/".$name.".png" ?>" alt="<?= $name ?>" class="nav-icon">
             </a></li>
+            
         <?php endforeach; ?>
     </ul>
+    </div>
 </nav>
 <?php
 }
 ?>
-
-<style>
-    nav {
-        background-color: #333;
-        padding: 10px;
-    }
-    nav ul {
-        list-style: none;
-        display: flex;
-        justify-content: space-around;
-    }
-    nav ul li {
-        margin: 0 15px;
-    }
-    nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-size: 18px;
-    }
-    nav ul li a.active {
-        font-weight: bold;
-        text-decoration: underline;
-    }
-    nav ul li a:hover {
-        text-decoration: underline;
-    }
-</style>

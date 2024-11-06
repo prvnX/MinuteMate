@@ -1,0 +1,14 @@
+body{
+    padding:0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+h1{
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #4a7aff;
+    letter-spacing: 1px;
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+}
