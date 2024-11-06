@@ -2,7 +2,7 @@
 
 
 .calendar-container {
-    margin: 100px auto;
+    margin: 0 auto;
     max-width: 350px;
     background: #f8f9ff;
     border-radius: 16px;
@@ -215,45 +215,4 @@ input[type="date"], input[type="text"], select {
     opacity: 0;
     transition: opacity 0.2s ease;
 }
-@media (max-width: 600px) {
-    .calendar-container th,
-    .calendar-container td {
-        padding: 5px;
-        font-size: 0.8rem; /* Smaller font size for mobile */
-    }
 
-    /* Adjust layout to single-column for days and weeks */
-    .calendar-container table {
-        display: block;
-    }
-
-    .calendar-container tr {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-    }
-
-    .calendar-container th, 
-    .calendar-container td {
-        width: calc(100% / 7); /* 7 columns for days of the week */
-    }
-
-    /* Hide table borders on mobile for a cleaner look */
-    .calendar-container td, .calendar-container th {
-        border: none;
-    }
-}
-
-/* Extra small screens (very narrow mobile screens) */
-@media (max-width: 468px) {
-    .calendar-container th,
-    .calendar-container td {
-        font-size: 0.7rem;
-        padding: 3px;
-    }
-
-    /* Stack days vertically if needed */
-    .calendar-container table {
-        width: auto;
-    }
-}
