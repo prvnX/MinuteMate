@@ -13,11 +13,47 @@
     require_once("../app/views/components/navbar.php"); //call the navbar component
     ?>
     <div class="dashboard-container">
-    <div class="dashboard-buttons-container">
-        <h1>Dashboard</h1>
-        <h2>Welcome, <?=$name?></h2>
+    <div class="dashboard-button-container">
+    <div class="card">
+    <img src="<?=ROOT?>/assets/images/create-minute.png" alt="Review Student Memos">
+    <a href="<?=ROOT?>/secretary/createminute">
+    <button class="card-button">Create a Minute</button>
+    </a>
+      
     </div>
-    <div>
+    <div class="card">
+    <img src="<?=ROOT?>/assets/images/enter memo.jpg" alt="Enter a Memo">
+    <a href="<?=ROOT?>/secretary/entermemo">
+    <button class="card-button">Enter a Memo</button>
+    </a>
+      
+    </div>
+    <div class="card">
+      <img src="<?=ROOT?>/assets/images/view minutes.jpg" alt="View Minutes">
+      <a href="<?=ROOT?>/secretary/viewminutes">
+      <button class="card-button">View Minutes</button>
+        </a>
+    </div>
+    <div class="card">
+      <img src="<?=ROOT?>/assets/images/view submitted memos.jpg" alt="View Submitted Memos">
+        <a href="<?=ROOT?>/secretary/viewsubmittedmemos">
+      <button class="card-button">View Memos</button>
+        </a>
+    </div>
+    <div class="card">
+
+      <img src="<?=ROOT?>/assets/images/view memo report.jpeg" alt="View Memo Reports">
+        <a href="<?=ROOT?>/secretary/viewmemoreports">
+      <button class="card-button">View Memo Reports</button>
+        </a>
+    </div>
+    <div class="card">
+      <img src="<?=ROOT?>/assets/images/view minute report.png" alt="View Minute Report">
+        <a href="<?=ROOT?>/secretary/viewminutereports">
+      <button class="card-button">View Minute Report</button>
+        </a>
+    </div>
+</div>
     <?php
    
     $showAddEvents=true;

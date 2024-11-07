@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memo Interface</title>
+  <title>Lecturer Dashboard</title>
   <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/lecturer.style.css">
 </head>
 
@@ -47,7 +47,6 @@
       <button>View Minute Report</button>
     </div>
   </div>
-
 
   <?php
     $notificationsArr =[
