@@ -6,7 +6,6 @@ $month = isset($_GET['month']) ? (int)$_GET['month'] : date('m');
 
 // Initialize the Calendar
 $calendar = new Calendar();
-$showAddEvents = true; // Adjust based on user role or criteria
 
 // Check if the form is submitted to add a new event
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -54,9 +53,9 @@ $nextYear = $month == 12 ? $year + 1 : $year;
         </div>
 
         <!-- Display Calendar -->
-        <?php echo $calendar->draw($year, $month); ?>
+        <?php echo $calendar->draw($year, $month);?>
         
-        <?php if ($showAddEvents) : ?>
+        <?php if ($showAddEvents==true) : ?>
             <button class="add-event-button" onclick="openModal()">+ Add Event</button>
         <?php endif; ?>
     </div>

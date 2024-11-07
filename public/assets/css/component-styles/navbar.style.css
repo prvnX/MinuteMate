@@ -131,3 +131,16 @@ nav form .search-bar{
     }
     
 }
+@media  screen and (max-width:1236px) {
+    nav form{
+        display: relative;
+        left: 1000px;
+        margin:10px
+
+    }
+    nav form .search-bar{
+        width: 380px;
+        margin: 0px ;
+    }
+    
+}

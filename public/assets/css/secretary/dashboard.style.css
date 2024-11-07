@@ -13,3 +13,15 @@ h1{
     font-weight: 500;
 }
 
+.dashboard-container{
+    display: flex;
+    height: 93%;
+}
+.dashboard-buttons-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;  
+    height: 800px;  
+    width: 800px;
+    margin:auto 200px
+}
