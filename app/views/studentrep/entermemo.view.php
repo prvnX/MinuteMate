@@ -1,0 +1,118 @@
+<head>
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/entermemo.style.css">
+    <link href="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/theme.css" rel="stylesheet">
+
+    <title>Enter Memo</title>
+    
+    
+</head>
+<body>
+<?php
+    $user="studentrep";
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/navbar.php"); //call the navbar component
+    $meetings = [
+        1 => array(
+            'id' => 12,
+            'name' => 'Meeting A',
+            'date' => '2024-11-20'
+        ),
+        2 => array(
+            'id' => 13,
+            'name' => 'Meeting B',
+            'date' => '2024-11-21'
+        ),
+        3 => array(
+            'id' => 14,
+            'name' => 'Meeting C',
+            'date' => '2024-11-22'
+        ),
+        4 => array(
+            'id' => 15,
+            'name' => 'Meeting D',
+            'date' => '2024-11-23'
+        ),
+        5 => array(
+            'id' => 16,
+            'name' => 'Meeting E',
+            'date' => '2024-11-24'
+        )
+        ];
+    ?>
+    <h1 class="memo-heading"> Enter a memo </h1>
+                <div class="memo-sub-container">
+                <form action="<?=ROOT?>/studentrep/submitmemo" method="post">
+                    <div class="field">
+                   <label for="meeting" class="input-label">Meeting : </label>
+                   <select name="meeting" id="meeting" class="select-meeting" required>
+                    <option value="" disabled selected>Select a meeting</option>
+                    <?php
+                        foreach($meetings as $meeting) {
+                            $id=$meeting['id'];
+                            echo "<option value='$id'>".$meeting['name']." - ".$meeting['date']."</option>";
+                        }
+                     ?>
+                     </select>
+                     </div>
+                     <div class="field">
+                    <label for="subject" class="input-label">Subject &nbsp;: </label>
+                    <input type="text" id="subject" name="memo-subject" placeholder="Enter the subject of the meeting" required>
+                   </div>
+                   <div id="content-sections">
+                    <!-- Dynamic content sections will be displayed here -->
+                    </div>  
+                    <div class="form-buttons">                  
+                    <button type="button" class="cancel-btn" onclick="handleCancel()">Cancel</button>
+                    <button type="submit" class="submit-btn" >Submit</button>
+                    </div>
+                </form>
+                 </div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
+
+<script>
+    let sectionCount = 0;
+    let editors = [];
+    function addContentSection(content = '') {
+        sectionCount++;
+        const sectionDiv = document.createElement('div');
+        sectionDiv.classList.add('content-section');
+        sectionDiv.id = `section-${sectionCount}`;
+        const editorDiv = document.createElement('div');
+        editorDiv.id = `editor-${sectionCount}`;
+        editorDiv.classList.add('editor-container');
+        sectionDiv.appendChild(editorDiv);
+        document.getElementById('content-sections').appendChild(sectionDiv);
+        ClassicEditor.create(document.querySelector(`#editor-${sectionCount}`), {
+            toolbar: [
+            'heading', '|', 'bold', 'italic', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'insertTable', 'mediaEmbed', 'undo', 'redo'
+            ],
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:full',
+                    'imageStyle:side'
+                ]
+            }
+        })
+        .then(editor => {
+            editor.setData(content);
+            editors.push({ editor });
+        })
+        .catch(error => {
+            console.error('Error initializing CKEditor:', error);
+        });
+    }
+
+    window.onload = function() {
+        addContentSection('<p>You can enter your memo<strong> with formatting</strong> <em>here</em>.</p><br><br><br><br><br><br><br>');
+    };
+
+    function handleCancel(){
+            window.location.href = "<?=ROOT?>/studentrep";
+        }
+</script>
+</body>
