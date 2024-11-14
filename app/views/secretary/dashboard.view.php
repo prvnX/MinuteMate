@@ -16,7 +16,7 @@
     <div class="dashboard-button-container">
     <div class="card">
     <img src="<?=ROOT?>/assets/images/create-minute.png" alt="Review Student Memos">
-    <a href="<?=ROOT?>/secretary/createminute">
+    <a href="<?=ROOT?>/secretary/selectmeeting">
     <button class="card-button">Create a Minute</button>
     </a>
       
