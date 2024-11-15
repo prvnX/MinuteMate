@@ -22,5 +22,16 @@ class Studentrep extends Controller {
             $this->view("showunsuccessmemo",["user"=>"studentrep"]);
         }
     }
+    public function notifications() {
+        //these are just placeholders
+        $user = "studentrep";
+        $notification = "notification"; //use notification-dot if there's a notification
+        $menuItems = [
+            "home" => ROOT."/studentrep",
+            $notification => ROOT."/studentrep/notifications",
+            "profile" => ROOT."/studentrep/viewprofile"
+        ];
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
+    }
 
 }
