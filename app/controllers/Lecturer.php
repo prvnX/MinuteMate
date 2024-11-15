@@ -8,7 +8,16 @@ class Lecturer extends Controller {
         $this->view("404");
     }
     public function notifications() {
-        $this->view("lecturer/notifications");
+        //these are just placeholders
+        $user = "lecturer";
+        $memocart = "memocart";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
+        $notification = "notification"; //use notification-dot if there's a notification
+        $menuItems = [
+            "home" => ROOT."/lecturer",
+            $notification => ROOT."/lecturer/notifications",
+            "profile" => ROOT."/lecturer/viewprofile"
+        ];
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
     }
     public function viewprofile() {
         $this->view("lecturer/viewprofile");

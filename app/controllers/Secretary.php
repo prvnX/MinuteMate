@@ -19,7 +19,17 @@ class Secretary extends Controller {
         $this->view("secretary/createminute", ['meetingId' => $meetingId]);
     }
     public function notifications() {
-        $this->view("secretary/notifications");
+        //these are just placeholders
+        $user = "secretary";
+        $memocart = "memocart-dot";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
+        $notification = "notification-dot"; //use notification-dot if there's a notification
+        $menuItems = [
+            "home" => ROOT."/secretary",
+            $memocart => ROOT."/secretary/memocart",
+            $notification => ROOT."/secretary/notifications",
+            "profile" => ROOT."/secretary/viewprofile"
+        ];
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"memocart" => $memocart, "notification" => $notification]);
     }
     public function selectmeeting() { //this is the page where the secretary selects the meeting to create a minute for
         $this->view("secretary/selectmeeting");
@@ -57,4 +67,5 @@ class Secretary extends Controller {
         $this->view("showunsuccessminute",["user"=>"secretary"]);
     }
     }
+
 }
