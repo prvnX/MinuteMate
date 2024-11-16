@@ -4,17 +4,44 @@ class Admin extends Controller {
         $this->view("admin/dashboard");
     }
 
-    public function search() {
-        $this->view("404");
+    public function viewpendingRequests(): void{
+        $this->view(name: "admin/viewpendingRequests");
     }
 
-    public function viewpendingRequests() {
-        $this->view("admin/viewpendingRequests");
+    public function viewRequestDetails() {
+        // Retrieve the request ID from the URL
+        $requestId = $_GET['id'] ?? null;
+    
+        // Add logic to fetch request details based on $requestId
+        // For example:
+        // $requestDetails = $this->model('RequestModel')->getRequestById($requestId);
+    
+        // Pass the request details to the view
+        $this->view("admin/viewRequestDetails", compact("requestId"));
     }
-    public function viewMembers() {
-        $this->view("admin/viewMembers");
+    
+    public function viewMembers(): void{
+        $this->view(name: "admin/viewMembers");
     }
-    public function RemoveMembers() {
-        $this->view("admin/RemoveMembers");
+
+    public function viewMembersList(): void{
+        $this->view(name: "admin/viewMembersList");
     }
+
+    public function viewMembersByMeetingType() {
+        // Get the meeting type from the URL
+        $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';
+
+        // Pass the meeting type to the view
+        $this->view("admin/viewMembersList", [
+            "meetingType" => $meetingType
+        ]);
+    }
+    
+    public function viewMemberProfile(): void{
+        $this->view(name: "admin/viewMemberProfile");
+    }
+
+    
+   
 }

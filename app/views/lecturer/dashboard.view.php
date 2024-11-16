@@ -25,8 +25,13 @@
     <div class="card">
       <img src="<?=ROOT?>/assets/images/enter memo.jpg" alt="Enter a Memo">
       <a href="<?=ROOT?>/lecturer/entermemo">
+
       <button class = "card button">Enter a Memo</button>
     </a>
+
+      <button>Enter a Memo</button>
+      </a>
+
     </div>
 
     <div class="card">

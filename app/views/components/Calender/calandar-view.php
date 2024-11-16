@@ -64,12 +64,9 @@ $nextYear = $month == 12 ? $year + 1 : $year;
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h3>Add Event</h3>
+            <h3>Add an event</h3>
             <form method="post">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-
-                <label for="summary">Event Summary:</label>
+                <label for="summary">Event Name:</label>
                 <input type="text" id="summary" name="summary" required>
 
                 <label for="class">Event Type:</label>
@@ -79,6 +76,12 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                     <option value="syn">Syndicate Meeting</option>
                     <option value="iud">IUD Meeting</option>
                 </select>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+
+                <label for="time">Time:</label>
+                <input type="time" id="time" name="time">
 
                 <button type="submit" class="submit-button">Add Event</button>
             </form>

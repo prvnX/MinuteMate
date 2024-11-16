@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+body{
+    padding: 0;
+    margin: 0;
+}
+.memo-heading{
+    font-family: "EB Garamond", serif;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 4rem;
+    font-weight:500;
+    color: #6164CE;
+}
+.memo-form-container{
+    margin: auto;
+    width: 90%;
+    height: 80%;
+
+}
+.memo-sub-container{
+    font-family:"EB Garamond", serif;
+    margin: 100px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 40px;
+    border: 0.5px solid #bcbcbc;
+    border-radius: 10px;
+    font-family: "Ubuntu", serif;
+    font-size : 1.2rem;
+    min-height: 60%;
+
+
+}
+.field{
+    margin-bottom: 25px;
+}
+.input-label{
+    font-family: "EB Garamond", serif;
+    font-size: 1.5rem;
+}
+.memo-sub-container input{
+    width: 70%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1.1rem;
+    margin-left: 50px;
+}
+.memo-sub-container select{
+    width: 70%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1.1rem;
+    margin-left: 50px;
+}
+.form-buttons{
+    margin-left: 85%;
+    min-width: 100px
+}
+.submit-btn , .cancel-btn{
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #b1b1b1;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size : 1.1rem;
+    background-color: #6164CE;
+    color: white;
+    display: inline;
+    width: 100px;
+    margin-top: 70px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.cancel-btn{
+    background-color: #ffffff;
+    color: #6164CE;
+    border: 1px solid #6164CE;
+}
+.cancel-btn:hover{
+    background-color: #6164CE;
+    color: #ffffff;
+    transition: 0.5s;
+}

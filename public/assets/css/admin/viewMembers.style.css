@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding-top: 100px;
+  }
+  
+  .members-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+  }
+  
+  .title {
+    font-size: 28px;
+    color: #5c4a7a;
+    background-color: #d1c3e0;
+    padding: 10px 30px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+  }
+  
+  .meeting-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  
+  .meeting-item {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    text-decoration: none;
+    color: #333;
+    border: 2px solid;
+    padding: 8px 20px;
+    border-radius: 20px;
+    width: 150px;
+    justify-content: center;
+    font-weight: bold;
+  }
+  
+  .meeting-item .dot {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .red { background-color: red; color: #d9534f; border-color: #d9534f; }
+  .yellow { background-color: yellow; color: #f0ad4e; border-color: #f0ad4e; }
+  .green { background-color: green; color: #5cb85c; border-color: #5cb85c; }
+  .blue { background-color: blue; color: #5bc0de; border-color: #5bc0de; }
+  
+  .meeting-item:hover {
+    opacity: 0.8;
+  }
+  

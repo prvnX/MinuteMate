@@ -38,7 +38,7 @@ public function draw($year, $month) {
     // Calculate the starting day of the week
     $firstDayOfMonth = date('w', strtotime("$year-$month-01"));
     $output .= str_repeat('<td></td>', $firstDayOfMonth);
-    $dt = new DateTime("now", new DateTimeZone('Asia/Dhaka')); 
+    $dt = new DateTime("now", new DateTimeZone('Asia/Colombo')); 
     $today = $dt->format('Y-m-d');
     // Display the days of the month
     for ($day = 1; $day <= $daysInMonth; $day++) {

@@ -1,0 +1,351 @@
+@import url('https://fonts.googleapis.com/css2?family=Katibeh&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
+body{
+    padding: 0;
+    margin: 0;
+}
+.minute-heading{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 4rem;
+    font-weight:500;
+    color: #6164CE;
+}
+.minute-form-container{
+    margin: auto;
+    width: 90%;
+    height: 80%;
+
+}
+.sub-container, .meeting-details{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 0.5px solid #bcbcbc;
+    border-radius: 10px;
+    font-family: "Ubuntu", serif;
+    font-size : 1.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+.row-A{
+    display: flex;
+    justify-content:space-between;
+    margin-bottom: 20px;
+}
+.row-B{
+    display: flex;
+    justify-content:space-between;
+    margin-bottom: 20px;
+}
+.col{
+    width: 600px;
+}
+.minute-form-container .meeting-details label{
+    margin: 10px;
+}
+
+.minute-form-container .meeting-details .row-A input{
+    width: 60%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1 rem;
+}
+.minute-form-container .meeting-details .row-A select{
+    width: 60%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 14px;
+}
+.minute-form-container .meeting-details .row-B input[type="date"]{
+    width: 60%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1 rem;
+    margin-left:100px;
+}
+.minute-form-container .meeting-details .row-B input[type="time"]{
+    width: 15%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1 rem;
+    margin-left:10px;
+}
+.form-sub-title{
+    color:#00047d;
+    margin: 0 0 20px 0;
+    font-weight: 100;
+    font-size: 2rem;
+    font-family: "EB Garamond", serif;
+    text-align: center;
+}
+.agenda-details input{
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1 rem;
+}
+.agenda-details{
+    padding-bottom: 50px;
+}
+.agenda-details button{
+    display: inline;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #6164CE;
+    font-family: "arial", serif;
+    font-size : 1 rem;
+    background-color: #ffffff;
+    color: #6164CE;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.agenda-details button:hover{
+    background-color: #6164CE;
+    color: #ffffff;
+    transition: 0.5s;
+}
+.agendaContainer , .input-container{
+    display: inline;
+}
+.agenda-details input{
+    margin-bottom: 10px;
+}
+
+.minute-content{
+    min-height: 500px;
+}
+
+/*Dynamic content section*/
+
+.content-section {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 0.5px solid #5d5d5d;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+.add-button {
+    display: inline;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #6164CE;
+    font-family: "arial", serif;
+    font-size : 1 rem;
+    background-color: #ffffff;
+    color: #6164CE;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.add-button:hover { 
+    background-color: #6164CE;
+    color: #ffffff;
+    transition: 0.5s;;
+ }
+
+.title-input-text , .radio-text , .select-text{
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: "EB Garamond", serif;
+
+}
+.title-input{
+    width: 90%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1 rem;
+}
+.select-dropdown{
+    width: 50%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1 rem;
+}
+.radio-container{
+    font-size: 16px;
+}
+
+/*Form navigators*/
+.form-navigation{
+    padding: 50px 0;
+    margin-bottom: 20px;
+}
+.form-navigation button{
+    display: inline;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #6164CE;
+    font-family: "arial", serif;
+    font-size : 1rem;
+    background-color: #6164CE;
+    color: #ffffff;
+    margin-left: 0px;
+    cursor: pointer;
+    width: 100px;
+}
+#backBtntoP1 , #backBtntoP2{
+    display: inline;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #6164CE;
+    font-family: "arial", serif;
+    font-size : 1rem;
+    background-color: #ffffff;
+    color: #6164CE;
+    margin-left: 10px;
+    cursor: pointer;
+    width: 100px;
+}
+#backBtntoP1:hover, #backBtntoP2:hover{
+    background-color: #6164CE;
+    color: #ffffff;
+    transition: 0.5s;
+}
+
+/*Attendence section */
+.attendence-mark-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    margin-top: 20px;
+    width: 75%;
+    margin: 0 auto;
+}
+.member{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size : 1rem;
+    margin-left: 25px;
+}
+.attendence-mark-section input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.attendence-mark-section input[type="checkbox"]:checked{
+    background-color: #6164CE;
+    border-color: #6164CE;
+}
+
+/*Memo  section */
+.memo-linking table {
+    min-width: 80%; /* Make the table take up the full width */
+    border-collapse: collapse; 
+    margin: 0 auto; /* Center the table */
+    border: 0.5px solid #e2e2e2; /* Add a border for visibility */
+    border-radius: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+th, td {
+    padding: 15px; 
+    text-align: center; /* Align content in the center */
+    border: 0.5px solid #e2e2e2b0; /* Add a border for visibility */
+}
+
+th {
+    background-color: #f8f8f8a9; /* Optional: light background for header */
+}
+
+td {
+    background-color: #f9f9f995; /* Optional: light background for table rows */
+}
+
+td input[type="checkbox"]{
+    height: 15px;
+    width: 15px;
+    background-color: #6164CE;
+    border-color: #6164CE;
+}
+
+/*Link Minute*/
+.minute-Linking select {
+    width: 70%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
+    font-family: "EB Garamond", serif;
+    font-size : 1.2 rem;
+    display: inline;
+    margin: 10px auto;
+    
+}
+.minute-Linking button{
+    display: inline;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #6164CE;
+    font-family: "arial", serif;
+    font-size : 1 rem;
+    background-color: #ffffff;
+    color: #6164CE;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 75%;
+}
+
+#LinkedminuteSection{
+    text-align: center;
+}
+
+.minute-Linking button:hover{
+    background-color: #6164CE;
+    color: #ffffff;
+    transition: 0.5s;;
+}
+input[type="file"] {
+    border:0.5px solid #e2e2e2b0;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+}
+.media-Linking{
+    text-align: center;
+    
+}
+/* Style the file selector button */
+input[type="file"]::file-selector-button {
+    background-color: #aaaaaa;
+    color: white;
+    padding: 8px 12px;
+    border: 1px black;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Style on hover */
+input[type="file"]::file-selector-button:hover {
+    background-color: #e4e4e4;
+}
+input[type="file"]{
+    width: 70%;
+    height: 20%;
+    background-color: #f0f0f064;
+    margin: 10px auto;
+    cursor: grab;
+    font-size: 1rem;
+}
+.media-Linking p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+    color:#5d5d5dc1;
+}
