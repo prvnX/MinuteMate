@@ -51,6 +51,12 @@ class Lecturer extends Controller {
             $this->view("showunsuccessmemo",["user"=>"lecturer"]);
         }
     }
+    public function confirmlogout() {
+        $this->view("confirmlogout",[ "user" =>"lecturer"]);
+    }
 
+    public function logout() {
+        $this->view("logout",[ "user" =>"lecturer"]);
+    }
 
 }
