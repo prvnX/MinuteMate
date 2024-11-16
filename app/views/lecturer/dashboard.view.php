@@ -29,9 +29,6 @@
       <button class = "card button">Enter a Memo</button>
     </a>
 
-      <button>Enter a Memo</button>
-      </a>
-
     </div>
 
     <div class="card">
