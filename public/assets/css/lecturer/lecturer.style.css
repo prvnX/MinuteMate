@@ -35,23 +35,17 @@ h1{
     z-index: 1000;
    height: 60px;
   }
-  .navbar nav{
-    height:50px
-  }
-  .navbar nav .search-bar{
-    position:relative;
-    bottom: 5px;
 
-  }
   
   
   .container {
+    
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     width: 600px;
-    right: 300px;
     position:relative;
+    right: 300px;
     left: 1000;
     
   }
@@ -93,6 +87,7 @@ h1{
   .card button:hover {
     background-color: #553c9a;
     transform: scale(1.05);
+    transition: transform 0.2s;
   }
 
   

@@ -24,27 +24,44 @@
   <div class="container">
     <div class="card">
       <img src="<?=ROOT?>/assets/images/enter memo.jpg" alt="Enter a Memo">
-      <button>Enter a Memo</button>
+      <a href="<?=ROOT?>/lecturer/entermemo">
+      <button class = "card button">Enter a Memo</button>
+    </a>
     </div>
+
     <div class="card">
       <img src="<?=ROOT?>/assets/images/review memos.jpeg" alt="Review Student Memos">
-      <button>Review Student Memos</button>
+      <a href="<?=ROOT?>/lecturer/reviewstudentmemos">
+      <button class = "card button">Review Student Memos</button>
+      </a>
     </div>
+
     <div class="card">
       <img src="<?=ROOT?>/assets/images/view minutes.jpg" alt="View Minutes">
-      <button>View Minutes</button>
+      <a href="<?=ROOT?>/lecturer/viewminutes">
+      <button class = "card button">View Minutes</button>
+      </a>
     </div>
+
     <div class="card">
       <img src="<?=ROOT?>/assets/images/view submitted memos.jpg" alt="View Submitted Memos">
-      <button>View Submitted Memos</button>
+      <a href="<?=ROOT?>/lecturer/viewsubmittedmemos">
+      <button class = "card button">View Submitted Memos</button>
+      </a>
     </div>
+
     <div class="card">
       <img src="<?=ROOT?>/assets/images/view memo report.jpeg" alt="View Memo Reports">
-      <button>View Memo Reports</button>
+      <a href="<?=ROOT?>/lecturer/viewmemoreports">
+      <button class = "card button">View Memo Reports</button>
+      </a>
     </div>
+
     <div class="card">
       <img src="<?=ROOT?>/assets/images/view minute report.png" alt="View Minute Report">
-      <button>View Minute Report</button>
+      <a href="<?=ROOT?>/lecturer/viewminutereports">
+      <button class = "card button">View Minute Report</button>
+      </a>
     </div>
   </div>
 
