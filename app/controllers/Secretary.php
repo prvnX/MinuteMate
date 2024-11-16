@@ -37,8 +37,8 @@ class Secretary extends Controller {
     public function viewminutes() {
         $this->view("secretary/viewminutes");
     }
-    public function viewsubmittedmemos() {
-        $this->view("secretary/viewsubmittedmemos");
+    public function viewmemos() {
+        $this->view("secretary/viewmemos");
     }
     public function viewmemoreports() {
         $this->view("secretary/viewmemoreports");
@@ -46,6 +46,7 @@ class Secretary extends Controller {
     public function viewminutereports() {
         $this->view("secretary/viewminutereports");
     }
+
 
     public function submitmemo() {
         $memosuccess = false;
