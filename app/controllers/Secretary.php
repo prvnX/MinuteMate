@@ -49,6 +49,7 @@ class Secretary extends Controller {
 
 
     public function submitmemo() {
+        // $content=$_POST['memo-content'];
         $memosuccess = false;
         $memoid = 1;
         if($memosuccess) {
