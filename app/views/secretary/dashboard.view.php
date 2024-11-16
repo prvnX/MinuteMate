@@ -35,8 +35,8 @@
         </a>
     </div>
     <div class="card">
-      <img src="<?=ROOT?>/assets/images/view submitted memos.jpg" alt="View Submitted Memos">
-        <a href="<?=ROOT?>/secretary/viewsubmittedmemos">
+      <img src="<?=ROOT?>/assets/images/view submitted memos.jpg" alt="View  Memos">
+        <a href="<?=ROOT?>/secretary/viewmemos">
       <button class="card-button">View Memos</button>
         </a>
     </div>
