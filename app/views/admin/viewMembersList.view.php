@@ -20,7 +20,8 @@ $dummyMembers = [
     ],
     'BOM' => [
         ['id' => 7, 'name' => 'Selina Kyle'],
-        ['id' => 8, 'name' => 'Lois Lane']
+        ['id' => 8, 'name' => 'Lois Lane'],
+        ['id' => 10, 'name' => 'Selia Kyle']
     ]
 ];
 
@@ -43,8 +44,14 @@ $members = $dummyMembers[$meetingType] ?? [];
     <ul class="members-list">
       <?php foreach ($members as $member): ?>
         <li class="member-item">
-          <a href="<?=ROOT?>/admin/viewMemberProfile?id=<?= htmlspecialchars($member['id']) ?>">
+          <span class="member-name">
             <?= htmlspecialchars($member['name']) ?>
+          </span>
+          <a class="view-btn" href="<?=ROOT?>/admin/viewMemberProfile?id=<?= htmlspecialchars($member['id']) ?>">
+            View
+          </a>
+          <a class="edit-btn" href="<?=ROOT?>/admin/editMemberProfile?id=<?= htmlspecialchars($member['id']) ?>">
+            Edit
           </a>
         </li>
       <?php endforeach; ?>
@@ -53,6 +60,7 @@ $members = $dummyMembers[$meetingType] ?? [];
     <p>No members found for this meeting type.</p>
   <?php endif; ?>
 </div>
+
 
 </body>
 </html>
