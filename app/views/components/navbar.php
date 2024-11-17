@@ -1,7 +1,6 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/component-styles/navbar.style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 <?php
 if (isset($menuItems)) {
@@ -15,9 +14,11 @@ if (isset($menuItems)) {
     <div class="nav-icon-list">
     <ul>
         <?php foreach ($menuItems as $name => $url) : ?>
-            <li><a href="<?= $url ?>" class="<?= $currentPage == strtolower($name) ? 'active' : '' ?>">
-                <img src="<?= ROOT."/assets/images/navbar-images/".$name.".png" ?>" alt="<?= $name ?>" class="nav-icon">
-            </a></li>
+            <li>
+            <a href="<?= $url ?>" class="<?= $currentPage == strtolower($name) ? 'active' : '' ?>">
+                    <img src="<?= ROOT."/assets/images/navbar-images/".$name.".png" ?>" alt="<?= $name ?>" class="nav-icon">
+                    </a>
+           </li>
             
         <?php endforeach; ?>
     </ul>
@@ -26,3 +27,5 @@ if (isset($menuItems)) {
 <?php
 }
 ?>
+
+</script>

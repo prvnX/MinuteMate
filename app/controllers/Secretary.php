@@ -49,6 +49,7 @@ class Secretary extends Controller {
 
 
     public function submitmemo() {
+        // $content=$_POST['memo-content'];
         $memosuccess = false;
         $memoid = 1;
         if($memosuccess) {
@@ -67,6 +68,16 @@ class Secretary extends Controller {
     else {
         $this->view("showunsuccessminute",["user"=>"secretary"]);
     }
+    }
+    public function confirmlogout() {
+        $this->view("confirmlogout",[ "user" =>"Secretary"]);
+    }
+
+    public function viewprofile() {
+        $this->view("secretary/viewprofile");
+    }
+    public function logout() {
+        $this->view("logout",[ "user" =>"Secretary"]);
     }
 
 }
