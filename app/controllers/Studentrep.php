@@ -22,6 +22,13 @@ class Studentrep extends Controller {
             $this->view("showunsuccessmemo",["user"=>"studentrep"]);
         }
     }
+
+    public function viewminutes() {
+        $this->view("lecturer/viewminutes");
+    }
+    public function viewsubmittedmemos() {
+        $this->view("lecturer/viewsubmittedmemos");
+    }
     public function notifications() {
         //these are just placeholders
         $user = "studentrep";

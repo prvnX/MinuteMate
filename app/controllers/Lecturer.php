@@ -41,6 +41,7 @@ class Lecturer extends Controller {
     public function viewprofile() {
         $this->view("lecturer/viewprofile");
     }
+
     public function submitmemo() {
         $memosuccess = false;
         $memoid = 1;

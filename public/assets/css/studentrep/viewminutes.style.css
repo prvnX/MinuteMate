@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+.navbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+   height: 60px;
+  }
+
+.heading{
+    text-align: left;
+    color: #4a008e;
+    margin-bottom: 30px;
+    margin-left: 130px;
+    margin-top: 200px;
+    font-family: 'Georgia', sans-serif;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+}
+.minutelist {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 150px;
+    width: 1000px;
+    margin-left: 400px; 
+}
+
+.minuteitem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e0e7ff;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.minutecontent h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.minutecontent p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.viewbtn {
+    background-color: #6b5b95;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.viewbtn:hover {
+    background-color: #3c2d5b;
+}
+.meetinglist{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.rhdbtn{
+    width: 150px;
+    background-color: #ed5f5f;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;  
+    margin-left: 110px; 
+}
+.rhdbtn:hover {
+    background-color: rgb(201, 52, 52);
+}
+
+.iudbtn{
+    width: 150px;
+    background-color: #ffe923;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;  
+    margin-left: 110px; 
+}
+.iudbtn:hover {
+    background-color: rgb(152, 152, 41);
+}
+
+.syndicatebtn{
+    width: 150px;
+    background-color: #5fff3b;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;  
+    margin-left: 110px; 
+}
+.syndicatebtn:hover {
+    background-color: rgb(43, 138, 43);
+}
+.bombtn{
+    width: 150px;
+    background-color: #58aff6;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;  
+    margin-left: 110px; 
+}
+.bombtn:hover {
+    background-color: rgb(39, 39, 109);
+}
+
+
+
+
