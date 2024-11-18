@@ -128,12 +128,41 @@ class Secretary extends Controller {
         $this->view("secretary/viewmemos");
     }
     public function viewmemoreports() {
-        $this->view("secretary/viewmemoreports");
+        if(!isset($_GET['memo'])) {
+            header("Location: ".ROOT."/secretary/selectmemo");
+        }
+        $memoid = $_GET['memo'];
+        
+        $data = [
+            'id' =>$memoid,
+            'date' => '2024-11-16',
+            'time' => '2:00 PM',
+            'status' => 'Approved',
+            'linked_memos' => 'Memo #11, Memo #12',
+            'author' => 'John Doe'
+        ];
+    
+        $this->view("secretary/viewmemoreports", $data);
     }
+    
     public function viewminutereports() {
-        $this->view("secretary/viewminutereports");
+        if(!isset($_GET['minute'])) {
+            header("Location: ".ROOT."/secretary/selectminute");
+        }
+        $memoid = $_GET['minute'];
+        $data = [
+            'date' => '2024-11-16',
+            'time' => '10:00 AM',
+            'meeting_type' => 'Team Meeting',
+            'meeting_minute' => 'Discussed project updates and next steps.',
+            'linked_minutes' => 'Minute #14, Minute #15',
+            'linked_memos' => 'Memo #12',
+            'recording' => 'https://example.com/recording.mp4',
+            'attendees' => 'Alice, Bob, Charlie'
+        ];
+        $this->view("secretary/viewminutereports", $data);
     }
-
+    
 
     public function submitmemo() {
         // $content=$_POST['memo-content'];
@@ -166,5 +195,10 @@ class Secretary extends Controller {
     public function logout() {
         $this->view("logout",[ "user" =>"Secretary"]);
     }
-
+    public function selectmemo (){
+        $this->view("secretary/selectmemo");
+    }
+    public function selectminute (){
+        $this->view("secretary/selectminute");
+    }
 }
