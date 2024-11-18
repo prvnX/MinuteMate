@@ -43,7 +43,7 @@
     <div class="card">
 
       <img src="<?=ROOT?>/assets/images/view memo report.jpeg" alt="View Memo Reports">
-        <a href="<?=ROOT?>/secretary/viewmemoreports">
+        <a href="<?=ROOT?>/secretary/selectmemo">
       <button class="card-button">View Memo Reports</button>
         </a>
     </div>
