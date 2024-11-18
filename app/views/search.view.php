@@ -17,7 +17,7 @@
     <h1 class="search-heading">Search Results for "<?=$searchtxt?>"</h1>
 </div>
 <div class="memo-results">
-    <p><span class="search-count"><?= count($memoResults) ?> </span>memos found ,  <button type="button" class="switch-btn">View the found minutes</button> </p>
+    <p><span class="search-count"><?= count($memoResults) ?> </span>memos found ,  <button type="button" class="switch-btn" onclick="document.querySelector('.memo-results').style.display='none'">View the found minutes</button> </p>
     <div class="memo-results-container">
         <div class="memo-results-list">
            <!-- Results will be displayed here -->
@@ -34,23 +34,29 @@
                 </div>
                 <div class="type-filter">
                     <p>Filter By Meeting Type</p>
-                    <div class="meeting-type">
-                    <input type="checkbox" name="rhd" id="rhd">                    
-                    <label for="rhd">RHD</label>
+                 
+                    <label class="checkbox-container iud" >
+                    <input type="checkbox" name="iud" id="iud"/>
+                    <span class="checkmark"></span>
+                    IUD
+                    </label>
+                    <label class="checkbox-container rhd">
+                    <input type="checkbox" name="rhd" id="iud"/>
+                    <span class="checkmark"></span>
+                    RHD
+                    </label>
+                    <label class="checkbox-container bom">
+                    <input type="checkbox" name="bom" id="bom"/>
+                    <span class="checkmark"></span>
+                     BOM
+                    </label>
+                    <label class="checkbox-container syndicate">
+                    <input type="checkbox" name="syndicate" id="syndicate" />
+                    <span class="checkmark"></span>
+                        Syndicate
+                    </label>
                     </div>
-                    <div class="meeting-type">
-                    <input type="checkbox" name="iud" id="iud">
-                    <label for="iud">IUD</label> 
-                    </div>
-                    <div class="meeting-type">
-                    <input type="checkbox" name="syn" id="syn">
-                    <label for="syn">SYNDICATE</label>
-                    </div>
-                    <div class="meeting-type">
-                    <input type="checkbox" name="bom" id="bom">
-                    <label for="bom">BOM</label>
-                    </div>
-                </div>
+
                 <div class="name-filter">
                     <p>Filter By Submitted By</p>
                     <select name="submitted-by" id="submitted-by">
@@ -60,8 +66,10 @@
                         <?php endforeach; ?>
                         </select>
                 </div>
-                <button class="filter-btns">Apply Filters</button>
-                <button class="filter-btns">Clear Filters</button>
+                <div class="filter-btns-list">
+                    <button class="filter-btns">Apply Filters</button>
+                    <button class="filter-btns">Clear Filters</button>
+                </div>
 
 
     </div>

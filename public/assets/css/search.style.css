@@ -42,7 +42,7 @@ body{
     padding: 0 10px; 
     max-height: 69vh; /* Restricts height to 70% of the viewport */
     overflow-y: auto; 
-    background-color: #fff; 
+    background-color: #ffffff00; 
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
     border-radius: 20px;
 }
@@ -114,6 +114,7 @@ hr{
     border-bottom: solid 1px rgba(0, 0, 0, 0.121);
     margin: auto;
     width: 40%;
+    margin-bottom: 40px;
 }
 .memo-results-filter{
     padding: 10px;
@@ -132,10 +133,117 @@ hr{
 .memo-results-filter p{
     text-align: left;
     margin-left:0;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-size: 14px;
     color: black;
 }
 .date-filter,.type-filter,.name-filter{
     margin: 20px;
+    margin-bottom: 30px;
+
+
+}
+
+.memo-results-filter label{
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #4f4f4f;
+    margin: 10px;
+    font-weight: 400;
+}
+.memo-results-filter input[type="date"]{
+    width:30%;
+    border-radius: 5px;
+    height: 1.4rem;
+    border: 1px solid #b1b1b1;
+    color:#6d6d6d ;
+    background: transparent;
+
+}
+.type-filter input[type="checkbox"]{
+    margin-left: 10px;
+}
+.type-filter input[type="checkbox"]:active{
+    background-color: #65558F;
+    color: white;
+}
+.meeting-type{
+    margin-bottom: 7px;
+} 
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    font-size: 16px;
+  }
+  
+  /* Hide the default checkbox */
+  .checkbox-container input {
+    display: none;
+  }
+  
+  /* Custom checkbox styling */
+  .checkmark {
+    width: 20px;
+    height: 20px;
+    background-color: #ccc; /* Default background */
+    border-radius: 4px;
+    margin-right: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Change background color when the checkbox is checked */
+  .checkbox-container input:checked + .checkmark {
+    background-color: #4caf50; /* Green when checked */
+  }
+  .syndicate input:checked + .checkmark {
+    background-color: #4caf50; /* Green when checked */
+
+  }
+  .iud input:checked + .checkmark {
+    background-color: rgb(255, 217, 0) ;
+
+  }
+  .rhd input:checked + .checkmark {
+    background-color: red;
+  }
+  .bom input:checked + .checkmark { 
+    background-color: rgb(49, 108, 255);
+  }
+
+.name-filter select{
+    width: 100%;
+    border-radius: 5px;
+    height: 1.6rem;
+    border: 1px solid #b1b1b1;
+    color:#6d6d6d ;
+}
+.filter-btns-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 20px;
+}
+.name-filter select{
+    background: transparent;
+}
+.filter-btns{
+    display: block;
+    color: #65558F;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: ubuntu;  
+    margin: 10px 10px;
+    border: 1px solid #65558F;
+    background: transparent;
+}
+.filter-btns:hover{
+    background-color: #65558F;
+    color: white;
+    scale:1.02;
+    transition: 0.3s ease;
 }
