@@ -5,8 +5,95 @@ class Secretary extends Controller {
 
     }
     public function search() {
-        echo "search";
-        $this->view("404");
+        $searchtxt=$_POST['search'];
+        if($searchtxt=="" || !$searchtxt){
+            $this->view("secretary/dashboard");
+        }
+        else{
+             //these are just placeholders
+        $user = "secretary";
+        $memocart = "memocart-dot";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
+        $notification = "notification-dot"; //use notification-dot if there's a notification
+        $menuItems = [
+            "home" => ROOT."/secretary",
+            $memocart => ROOT."/secretary/memocart",
+            $notification => ROOT."/secretary/notifications",
+            "profile" => ROOT."/secretary/viewprofile"
+        ];
+        $memoResults = [
+            [
+                "id" => 1,
+                "title" => "Project Proposal",
+                "date" => "2024-11-01",
+                "submitted_by" => "Alice",
+                "meeting_type" => "IUD"
+            ],
+            [
+                "id" => 2,
+                "title" => "Meeting Minutes",
+                "date" => "2024-11-05",
+                "submitted_by" => "Bob",
+                "meeting_type" => "RHD"
+            ],
+            [
+                "id" => 3,
+                "title" => "Research Report",
+                "date" => "2024-11-10",
+                "submitted_by" => "Charlie",
+                "meeting_type" => "IUD"
+            ],
+            [
+                "id" => 4,
+                "title" => "Budget Plan",
+                "date" => "2024-11-12",
+                "submitted_by" => "Diana",
+                "meeting_type" => "Syndicate"
+            ],
+            [
+                "id" => 5,
+                "title" => "Client Feedback",
+                "date" => "2024-11-15",
+                "submitted_by" => "Eve",
+                "meeting_type" => "RHD"
+            ],
+            [
+                "id" => 6,
+                "title" => "Project Proposal",
+                "date" => "2024-11-01",
+                "submitted_by" => "Alice",
+                "meeting_type" => "IUD"
+            ],
+            [
+                "id" => 7,
+                "title" => "Meeting Minutes",
+                "date" => "2024-11-05",
+                "submitted_by" => "Bob",
+                "meeting_type" => "RHD"
+            ],
+            [
+                "id" => 8,
+                "title" => "Research Report",
+                "date" => "2024-11-10",
+                "submitted_by" => "Charlie",
+                "meeting_type" => "IUD"
+            ],
+            [
+                "id" => 9,
+                "title" => "Budget Plan",
+                "date" => "2024-11-12",
+                "submitted_by" => "Diana",
+                "meeting_type" => "Syndicate"
+            ],
+            [
+                "id" => 10,
+                "title" => "Client Feedback",
+                "date" => "2024-11-15",
+                "submitted_by" => "Eve",
+                "meeting_type" => "RHD"
+            ]
+        ];
+        $this->view("search",[ "user" => $user, "menuItems" => $menuItems,"memocart" => $memocart, "notification" => $notification,"searchtxt"=>$searchtxt,"memoResults"=>$memoResults]);
+        }
     }
     public function entermemo() {
         $this->view("secretary/entermemo");
