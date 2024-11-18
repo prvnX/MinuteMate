@@ -42,8 +42,6 @@ class Admin extends Controller {
         $this->view(name: "admin/viewMemberProfile");
     }
 
-    public function editMemberProfile(): void{
-        $this->view(name: "admin/editMemberProfile");
-    }
+    
    
 }
