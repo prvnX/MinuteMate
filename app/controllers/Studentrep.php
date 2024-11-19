@@ -24,10 +24,10 @@ class Studentrep extends Controller {
     }
 
     public function viewminutes() {
-        $this->view("lecturer/viewminutes");
+        $this->view("studentrep/viewminutes");
     }
     public function viewsubmittedmemos() {
-        $this->view("lecturer/viewsubmittedmemos");
+        $this->view("studentrep/viewsubmittedmemos");
     }
     public function notifications() {
         //these are just placeholders
@@ -39,6 +39,10 @@ class Studentrep extends Controller {
             "profile" => ROOT."/studentrep/viewprofile"
         ];
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
+    }
+
+    public function confirmlogout() {
+        $this->view("confirmlogout",[ "user" =>"studentrep"]);
     }
 
 }
