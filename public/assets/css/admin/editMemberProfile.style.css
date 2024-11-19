@@ -20,7 +20,7 @@ body {
 /* Heading */
 h3 {
     font-size: 24px;
-    color: #333;
+    color: #6473d6;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -68,7 +68,7 @@ button[type="submit"].btn-save {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 20%;
     transition: background-color 0.3s;
 }
 

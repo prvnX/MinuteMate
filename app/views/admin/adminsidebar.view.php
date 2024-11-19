@@ -23,7 +23,7 @@
     <div class="sidebar">
         <a href="<?=ROOT?>/admin/viewpendingRequests">View Pending Member Request</a>
         <a href="<?=ROOT?>/admin/viewMembers">View Members</a>
-        <a href="<?=ROOT?>/admin/RemoveMembers">Remove Members</a>
+        <a href="<?=ROOT?>/admin/PastMembers">Remove Members</a>
     </div>
    
 </body>
