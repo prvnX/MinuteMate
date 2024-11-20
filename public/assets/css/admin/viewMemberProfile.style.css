@@ -73,10 +73,10 @@ p {
 
 /* Color-specific Styles for Meeting Types */
 .rhd-option input[type="checkbox"] {
-    border-color: red;
+    border-color: rgb(222, 40, 40);
 }
 .rhd-option input[type="checkbox"]:checked {
-    background-color: red;
+    background-color: rgb(222, 40, 40);
 }
 
 .iod-option input[type="checkbox"] {
@@ -94,10 +94,10 @@ p {
 }
 
 .bom-option input[type="checkbox"] {
-    border-color: blue;
+    border-color: rgb(53, 53, 127);
 }
 .bom-option input[type="checkbox"]:checked {
-    background-color: blue;
+    background-color: rgb(53, 53, 127);
 }
 
 /* Label Cursor Style */

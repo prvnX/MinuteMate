@@ -21,13 +21,13 @@
 .sidebar {
   width: 200px; /* Adjust width of sidebar */
   position: fixed;
-  top: 100px; /* Sidebar starts after the navbar */
+  top: 70px; /* Sidebar starts after the navbar */
   left: 0;
   height: 100%;
-  background-color: #f8f9fa;
+  background-color: #e8f4fc;
   padding-top: 20px;
   box-sizing: border-box;
-  border-right: 2px solid #ccc; /* Adds a thin vertical line between sidebar and content */
+  border-right: 2px solid #8b7e7e; /* Adds a thin vertical line between sidebar and content */
 }
 
 .sidebar a {
@@ -35,12 +35,19 @@
   text-decoration: none;
   display: block;
   color: #333;
+  margin-bottom: 15px; /* Adds spacing between links */
   font-size: 90%;
+  border-radius: 4px;
 }
 
-.sidebar a:hover {
-  background-color: #ddd; /* Hover effect for sidebar links */
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #d0e9f9; /* Lighter blue for hover and active state */
+    color: #1b365d;
+    font-weight: bold;
+    border-left: 4px solid #1b365d; /* Highlight with a left border */
 }
+
 
 /* Main content styling */
 .main-content {

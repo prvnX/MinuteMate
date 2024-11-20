@@ -20,15 +20,25 @@
             require_once("../app/views/components/navbar.php");
         ?>
     </div>
+    <?php
+        // Get the current full URL
+        $currentURL = $_SERVER['REQUEST_URI'];
+
+        // Function to check if a link is active
+        function isActive($page) {
+            global $currentURL;
+            return strpos($currentURL, $page) !== false ? 'active' : '';
+        }
+    ?>
     <div class="sidebar">
-        <a href="<?=ROOT?>/admin/viewpendingRequests">
-            <i class="fas fa-user-clock"></i>  Pending Member Request
+        <a href="<?=ROOT?>/admin/viewpendingRequests" class="<?= isActive('viewpendingRequests') ?>">
+            <i class="fas fa-user-clock"></i> Pending Member Request
         </a>
-        <a href="<?=ROOT?>/admin/viewMembers">
-            <i class="fas fa-users"></i>  Members
+        <a href="<?=ROOT?>/admin/viewMembers" class="<?= isActive('viewMembers') ?>">
+            <i class="fas fa-users"></i> Members
         </a>
-        <a href="<?=ROOT?>/admin/PastMembers">
-            <i class="fas fa-user-minus"></i> Remove Members
+        <a href="<?=ROOT?>/admin/PastMembers" class="<?= isActive('PastMembers') ?>">
+            <i class="fas fa-user-minus"></i> Past Members
         </a>
     </div>
 </body>

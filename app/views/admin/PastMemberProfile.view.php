@@ -29,23 +29,33 @@ $member = $dummyMembers[$memberId] ?? null;
   <?php if ($member): ?>
     <h2 class="profile-title">Profile Details</h2>
     <div class="profile-details">
-      <p><strong>Name:</strong> <?= htmlspecialchars($member['name']) ?></p>
-      <p><strong>Email:</strong> <?= htmlspecialchars($member['email']) ?></p>
-      <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($member['lecturer_id']) ?></p>
-      <p><strong>NIC:</strong> <?= htmlspecialchars($member['nic']) ?></p>
-      <p><strong>Role:</strong> <?= htmlspecialchars($member['role']) ?></p>
-      <p><strong>Phone:</strong> <?= htmlspecialchars($member['phone']) ?></p>
-      <p><strong>Meeting Types:</strong> <?= htmlspecialchars(implode(', ', $member['meetingTypes'])) ?></p>
-      <p><strong>Status:</strong> <?= htmlspecialchars($member['status']) ?></p>
-    </div>
-    <div class="action-buttons">
-      <a href="<?=ROOT?>/admin/addPastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-add">Add</a>
-      <a href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-delete">Delete</a>
+      <div class="content">
+        <div class="profile-header">
+            <img src="<?= ROOT ?>/assets/images/user.png" alt="Profile Image" class="profile-img">
+            <div class="profile-info">
+              <h3><?php echo htmlspecialchars($member['name']); ?></h3>
+              <p><strong>Name:</strong> <?= htmlspecialchars($member['name']) ?></p>
+              <p><strong>Email:</strong> <?= htmlspecialchars($member['email']) ?></p>
+              <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($member['lecturer_id']) ?></p>
+              <p><strong>NIC:</strong> <?= htmlspecialchars($member['nic']) ?></p>
+              <p><strong>Role:</strong> <?= htmlspecialchars($member['role']) ?></p>
+              <p><strong>Phone:</strong> <?= htmlspecialchars($member['phone']) ?></p>
+              <p><strong>Meeting Types:</strong> <?= htmlspecialchars(implode(', ', $member['meetingTypes'])) ?></p>
+              <p><strong>Status:</strong> <?= htmlspecialchars($member['status']) ?></p>
+            </div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <a href="<?=ROOT?>/admin/addPastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-add">Add</a>
+        <a href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-delete">Delete</a>
+      </div>
     </div>
   <?php else: ?>
     <p>Member not found.</p>
   <?php endif; ?>
 </div>
+
+
 
 </body>
 </html>
