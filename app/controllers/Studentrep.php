@@ -33,5 +33,7 @@ class Studentrep extends Controller {
         ];
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
     }
-
+    public function viewprofile(){
+        $this->view("studentrep/viewprofile");
+    }
 }
