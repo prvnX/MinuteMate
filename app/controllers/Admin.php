@@ -72,4 +72,7 @@ class Admin extends Controller {
         ]);
     }
     
+    public function pastMemberProfile(): void{
+        $this->view(name: "admin/pastMemberProfile");
+    }
 }

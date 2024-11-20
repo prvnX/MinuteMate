@@ -1,0 +1,88 @@
+/* General Layout Styles */
+.profile-container {
+    padding: 20px;
+    margin-left: 220px; /* Adjust if sidebar width changes */
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+.profile-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #6473d6;
+    padding-bottom: 10px;
+}
+
+.profile-details p {
+    font-size: 1.1em;
+    margin: 10px 0;
+    color: #555;
+}
+
+.profile-details strong {
+    color: #333;
+}
+
+/* Button Styles */
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.action-buttons .btn-add, .action-buttons .btn-delete {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add {
+    background-color: #28a745; /* Green */
+}
+
+.btn-add:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Red */
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-container {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .profile-title {
+        font-size: 1.5em;
+    }
+
+    .profile-details p {
+        font-size: 1em;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-add, .btn-delete {
+        width: 100%;
+        text-align: center;
+    }
+}
