@@ -1,0 +1,132 @@
+/* General Layout Styles */
+.profile-container {
+    padding: 30px;
+    margin: 30px auto;
+    width: 60%;
+    max-width: 600px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Align text to the left */
+    height: auto;  /* Height adjusts based on content */
+   
+}
+
+.profile-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #6473d6;
+    padding-bottom: 10px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0px; /* Space between image and profile details */
+    margin-bottom: 20px;
+    border: 3px solid #2c3f5a;
+    border-radius: 15px;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-top: -50px;
+    margin-left: 80px; /* Move image slightly to the right */
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px;
+    border-radius: 25px;  /* Increased border radius for rounder corners */
+}
+
+.profile-info h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.profile-details p {
+    font-size: 18px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.profile-details strong {
+    color: #333;
+}
+
+/* Button Styles */
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.action-buttons .btn-add, .action-buttons .btn-delete {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add {
+    background-color: #6473d6;
+}
+
+.btn-add:hover {
+    background-color: #8f69e7;
+}
+
+.btn-delete {
+    background-color: #6473d6;
+}
+
+.btn-delete:hover {
+    background-color: #8f69e7;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .profile-title {
+        font-size: 1.5em;
+    }
+
+    .profile-details p {
+        font-size: 1em;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-info {
+        text-align: center;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-add, .btn-delete {
+        width: 100%;
+        text-align: center;
+    }
+}

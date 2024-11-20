@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin-left: -40px;
+    padding-top: 100px;
+  }
+  /* General styling */
+.members-list-container {
+  padding: 20px;
+  margin-left: 250px; /* Adjust based on sidebar width */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #67a1de;
+  border-bottom: 2px solid #67a1de;
+  padding-bottom: 5px;
+}
+
+/* Members list styling */
+.members-list {
+  list-style: none;
+  padding: 0;
+  margin-left: -10px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.member-name {
+  font-size: 18px;
+  color: #333;
+  flex: 1; /* Ensures name takes up available space */
+}
+
+/* Button styling */
+.view-btn, .delete-btn {
+  padding: 5px 10px;
+  margin-left: 10px;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 5px;
+  color: #5c4a7a;
+  transition: background-color 0.3s ease;
+}
+
+.view-btn {
+  background-color: #eff1f4;
+}
+
+.view-btn:hover {
+  background-color: #aa81eb;
+}
+
+.delete-btn {
+  background-color: #eff1f4;
+}
+
+.delete-btn:hover {
+  background-color: #aa81eb;
+}
+
+  
+  .member-item a:hover {
+    color: #5c4a7a;
+  }
+  
