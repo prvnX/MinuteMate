@@ -7,7 +7,6 @@ class Lecturer extends Controller {
     public function search() {
         $this->view("404");
     }
-
     public function entermemo() {
         $this->view("lecturer/entermemo");
     }
@@ -42,9 +41,7 @@ class Lecturer extends Controller {
     public function viewprofile() {
         $this->view("lecturer/viewprofile");
     }
-    public function entermemo() {
-        $this->view("lecturer/entermemo");
-    }
+
     public function submitmemo() {
         $memosuccess = false;
         $memoid = 1;
@@ -55,6 +52,12 @@ class Lecturer extends Controller {
             $this->view("showunsuccessmemo",["user"=>"lecturer"]);
         }
     }
+    public function confirmlogout() {
+        $this->view("confirmlogout",[ "user" =>"lecturer"]);
+    }
 
+    public function logout() {
+        $this->view("logout",[ "user" =>"lecturer"]);
+    }
 
 }
