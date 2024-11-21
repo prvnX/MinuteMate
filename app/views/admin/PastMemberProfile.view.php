@@ -6,6 +6,7 @@ $dummyMembers = [
     1 => ['name' => 'Rasha Doe', 'email' => 'rashadoe@example.com', 'lecturer_id' => 'L10001', 'nic' => '987654321V', 'role' => 'Lecturer', 'phone' => '0772345678', 'meetingTypes' => ['RHD'], 'status' => 'removed'],
     2 => ['name' => 'Sanda Brown', 'email' => 'sandabrown@example.com', 'lecturer_id' => 'L10002', 'nic' => '123654789V', 'role' => 'Lecturer', 'phone' => '0773456789', 'meetingTypes' => ['RHD'], 'status' => 'removed'],
     3 => ['name' => 'AC Smith', 'email' => 'acsmith@example.com', 'lecturer_id' => 'L10003', 'nic' => '135792468V', 'role' => 'Lecturer', 'phone' => '0774567890', 'meetingTypes' => ['IOD'], 'status' => 'active'],
+    4 => ['name' => 'Olof Prince', 'email' => 'sandabrown@example.com', 'lecturer_id' => 'L10004', 'nic' => '123654789V', 'role' => 'Lecturer', 'phone' => '0773456789', 'meetingTypes' => ['IOD'], 'status' => 'removed'],
     // Add other members as necessary
 ];
 
