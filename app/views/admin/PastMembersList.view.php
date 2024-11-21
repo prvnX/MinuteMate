@@ -12,7 +12,7 @@ $dummyMembers = [
     ],
     'IOD' => [
         ['id' => 3, 'name' => 'AC Smith', 'status' => 'active'], // Active member, will be excluded
-        ['id' => 4, 'name' => 'DS Prince', 'status' => 'removed'],
+        ['id' => 4, 'name' => 'Olof Prince', 'status' => 'removed'],
     ],
     'SYN' => [
         ['id' => 5, 'name' => 'THisu Kent', 'status' => 'removed'],

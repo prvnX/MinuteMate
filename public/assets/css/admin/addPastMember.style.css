@@ -1,0 +1,126 @@
+/* General styles for the profile container */
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    margin-top: 40px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #6473d6;
+  }
+  
+  /* Styles for the profile header section */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .profile-info {
+    flex: 1;
+  }
+  
+  .profile-info label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .profile-info input,
+  .profile-info select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .profile-info input:focus,
+  .profile-info select:focus {
+    outline: none;
+    border-color: #4CAF50;
+  }
+  
+  .profile-info input[type="text"],
+  .profile-info input[type="email"] {
+    font-family: Arial, sans-serif;
+  }
+  
+  .profile-info select {
+    background-color: #fff;
+  }
+  
+  /* Action buttons */
+  .action-buttons {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+ /* CSS for the Save Changes button */
+.btn-submit {
+  background-color: #87CEEB; /* Light blue background */
+  color: white; /* White text */
+  font-size: 16px; /* Slightly larger font size for emphasis */
+  padding: 10px 20px; /* Spacing for the button */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for the button */
+.btn-submit:hover {
+  background-color: #5DADE2; /* Slightly darker blue on hover */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
+}s
+  
+  .btn-submit:disabled {
+    background-color: #809ad6;
+    cursor: not-allowed;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 10px;
+    }
+  
+    .profile-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 15px;
+    }
+  
+    .profile-info input,
+    .profile-info select {
+      font-size: 14px;
+    }
+  
+    .action-buttons {
+      margin-top: 10px;
+    }
+  }
+  
