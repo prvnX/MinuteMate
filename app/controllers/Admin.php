@@ -42,6 +42,8 @@ class Admin extends Controller {
         $this->view(name: "admin/viewMemberProfile");
     }
 
-    
+    public function confirmlogout() {
+        $this->view("confirmlogout",[ "user" =>"admin"]);
+    }
    
 }
