@@ -2,10 +2,14 @@
 /* Main model trait */
 Trait Model {
     use Database;
-    protected $limit=10;
+    protected $limit=100;
     protected $offset= 0;
     protected $order_type= "asc";
     protected $order_column= "id";
+
+    public $errors=[];
+
+
 
 /*Select All from table*/
     public function find_all(){
