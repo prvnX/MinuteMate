@@ -1,5 +1,5 @@
 <?php
-class Admin extends Controller {
+class Admin extends BaseController {
     public function index() {
         $this->view("admin/dashboard");
     }
@@ -47,7 +47,12 @@ class Admin extends Controller {
     }
 
     public function logout() {
-        $this->view("logout",[ "user" =>"admin"]);
+        session_start();
+        // Destroy all session data
+        session_unset();
+        session_destroy();
+        // Redirect to the login page
+        redirect("home");
     }
    
     public function editMemberProfile(): void{
