@@ -40,16 +40,11 @@ class Studentrep extends Controller {
         ];
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
     }
-    public function viewprofile(){
-        $this->view("studentrep/viewprofile");
-    }
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
     }
 
-=========
     public function viewprofile(){
         $this->view("studentrep/viewprofile");
     }
->>>>>>>>> Temporary merge branch 2
 }
