@@ -47,4 +47,9 @@ class Studentrep extends Controller {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
     }
 
+=========
+    public function viewprofile(){
+        $this->view("studentrep/viewprofile");
+    }
+>>>>>>>>> Temporary merge branch 2
 }
