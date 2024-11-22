@@ -2,6 +2,8 @@
 // Include sidebar and other layout components
 include '../app/views/admin/adminsidebar.view.php'; 
 
+// Retrieve the user details passed from the controller
+$userDetails = $data['userDetails']; // The fetched user details
 // Example dummy data to populate the fields
 $userId = $_GET['id'];
 $userData = [
@@ -17,13 +19,13 @@ $userData = [
 <div class="content">
     <div class="profile-header">
         <img src="<?= ROOT ?>/assets/images/user.png" alt="Profile Image" class="profile-img">
-        <h3><?php echo htmlspecialchars($userData['name']); ?></h3>
+        <h3><?php echo htmlspecialchars($userDetails->full_name); ?></h3>
     </div>
-    <p>Email: <?php echo htmlspecialchars($userData['email']); ?></p>
-    <p>Lecture ID: <?php echo htmlspecialchars($userData['lecturer_id']); ?></p>
-    <p>NIC: <?php echo htmlspecialchars($userData['nic']); ?></p>
-    <p>Role: <?php echo htmlspecialchars($userData['role']); ?></p>
-    <p>Contact No.: <?php echo htmlspecialchars($userData['phone']); ?></p>
+    <p>Email: <?php echo htmlspecialchars($userDetails->email); ?></p>
+    <p>Lecture ID: <?php echo htmlspecialchars($userDetails->lec_stu_id); ?></p>
+    <p>NIC: <?php echo htmlspecialchars($userDetails->nic); ?></p>
+    <p>Role: <?php echo htmlspecialchars($userDetails->role); ?></p>
+    <p>Contact No.: <?php echo htmlspecialchars($userDetails->tp_no); ?></p>
 
     <!-- Meeting Type Selection (allow multiple) -->
     <label>Select Meeting Type(s):</label>
