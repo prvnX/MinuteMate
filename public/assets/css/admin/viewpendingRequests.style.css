@@ -1,7 +1,7 @@
 /* ViewpendingRequests.style.css */
 .content {
     margin-top: 100px; /* Moves the content down */
-    margin-left: 250px; /* Moves the content to the right */
+    margin-left: 190px; /* Moves the content to the right */
 }
 
 /* Position the pending request list relative to the sidebar */
@@ -13,13 +13,15 @@
 }
 
 .pending-request-list li {
-    margin: 10px 0;
+    margin: 20px 0;
+    border-bottom: 1px solid #131111; /* Adds a line between names */
+    padding-bottom: 15px; /* Pushes the line down */
 }
 
 .pending-request-list a {
-    color: black;          /* Makes the text black */
+    color: rgb(0, 0, 0);          /* Makes the text black */
     font-size: 20px;       /* Increases the font size */
-    font-weight: bold;
+    
     text-decoration: none;
 }
 

@@ -52,7 +52,7 @@ $userData = [
 
     <!-- Edit and Remove Buttons -->
     <div class="action-buttons">
-        <button class="btn-edit" onclick="handleMemberAction('edit')">Edit</button>
+    <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($userId) ?>" class="btn-edit">Edit</a>
         <button class="btn-remove" onclick="handleMemberAction('remove')">Remove</button>
     </div>
 </div>
