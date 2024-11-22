@@ -1,5 +1,5 @@
 <?php
-class Lecturer extends Controller {
+class Lecturer extends BaseController {
     public function index() {
         $this->view("lecturer/dashboard");
     }
@@ -57,7 +57,12 @@ class Lecturer extends Controller {
     }
 
     public function logout() {
-        $this->view("logout",[ "user" =>"lecturer"]);
+        session_start();
+        // Destroy all session data
+        session_unset();
+        session_destroy();
+        // Redirect to the login page
+        redirect("home");
     }
 
 }

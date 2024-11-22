@@ -1,5 +1,5 @@
 <?php
-class Studentrep extends Controller {
+class Studentrep extends BaseController {
     public function index() {
          
         $this->view("studentrep/dashboard");
@@ -45,5 +45,13 @@ class Studentrep extends Controller {
     }
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
+    }
+    public function logout() {
+        session_start();
+        // Destroy all session data
+        session_unset();
+        session_destroy();
+        // Redirect to the login page
+        redirect("home");
     }
 }
