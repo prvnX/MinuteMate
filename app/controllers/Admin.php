@@ -79,4 +79,10 @@ class Admin extends Controller {
     public function addPastMember(): void{
         $this->view(name: "admin/addPastMember");
     }
+    public function vieweditrequests(){
+        $this->view("admin/vieweditrequests");
+    }
+    public function viewsinglerequest(){
+        $this->view("admin/viewsinglerequest");
+    }
 }
