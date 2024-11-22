@@ -17,11 +17,16 @@
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" placeholder="Enter Your Username" required>
+                    
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Enter Your Password" required>
+                    <input type="password" name="password" id="password" placeholder="Enter Your Password" minlength="8" required>
                 </div>
+                <? if (isset($err['invalid'])): ?>
+                        <span class="err-login"> <?=$err['invalid'] ?></span>
+                    <? endif; ?>
+
                 <button type="submit" class="btn-long">Sign In</button>
             </form>
             <p>Don't have an account? <a href="<?=ROOT?>/register">Request One</a></p>
