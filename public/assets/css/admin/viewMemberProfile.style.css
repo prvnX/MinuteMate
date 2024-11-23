@@ -37,6 +37,7 @@ p {
     margin-right: 10px;
     background-color: #6473d6;
     color: white;
+    text-decoration: none;  /* Remove the underline */
 }
 
 .btn-edit {

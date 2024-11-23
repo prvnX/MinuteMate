@@ -26,18 +26,18 @@
 
         // Function to check if a link is active
         function isActive($page) {
-            global $currentURL;
-            return strpos($currentURL, $page) !== false ? 'active' : '';
+            $currentPage = basename($_SERVER['PHP_SELF']);
+            return $currentPage === $page ? 'active' : '';
         }
     ?>
     <div class="sidebar">
-        <a href="<?=ROOT?>/admin/viewpendingRequests" class="<?= isActive('viewpendingRequests') ?>">
+        <a href="<?=ROOT?>/admin/viewpendingRequests" class="<?= isActive('viewpendingRequests.view.php') ?>">
             <i class="fas fa-user-clock"></i> Pending Member Request
         </a>
-        <a href="<?=ROOT?>/admin/viewMembers" class="<?= isActive('viewMembers') ?>">
+        <a href="<?=ROOT?>/admin/viewMembers" class="<?= isActive('viewMembers.view.php') ?>">
             <i class="fas fa-users"></i> Members
         </a>
-        <a href="<?=ROOT?>/admin/PastMembers" class="<?= isActive('PastMembers') ?>">
+        <a href="<?=ROOT?>/admin/PastMembers" class="<?= isActive('PastMembers.view.php') ?>">
             <i class="fas fa-user-minus"></i> Past Members
         </a>
     </div>

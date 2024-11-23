@@ -51,7 +51,7 @@ $members = array_filter($dummyMembers[$meetingType] ?? [], function ($member) {
           <a class="view-btn" href="<?=ROOT?>/admin/PastMemberProfile?id=<?= htmlspecialchars($member['id']) ?>">
             View
           </a>
-          <a class="delete-btn" href="<?=ROOT?>/admin/editPastMemberProfile?id=<?= htmlspecialchars($member['id']) ?>">
+          <a class="delete-btn" href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($member['id']) ?>">
             Delete
           </a>
         </li>

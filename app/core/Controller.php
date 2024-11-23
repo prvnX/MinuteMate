@@ -11,4 +11,13 @@ class Controller{
         }
     }
 
+    public function model($model) {
+        $filename = "../app/models/" . $model . ".php";
+        if (file_exists($filename)) {
+            require_once $filename;
+            return new $model();
+        } else {
+            die("Model file not found: " . $filename);
+        }
+    }
 }

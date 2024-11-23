@@ -4,20 +4,44 @@ class Admin extends Controller {
         $this->view("admin/dashboard");
     }
 
-    public function viewpendingRequests(): void{
-        $this->view(name: "admin/viewpendingRequests");
+    public function viewpendingRequests(): void {
+        // Create an instance of the UserRequests model
+        $userRequestsModel = $this->model("user_requests");
+
+        // Fetch the list of pending requests
+        $pendingRequests = $userRequestsModel->getPendingRequests();
+
+        // Pass the data to the view
+        $this->view(name: "admin/viewpendingRequests", data: [
+            "pendingRequests" => $pendingRequests
+        ]);
     }
 
     public function viewRequestDetails() {
         // Retrieve the request ID from the URL
         $requestId = $_GET['id'] ?? null;
-    
-        // Add logic to fetch request details based on $requestId
-        // For example:
-        // $requestDetails = $this->model('RequestModel')->getRequestById($requestId);
-    
-        // Pass the request details to the view
-        $this->view("admin/viewRequestDetails", compact("requestId"));
+        
+        if ($requestId) {
+            // Create an instance of the UserRequests model
+            $userRequestsModel = $this->model("user_requests");
+
+            // Fetch the user details based on the request ID
+            $userDetails = $userRequestsModel->getRequestById($requestId);
+
+            // Check if data is found
+            if ($userDetails) {
+                // Pass the user details to the view
+                $this->view("admin/viewRequestDetails", [
+                    "userDetails" => $userDetails
+                ]);
+            } else {
+                // Handle if no user found with the given ID
+                $this->view("admin/404");
+            }
+        } else {
+            // Handle if no ID is passed
+            $this->view("admin/404");
+        }
     }
     
     public function viewMembers(): void{
@@ -79,4 +103,6 @@ class Admin extends Controller {
     public function addPastMember(): void{
         $this->view(name: "admin/addPastMember");
     }
+
+
 }

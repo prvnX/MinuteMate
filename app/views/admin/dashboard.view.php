@@ -39,7 +39,7 @@
     <div class="card">
       <img src="<?=ROOT?>/assets/images/Remove Members.jpeg" alt="Remove Members">
       <a href="<?=ROOT?>/admin/PastMembers">
-      <button>Remove Members</button>
+      <button>Past Members</button>
     </a>
     </div>
     </div>
