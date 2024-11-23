@@ -46,6 +46,37 @@ class Studentrep extends BaseController {
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
     }
+
+
+    // public function requestchange() {
+    //     $this->view("studentrep/requestchange");
+    
+    // }
+
+    public function requestchange(){
+        $responseStatus = "";
+    
+        // Handle POST request
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $field = $_POST['field'] ?? null;
+            $newValue = $_POST['newValue'] ?? null;
+    
+            if (!empty($field) && !empty($newValue)) {
+                $responseStatus = "success";
+            } else {
+                $responseStatus = "failure";
+            }
+        }
+    
+        // Pass responseStatus to the view
+        $this->view("studentrep/requestchange", [
+            "user" => "studentrep",
+            "responseStatus" => $responseStatus
+        ]);
+    }
+
+
+
     public function logout() {
         session_start();
         // Destroy all session data
@@ -54,4 +85,5 @@ class Studentrep extends BaseController {
         // Redirect to the login page
         redirect("home");
     }
+
 }

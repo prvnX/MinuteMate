@@ -315,4 +315,27 @@ class Secretary extends BaseController {
     public function selectminute (){
         $this->view("secretary/selectminute");
     }
+
+    public function requestchange(){
+        $responseStatus = "";
+    
+        // Handle POST request
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $field = $_POST['field'] ?? null;
+            $newValue = $_POST['newValue'] ?? null;
+    
+            if (!empty($field) && !empty($newValue)) {
+                $responseStatus = "success";
+            } else {
+                $responseStatus = "failure";
+            }
+        }
+    
+        // Pass responseStatus to the view
+        $this->view("secretary/requestchange", [
+            "user" => "secretary",
+            "responseStatus" => $responseStatus
+        ]);
+    }
+    
 }

@@ -65,7 +65,7 @@ $minutes = [
                         <button class="viewbtn">View</button>
                     </a>
                     <a href="<?= ROOT ?>/studentrep/viewminutes/pdf/<?= $id ?>">
-                        <button class="viewbtn">View PDF</button>
+                        <button class="viewbtn">Download PDF</button>
                     </a>
                 </div>
             </div> 
