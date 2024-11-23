@@ -6,6 +6,7 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <?php
+                date_default_timezone_set('Asia/Colombo');
                 $currentTime = date("H:i");
                 if ($currentTime >= "06:00" && $currentTime < "12:00") {
                     $greeting = "Good Morning";

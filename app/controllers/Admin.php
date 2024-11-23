@@ -1,5 +1,5 @@
 <?php
-class Admin extends Controller {
+class Admin extends BaseController {
     public function index() {
         $this->view("admin/dashboard");
     }
@@ -45,5 +45,49 @@ class Admin extends Controller {
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"admin"]);
     }
+
+    public function logout() {
+        session_start();
+        // Destroy all session data
+        session_unset();
+        session_destroy();
+        // Redirect to the login page
+        redirect("home");
+    }
    
+    public function editMemberProfile(): void{
+        $this->view(name: "admin/editMemberProfile");
+    }
+
+    public function PastMembers(): void{
+        $this->view(name: "admin/PastMembers");
+    }
+
+    public function PastMembersList(): void{
+        $this->view(name: "admin/PastMembersList");
+    }
+
+    public function viewPastMembersByType() {
+        // Retrieve the meeting type from the URL
+        $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';
+    
+        // Pass the meeting type to the view
+        $this->view("admin/PastMembersList", [
+            "meetingType" => $meetingType
+        ]);
+    }
+    
+    public function pastMemberProfile(): void{
+        $this->view(name: "admin/pastMemberProfile");
+    }
+
+    public function addPastMember(): void{
+        $this->view(name: "admin/addPastMember");
+    }
+    public function vieweditrequests(){
+        $this->view("admin/vieweditrequests");
+    }
+    public function viewsinglerequest(){
+        $this->view("admin/viewsinglerequest");
+    }
 }

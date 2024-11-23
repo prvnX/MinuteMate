@@ -1,9 +1,10 @@
 <?php
-class Secretary extends Controller {
+class Secretary extends BaseController {
+
     public function index() {
         $this->view("secretary/dashboard");
-
     }
+
     public function search() {
         $searchtxt=$_POST['search'];
         if($searchtxt=="" || !$searchtxt){
@@ -301,8 +302,13 @@ class Secretary extends Controller {
         $this->view("secretary/viewprofile");
     }
     public function logout() {
-        $this->view("logout",[ "user" =>"Secretary"]);
-    }
+        session_start();
+        // Destroy all session data
+        session_unset();
+        session_destroy();
+        // Redirect to the login page
+        redirect("home");
+            }
     public function selectmemo (){
         $this->view("secretary/selectmemo");
     }

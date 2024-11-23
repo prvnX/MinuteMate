@@ -43,7 +43,7 @@ body {
 }
 
 /* Button styling */
-.view-btn, .edit-btn {
+.view-btn, .delete-btn {
   padding: 5px 10px;
   margin-left: 10px;
   text-decoration: none;
@@ -61,11 +61,11 @@ body {
   background-color: #aa81eb;
 }
 
-.edit-btn {
+.delete-btn {
   background-color: #eff1f4;
 }
 
-.edit-btn:hover {
+.delete-btn:hover {
   background-color: #aa81eb;
 }
 
