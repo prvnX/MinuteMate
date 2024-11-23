@@ -60,10 +60,8 @@
     $notificationsArr =[
         "Reminder: Meeting scheduled for tomorrow at 3 PM.",
         "Update: Minutes from yesterday's meeting are now available.",
-        "Memo Added: A new memo has been attached to this week’s meeting.",
-        "Backup Complete: Meeting records were successfully backed up today.",
-    ]; //pass the notifications here
-    $name = "John Doe"; //pass the name of the user here  
+        "Memo Added: A new memo has been attached to this week’s meeting."    ]; //pass the notifications here
+    $name = $_SESSION['userDetails']->full_name; //pass the name of the user here
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
     </div>

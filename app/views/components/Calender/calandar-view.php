@@ -40,13 +40,15 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             <div class="nav-buttons">
                 <form method="get" style="display: inline;">
                     <input type="hidden" name="month" value="<?php echo $prevMonth; ?>">
-                    <input type="hidden" name="year" value="<?php echo $prevYear; ?>">
+                    <input type="hidden" name="year" value="<?php echo $prevYear;echo "date=''" ?>">
+                    <input type="hidden" name="date" value="">
                     <button type="submit">&lt;</button>
                 </form>
                 
                 <form method="get" style="display: inline;">
                     <input type="hidden" name="month" value="<?php echo $nextMonth; ?>">
-                    <input type="hidden" name="year" value="<?php echo $nextYear; ?>">
+                    <input type="hidden" name="year" value="<?php echo $nextYear;echo "date=''" ?>">
+                    <input type="hidden" name="date" value="">
                     <button type="submit">&gt;</button>
                 </form>
             </div>
@@ -58,6 +60,7 @@ $nextYear = $month == 12 ? $year + 1 : $year;
         <?php if ($showAddEvents==true) : ?>
             <button class="add-event-button" onclick="openModal()">+ Add Event</button>
         <?php endif; ?>
+
     </div>
 
     <!-- Add Event Modal -->
@@ -125,6 +128,10 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                 modal.style.display = "none";
             }
         }
+    function handleDayClick(date) {
+        window.location.href = `<?= ROOT ?>/Events?date=${date}`;
+    }
+
     </script>
 </body>
 </html>

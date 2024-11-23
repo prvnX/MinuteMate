@@ -97,7 +97,7 @@ td:hover {
 }
 
 .rhd {
-    background-color: #ed5f5f; 
+    background-color: #ff8383; 
     border: solid 2px rgb(255, 255, 255);
 
 }
@@ -114,7 +114,7 @@ td:hover {
 }
 
 .today {
-    background-color: #9e9e9e; 
+    background-color: #7C4AFF; 
     color: white;
     border-radius: 25px;
 }
