@@ -69,9 +69,9 @@
 <body>
     <div class="navbar">
     <?php
-    $user="studentrep";
+    $user="lecturer";
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/navbar.php"); //call the navbar component
     $profileDetails=["name"=>"Keneth Gunewardana","Email"=>"Email@gmail.com","LectureID"=>"932837273","NIC"=>"9283984743284v","Role"=>" Board Member","Contact_No:"=>"071 283 3684, 077 647 2983","Meeting_types"=>"IUD, RHD, Syndicate"]
    ?>
@@ -143,7 +143,7 @@
 
     <script>
         document.getElementById("continueButton").addEventListener("click", () => {
-    window.location.href = "<?= ROOT ?>/studentrep"; // Redirect to the dashboard
+    window.location.href = "<?= ROOT ?>/lecturer"; // Redirect to the dashboard
 });
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -171,7 +171,7 @@
             });
 
             requestbtn.addEventListener("click", ()=>{
-                window.location.href= "<?= ROOT ?>/studentrep/requestchange";
+                window.location.href= "<?= ROOT ?>/lecturer/requestchange";
             })
         });
     </script>
