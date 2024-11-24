@@ -2,7 +2,7 @@
 class Login extends Controller {
     public function index() {
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            $user = new User;            
+            $user = new User();            
             $username = $_POST['username'];
             $password = $_POST['password'];
             $row = $user->select_all(["username"=>$username]);
