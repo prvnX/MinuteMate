@@ -131,17 +131,69 @@ class Admin extends BaseController {
 
     public function viewMembersByMeetingType() {
         // Get the meeting type from the URL
-        $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';
-
-        // Pass the meeting type to the view
-        $this->view("admin/viewMembersList", [
-            "meetingType" => $meetingType
-        ]);
+        $meetingType = $_GET['meetingType'] ?? null;
+    
+        if ($meetingType) {
+            // Load the required models
+            $meetingTypesModel = $this->model("meeting_types");
+            $userMeetingTypesModel = $this->model("user_meeting_types");
+    
+            // Retrieve the type_id for the given meeting type
+            $meetingTypeId = $meetingTypesModel->getTypeIdByMeetingType($meetingType);
+    
+            if ($meetingTypeId) {
+                // Fetch the usernames of users belonging to this meeting type
+                $usernames = $userMeetingTypesModel->getUsernamesByMeetingTypeId($meetingTypeId);
+    
+                // Pass the data to the view
+                $this->view("admin/viewMembersList", [
+                    "meetingType" => $meetingType,
+                    "members" => $usernames
+                ]);
+            } else {
+                // Handle invalid meeting type
+                $this->view("admin/viewMembersList", [
+                    "meetingType" => $meetingType,
+                    "members" => []
+                ]);
+            }
+        } else {
+            // Handle missing meeting type
+            $this->view("admin/viewMembersList", [
+                "meetingType" => "Unknown Meeting Type",
+                "members" => []
+            ]);
+        }
     }
     
-    public function viewMemberProfile(): void{
-        $this->view(name: "admin/viewMemberProfile");
+    
+   // Controller - Admin.php
+
+public function viewMemberProfile() {
+    // Get the user ID from the URL
+    $userId = $_GET['id'] ?? null;
+
+    // Check if the user ID is provided
+    if ($userId) {
+        // Instantiate the User model
+        $userModel = new User();
+
+        // Fetch the user data by username or ID
+        $userData = $userModel->getUserById($userId);
+
+        if ($userData) {
+            // Pass the user data to the view
+            $this->view('admin/viewMemberProfile', ['userData' => $userData]);
+        } else {
+            // Handle the case where no user is found
+            echo "User not found.";
+        }
+    } else {
+        // Handle the case where no user ID is provided
+        echo "Invalid user ID.";
     }
+}
+
 
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"admin"]);
