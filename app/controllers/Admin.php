@@ -17,6 +17,81 @@ class Admin extends BaseController {
         ]);
     }
 
+    public function handleRequest() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Get JSON data from the AJAX request
+            $requestData = json_decode(file_get_contents("php://input"), true);
+    
+            // Extract the data
+            $requestId = $requestData['id'] ?? null;
+            $action = $requestData['action'] ?? null;
+            $meetingTypes = $requestData['meetingTypes'] ?? [];
+    
+            if ($requestId && $action === 'accept') {
+                // Create model instances
+                $userRequestsModel = $this->model("user_requests");
+                $userModel = $this->model("User");
+                $userMeetingTypesModel = $this->model("user_meeting_types");
+                $meetingTypesModel = $this->model("meeting_types");
+    
+                // Fetch the user details from user_requests
+                $userDetails = $userRequestsModel->getRequestById($requestId);
+    
+                if ($userDetails) {
+                    // Generate username and default password
+                    $username = strtolower(str_replace(' ', '', $userDetails->lec_stu_id));
+                    $password = password_hash('defaultpassword', PASSWORD_DEFAULT);
+    
+                    // Insert user into the `user` table
+                    $userInsertResult = $userModel->insert([
+                        'username' => $username,
+                        'password' => $password,
+                        'nic' => $userDetails->nic,
+                        'full_name' => $userDetails->full_name,
+                        'email' => $userDetails->email,
+                        'role' => $userDetails->role,
+                        'status' => 'active'
+                    ]);
+    
+                    if ($userInsertResult['success'] === false) {
+                        // Handle the case where the username already exists
+                        echo json_encode(['success' => false, 'message' => 'Username already exists.']);
+                        return;
+                    }
+    
+                    // Insert selected meeting types into `user_meeting_types` table
+                    if (!empty($meetingTypes)) {
+                        foreach ($meetingTypes as $meetingTypeId) {
+                            // Add each meeting type to the user_meeting_types table
+                            $userMeetingTypesModel->insertMeetingTypes($username, [$meetingTypeId]);
+                        }
+                    }
+    
+                    // Remove the user from the `user_requests` table
+                    $userRequestsModel->deleteRequestById($requestId);
+    
+                    // Return success response
+                    echo json_encode(['success' => true]);
+                    return;
+                }
+            } elseif ($requestId && $action === 'decline') {
+                // Handle decline action
+                $userRequestsModel->deleteRequestById($requestId);
+    
+                echo json_encode(['success' => true]);
+                return;
+            }
+        }
+    
+        // Return error response if request data is invalid
+        echo json_encode(['success' => false, 'message' => 'Invalid request']);
+    }
+    
+    
+    
+    
+    
+
     public function viewRequestDetails() {
         // Retrieve the request ID from the URL
         $requestId = $_GET['id'] ?? null;
