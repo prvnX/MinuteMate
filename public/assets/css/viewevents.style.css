@@ -22,10 +22,81 @@ body{
 .events-container{
     width: 65%;
     padding: 20px;
-    height: 500px;
-    overflow-y: auto; 
+    height: 800px;
+   
     
 }
+.events-container .events{
+    height: 800px;
+    overflow-y:  auto;
+
+}
+.events-container .events .meeting h1{
+    font-size: 2rem;
+    font-weight: bold;
+    color:rgb(65, 65, 65);
+    letter-spacing: 1px;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
+    margin: auto;
+    text-align: center;
+}
+.events-container .events .meeting{
+    
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    margin: 50px;
+    border-radius: 30px;
+}
+.events-container .events .meeting hr{
+    width: 10%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 2px;
+    border: none;
+    border-top:solid rgba(190, 190, 190, 0.673) 1px;
+}
+.events-container .events .meeting:hover{
+    transform: scale(1.02);
+    background-color: rgba(234, 234, 234, 0.414);
+}
+.events-container .events .event table{
+    width:80%;
+    cursor:auto;
+    margin: auto;
+    font-size: 1.1rem;
+
+}
+.events-container .events .event table tr td{
+    text-align: left;
+    border: none;
+    border-radius: 0px;
+    
+}
+.events-container .events .event table tr td:hover{
+    background-color: transparent;
+    cursor:auto;
+}
+.events-container .events .event table tr .left{
+    font-weight: 500;
+
+}
+.events-container .events .event table tr{
+    cursor:auto;
+}
+.events-container .events .event table tr:hover{
+    background-color: #bababa21;
+    cursor:auto;
+}
+
+
+
 .viewevent-sidebar{
     width: 30%;
     
@@ -37,3 +108,247 @@ body{
 }
 
   
+
+
+/* Modal container (hidden by default) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Black with opacity */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s;
+}
+
+/* Modal Header */
+.modal-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Modal Body */
+.modal-body {
+    font-size: 1em;
+    margin: 10px 0;
+    color: #555;
+}
+
+/* Modal Actions */
+.delete-modal-actions {
+    display: flex;
+    width: 50%;
+    margin:0 100px;
+}
+
+/* Buttons */
+.modal-btn {
+    padding: 10px 20px;
+    border: none;
+    margin: auto;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100px;
+    transition: all 0.2s ease-in-out;
+
+}
+
+.btn-yes {
+    border: solid 1.2px #7C4AFF;
+    background-color: transparent;
+    font-weight: 400;
+    color: #7C4AFF;
+}
+
+.btn-no{
+    background-color:#7C4AFF;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+.btn-yes:hover{
+    background-color: #7C4AFF;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+/* Reschedule Modal (inherits from general modal styles) */
+#rescheduleModal .modal-content {
+    width: 50%; /* Slightly larger for form elements */
+}
+#rescheduleModal input[type="date"],input[type='time'] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submit-button:hover {
+    background-color: #5b29d8;
+}
+
+#rescheduleModal .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    margin: 10px 0;
+}
+
+#rescheduleModal button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #7C4AFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+#rescheduleModal button:hover {
+    background-color: #5b29d8;
+}
+#rescheduleModal label {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;
+}
+
+#rescheduleModal input {
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+#rescheduleModal .modal-header {
+    font-size: 1.5em;
+    font-family: "Ubuntu", sans-serif;
+    margin-bottom: 10px;
+    color:#2f196e;
+    text-align: center;
+}
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover, .close-btn:focus {
+    color: black;
+    cursor: pointer;
+}
+.meeting-action-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.action-btn{
+    width: 180px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: transparent;
+}
+.meeting-action-btns .delete-btn {
+    color: #ff4d4d;
+    border: solid 1px #ff4d4d;
+}
+.meeting-action-btns .resch-btn {
+    color: #5b29d8;
+    border: solid 1px #5b29d8;
+}
+.meeting-action-btns .delete-btn:hover {
+    background-color: #ff4d4d;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+.meeting-action-btns .resch-btn:hover {
+    background-color: #5b29d8;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+
+
+
+
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.error-message{
+    color: red;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 20% 20px;
+    font-family: "Ubuntu", sans-serif;
+    text-align: center;
+}
+
+#alertModal .modal-content {
+    width: 40%;
+    background-color: #ffffff; /* Light green for success */
+    color: #ffffff; /* Dark green text */
+    border:solid 0.5px #7C4AFF;
+}
+
+#alertModal .modal-body {
+    padding: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+
+}
+
+#alertModal .modal-actions {
+    text-align: center;
+}
+
+#alertModal .btn-ok {
+    background-color:#5b29d8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#alertModal .btn-ok:hover {
+    background-color: #390ea6; /* Darker green on hover */
+}
+#message{
+    color: rgb(101, 101, 101);
+    font-size: 1rem;
+    font-weight: 300;
+    font-family: "Ubuntu", sans-serif;
+    text-align: center;
+}

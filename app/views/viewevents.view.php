@@ -20,7 +20,11 @@
 
     <div class="dashboard-container">  
     <div class="events-container">
+        <?php if($date!=""){ ?>
         <h1>Events on : <?= $date ?></h1>
+        <?php } ?>
+        <div class="events">
+            <div class="event">
         <?php 
             
             // Decode fetchData from the controller
@@ -33,48 +37,222 @@
                 // Loop through meeting data if fetchData is valid
                 foreach ($fetchData as $meeting) {
                     echo "<div class='meeting'>";
-                    echo "Meeting ID: " . htmlspecialchars($meeting['meeting_id']) . "<br>";
-                    echo "Date: " . htmlspecialchars($meeting['date']) . "<br>";
-                    echo "Start Time: " . htmlspecialchars($meeting['start_time']) . "<br>";
-                    echo "End Time: " . htmlspecialchars($meeting['end_time']) . "<br>";
-                    echo "Location: " . htmlspecialchars($meeting['location']) . "<br>";
-                    echo "Meeting Type: " . htmlspecialchars($meeting['meeting_type']) . "<br>";
-                    echo "Additional Notes: " . htmlspecialchars($meeting['additional_note']) . "<br>";
-                    echo htmlspecialchars($meeting['memos'])." memos submitted";
+                    $meeting['meeting_type'] = $meeting['meeting_type'] == 'syn' ? 'syndicate' : $meeting['meeting_type'];
+                    echo "<h1 class='meetingtitle'>" . ucfirst(htmlspecialchars($meeting['meeting_type']))." Meeting </h1><hr>";
+                    echo "<table>";
+                    echo "<tr><td class='left'>Date</td><td>" . htmlspecialchars($meeting['date']) . "</td></tr>";
+                    echo "<tr><td class='left'>Start Time:</td><td>" . htmlspecialchars($meeting['start_time']) . "</td></tr>";
+                    echo "<tr><td class='left'>End Time:</td><td>" . htmlspecialchars($meeting['end_time']) . "</td></tr>";
+                    echo "<tr><td class='left'>Location:</td><td>" . htmlspecialchars($meeting['location']) . "</td></tr>";
+                    echo "<tr><td class='left'>Meeting Type:</td><td>" . htmlspecialchars($meeting['meeting_type']) . "</td></tr>";
+                    echo "<tr><td class='left'>Created By:</td><td>" . htmlspecialchars($meeting['created_by_name']) . "</td></tr>";
+                    echo "<tr><td>Additional Notes:</td><td>" . htmlspecialchars($meeting['additional_note']) . "</td></tr>";
+                    $meetingid = htmlspecialchars($meeting['meeting_id']);
+                    echo "<tr><td>Memos Submitted:</td><td>" . htmlspecialchars($meeting['memos']) . " memos submitted for this meeting.</td></tr>";
+                    echo "</table>";
+                    date_default_timezone_set('Asia/Colombo');
+                    $todayDate = date('Y-m-d');
+                    if($_SESSION['userDetails']->role=="secretary" && $meeting['date'] >= $todayDate){
+                        echo "<div class='meeting-action-btns'>
+                        <button class='delete-btn action-btn' onclick='handleMeetingDelete(".$meetingid.")'>Delete The Meeting</button>
+                        <button class='resch-btn action-btn' onclick='handleMeetingReschedule(".$meetingid.")'>Reschedule The Meeting </button>
+                        </div>";
+                    }
                     echo "</div>";
+      
+                    
                 }
             } else {
                 echo "<div class='error-message'>No meetings found.</div>";
             }
+            
             ?>
+            </div>
+            </div>
               
         
     </div>
     <div class="viewevent-sidebar">   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
    
    <?php
    
 
 
 
-    $showAddEvents=true;
+    $showAddEvents=false;
     $notificationsArr =[
         "Reminder: Meeting scheduled for tomorrow at 3 PM.",
         "Update: Minutes from yesterday's meeting are now available.",
         "Memo Added: A new memo has been attached to this week’s meeting."    ]; //pass the notifications here
     $name = $_SESSION['userDetails']->full_name; //pass the name of the user here
+    $role = $_SESSION['userDetails']->role;
+    if($role=="secretary"){
+        $showAddEvents=true;
+    }
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
     </div>
     </div>
+<!-- Delete Confirm Modal -->
+    <div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p id="confirmMessage"></p>
+        <div class="delete-modal-actions">
+            <button id="confirmNo" class="modal-btn btn-no">No</button>
+            <button id="confirmYes" class="modal-btn btn-yes">Yes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Reschedule Modal -->
+<div id="rescheduleModal" class="modal">
+    <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 class="modal-header">Reschedule Meeting</h2>
+        <form id="rescheduleForm">
+            <div class="modal-body">
+                <label for="newDate">New Date:</label>
+                <input type="date" id="newDate" name="newDate" required>
+                
+                <label for="startTime">New Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required>
+                
+                <label for="endTime">New End Time:</label>
+                <input type="time" id="endTime" name="endTime" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="rescheduleYes" class="btn btn-yes">Reschedule</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Alert Message -->
+<div id="alertModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <p id="Message">Your action was successful!</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" id="successOk" class="btn btn-ok">OK</button>
+        </div>
+    </div>
+</div>
+    <script>
+        function handleMeetingDelete(meetingId) {
+    document.getElementById('confirmMessage').innerText = `Are you sure you want to delete this meeting?`;
+    const modal = document.getElementById('confirmModal');
+    modal.style.display = 'block';
+    document.getElementById('confirmYes').onclick = function () {
+        const url = '<?=ROOT?>/Events/deleteMeeting';
+        fetch(url, {
+                method: 'POST', // Use POST as the PHP function expects POST data
+                headers: {
+                        'Content-Type': 'application/json', // Specify content type
+                        },
+                body: JSON.stringify({ meeting_id: meetingId }), // Send meeting ID as JSON
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parse JSON response
+            })
+        .then(data => {
+            // Handle success or failure from PHP
+        if (data.success) { //success is the key in the json response from php same as the error key
+            console.log(data.success); // Log success message
+
+            showAlert(data.success); // Optionally alert the user
+            modal.style.display = 'none';
+
+        } else {
+            console.error('Deletion failed:', data.error || 'Unknown error');
+        }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    //close the modal on click
+    document.getElementById('confirmNo').onclick = function () {
+        modal.style.display = 'none';
+    };
+}
+
+function handleMeetingReschedule(meetingId) {
+    const modal = document.getElementById('rescheduleModal');
+    modal.style.display = 'block';
+
+    document.getElementById('rescheduleYes').onclick = function () {
+        const newDate = document.getElementById('newDate').value;
+        const startTime = document.getElementById('startTime').value;
+        const endTime = document.getElementById('endTime').value;
+
+    if (newDate && startTime && endTime) {
+        const url = '<?=ROOT?>/Events/rescheduleMeeting';
+        const data = {
+            meeting_id: meetingId,
+            newDate: newDate,
+            startTime: startTime,
+            endTime: endTime
+        };
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log(data.success);
+                showAlert(data.success);
+            } else {
+                console.error('Rescheduling failed:', data.error || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        modal.style.display = 'none';
+        } 
+        else {
+            showAlert("Please fill in all fields.");
+        }
+    };
+        document.querySelector('.close-btn').onclick = function () {
+            modal.style.display = 'none';
+        };
+    }
+
+
+
+    //function for handling the alert
+    function showAlert(message) {
+            const modal = document.getElementById('alertModal');
+            const messageElement = document.getElementById('Message');
+            messageElement.textContent = message;
+            modal.style.display = 'block';
+            document.getElementById('successOk').onclick = function () {
+            modal.style.display = 'none';
+            location.reload();  // Refresh the current page
+        };
+    }
+    window.onclick = function (event) {
+    const modal = document.getElementById('confirmModal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+    };
+
+
+
+    </script>
 </body>
