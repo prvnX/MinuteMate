@@ -75,6 +75,7 @@ class Admin extends BaseController {
                     return;
                 }
             } elseif ($requestId && $action === 'decline') {
+                $userRequestsModel = $this->model("user_requests"); // Comment: I added this line because in here it showed an error as undefined variable -prvn
                 // Handle decline action
                 $userRequestsModel->deleteRequestById($requestId);
     

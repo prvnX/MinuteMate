@@ -74,6 +74,7 @@
        
     ]; //pass the notifications here
     $name = "John Doe"; //pass the name of the user here  
+    $showAddEvents = false;
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
     

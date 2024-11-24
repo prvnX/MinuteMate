@@ -11,8 +11,9 @@ class Meeting{
         'end_time',
         'location',
         'created_by',
-        'is_minute'
-
+        'is_minute',
+        'type_id',
+        'additional_note'
     ]; //editable columns
     public function showMeeting(){ //for calendar
         $query="select meeting_id,date,meeting_type from $this->table";
@@ -21,10 +22,10 @@ class Meeting{
     public function getMeetingByDateUser($date,$user=''){
         $data['date']=$date;
         $data['username']=$user;
-        $query = "
-                SELECT 
+        $query = "SELECT 
                     meeting.*, 
-                    IFNULL(COUNT(memo.memo_id), 0) AS memos
+                    IFNULL(COUNT(memo.memo_id), 0) AS memos,
+                    creator.full_name AS created_by_name
                 FROM 
                     $this->table AS meeting
                 INNER JOIN 
@@ -33,13 +34,16 @@ class Meeting{
                     user ON user_meeting_types.accessible_user = user.username
                 LEFT JOIN 
                     memo ON memo.meeting_id = meeting.meeting_id
+                INNER JOIN 
+                    user AS creator ON meeting.created_by = creator.username
                 WHERE 
                     user.username = :username
                     AND meeting.date = :date
                 GROUP BY 
                     meeting.meeting_id";
 
-                return $this->query($query,$data);
+
+        return $this->query($query,$data);
     }
 
     public function getMeetingByDate($date){
