@@ -26,10 +26,12 @@ class Admin extends BaseController {
             $requestId = $requestData['id'] ?? null;
             $action = $requestData['action'] ?? null;
             $meetingTypes = $requestData['meetingTypes'] ?? [];
+
+            // Initialize the userRequestsModel here
+            $userRequestsModel = $this->model("user_requests");
     
             if ($requestId && $action === 'accept') {
                 // Create model instances
-                $userRequestsModel = $this->model("user_requests");
                 $userModel = $this->model("User");
                 $userMeetingTypesModel = $this->model("user_meeting_types");
                 $meetingTypesModel = $this->model("meeting_types");
