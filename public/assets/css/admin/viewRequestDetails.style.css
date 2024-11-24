@@ -106,3 +106,18 @@ p {
 .meeting-option label {
     cursor: pointer;
 }
+
+/* Hover effects for buttons */
+.btn-accept:hover {
+    background-color: #4f5fb8; /* Slightly darker shade of blue */
+    color: #f1f1f1; /* Slightly lighter text color */
+    transform: scale(1.05); /* Subtle zoom-in effect */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+}
+
+.btn-decline:hover {
+    background-color: #4f5fb8; /* Slightly darker shade of blue */
+    color: #f1f1f1; /* Slightly lighter text color */
+    transform: scale(1.05); /* Subtle zoom-in effect */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+}
