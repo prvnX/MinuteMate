@@ -31,4 +31,11 @@ class user_requests {
         // Fetch a single row from the database
         return $this->get_row($query, $data);
     } 
+
+    public function deleteRequestById($requestId) {
+        $query = "DELETE FROM user_requests WHERE id = :id";
+        $data = ['id' => $requestId];
+        return $this->query($query, $data);
+    }
+    
 }

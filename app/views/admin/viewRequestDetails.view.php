@@ -4,16 +4,8 @@ include '../app/views/admin/adminsidebar.view.php';
 
 // Retrieve the user details passed from the controller
 $userDetails = $data['userDetails']; // The fetched user details
-// Example dummy data to populate the fields
 $userId = $_GET['id'];
-$userData = [
-    'name' => 'John Doe',
-    'email' => 'johndoe@example.com',
-    'lecturer_id' => 'L12345',
-    'nic' => '123456789V',
-    'role' => 'Lecturer',
-    'phone' => '0771234567'
-];
+
 ?>
 
 <div class="content">
@@ -27,26 +19,27 @@ $userData = [
     <p>Role: <?php echo htmlspecialchars($userDetails->role); ?></p>
     <p>Contact No.: <?php echo htmlspecialchars($userDetails->tp_no); ?></p>
 
-    <!-- Meeting Type Selection (allow multiple) -->
-    <label>Select Meeting Type(s):</label>
-    <div class="meeting-options">
-        <div class="meeting-option rhd-option">
-            <input type="checkbox" id="meetingRHD" name="meetingType[]" value="RHD">
-            <label for="meetingRHD">RHD</label>
-        </div>
-        <div class="meeting-option iod-option">
-            <input type="checkbox" id="meetingIOD" name="meetingType[]" value="IOD">
-            <label for="meetingIOD">IOD</label>
-        </div>
-        <div class="meeting-option syn-option">
-            <input type="checkbox" id="meetingSYN" name="meetingType[]" value="SYN">
-            <label for="meetingSYN">SYN</label>
-        </div>
-        <div class="meeting-option bom-option">
-            <input type="checkbox" id="meetingBOM" name="meetingType[]" value="BOM">
-            <label for="meetingBOM">BOM</label>
-        </div>
+   <!-- Meeting Type Selection (allow multiple) -->
+<label>Select Meeting Type(s):</label>
+<div class="meeting-options">
+    <div class="meeting-option rhd-option">
+        <input type="checkbox" id="meetingRHD" name="meetingType[]" value="1"> <!-- RHD -->
+        <label for="meetingRHD">RHD</label>
     </div>
+    <div class="meeting-option iod-option">
+        <input type="checkbox" id="meetingIOD" name="meetingType[]" value="2"> <!-- IOD -->
+        <label for="meetingIOD">IOD</label>
+    </div>
+    <div class="meeting-option syn-option">
+        <input type="checkbox" id="meetingSYN" name="meetingType[]" value="3"> <!-- SYN -->
+        <label for="meetingSYN">SYN</label>
+    </div>
+    <div class="meeting-option bom-option">
+        <input type="checkbox" id="meetingBOM" name="meetingType[]" value="4"> <!-- BOM -->
+        <label for="meetingBOM">BOM</label>
+    </div>
+</div>
+
 
     <!-- Accept and Decline Buttons -->
     <div class="action-buttons">
@@ -60,29 +53,30 @@ $userData = [
 
 <script>
     function handleRequest(action) {
-        // Get all selected meeting types
-        const selectedMeetingTypes = Array.from(document.querySelectorAll('input[name="meetingType[]"]:checked')).map(input => input.value);
+    const selectedMeetingTypes = Array.from(
+        document.querySelectorAll('input[name="meetingType[]"]:checked')
+    ).map(input => input.value);
 
-        // Example AJAX request to send action and meeting types to the backend
-        fetch(`<?= ROOT ?>/admin/handleRequest`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                id: <?php echo json_encode($userId); ?>, 
-                action: action,
-                meetingTypes: selectedMeetingTypes // Send selected meeting types as an array
-            }),
-        })
+    fetch(`<?= ROOT ?>/admin/handleRequest`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: <?= json_encode($userId); ?>,
+            action: action,
+            meetingTypes: selectedMeetingTypes,
+        }),
+    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(action === 'accept' ? 'Request accepted!' : 'Request declined.');
+                alert(action === 'accept' ? 'Request accepted and user added!' : 'Request declined.');
                 window.location.href = '<?= ROOT ?>/admin/viewpendingRequests';
             } else {
                 alert('An error occurred. Please try again.');
             }
         });
-    }
+}
+
 </script>
