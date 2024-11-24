@@ -189,6 +189,57 @@ class Admin extends BaseController {
         $this->view("admin/vieweditrequests");
     }
     public function viewsinglerequest(){
-        $this->view("admin/viewsinglerequest");
+         
+
+        $_REQUEST = [
+                
+            ['userid' => '001',
+              'name' => 'Nuwan chanu',
+              'newname' => 'Nuwan Chanuka',
+              'nic' => '19981234567V',
+              'newnic' => '199812345567',
+              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
+  
+            ],
+          [
+              'userid' => '002',
+              'name' => 'John Doe',
+              'newname' => 'John Dohn',
+              'nic' => '19981234567V',
+              'newnic' => '19981234565',
+              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
+            ],
+          [
+              'userid' => '003',
+              'name' => 'keneth sil',
+              'newname' => 'keneth Doe',
+              'nic' => '19981234567V',
+              'newnic' => '19981234567',
+              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
+            ],
+          ];
+              
+       
+          
+              
+        $userid = $_REQUEST['1'];
+        $currentuser = $_REQUEST['1'];
+        
+
+        $data = [
+            'id' => $userid['userid'],
+            'name' => $currentuser['name'],
+            'nic' => $currentuser['nic'],
+            'newname' => $currentuser['newname'],
+            'newnic' => $currentuser['newnic'],
+            'additionalnote' => $currentuser['additionalnote'],
+        ];
+
+
+
+
+        $this->view("admin/viewsinglerequest", $data);
     }
+    
+    
 }
