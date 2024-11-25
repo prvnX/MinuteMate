@@ -100,12 +100,12 @@ body {
 }
 
 .request-table tr:nth-child(even) {
-     background-color: rgb(249, 249, 235);
+     background-color:transparent;
 }
 
 .request-table td {
     font-size: 22px;
-    background-color: rgb(249, 249, 235);
+    background-color: transparent;
 }
 
 /* Action Buttons */

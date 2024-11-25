@@ -42,6 +42,12 @@
       <button>Past Members</button>
     </a>
     </div>
+    <div class="card">
+      <img src="<?=ROOT?>/assets/images/edit.png" alt="Remove Members">
+      <a href="<?=ROOT?>/admin/vieweditrequests">
+      <button>View Edit Requests</button>
+    </a>
+    </div>
     </div>
     
     <div class="aside">

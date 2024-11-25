@@ -1,23 +1,35 @@
+ 
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 
 <head>
-    <title>Request Change</title>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/requestchange.style.css">
+    
+    <meta charset= "UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Request Change</title>
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/requestchange.style.css">
 </head>
 
 <body>
-    <div class="navbar">
-    <?php
-        $user="studentrep";
-        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-        $notification="notification"; //use notification-dot if there's a notification
-        $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile","logout"=> ROOT."/studentrep/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
-        require_once("../app/views/components/navbar.php"); //call the navbar component
-        ?>
+ 
+<div class="navbar">    
+<?php
+    
+    $user="secretary";
+    $memocart="memocart"; 
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/secretary", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile","logout" => ROOT."/secretary/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/navbar.php"); //call the navbar component
+    $showAddEvents = false; 
+   ?>
+
+
+
+
     </div>
+    <h1>Request Change</h1>
     <div class="container">
-        <h1>Request Change</h1>
+         
         <form action="<?= ROOT ?>/studentrep/requestchange" method="post">
             <div id="fieldsContainer">
                 <div class="field-group">
@@ -108,7 +120,7 @@
             }
 
             function submitForm() {
-                const form = document.querySelector("form");
+                const form = document.querySelector("/admin/vieweditrequest");
 
                 if (validateForm()) {
                     form.submit();
