@@ -37,7 +37,7 @@ $currentPage = 'viewMembers'; // For navbar highlighting
     </div>
 
     <div class="action-buttons">
-        <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($userId) ?>" class="btn-edit">Edit</a>
+        <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($username) ?>" class="btn-edit">Edit</a>
         <button class="btn-remove" onclick="handleMemberAction('remove')">Remove</button>
     </div>
 </div>
