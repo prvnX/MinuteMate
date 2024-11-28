@@ -37,5 +37,15 @@ class user_requests {
         $data = ['id' => $requestId];
         return $this->query($query, $data);
     }
+
+    public function updateRequestStatusById($requestId, $status) {
+        $query = "UPDATE user_requests SET status = :status WHERE id = :id";
+        $data = [
+            'status' => $status,
+            'id' => $requestId,
+        ];
+        return $this->query($query, $data);
+    }
+    
     
 }
