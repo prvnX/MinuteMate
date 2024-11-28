@@ -1,45 +1,31 @@
 <?php 
-// Include sidebar and other layout components
 include '../app/views/admin/adminsidebar.view.php'; 
 
-// Example dummy data for the selected member
-$userId = $_GET['id'] ?? null;
-$userData = [
-    'name' => 'John Doe',
-    'email' => 'johndoe@example.com',
-    'lecturer_id' => 'L12345',
-    'nic' => '123456789V',
-    'role' => 'Lecturer',
-    'phone' => '0771234567',
-    'meetingTypes' => ['RHD', 'SYN'] // Example of meeting types this member belongs to
-];
+// Fetch the user data passed from the controller
+$userData = $data['userData'] ?? null;
+$userId = $userData->id ?? null;
+$currentPage = 'viewMembers'; // For navbar highlighting
 ?>
 
 <div class="content">
     <div class="profile-header">
         <img src="<?= ROOT ?>/assets/images/user.png" alt="Profile Image" class="profile-img">
-        <h3><?php echo htmlspecialchars($userData['name']); ?></h3>
+        <h3><?= htmlspecialchars($userData->full_name); ?></h3>
     </div>
-    <p>Email: <?php echo htmlspecialchars($userData['email']); ?></p>
-    <p>Lecture ID: <?php echo htmlspecialchars($userData['lecturer_id']); ?></p>
-    <p>NIC: <?php echo htmlspecialchars($userData['nic']); ?></p>
-    <p>Role: <?php echo htmlspecialchars($userData['role']); ?></p>
-    <p>Contact No.: <?php echo htmlspecialchars($userData['phone']); ?></p>
+    <p>Email: <?= htmlspecialchars($userData->email); ?></p>
+    <p>Username: <?= htmlspecialchars($userData->username); ?></p>
+    <p>NIC: <?= htmlspecialchars($userData->nic); ?></p>
+    <p>Role: <?= htmlspecialchars($userData->role); ?></p>
+    <p>Contact No.: <?= htmlspecialchars($userData->contact_no ?? 'N/A'); ?></p>
 
-    <!-- Meeting Type Selection (allow multiple) -->
     <label>Select Meeting Type(s):</label>
     <div class="meeting-options">
         <?php
-        // Normalize the meetingTypes to uppercase for comparison
-        $userData['meetingTypes'] = array_map('strtoupper', $userData['meetingTypes']);
-        $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM']; // List of all meeting types
+        $userData->meetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
+        $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
 
-        // Loop through all meeting types
         foreach ($meetingTypes as $type) {
-            // Check if this meeting type is selected for the user
-            $checked = in_array($type, $userData['meetingTypes']) ? 'checked' : '';
-
-            // Assign the appropriate class for styling each meeting type
+            $checked = in_array($type, $userData->meetingTypes) ? 'checked' : '';
             $class = strtolower($type) . '-option';
 
             echo "<div class='meeting-option $class'>
@@ -50,30 +36,27 @@ $userData = [
         ?>
     </div>
 
-    <!-- Edit and Remove Buttons -->
     <div class="action-buttons">
-    <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($userId) ?>" class="btn-edit">Edit</a>
+        <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($username) ?>" class="btn-edit">Edit</a>
         <button class="btn-remove" onclick="handleMemberAction('remove')">Remove</button>
     </div>
 </div>
 
-<!-- Include CSS for this page -->
 <link rel="stylesheet" href="<?= ROOT ?>/assets/css/admin/viewMemberProfile.style.css">
 
 <script>
     function handleMemberAction(action) {
+        if (action === 'remove' && !confirm('Are you sure you want to remove this member?')) return;
+
         const selectedMeetingTypes = Array.from(document.querySelectorAll('input[name="meetingType[]"]:checked')).map(input => input.value);
 
-        // AJAX request to send action, member ID, and selected meeting types to the backend
         fetch(`<?= ROOT ?>/admin/handleMemberAction`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                id: <?php echo json_encode($userId); ?>, 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: <?= json_encode($userId) ?>,
                 action: action,
-                meetingTypes: selectedMeetingTypes 
+                meetingTypes: selectedMeetingTypes
             }),
         })
         .then(response => response.json())

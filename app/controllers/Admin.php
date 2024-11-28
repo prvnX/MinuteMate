@@ -26,10 +26,12 @@ class Admin extends BaseController {
             $requestId = $requestData['id'] ?? null;
             $action = $requestData['action'] ?? null;
             $meetingTypes = $requestData['meetingTypes'] ?? [];
+
+            // Initialize the userRequestsModel here
+            $userRequestsModel = $this->model("user_requests");
     
             if ($requestId && $action === 'accept') {
                 // Create model instances
-                $userRequestsModel = $this->model("user_requests");
                 $userModel = $this->model("User");
                 $userMeetingTypesModel = $this->model("user_meeting_types");
                 $meetingTypesModel = $this->model("meeting_types");
@@ -130,17 +132,69 @@ class Admin extends BaseController {
 
     public function viewMembersByMeetingType() {
         // Get the meeting type from the URL
-        $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';
-
-        // Pass the meeting type to the view
-        $this->view("admin/viewMembersList", [
-            "meetingType" => $meetingType
-        ]);
+        $meetingType = $_GET['meetingType'] ?? null;
+    
+        if ($meetingType) {
+            // Load the required models
+            $meetingTypesModel = $this->model("meeting_types");
+            $userMeetingTypesModel = $this->model("user_meeting_types");
+    
+            // Retrieve the type_id for the given meeting type
+            $meetingTypeId = $meetingTypesModel->getTypeIdByMeetingType($meetingType);
+    
+            if ($meetingTypeId) {
+                // Fetch the usernames of users belonging to this meeting type
+                $usernames = $userMeetingTypesModel->getUsernamesByMeetingTypeId($meetingTypeId);
+    
+                // Pass the data to the view
+                $this->view("admin/viewMembersList", [
+                    "meetingType" => $meetingType,
+                    "members" => $usernames
+                ]);
+            } else {
+                // Handle invalid meeting type
+                $this->view("admin/viewMembersList", [
+                    "meetingType" => $meetingType,
+                    "members" => []
+                ]);
+            }
+        } else {
+            // Handle missing meeting type
+            $this->view("admin/viewMembersList", [
+                "meetingType" => "Unknown Meeting Type",
+                "members" => []
+            ]);
+        }
     }
     
-    public function viewMemberProfile(): void{
-        $this->view(name: "admin/viewMemberProfile");
+    
+   // Controller - Admin.php
+
+public function viewMemberProfile() {
+    // Get the user ID from the URL
+    $userId = $_GET['id'] ?? null;
+
+    // Check if the user ID is provided
+    if ($userId) {
+        // Instantiate the User model
+        $userModel = new User();
+
+        // Fetch the user data by username or ID
+        $userData = $userModel->getUserById($userId);
+
+        if ($userData) {
+            // Pass the user data to the view
+            $this->view('admin/viewMemberProfile', ['userData' => $userData]);
+        } else {
+            // Handle the case where no user is found
+            echo "User not found.";
+        }
+    } else {
+        // Handle the case where no user ID is provided
+        echo "Invalid user ID.";
     }
+}
+
 
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"admin"]);
@@ -155,9 +209,81 @@ class Admin extends BaseController {
         redirect("home");
     }
    
-    public function editMemberProfile(): void{
-        $this->view(name: "admin/editMemberProfile");
+    public function editMemberProfile() {
+        // Get the user ID from the URL
+        $userId = $_GET['id'] ?? null;
+    
+        if (!$userId) {
+            die("User ID is required.");
+        }
+    
+        // Fetch user details from the database
+        $userModel = $this->model("User");
+        $userData = $userModel->getUserById($userId);
+    
+        if (!$userData) {
+            die("User not found.");
+        }
+    
+        // Pass the data to the view
+        $this->view("admin/editMemberProfile", ['userData' => $userData]);
     }
+    
+    public function updateMember() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $userModel = $this->model("User");
+            
+    
+             // Sanitize and validate input
+            $username = trim($_POST['username'] ?? '');
+            $full_name = trim($_POST['full_name'] ?? '');
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+            $nic = trim($_POST['nic'] ?? '');
+            $role = trim($_POST['role'] ?? '');
+            $phone = trim($_POST['phone'] ?? '');
+            $meetingTypeIds = $_POST['meeting_types'] ?? [];
+
+        if (empty($username) || empty($full_name) || !$email || empty($nic) || empty($role)) {
+            echo "Invalid input. Please fill all fields correctly.";
+            exit;
+        }
+            
+        $meetingTypeMap = [
+            'RHD' => 1,
+            'IOD' => 2,
+            'SYN' => 3,
+            'BOM' => 4,
+        ];
+        
+        $meetingTypeIds = array_map(fn($type) => $meetingTypeMap[$type], $meetingTypeIds);
+        
+    
+            // Update user details
+            $userData = [
+                'username' => $username,
+                'full_name' => $full_name,
+                'email' => $email,
+                'nic' => $nic,
+                'role' => $role
+            ];
+
+            $userModel->updateUserByUsername($username, $userData);
+            
+            if (!empty($phone)) {
+                $userModel->updateContactInfo($username, $phone);
+            }
+
+            if (!empty($meetingTypeIds)) {
+                $userModel->updateMeetingTypes($username, $meetingTypeIds);
+            }
+
+            echo json_encode(['status' => 'success', 'message' => 'Member updated successfully']);
+            header("Location: " . ROOT . "/admin/viewMemberProfile?id=" . urlencode($username));
+        exit;
+        }
+
+    }
+    
 
     public function PastMembers(): void{
         $this->view(name: "admin/PastMembers");
@@ -190,6 +316,57 @@ class Admin extends BaseController {
         $this->view("admin/vieweditrequests");
     }
     public function viewsinglerequest(){
-        $this->view("admin/viewsinglerequest");
+         
+
+        $_REQUEST = [
+                
+            ['userid' => '001',
+              'name' => 'Nuwan chanu',
+              'newname' => 'Nuwan Chanuka',
+              'nic' => '19981234567V',
+              'newnic' => '199812345567',
+              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
+  
+            ],
+          [
+              'userid' => '002',
+              'name' => 'John Doe',
+              'newname' => 'John Dohn',
+              'nic' => '19981234567V',
+              'newnic' => '19981234565',
+              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
+            ],
+          [
+              'userid' => '003',
+              'name' => 'keneth sil',
+              'newname' => 'keneth Doe',
+              'nic' => '19981234567V',
+              'newnic' => '19981234567',
+              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
+            ],
+          ];
+              
+       
+          
+              
+        $userid = $_REQUEST['1'];
+        $currentuser = $_REQUEST['1'];
+        
+
+        $data = [
+            'id' => $userid['userid'],
+            'name' => $currentuser['name'],
+            'nic' => $currentuser['nic'],
+            'newname' => $currentuser['newname'],
+            'newnic' => $currentuser['newnic'],
+            'additionalnote' => $currentuser['additionalnote'],
+        ];
+
+
+
+
+        $this->view("admin/viewsinglerequest", $data);
     }
+    
+    
 }

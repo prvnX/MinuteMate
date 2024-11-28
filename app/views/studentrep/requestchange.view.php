@@ -1,23 +1,35 @@
+ 
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 
 <head>
-    <title>Request Change</title>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/requestchange.style.css">
+    
+    <meta charset= "UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Request Change</title>
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/requestchange.style.css">
 </head>
 
 <body>
-    <div class="navbar">
-    <?php
-        $user="studentrep";
-        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-        $notification="notification"; //use notification-dot if there's a notification
-        $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile","logout"=> ROOT."/studentrep/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
-        require_once("../app/views/components/navbar.php"); //call the navbar component
-        ?>
+ 
+<div class="navbar">    
+<?php
+    
+    $user="secretary";
+    $memocart="memocart"; 
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/secretary", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile","logout" => ROOT."/secretary/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/navbar.php"); //call the navbar component
+    $showAddEvents = false; 
+   ?>
+
+
+
+
     </div>
+    <h1>Request Change</h1>
     <div class="container">
-        <h1>Request Change</h1>
+         
         <form action="<?= ROOT ?>/studentrep/requestchange" method="post">
             <div id="fieldsContainer">
                 <div class="field-group">
@@ -25,9 +37,11 @@
                         <label for="field">Field to change:</label>
                         <select class="field-select" name="field[]" required>
                             <option value="">Select a field</option>
-                            <option value="Username">Username</option>
-                            <option value="Email">Email</option>
-                            <option value="contact">Telephone number</option>
+                            <option value="new_fullname">Full Name</option>
+                            <option value="new_email">Email</option>
+                            <option value="new_nic">Nic</option>
+                            <option value="new_department">Department</option>
+                            <option value="new_tp_no">Telephone Number</option>
                         </select>
                     </div>
                     <div class="form">
@@ -47,87 +61,143 @@
             </div>
 
             <div class="form-buttons">
-                <button type="submit" class="submit-btn" onclick="submitForm()">Submit</button>
+                <button type="submit" class="submit-btn">Submit</button>
                 <button type="button" class="cancel-btn" onclick="handleCancel()">Cancel</button>
             </div>
         </form>
 
+    <div id="alertModal" class="modal">
+    <div class="modal-contents">
+        <div class="modal-body">
+            <p id="Message">Your action was successful!</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" id="successOk" class="btn btn-ok">OK</button>
+        </div>
+    </div>
+</div>
+
         <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const addFieldsButton = document.getElementById("addfieldsbtn");
-                const fieldsContainer = document.getElementById("fieldsContainer");
 
-                function updateDropdownOptions() {
-                    const selectedValues = Array.from(document.querySelectorAll(".field-select"))
-                        .map(select => select.value)
-                        .filter(value => value);
+function handleCancel() {
+        window.location.href = "<?= ROOT ?>/studentrep/viewprofile";
+    
+}
 
-                    document.querySelectorAll(".field-select").forEach(select => {
-                        const currentValue = select.value;
-                        const options = select.querySelectorAll("option");
 
-                        options.forEach(option => {
-                            if (selectedValues.includes(option.value) && option.value !== currentValue) {
-                                option.disabled = true; // Disable options already selected
-                            } else {
-                                option.disabled = false; // Re-enable unselected options
-                            }
-                        });
-                    });
+    document.addEventListener("DOMContentLoaded", () => {
+    const addFieldsButton = document.getElementById("addfieldsbtn");
+    const fieldsContainer = document.getElementById("fieldsContainer");
+    let fieldClicks = 1;
+    let successMessage = "<?= $responseStatus ?>";
+    if (successMessage==="success"){
+        showAlert("Request submitted successfully");
+    }
+    else if (successMessage==="error"){
+        showAlert("Request submission failed");
+    }
+
+    function updateDropdownOptions() {
+        const selectedValues = Array.from(document.querySelectorAll(".field-select"))
+            .map(select => select.value)
+            .filter(value => value);
+
+        document.querySelectorAll(".field-select").forEach(select => {
+            const currentValue = select.value;
+            const options = select.querySelectorAll("option");
+
+            options.forEach(option => {
+                if (selectedValues.includes(option.value) && option.value !== currentValue) {
+                    option.disabled = true; // Disable options already selected
+                } else {
+                    option.disabled = false; // Re-enable unselected options
                 }
 
-                addFieldsButton.addEventListener("click", () => {
-                    const fieldGroup = document.querySelector(".field-group");
-                    const newFieldGroup = fieldGroup.cloneNode(true);
-
-                    newFieldGroup.removeAttribute('required');
-
-                    // Clear cloned inputs
-                    const inputs = newFieldGroup.querySelectorAll("input, select");
-                    inputs.forEach(input => {
-                        input.value = "";          // Clear the value
-                        input.removeAttribute("required"); // Remove the required attribute
-                    });
-
-                    // Append the cloned field group to the container
-                    fieldsContainer.appendChild(newFieldGroup);
-
-                    // Add change event listener to the new select dropdown
-                    newFieldGroup.querySelector(".field-select").addEventListener("change", updateDropdownOptions);
-                    updateDropdownOptions();
-                });
-
-                // Add change event listeners to existing dropdowns
-                document.querySelectorAll(".field-select").forEach(select => {
-                    select.addEventListener("change", updateDropdownOptions);
-                });
             });
+        });
+    }
 
-            function handleCancel() {
-                window.location.href = "<?= ROOT ?>/studentrep/viewprofile";
+    function validateAllFieldGroups() {
+        const fieldGroups = document.querySelectorAll(".field-group");
+
+        for (const fieldGroup of fieldGroups) {
+            const fieldSelect = fieldGroup.querySelector(".field-select");
+            const newValueInput = fieldGroup.querySelector("input[name='newValue[]']");
+
+            // If any field group is incomplete, validation fails
+            if (!fieldSelect.value.trim() || !newValueInput.value.trim()) {
+                return false;
             }
+        }
 
-            function submitForm() {
-                const form = document.querySelector("form");
+        return true; // All field groups are valid
+    }
 
-                if (validateForm()) {
-                    form.submit();
-                    alert("Request sent successfully");
-                }
-            }
+    function toggleAddFieldsButton() {
+        addFieldsButton.disabled = !validateAllFieldGroups();
+    }
 
-            function validateForm() {
-                const fields = document.querySelectorAll(".field-select");
-                const values = document.querySelectorAll("input[name='newValue[]']");
+    addFieldsButton.addEventListener("click", () => {
+        if (fieldClicks >= 5) {
+            showAlert("You can only change up to 5 fields at a time.");
+            return;
+        }
 
-                for (let i = 0; i < fields.length; i++) {
-                    if (!fields[i].value || !values[i].value) {
-                        alert("Please fill in all required fields.");
-                        return false;
-                    }
-                }
-                return true;
-            }
+        const fieldGroup = document.querySelector(".field-group");
+        const newFieldGroup = fieldGroup.cloneNode(true);
+
+        // Clear cloned inputs
+        const inputs = newFieldGroup.querySelectorAll("input, select");
+        inputs.forEach(input => {
+            input.value = ""; // Clear the value
+        });
+
+        // Append the cloned field group to the container
+        fieldsContainer.appendChild(newFieldGroup);
+
+        // Add event listeners to the new dropdown and input
+        const newFieldSelect = newFieldGroup.querySelector(".field-select");
+        const newInput = newFieldGroup.querySelector("input[name='newValue[]']");
+
+        newFieldSelect.addEventListener("change", () => {
+            updateDropdownOptions();
+            toggleAddFieldsButton();
+        });
+
+        newInput.addEventListener("input", toggleAddFieldsButton);
+
+        updateDropdownOptions();
+        toggleAddFieldsButton(); // Re-check after adding new fields
+        fieldClicks++;
+    });
+
+    // Add change event listeners to existing dropdowns and inputs
+    document.querySelectorAll(".field-select").forEach(select => {
+        select.addEventListener("change", () => {
+            updateDropdownOptions();
+            toggleAddFieldsButton();
+        });
+    });
+
+    document.querySelectorAll("input[name='newValue[]']").forEach(input => {
+        input.addEventListener("input", toggleAddFieldsButton);
+    });
+
+    toggleAddFieldsButton(); // Initial check
+});
+    function showAlert(message) {
+            const modal = document.getElementById('alertModal');
+            const messageElement = document.getElementById('Message');
+            messageElement.textContent = message;
+            modal.style.display = 'block';
+            document.getElementById('successOk').onclick = function () {
+            modal.style.display = 'none';
+            window.location.href = "<?= ROOT ?>/studentrep/requestchange";
+                
+        }
+        }
+       
+
         </script>
     </div>
 </body>
