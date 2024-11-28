@@ -132,18 +132,18 @@ class User {
         $userMeetingTypesModel->updateMeetingTypes($username, $meetingTypeIds);
     }
 
-    public function updateUserStatus($username, $status) {
-        // Prepare the query to update the user's status by username
-        $query = "UPDATE user SET status = :status WHERE username = :username";
+    // public function updateUserStatus($username, $status) {
+    //     // Prepare the query to update the user's status by username
+    //     $query = "UPDATE user SET status = :status WHERE username = :username";
         
-        // Prepare and execute the query
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':username', $username);
+    //     // Prepare and execute the query
+    //     // $stmt = $this->db->prepare($query);
+    //     $stmt->bindParam(':status', $status);
+    //     $stmt->bindParam(':username', $username);
     
-        // Execute the query and return whether it was successful
-        return $stmt->execute();
-    }
+    //     // Execute the query and return whether it was successful
+    //     return $stmt->execute();
+    // }
     
 
 
