@@ -40,6 +40,9 @@
         <a href="<?=ROOT?>/admin/PastMembers" class="<?= isActive('PastMembers.view.php') ?>">
             <i class="fas fa-user-minus"></i> Past Members
         </a>
+        <a href="<?=ROOT?>/admin/vieweditrequests" class="<?= isActive('vieweditrequests.view.php') ?>">
+            <i class="fas fa-user-edit"></i> view edit requests
+        </a>
     </div>
 </body>
 </html>
