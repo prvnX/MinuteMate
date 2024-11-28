@@ -69,11 +69,11 @@
 <body>
     <div class="navbar">
     <?php
-    $user="studentrep";
+    $user=$_SESSION['userDetails']->role;
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/navbar.php"); //call the navbar component
-    $profileDetails=["name"=>"Keneth Gunewardana","Email"=>"Email@gmail.com","LectureID"=>"932837273","NIC"=>"9283984743284v","Role"=>" Board Member","Contact_No:"=>"071 283 3684, 077 647 2983","Meeting_types"=>"IUD, RHD, Syndicate"]
+    $profileDetails=["name"=>$_SESSION['userDetails']->full_name,"Email"=>$_SESSION['userDetails']->email,"LectureID"=>"932837273","NIC"=>"9283984743284v","Role"=>" Board Member","Contact_No:"=>"071 283 3684, 077 647 2983","Meeting_types"=>"IUD, RHD, Syndicate"]
    ?>
     </div>
     <div class="title">
