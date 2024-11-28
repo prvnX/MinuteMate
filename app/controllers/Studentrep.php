@@ -10,25 +10,125 @@ class Studentrep extends BaseController {
         $this->view("404");
     }
     public function entermemo() {
-        $this->view("studentrep/entermemo");
-    }
-    public function submitmemo() {
-        $memosuccess = true;
-        $memoid = 1;
-        if($memosuccess) {
-            $this->view("showsuccessmemo",["user"=>"studentrep","memoid"=>$memoid]);
+        $user=$_SESSION['userDetails']->username;
+        $date = date("Y-m-d");
+        if($this->isValidRequest()){
+            $meetings = ($this->findMeetingsToEnterMemos($date));
+
+            
+
+            $this->view("studentrep/entermemo", ['meetings' => $meetings]);
         }
-        else {
-            $this->view("showunsuccessmemo",["user"=>"studentrep"]);
+        else{
+            redirect("login");
+        }
+       
+    }
+    public function findMeetingsToEnterMemos($date){
+        $user=$_SESSION['userDetails']->username;
+        $meeting = new Meeting();
+        $meetinglist = $meeting->getmeetingsforuser($date, $user);
+        
+        return $meetinglist ?: [];
+    }
+
+    public function isValidRequest(){
+        if(isset($_SESSION['userDetails'])){
+            return true;
+        }
+        else{
+            return false;
         }
 
+    }
+    public function submitmemo() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            $memoTitle = htmlspecialchars($_POST['memo-subject']);
+            $memoContent = htmlspecialchars($_POST['memo-content']);
+            $meetingId = htmlspecialchars($_POST['meeting']);
+            $submittedBy=$_SESSION['userDetails']->username;
+
+            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
+            {
+                // $_SESSION['flash_error'] = "All fields are required.";
+                // redirect("studentrep/entermemo");
+                echo "All fields are required";
+                return;
+            }
+
+            $memoData = [
+                'memo_title' => $memoTitle,
+                'memo_content' => $memoContent,
+                'status' => 'pending', // Set default status
+                'submitted_by' => $submittedBy,
+                'meeting_id' => $meetingId,
+            ];
+
+            $memo = new Memo();
+            if($memo->insert($memoData))
+            {
+                $this->view("showsuccessmemo",["user"=>"studentrep"]);
+            }
+            else
+            {
+                error_log("Memo insert failed: " . json_encode($memoData)); //for debugging purposes
+                $this->view("showunsuccessmemo",["user"=>"studentrep"]); 
+            }
+        }
+        
     }
 
     public function viewminutes() {
         $this->view("studentrep/viewminutes");
     }
     public function viewsubmittedmemos() {
-        $this->view("studentrep/viewsubmittedmemos");
+        $user=$_SESSION['userDetails']->username;
+
+        if($this->isValidRequest())
+        {
+            $memo = new Memo();
+            $memos = $memo->getMemosByUser($user);
+            $this->view("studentrep/viewsubmittedmemos", ['memos'=> $memos]);
+        }
+        else
+        {
+            redirect("login");
+        }
+    }
+
+    public function viewMemoDetails()
+    
+        {$memo_id=$_GET['memo_id'];
+        error_log("Memo ID: " . $memo_id); //debugging
+        if($this->isValidRequest())
+        {
+           if(!$memo_id)
+           {
+            $_SESSION['flash_error'] = "Memo ID not provided.";
+            redirect("studentrep/viewsubmittedmemos");
+            return;
+           }
+
+            $memoModel = new Memo;
+            $memo = $memoModel->getMemoById($memo_id);
+
+            error_log("Memo Data: " . json_encode($memo)); //debugging
+
+            if($memo)
+            {
+                $this->view("studentrep/viewmemodetails", ['memo'=>$memo]);
+            }
+            else
+            {
+                $_SESSION['flash_error'] = "Memo not found.";
+                redirect("studentrep/viewmemos");
+            }
+        }
+        else
+        {
+            redirect("login");
+        }
     }
     public function notifications() {
         //these are just placeholders
