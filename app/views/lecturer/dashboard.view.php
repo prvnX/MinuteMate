@@ -74,7 +74,7 @@
         "Update: Minutes from yesterday's meeting are now available.",
        
     ]; //pass the notifications here
-    $name = "John Doe"; //pass the name of the user here  
+    $name = $_SESSION['userDetails']->full_name; //pass the name of the user here  
     $showAddEvents = false;
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
