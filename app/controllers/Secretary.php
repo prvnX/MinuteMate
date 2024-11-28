@@ -492,14 +492,13 @@ class Secretary extends BaseController {
     
         // Handle POST request
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $field = $_POST['field'] ?? null;
-            $newValue = $_POST['newValue'] ?? null;
-    
-            if (!empty($field) && !empty($newValue)) {
-                $responseStatus = "success";
-            } else {
-                $responseStatus = "failure";
-            }
+            $field = $_POST['field'] ?? [];
+            $newValue = $_POST['newValue'] ?? [];
+            $message = $_POST['message'] ?? "Message not provided";
+            $requestchange = new User_edit_requests();
+            $requestchange->addUserRequest($field, $newValue, $message);
+            $responseStatus = "success";
+            
         }
     
         // Pass responseStatus to the view
@@ -508,5 +507,6 @@ class Secretary extends BaseController {
             "responseStatus" => $responseStatus
         ]);
     }
+    
     
 }
