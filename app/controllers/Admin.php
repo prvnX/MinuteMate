@@ -209,9 +209,81 @@ public function viewMemberProfile() {
         redirect("home");
     }
    
-    public function editMemberProfile(): void{
-        $this->view(name: "admin/editMemberProfile");
+    public function editMemberProfile() {
+        // Get the user ID from the URL
+        $userId = $_GET['id'] ?? null;
+    
+        if (!$userId) {
+            die("User ID is required.");
+        }
+    
+        // Fetch user details from the database
+        $userModel = $this->model("User");
+        $userData = $userModel->getUserById($userId);
+    
+        if (!$userData) {
+            die("User not found.");
+        }
+    
+        // Pass the data to the view
+        $this->view("admin/editMemberProfile", ['userData' => $userData]);
     }
+    
+    public function updateMember() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $userModel = $this->model("User");
+            
+    
+             // Sanitize and validate input
+            $username = trim($_POST['username'] ?? '');
+            $full_name = trim($_POST['full_name'] ?? '');
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+            $nic = trim($_POST['nic'] ?? '');
+            $role = trim($_POST['role'] ?? '');
+            $phone = trim($_POST['phone'] ?? '');
+            $meetingTypeIds = $_POST['meeting_types'] ?? [];
+
+        if (empty($username) || empty($full_name) || !$email || empty($nic) || empty($role)) {
+            echo "Invalid input. Please fill all fields correctly.";
+            exit;
+        }
+            
+        $meetingTypeMap = [
+            'RHD' => 1,
+            'IOD' => 2,
+            'SYN' => 3,
+            'BOM' => 4,
+        ];
+        
+        $meetingTypeIds = array_map(fn($type) => $meetingTypeMap[$type], $meetingTypeIds);
+        
+    
+            // Update user details
+            $userData = [
+                'username' => $username,
+                'full_name' => $full_name,
+                'email' => $email,
+                'nic' => $nic,
+                'role' => $role
+            ];
+
+            $userModel->updateUserByUsername($username, $userData);
+            
+            if (!empty($phone)) {
+                $userModel->updateContactInfo($username, $phone);
+            }
+
+            if (!empty($meetingTypeIds)) {
+                $userModel->updateMeetingTypes($username, $meetingTypeIds);
+            }
+
+            echo json_encode(['status' => 'success', 'message' => 'Member updated successfully']);
+            header("Location: " . ROOT . "/admin/viewMemberProfile?id=" . urlencode($username));
+        exit;
+        }
+
+    }
+    
 
     public function PastMembers(): void{
         $this->view(name: "admin/PastMembers");

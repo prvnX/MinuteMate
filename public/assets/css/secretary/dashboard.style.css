@@ -19,11 +19,11 @@ h1{
 
  
 .dashboard-button-container {
-    margin: 90px 250px 0 300px;
+    margin: 100px 250px 0 200px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 500px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 100px;
+    width: 800px;
     height: 500px;
     position:relative;
     
@@ -68,4 +68,42 @@ h1{
   }
 
 
+  /* Mobile View: Adjust grid layout for smaller screens */
+@media (max-width: 768px) {
+  .dashboard-button-container {
+    margin: 50px 50px 0 500px; /* Reduce side margins */
+    grid-template-columns: repeat(2, 1fr); /* Two columns for medium screens */
+    grid-template-columns: 2fr; /* Single column for small screens */
+    gap: 20px; /* Smaller gap between cards */
+    width: auto; /* Allow width to adjust */
+  }
   
+  .card img {
+    width: 80px; /* Smaller image for cards */
+    height: 80px;
+  }
+
+  .card-button {
+    font-size: 14px; /* Adjust button size */
+    padding: 8px 16px;
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 468px) {
+  .dashboard-button-container {
+    margin: 20px; /* Further reduce margins */
+    grid-template-columns: 1fr; /* Single-column layout */
+  }
+
+  .card img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .card-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+

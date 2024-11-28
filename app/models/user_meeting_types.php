@@ -3,6 +3,8 @@
 class User_Meeting_Types
 {
     use Database;
+    use Model;
+    
 
     protected $table = 'user_meeting_types';
 
@@ -37,4 +39,22 @@ class User_Meeting_Types
         $result = $this->query($query, $data);
         return $result ? $result : [];
     }
+
+    public function updateMeetingTypes($username, $meetingTypeIds) {
+        // Delete existing records for the user
+        $query = "DELETE FROM user_meeting_types WHERE accessible_user = :username";
+        $this->query($query, ['username' => $username]);
+
+        // Insert new meeting types
+        foreach ($meetingTypeIds as $typeId) {
+            $query = "INSERT INTO user_meeting_types (accessible_user, meeting_type_id) 
+                      VALUES (:accessible_user, :meeting_type_id)";
+            $this->query($query, [
+                'accessible_user' => $username,
+                'meeting_type_id' => $typeId,
+            ]);
+        }
+    }
+    
+
 }
