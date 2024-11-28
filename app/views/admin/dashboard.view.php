@@ -57,7 +57,7 @@
         "Reminder: Meeting shceduled for tommorow at a 3 pm ",
        
     ]; //pass the notifications here
-    $name = "John Doe"; //pass the name of the user here  
+    $name = $_SESSION['userDetails']->full_name; //pass the name of the user here  
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
  </div>

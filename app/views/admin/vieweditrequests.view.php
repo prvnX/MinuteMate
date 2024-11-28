@@ -24,11 +24,11 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <ul>
-            <li><a href="#"><img src="<?= ROOT ?>/assets/images/writing.png" alt="writing"> Enter a Memo</a></li>
-            <li class="active"><a href="#"><img src="<?= ROOT ?>/assets/images/sticky.png" alt="sticky"> View Edit requests</a></li>
-            <li><a href="#"><img src="<?= ROOT ?>/assets/images/note.png" alt="note"> View Memo Reports</a></li>
-            <li><a href="#"><img src="<?= ROOT ?>/assets/images/interface.png" alt="interface"> Review Student Memos</a></li>
+    <ul>
+            <li><a href="<?= ROOT.'/admin/viewMembers' ?>"><img src="<?= ROOT ?>/assets/images/writing.png" alt="writing"> View Members</a></li>
+            <li class="active"><a href="<?= ROOT.'/admin/vieweditrequests' ?>"><img src="<?= ROOT ?>/assets/images/sticky.png" alt="sticky"> View Edit Requests</a></li>
+            <li><a href="<?= ROOT.'/admin/viewpendingRequests' ?>"><img src="<?= ROOT ?>/assets/images/note.png" alt="note"> View Pending Member   Request</a></li>
+            <li><a href="<?= ROOT.'/admin/PastMembers' ?>"><img src="<?= ROOT ?>/assets/images/interface.png" alt="interface"> Past Members</a></li>
         </ul>
     </div>
 
