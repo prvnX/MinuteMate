@@ -1,0 +1,102 @@
+/* General Reset */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #f7f7f7;
+}
+
+/* Container */
+.container {
+    max-width: 800px;
+    min-height: 700px;
+    margin: 50px auto;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Header Section */
+.header {
+    font-family: ubuntu;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: blueviolet;
+    margin: 0;
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group span {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Links */
+.form-group span a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-group span a:hover {
+    text-decoration: underline;
+}
+
+/* Footer Section */
+.footer {
+    margin-top: 20px;
+    text-align: right;
+    padding-top: 15px;
+     
+}
+
+.footer img {
+    width: 100px;
+    height: 100px;
+    opacity: 0.8;
+    background-color: #C4D2F7;
+    border-radius: 50%;
+    
+    
+}
+
+.footer img:hover {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-group label {
+        margin-bottom: 5px;
+    }
+}
