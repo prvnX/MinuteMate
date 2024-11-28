@@ -50,6 +50,9 @@
                     $meetingid = htmlspecialchars($meeting['meeting_id']);
                     echo "<tr><td>Memos Submitted:</td><td>" . htmlspecialchars($meeting['memos']) . " memos submitted for this meeting.</td></tr>";
                     echo "</table>";
+                    if($_SESSION['userDetails']->role=="secretary"|| $_SESSION['userDetails']->role=="lecturer"){
+                        echo "<button id='view-meeting-agenda'>View Agenda Details</button>";
+                    }
                     date_default_timezone_set('Asia/Colombo');
                     $todayDate = date('Y-m-d');
                     if($_SESSION['userDetails']->role=="secretary" && $meeting['date'] >= $todayDate){
@@ -138,6 +141,32 @@
         </div>
     </div>
 </div>
+<!-- Popup box -->
+<div id="meeting-agenda-popup" class="popup-box">
+  <div class="popup-content">
+    <span class="close-btn">&times;</span>
+    <h2 class="popup-title">Agenda Details</h2>
+    
+    <!-- Agenda Section -->
+    <div class="section">
+      <h3 class="section-title">Agenda Items</h3>
+      <ul class="item-list" id="agenda-list">
+        <li>Budget Allocation Review</li>
+        <li>Quarterly Team Feedback</li>
+        <li>Future Project Planning</li>
+      </ul>
+    </div>
+
+    <!-- Memos Section -->
+    <div class="section">
+      <h3 class="section-title">Memos Submitted</h3>
+      <ul class="item-list" id="memo-list">
+        <!-- List of memos will be displayed here -->
+      </ul>
+    </div>
+  </div>
+</div>
+
     <script>
         function handleMeetingDelete(meetingId) {
     document.getElementById('confirmMessage').innerText = `Are you sure you want to delete this meeting?`;
@@ -251,6 +280,63 @@ function handleMeetingReschedule(meetingId) {
         modal.style.display = 'none';
     }
     };
+
+    // Get the elements
+const agendaButton = document.getElementById('view-meeting-agenda');
+const popupBox = document.getElementById('meeting-agenda-popup');
+const closeButton = popupBox.querySelector('.close-btn');
+
+// Show the popup when the button is clicked
+agendaButton.addEventListener('click', () => {
+    const meetingID =<?= $meetingid ?>;
+    const url = '<?=ROOT?>/Events/getMemoList';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ meeting_id: meetingID })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        
+        if (data.success) {
+            const memoList = document.getElementById('memo-list');
+            memoList.innerHTML = '';
+            data.memos.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href='<?= ROOT . "/" . $_SESSION['userDetails']->role . "/viewmemodetails/?memo_id=" ?>${item.memo_id}'>${item.memo_title}</a>`;
+                memoList.appendChild(li);
+            });
+            
+        } else {
+            console.error('Failed to get meeting details:', data.error || 'Unknown error');
+        
+        }
+        popupBox.style.display = 'flex';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+
+// Close the popup when the close button is clicked
+closeButton.addEventListener('click', () => {
+  popupBox.style.display = 'none';
+});
+
+// Close the popup when clicking outside the content box
+window.addEventListener('click', (event) => {
+  if (event.target === popupBox) {
+    popupBox.style.display = 'none';
+  }
+});
 
 
 

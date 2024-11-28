@@ -96,11 +96,13 @@ body {
 }
 
 .aside {
-  position: relative; 
-  top: -290px; 
-  margin-top: -20px; 
-  padding: 10px;
-  left: 440px;
+  position: relative;
+  bottom:335px;
+  left:550px;
+}
+.aside .sidebar{
+  height: 100vh;
+  margin-top: -10vh;
 }
 
 

@@ -214,12 +214,8 @@ class Lecturer extends BaseController {
     public function viewsubmittedmemos() {
         $this->view("lecturer/viewsubmittedmemos");
     }
-    public function viewmemoreports() {
-        $this->view("lecturer/viewmemoreports");
-    }
-    public function viewminutereports() {
-        $this->view("lecturer/viewminutereports");
-    }
+     
+    
 
     public function notifications() {
         //these are just placeholders
@@ -258,6 +254,46 @@ class Lecturer extends BaseController {
         session_destroy();
         // Redirect to the login page
         redirect("home");
+    }
+    public function selectmemo (){
+        $this->view("lecturer/selectmemo");
+    }
+    public function selectminute (){
+        $this->view("lecturer/selectminute");
+    }
+    public function viewmemoreports() {
+        if(!isset($_GET['memo'])) {
+            header("Location: ".ROOT."/lecturer/selectmemo");
+        }
+        $memoid = $_GET['memo'];
+        
+        $data = [
+            'id' =>$memoid,
+            'date' => '2024-11-16',
+            'time' => '2:00 PM',
+            'status' => 'Approved',
+            'linked_memos' => 'Memo #11, Memo #12',
+            'author' => 'John Doe'
+        ];
+    
+        $this->view("lecturer/viewmemoreports", $data);
+    }
+    public function viewminutereports() {
+        if(!isset($_GET['minute'])) {
+            header("Location: ".ROOT."/lecturer/selectminute");
+        }
+        $memoid = $_GET['minute'];
+        $data = [
+            'date' => '2024-11-16',
+            'time' => '10:00 AM',
+            'meeting_type' => 'Team Meeting',
+            'meeting_minute' => 'Discussed project updates and next steps.',
+            'linked_minutes' => 'Minute #14, Minute #15',
+            'linked_memos' => 'Memo #12',
+            'recording' => 'https://example.com/recording.mp4',
+            'attendees' => 'Alice, Bob, Charlie'
+        ];
+        $this->view("secretary/viewminutereports", $data);
     }
 
     public function requestchange(){

@@ -61,7 +61,7 @@ input[type="text"], input[type="email"], input[type="checkbox"] {
 
 /* Submit Button */
 button[type="submit"].btn-save {
-    background-color: #67a1de;
+    background-color: #6164CE;
     color: white;
     font-size: 16px;
     padding: 10px 20px;
@@ -74,7 +74,7 @@ button[type="submit"].btn-save {
 
 /* Button Hover Effect */
 button[type="submit"].btn-save:hover {
-    background-color: #67a1de;
+    background-color: #6568c5;
 }
 
 /* Form Container */

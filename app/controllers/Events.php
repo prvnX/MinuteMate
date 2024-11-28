@@ -7,6 +7,8 @@ class Events extends Controller
         $date=$_GET['date'];
         if($this->isValidRequest()){
             $this->findMeetingforDate();
+
+
             $this->view("viewevents",['date'=>$date,'fetchData'=>$this->fetchData]);
         }
         else{
@@ -128,8 +130,33 @@ public function addMeeting() {
         echo json_encode(["error" => "Invalid request"]);
     }
 }
-}
 
+public function  getMemoList(){
+    $memo = new Memo();
+    $input = json_decode( file_get_contents('php://input'), true);
+    $meeting_id = $input['meeting_id'] ?? null;
+    if ($meeting_id) {
+
+
+        $memosList = $memo->select_all(['meeting_id' => $meeting_id]);
+        if($memosList){
+            echo json_encode(["success" => true, "memos" => $memosList]);
+        }
+        else{
+            echo json_encode(["error" => "No memos found for the given meeting ID"]);
+        }
+        // if($memosList){
+        //     echo json_encode(["success" => true, "memos" => $memosList]);
+        // }
+        // else{
+        //     echo json_encode(["error" => "No memos found for the given meeting ID"]);
+        // }
+
+    } else {
+        echo json_encode(["error" => "Meeting ID is missing"]);
+    }
+}
+}
 
         
 ?>
