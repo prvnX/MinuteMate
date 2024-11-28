@@ -57,4 +57,24 @@ class Meeting{
         return $this->query($query,$data);
     }
 
+    public function getmeetingsforuser($date , $user){
+        $data['date'] = $date;
+        $data['accessible_user'] = $user;
+
+        $query = "
+                    SELECT m.*
+                    FROM
+                         meeting m
+                    JOIN 
+                        user_meeting_types umt ON m.type_id = umt.meeting_type_id
+                    WHERE 
+                        umt.accessible_user = :accessible_user
+                    AND 
+                        m.date > :date
+                    ORDER BY m.date ASC;
+                    ";
+
+            return $this->query($query, $data);
+    }
+
 }

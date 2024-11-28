@@ -5,8 +5,9 @@
     
     <meta charset= "UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>View memo</title>
-     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewmemo.style.css">
+     <title>Memocart</title>
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/memocart.style.css">
+  
 </head>
 
 <body>
@@ -19,23 +20,21 @@
     require_once("../app/views/components/navbar.php"); //call the navbar component
    ?>
 
-   <h1 class="heading">Memos</h1>
-</div>
-   
+   <div>
+        <h1 class="heading">MemoCart</h1>
+   </div>
 
-
-<div class="memolist">
+   <div class="memolist">
     <?php foreach ($memos as $memo): ?>
         <div class="memoitem">
             <div class="memocontent">
             <h3><?= htmlspecialchars($memo->memo_title) ?></h3>
             <p><?= htmlspecialchars($memo->memo_id) ?></p>
-    </div>
-    <a href="<?=ROOT?>/secretary/viewmemodetails/?memo_id=<?= $memo->memo_id ?>">
-        <button class="viewbtn">View</button>
-    </a>
+         </div>
+            <a href="<?=ROOT?>/secretary/acceptmemo/?memo_id=<?= $memo->memo_id ?>">
+                <button class="viewbtn">View</button>
+            </a>
         </div>
     <?php endforeach; ?>
  </div>
 </body>
-</html>

@@ -205,7 +205,72 @@ class Secretary extends BaseController {
         }
     }
     public function entermemo() {
-        $this->view("secretary/entermemo");
+        $user=$_SESSION['userDetails']->username;
+        $date = date("Y-m-d");
+        if($this->isValidRequest()){
+            $meetings = ($this->findMeetingsToEnterMemos($date));
+
+            
+
+            $this->view("secretary/entermemo", ['meetings' => $meetings]);
+        }
+        else{
+            redirect("login");
+        }
+       
+    }
+    public function findMeetingsToEnterMemos($date){
+        $user=$_SESSION['userDetails']->username;
+        $meeting = new Meeting();
+        $meetinglist = $meeting->getmeetingsforuser($date, $user);
+        
+        return $meetinglist ?: [];
+    }
+
+    public function isValidRequest(){
+        if(isset($_SESSION['userDetails'])){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public function submitmemo() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            $memoTitle = htmlspecialchars($_POST['memo-subject']);
+            $memoContent = htmlspecialchars($_POST['memo-content']);
+            $meetingId = htmlspecialchars($_POST['meeting']);
+            $submittedBy=$_SESSION['userDetails']->username;
+
+            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
+            {
+                // $_SESSION['flash_error'] = "All fields are required.";
+                // redirect("studentrep/entermemo");
+                echo "All fields are required";
+                return;
+            }
+
+            $memoData = [
+                'memo_title' => $memoTitle,
+                'memo_content' => $memoContent,
+                'status' => 'pending', // Set default status
+                'submitted_by' => $submittedBy,
+                'meeting_id' => $meetingId,
+            ];
+
+            $memo = new Memo();
+            if($memo->insert($memoData))
+            {
+                $this->view("showsuccessmemo",["user"=>"secretary"]);
+            }
+            else
+            {
+                error_log("Memo insert failed: " . json_encode($memoData)); //for debugging purposes
+                $this->view("showunsuccessmemo",["user"=>"secretary"]); 
+            }
+        }
+        
     }
     public function createminute() {
         if(!isset($_GET['meeting'])) {
@@ -233,9 +298,127 @@ class Secretary extends BaseController {
     public function viewminutes() {
         $this->view("secretary/viewminutes");
     }
-    public function viewmemos() {
-        $this->view("secretary/viewmemos");
+
+    public function memocart() {
+        $user = $_SESSION['userDetails']->username;
+        $memo = new Memo();
+
+        $memos = $memo->getMemosForMemocart($user);
+        $this->view('secretary/memocart', ['memos'=>$memos]);
     }
+
+    public function acceptmemo()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // Handle GET request to display memo details
+        $memo_id = $_GET['memo_id'] ?? null;
+
+        if (!$memo_id) {
+            $_SESSION['flash_error'] = "Memo ID not provided.";
+            redirect("secretary/memocart");
+            return;
+        }
+
+        $memo = new Memo();
+        $memos = $memo->getMemoById($memo_id);
+
+        if ($memos) {
+            $this->view("secretary/acceptmemo", ['memo' => $memos]);
+        } else {
+            $_SESSION['flash_error'] = "Memo not found.";
+            redirect("secretary/memocart");
+        }
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Handle POST request for accepting or declining the memo
+        $memo_id = $_POST['memo_id'] ?? null;
+        $action = $_POST['action'] ?? null;
+
+        if (!$memo_id || !$action) {
+            $_SESSION['flash_error'] = 'Invalid request. Please provide all required data.';
+            redirect("secretary/memocart");
+            return;
+        }
+
+        $memo = new Memo();
+
+        if ($action === 'accept') {
+            $updated = $memo->updateStatus($memo_id, 'accepted');
+        } elseif ($action === 'decline') {
+            $updated = $memo->deleteMemo($memo_id);
+        } else {
+            $_SESSION['flash_error'] = 'Invalid action.';
+            redirect("secretary/memocart");
+            return;
+        }
+
+        if ($updated) {
+            $_SESSION['flash_message'] = "Memo successfully {$action}ed.";
+        } else {
+            $_SESSION['flash_error'] = "Failed to {$action} memo.";
+        }
+
+        // Redirect to prevent form resubmission
+        redirect("secretary/memocart");
+    }
+}
+
+
+    public function declinememo($memoId)
+    {
+        $memo = new Memo();
+        $memo->deleteMemo($memoId);
+        header('Location: ' . ROOT . '/secretary/memocart');   
+    }
+
+    public function viewmemos() {
+        $user=$_SESSION['userDetails']->username;
+
+        if($this->isValidRequest())
+        {
+            $memo = new Memo();
+            $memos = $memo->getAllMemos();
+            $this->view("secretary/viewmemos", ['memos'=> $memos]);
+        }
+        else
+        {
+            redirect("login");
+        }
+    }
+
+    public function viewMemoDetails()
+    
+        {$memo_id=$_GET['memo_id'];
+        error_log("Memo ID: " . $memo_id); //debugging
+        if($this->isValidRequest())
+        {
+           if(!$memo_id)
+           {
+            $_SESSION['flash_error'] = "Memo ID not provided.";
+            redirect("secretary/viewsubmittedmemos");
+            return;
+           }
+
+            $memoModel = new Memo;
+            $memo = $memoModel->getMemoById($memo_id);
+
+            error_log("Memo Data: " . json_encode($memo)); //debugging
+
+            if($memo)
+            {
+                $this->view("secretary/viewmemodetails", ['memo'=>$memo]);
+            }
+            else
+            {
+                $_SESSION['flash_error'] = "Memo not found.";
+                redirect("secretary/viewmemos");
+            }
+        }
+        else
+        {
+            redirect("login");
+        }
+    }
+
     public function viewmemoreports() {
         if(!isset($_GET['memo'])) {
             header("Location: ".ROOT."/secretary/selectmemo");
@@ -272,18 +455,6 @@ class Secretary extends BaseController {
         $this->view("secretary/viewminutereports", $data);
     }
     
-
-    public function submitmemo() {
-        // $content=$_POST['memo-content'];
-        $memosuccess = false;
-        $memoid = 1;
-        if($memosuccess) {
-            $this->view("showsuccessmemo",["user"=>"secretary","memoid"=>$memoid]);
-    }
-    else {
-        $this->view("showunsuccessmemo",["user"=>"secretary"]);
-    }
-    }
     public function submitminute() {
         $memosuccess = false;
         $minuteid = 1;

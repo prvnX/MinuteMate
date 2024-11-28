@@ -19,33 +19,21 @@
     <h1 class="heading">Submitted Memos</h1>
     </div>
 
-    <?php
-$memos = [
-    "M001" => "Memo Title 1",
-    "M002" => "Memo Title 2",
-    "M003" => "Memo Title 3",
-    "M004" => "Memo Title 4",
-    "M005" => "Memo Title 5",
-    "M006" => "Memo Title 6",
-    "M007" => "Memo Title 7",
-    "M008" => "Memo Title 8",
-    "M009" => "Memo Title 9",
-    "M0010" => "Memo Title 10"
-];
-?>
 
 <div class="memolist">
-    <?php foreach ($memos as $id=>$title): ?>
+    <?php foreach ($memos as $memo): ?>
         <div class="memoitem">
             <div class="memocontent">
-                <h3><?= $title ?></h3>
-                <p><?= $id ?></p>
-    </div>
-    <a href="<?=ROOT?>/studentrep/viewsubmittedmemos/<?= $id ?>">
-        <button class="viewbtn">View</button>
-    </a>
+                <h3><?= htmlspecialchars($memo->memo_title) ?></h3>
+                <p><?= htmlspecialchars($memo->memo_id) ?></p>
+            </div>
+             <a href="<?=ROOT?>/studentrep/viewmemodetails/?memo_id=<?= $memo->memo_id ?>">
+                 <button class="viewbtn">View</button>
+             </a>
         </div>
     <?php endforeach; ?>
  </div>
 
 </body> 
+
+ </html>
