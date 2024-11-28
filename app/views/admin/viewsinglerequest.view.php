@@ -56,17 +56,17 @@
                 <tr>
                     <td>NIC</td>
                     <td><?= htmlspecialchars($data[0]->nic) ?></td>
-                    <td><?= htmlspecialchars($data[0]->new_nic ?? "No change requested") ?></td>
+                    <td><?= htmlspecialchars($data[0]->new_nic ?? "No change Requested") ?></td>
                 </tr>
                 <tr>
                     <td>Email</td>
                     <td><?= htmlspecialchars($data[0]->email) ?></td>
-                    <td><?= htmlspecialchars($data[0]->new_email) ?></td>
+                    <td><?= htmlspecialchars($data[0]->new_email ?? "No change Requested" ) ?></td>
                 </tr>
                 <tr>
                     <td>Telephone Number</td>
                     <td><?= htmlspecialchars($data[0]->tp_no ?? "No current value") ?></td>
-                    <td><?= htmlspecialchars($data[0]->new_tp_no) ?></td>
+                    <td><?= htmlspecialchars($data[0]->new_tp_no ?? "No change Requested") ?></td>
                 </tr>
                 <tr>
                     <td>Additional Note</td>
@@ -131,12 +131,16 @@
                         window.location.href = "<?= ROOT ?>/admin/vieweditrequests";
                     } else {
                         alert(result.message || "Failed to accept the request.");
+                        window.location.href = "<?= ROOT ?>/admin/vieweditrequests";
+
                     }
                 } else {
                     throw new Error("Failed to accept request. Status: " + response.status);
                 }
             } catch (error) {
                 alert("Success.");
+                window.location.href = "<?= ROOT ?>/admin/vieweditrequests";
+
             }
         });
     </script>

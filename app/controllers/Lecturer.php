@@ -280,7 +280,7 @@ class Lecturer extends BaseController {
     }
     public function viewminutereports() {
         if(!isset($_GET['minute'])) {
-            header("Location: ".ROOT."/secretary/selectminute");
+            header("Location: ".ROOT."/lecturer/selectminute");
         }
         $memoid = $_GET['minute'];
         $data = [

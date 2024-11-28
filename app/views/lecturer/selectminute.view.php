@@ -1,5 +1,5 @@
 <head>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/selectminute.style.css">
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/selectminute.style.css">
     <title>Please Select a Minute</title>
     
 </head>
