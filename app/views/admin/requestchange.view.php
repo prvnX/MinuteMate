@@ -1,37 +1,29 @@
- 
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 
 <head>
-    
-    <meta charset= "UTF-8">
+<meta charset= "UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>Request Change</title>
      <link rel="stylesheet" href="<?=ROOT?>/assets/css/requestchange.style.css">
 </head>
 
 <body>
- 
-<div class="navbar">    
-<?php
-    
-    $user="studentrep";
-    $memocart="memocart"; 
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
-    $showAddEvents = false; 
-   ?>
-
-
-
-
+    <div class="navbar">
+    <?php
+        $user="admin";
+        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
+        $notification="notification"; //use notification-dot if there's a notification
+        $menuItems = [ "home" => ROOT."/admin", $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+        require_once("../app/views/components/navbar.php"); //call the navbar component
+        $showAddEvents = false;
+        ?>
     </div>
     <h1>Request Change</h1>
     <div class="container">
-         
-        <form action="<?= ROOT ?>/studentrep/requestchange" method="post">
-            <div id="fieldsContainer">
+       
+        <form action="<?= ROOT ?>/admin/requestchange" method="post">
+        <div id="fieldsContainer">
                 <div class="field-group">
                     <div class="form">
                         <label for="field">Field to change:</label>
@@ -80,7 +72,7 @@
         <script>
 
 function handleCancel() {
-        window.location.href = "<?= ROOT ?>/studentrep/viewprofile";
+        window.location.href = "<?= ROOT ?>/admin/viewprofile";
     
 }
 
@@ -192,7 +184,7 @@ function handleCancel() {
             modal.style.display = 'block';
             document.getElementById('successOk').onclick = function () {
             modal.style.display = 'none';
-            window.location.href = "<?= ROOT ?>/studentrep/requestchange";
+            window.location.href = "<?= ROOT ?>/admin/requestchange";
                 
         }
         }

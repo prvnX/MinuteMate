@@ -310,63 +310,98 @@ public function viewMemberProfile() {
     public function addPastMember(): void{
         $this->view(name: "admin/addPastMember");
     }
-
-
-    public function vieweditrequests(){
-        $this->view("admin/vieweditrequests");
+    public function viewprofile() {
+        $this->view("admin/viewprofile");
     }
+    
+    public function requestchange(){
+        $responseStatus = "";
+    
+        // Handle POST request
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $field = $_POST['field'] ?? [];
+            $newValue = $_POST['newValue'] ?? [];
+            $message = $_POST['message'] ?? "Message not provided";
+            $requestchange = new User_edit_requests();
+            $requestchange->addUserRequest($field, $newValue, $message);
+            $responseStatus = "success";
+            
+        }
+    
+        // Pass responseStatus to the view
+        $this->view("admin/requestchange", [
+            "user" => "admin",
+            "responseStatus" => $responseStatus
+        ]);
+    }
+
+    
+    public function vieweditrequests() {
+        //changes done by nc
+        $requestChangeModel = $this->model("User_edit_requests");
+        $requests = $requestChangeModel->find_requests();  // Fetch edit requests
+
+        // Pass the data to the view
+        $this->view("admin/vieweditrequests", [
+            "requests" => $requests
+        ]);
+    }
+
+
     public function viewsinglerequest(){
-         
-
-        $_REQUEST = [
-                
-            ['userid' => '001',
-              'name' => 'Nuwan chanu',
-              'newname' => 'Nuwan Chanuka',
-              'nic' => '19981234567V',
-              'newnic' => '199812345567',
-              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
-  
-            ],
-          [
-              'userid' => '002',
-              'name' => 'John Doe',
-              'newname' => 'John Dohn',
-              'nic' => '19981234567V',
-              'newnic' => '19981234565',
-              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
-            ],
-          [
-              'userid' => '003',
-              'name' => 'keneth sil',
-              'newname' => 'keneth Doe',
-              'nic' => '19981234567V',
-              'newnic' => '19981234567',
-              'additionalnote' => 'I would like to request a change of my user profile name to [New Name]. Please ensure that this change is reflected across all associated platforms and services. If any further information is required to process this request, do not hesitate to contact me.',
-            ],
-          ];
-              
-       
-          
-              
-        $userid = $_REQUEST['1'];
-        $currentuser = $_REQUEST['1'];
-        
-
-        $data = [
-            'id' => $userid['userid'],
-            'name' => $currentuser['name'],
-            'nic' => $currentuser['nic'],
-            'newname' => $currentuser['newname'],
-            'newnic' => $currentuser['newnic'],
-            'additionalnote' => $currentuser['additionalnote'],
-        ];
-
-
-
-
+        //changes done by nc
+        $id=$_GET['id'];
+        $requestChangeModel=new User_edit_requests;
+        $data=$requestChangeModel->find_request_by_id($id);
         $this->view("admin/viewsinglerequest", $data);
     }
+
+    public function declineRequest() {
+        $data = json_decode(file_get_contents("php://input"), true);
+        $id = $data['id'] ?? null;
+        echo json_encode(['success' => $id]);
+        if ($id) {
+            $userEditRequests = new User_edit_requests();
+            $userEditRequests->deleteRequestById($id);
+            echo json_encode(['success' => "Request with ID - $id is Declined"]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Invalid request ID']);
+        }
+    }
+
+    public function acceptRequest() {
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        // Extract data from the request
+        $username = $data['username'] ?? null;
+        $new_fullname = $data['new_fullname'] ?? null;
+        $new_nic = $data['new_nic'] ?? null;
+        $new_email = $data['new_email'] ?? null;
+        $new_tp_no = $data['new_tp_no'] ?? null;
+        $new_department = $data['new_department'] ?? null;
+        $id = $data['id'] ?? null;
+    
+        // Prepare the updated data
+        $updatedData = [];
+    
+        if (!empty($new_fullname)) {
+            $updatedData['full_name'] = $new_fullname;
+        }
+    
+        if (!empty($new_nic)) {
+            $updatedData['nic'] = $new_nic;
+        }
+    
+        if (!empty($new_email)) {
+            $updatedData['email'] = $new_email;
+        }
+    
+        // Update the user data
+        $userUpdate = new User();
+        $updateSuccess = $userUpdate->update($username, $updatedData, 'username');
+        $updateAndDelete = new User_edit_requests();
+        $updateAndDelete->deleteRequestById($id);
     
     
+}
 }

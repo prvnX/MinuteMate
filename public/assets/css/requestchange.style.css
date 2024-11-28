@@ -119,23 +119,23 @@ button:hover {
 
 }
 #alertModal .modal-contents {
-    background-color: rgb(255, 255, 255);
-    width: 40%;
-    margin-top: 40vh;
-    margin-left: 60vh;
+    background-color: rgb(24, 17, 17);
+    width: 30%;
+    margin-top: 74vh;
+    margin-left: 75vh;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 30px;
 }
 #alertModal p{
-    color:black;
+    color:rgb(243, 240, 240);
     font-family: ubuntu,sans-serif;
 }
 
 #alertModal .modal-content {
     color:black;
     width: 40%;
-    background-color: #ffffff; /* Light green for success */
-    color: #ffffff; /* Dark green text */
+    background-color: #cb1717; /* Light green for success */
+    color: #14c12e; /* Dark green text */
     border:solid 0.5px #7C4AFF;
 }
 
@@ -151,23 +151,23 @@ button:hover {
 }
 
 #alertModal .btn-ok {
-    background-color:#5b29d8;
+    background-color:#8694e8;
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
 }
 
 #alertModal .btn-ok:hover {
-    background-color: #390ea6; /* Darker green on hover */
+    background-color: #3746cd; /* Darker green on hover */
 }
 #message{
     color: rgb(101, 101, 101);
     font-size: 1rem;
     font-weight: 300;
     font-family: "Ubuntu", sans-serif;
-    text-align: center;
+    text-align: left;
 }
 .modal {
     display: none;

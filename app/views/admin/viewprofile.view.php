@@ -69,11 +69,12 @@
 <body>
     <div class="navbar">
     <?php
-    $user="lecturer";
+    $user="admin";
+    $memocart="memocart";
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/admin", $memocart => ROOT."/admin/memocart",$notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/navbar.php"); //call the navbar component
-    $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,"Email"=>$_SESSION['userDetails'] -> email,"LectureID"=>"102837273","NIC"=>$_SESSION['userDetails'] ->nic,"Role"=>"Lecturer","Contact_No:"=>"077 283 3685","Meeting_types"=>"IUD, RHD, Syndicate"]
+    $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,"Email"=>$_SESSION['userDetails'] -> email,"LectureID"=>"932837273","NIC"=>$_SESSION['userDetails'] ->nic,"Role"=>"admin","Contact_No:"=>"071 283 3684","Meeting_types"=>"IUD, RHD, Syndicate"]
    ?>
     </div>
     <div class="title">
@@ -143,7 +144,7 @@
 
     <script>
         document.getElementById("continueButton").addEventListener("click", () => {
-    window.location.href = "<?= ROOT ?>/lecturer"; // Redirect to the dashboard
+    window.location.href = "<?= ROOT ?>/admin"; // Redirect to the dashboard
 });
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -171,7 +172,7 @@
             });
 
             requestbtn.addEventListener("click", ()=>{
-                window.location.href= "<?= ROOT ?>/lecturer/requestchange";
+                window.location.href= "<?= ROOT ?>/admin/requestchange";
             })
         });
     </script>

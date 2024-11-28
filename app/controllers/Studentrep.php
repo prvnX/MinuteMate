@@ -67,7 +67,7 @@ class Studentrep extends BaseController {
             $requestchange = new User_edit_requests();
             $requestchange->addUserRequest($field, $newValue, $message);
             $responseStatus = "success";
-
+            
         }
     
         // Pass responseStatus to the view
