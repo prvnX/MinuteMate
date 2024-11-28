@@ -18,13 +18,17 @@
         ?>
     </div>
 
+    <div><h1 class="heading">Memo Details</h1></div>
+
     <div class="memo-details-container">
     <?php
     if (!empty($memo)) : ?>
-        <h1 class="memo-title">Memo Details</h1>
-
+        
         <p class="memo-detail"><strong>ID:</strong> <span class="memo-id"><?= htmlspecialchars($memo->memo_id) ?></span></p>
         <p class="memo-detail"><strong>Title:</strong> <span class="memo-title"><?= htmlspecialchars($memo->memo_title) ?></span></p>
+        <p class="memo-detail"><strong>Status:</strong> <span class="memo-status"><?= htmlspecialchars($memo->status) ?></span></p>
+        <p class="memo-detail"><strong>Submitted By:</strong> <span class="memo-submitted-by"><?= htmlspecialchars($memo->submitted_by) ?></span></p>
+
         
         <p class="memo-detail"><strong>Content:</strong></p>
         <div class="memo-content-box">
@@ -34,9 +38,6 @@
             ?>
         </div>
 
-        <p class="memo-detail"><strong>Status:</strong> <span class="memo-status"><?= htmlspecialchars($memo->status) ?></span></p>
-        <p class="memo-detail"><strong>Submitted By:</strong> <span class="memo-submitted-by"><?= htmlspecialchars($memo->submitted_by) ?></span></p>
-        <p class="memo-detail"><strong>Meeting ID:</strong> <span class="memo-meeting-id"><?= htmlspecialchars($memo->meeting_id) ?></span></p>
 
         <a href="<?= ROOT ?>/studentrep/viewsubmittedmemos" class="btn-back">Back to Memos</a>
     <?php else : ?>

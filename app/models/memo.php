@@ -21,9 +21,10 @@
             return $this->query($query, $columns); // Assuming `query` is defined in Model
         }
 
-        public function getAllMemos(){
+        public function getAllAcceptedMemos(){
             $query = "SELECT * 
                       FROM $this->table
+                      WHERE status='accepted'
                       ORDER BY memo_id 
                       DESC;";
             return $this->query($query);

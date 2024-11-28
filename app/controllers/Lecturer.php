@@ -205,8 +205,8 @@ class Lecturer extends BaseController {
     public function entermemo() {
         $this->view("lecturer/entermemo");
     }
-    public function reviewstudentmemos() {
-        $this->view("lecturer/reviewstudentmemos");
+    public function reviewmemos() {
+        $this->view("lecturer/reviewmemos");
     }
     public function viewminutes() {
         $this->view("lecturer/viewminutes");
