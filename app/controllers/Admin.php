@@ -35,6 +35,7 @@ class Admin extends BaseController {
                 $userModel = $this->model("User");
                 $userMeetingTypesModel = $this->model("user_meeting_types");
                 $meetingTypesModel = $this->model("meeting_types");
+                $userContactNumsModel = $this->model("UserContactNums");
     
                 // Fetch the user details from user_requests
                 $userDetails = $userRequestsModel->getRequestById($requestId);
@@ -42,7 +43,7 @@ class Admin extends BaseController {
                 if ($userDetails) {
                     // Generate username and default password
                     $username = strtolower(str_replace(' ', '', $userDetails->lec_stu_id));
-                    $password = password_hash('defaultpassword', PASSWORD_DEFAULT);
+                    $password = password_hash($userDetails->nic, PASSWORD_DEFAULT);
     
                     // Insert user into the `user` table
                     $userInsertResult = $userModel->insert([
@@ -60,6 +61,15 @@ class Admin extends BaseController {
                         echo json_encode(['success' => false, 'message' => 'Username already exists.']);
                         return;
                     }
+
+                     // Insert contact number into `user_contact_nums` table
+                $existingContact = $userContactNumsModel->getContactByUsername($username);
+                if (!$existingContact) {
+                    $userContactNumsModel->insert([
+                        'username' => $username,
+                        'contact_no' => $userDetails->tp_no
+                    ]);
+                }
     
                     // Insert selected meeting types into `user_meeting_types` table
                     if (!empty($meetingTypes)) {
@@ -84,8 +94,25 @@ class Admin extends BaseController {
                 echo json_encode(['success' => true]);
                 return;
             }
-        }
+
+            elseif ($requestId && $action === 'remove') {
+                $userModel = $this->model("User");
     
+                // Update user status to 'removed'
+                $success = $userModel->updateUserStatus($requestId, 'removed'); // Assuming the userId is passed as requestId
+    
+                if ($success) {
+                    echo json_encode(['success' => true, 'message' => 'Member removed successfully.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to remove member.']);
+                }
+                return;
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Invalid action or request ID.']);
+                return;
+            }
+        }
+        
         // Return error response if request data is invalid
         echo json_encode(['success' => false, 'message' => 'Invalid request']);
     }
@@ -277,8 +304,8 @@ public function viewMemberProfile() {
                 $userModel->updateMeetingTypes($username, $meetingTypeIds);
             }
 
-            echo json_encode(['status' => 'success', 'message' => 'Member updated successfully']);
-            header("Location: " . ROOT . "/admin/viewMemberProfile?id=" . urlencode($username));
+            $redirectUrl = ROOT . "/admin/viewMemberProfile?id=" . urlencode($username) . "&status=success&message=" . urlencode("Member updated successfully.");
+            header("Location: " . $redirectUrl);
         exit;
         }
 
