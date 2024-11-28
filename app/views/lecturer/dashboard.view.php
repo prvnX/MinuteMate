@@ -53,17 +53,18 @@
     </div>
 
     <div class="card">
-      <img src="<?=ROOT?>/assets/images/view memo report.jpeg" alt="View Memo Reports">
-      <a href="<?=ROOT?>/lecturer/viewmemoreports">
-      <button class = "card button">View Memo Reports</button>
-      </a>
-    </div>
 
-    <div class="card">
+<img src="<?=ROOT?>/assets/images/view memo report.jpeg" alt="View Memo Reports">
+  <a href="<?=ROOT?>/lecturer/selectmemo">
+<button class="card-button">View Memo Reports</button>
+  </a>
+</div>
+
+<div class="card">
       <img src="<?=ROOT?>/assets/images/view minute report.png" alt="View Minute Report">
-      <a href="<?=ROOT?>/lecturer/viewminutereports">
-      <button class = "card button">View Minute Report</button>
-      </a>
+        <a href="<?=ROOT?>/lecturer/viewminutereports">
+      <button class="card-button">View Minute Report</button>
+        </a>
     </div>
   </div>
 
@@ -73,7 +74,7 @@
         "Update: Minutes from yesterday's meeting are now available.",
        
     ]; //pass the notifications here
-    $name = "John Doe"; //pass the name of the user here  
+    $name = $_SESSION['userDetails']->full_name; //pass the name of the user here  
     $showAddEvents = false;
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
