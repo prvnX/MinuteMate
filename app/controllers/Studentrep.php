@@ -179,5 +179,25 @@ class Studentrep extends BaseController {
         // Redirect to the login page
         redirect("home");
     }
+    public function viewmemoreports() {
+        if(!isset($_GET['memo'])) {
+            header("Location: ".ROOT."/studentrep/selectmemo");
+        }
+        $memoid = $_GET['memo'];
+        
+        $data = [
+            'id' =>$memoid,
+            'date' => '2024-11-16',
+            'time' => '2:00 PM',
+            'status' => 'Approved',
+            'linked_memos' => 'Memo #11, Memo #12',
+            'author' => 'John Doe'
+        ];
+    
+        $this->view("studentrep/viewmemoreports", $data);
+    }
+    public function selectmemo (){
+        $this->view("studentrep/selectmemo");
+    }
 
 }
