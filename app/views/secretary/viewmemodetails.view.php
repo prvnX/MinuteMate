@@ -42,7 +42,7 @@
         </div>
 
        
-        <a href="<?= ROOT ?>/secretary/viewsubmittedmemos" class="btn-back">Back to Memos</a>
+        <a href="<?= ROOT ?>/secretary/viewmemos" class="btn-back">Back to Memos</a>
     <?php else : ?>
         <p class="memo-error">Memo not found.</p>
     <?php endif; ?>

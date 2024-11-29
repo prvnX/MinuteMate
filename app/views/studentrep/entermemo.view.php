@@ -28,7 +28,8 @@
                             
                             $id=$meeting->meeting_id;
                             $date = htmlspecialchars($meeting->date); 
-                            echo "<option value='$id'>$date</option>";
+                            $type = htmlspecialchars($meeting->meeting_type);
+                            echo "<option value='$id'>".ucfirst($type)." Meeting On ".$date."</option>";
 
                         }
                     }else{

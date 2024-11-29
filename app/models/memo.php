@@ -21,6 +21,14 @@
             return $this->query($query, $columns); // Assuming `query` is defined in Model
         }
 
+        public function getAllMemos(){
+            $query = "SELECT * 
+                      FROM $this->table
+                      ORDER BY memo_id 
+                      DESC;";
+            return $this->query($query);
+        }
+
         public function getAllAcceptedMemos(){
             $query = "SELECT * 
                       FROM $this->table
@@ -77,6 +85,7 @@
                 'memo_id' => $memoId
             ]);
         }
+
 
 
 

@@ -33,7 +33,7 @@
 
     <div class="card">
       <img src="<?=ROOT?>/assets/images/review memos.jpeg" alt="Review Student Memos">
-      <a href="<?=ROOT?>/lecturer/reviewstudentmemos">
+      <a href="<?=ROOT?>/lecturer/reviewstudentmemo">
       <button class = "card button">Review Student Memos</button>
       </a>
     </div>
@@ -62,7 +62,7 @@
 
 <div class="card">
       <img src="<?=ROOT?>/assets/images/view minute report.png" alt="View Minute Report">
-        <a href="<?=ROOT?>/lecturer/viewminutereports">
+        <a href="<?=ROOT?>/lecturer/viewminutereport">
       <button class="card-button">View Minute Report</button>
         </a>
     </div>
