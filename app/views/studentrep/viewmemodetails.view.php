@@ -39,7 +39,7 @@
         </div>
 
 
-        <a href="<?= ROOT ?>/studentrep/viewsubmittedmemos" class="btn-back">Back to Memos</a>
+        <a href="<?= ROOT ?>/studentrep/viewmemos" class="btn-back">Back to Memos</a>
     <?php else : ?>
         <p class="memo-error">Memo not found.</p>
     <?php endif; ?>

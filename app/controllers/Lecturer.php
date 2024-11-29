@@ -202,6 +202,9 @@ class Lecturer extends BaseController {
         $this->view("search",[ "user" => $user, "menuItems" => $menuItems, "notification" => $notification,"searchtxt"=>$searchtxt,"memoResults"=>$memoResults,"minuteResults"=>$minuteResults]);
         }
     }
+    public function reviewstudentmemo(){
+        $this->view("lecturer/reviewstudentmemo");
+    }
     public function entermemo() {
         $this->view("lecturer/entermemo");
     }
@@ -316,5 +319,9 @@ class Lecturer extends BaseController {
             "responseStatus" => $responseStatus
         ]);
     }
+    public function acceptmemo()
+{
+    $this->view("lecturer/acceptmemo");
 
+}
 }
