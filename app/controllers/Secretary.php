@@ -245,8 +245,6 @@ class Secretary extends BaseController {
 
             if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
             {
-                // $_SESSION['flash_error'] = "All fields are required.";
-                // redirect("studentrep/entermemo");
                 echo "All fields are required";
                 return;
             }
@@ -266,7 +264,6 @@ class Secretary extends BaseController {
             }
             else
             {
-                error_log("Memo insert failed: " . json_encode($memoData)); //for debugging purposes
                 $this->view("showunsuccessmemo",["user"=>"secretary"]); 
             }
         }
@@ -376,7 +373,7 @@ class Secretary extends BaseController {
         if($this->isValidRequest())
         {
             $memo = new Memo();
-            $memos = $memo->getAllMemos();
+            $memos = $memo->getAllAcceptedMemos();
             $this->view("secretary/viewmemos", ['memos'=> $memos]);
         }
         else

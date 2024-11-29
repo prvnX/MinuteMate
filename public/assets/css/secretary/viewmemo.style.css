@@ -39,6 +39,8 @@ h1{
     margin-top: 150px;
     width: 1000px;
     margin-left: 500px;
+    overflow-y: auto;
+    max-height: 800px;
   
 }
 

@@ -51,13 +51,18 @@
     </div>
     
     <div class="aside">
-  <?php
+    <?php
     $notificationsArr =[
-        "Requests: 3 Requests are pending.",
-        "Reminder: Meeting shceduled for tommorow at a 3 pm ",
+        "Reminder: Meeting scheduled for tomorrow at 3 PM.",
+        "Update: Minutes from yesterday's meeting are now available.",
        
     ]; //pass the notifications here
+
+ 
+    $showAddEvents = false;
+
     $name = $_SESSION['userDetails']->full_name; //pass the name of the user here  
+
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
  </div>

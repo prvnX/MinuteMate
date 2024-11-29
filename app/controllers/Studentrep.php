@@ -64,17 +64,9 @@ class Studentrep extends BaseController {
                 'submitted_by' => $submittedBy,
                 'meeting_id' => $meetingId,
             ];
-
             $memo = new Memo();
-            if($memo->insert($memoData))
-            {
-                $this->view("showsuccessmemo",["user"=>"studentrep"]);
-            }
-            else
-            {
-                error_log("Memo insert failed: " . json_encode($memoData)); //for debugging purposes
-                $this->view("showunsuccessmemo",["user"=>"studentrep"]); 
-            }
+            $memo->insert($memoData);
+             $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
         
     }
