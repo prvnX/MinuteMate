@@ -12,7 +12,7 @@
     <div class= "navbar">
         <?php
              $notification="notification"; //use notification-dot if there's a notification
-             $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/lecturer/studentrep", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+             $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/studentrep", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
              require_once("../app/views/components/navbar.php"); //call the navbar component
         ?>
 
