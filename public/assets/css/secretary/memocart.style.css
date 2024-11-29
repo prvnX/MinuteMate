@@ -32,6 +32,8 @@ body{
     gap: 15px;
     width: 1000px;
     margin-left: 450px;
+    overflow-y: auto;
+    max-height: 800px;
   
 }
 
