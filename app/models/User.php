@@ -12,7 +12,6 @@ class User {
         'nic',
         'full_name',
         'email',
-        'role',
         'status'
     ]; // editable columns
 

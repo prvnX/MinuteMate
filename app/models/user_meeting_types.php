@@ -7,6 +7,10 @@ class User_Meeting_Types
     
 
     protected $table = 'user_meeting_types';
+    protected $allowedColumns = [
+        'meeting_type_id',
+        'accessible_user'
+    ];
 
     /**
      * Inserts meeting types for a given user into the database.
@@ -55,6 +59,10 @@ class User_Meeting_Types
             ]);
         }
     }
-    
 
+    public function getUserMeetingTypes($username) {
+        $data['username'] = $username;
+        $query = "SELECT meeting_type FROM user_meeting_types um INNER JOIN meeting_types mt ON um.meeting_type_id = mt.type_id WHERE accessible_user = :username";
+        return $this->query($query, $data);
+    }
 }

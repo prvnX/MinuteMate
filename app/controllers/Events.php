@@ -33,6 +33,24 @@ class Events extends Controller
             return false;
         }
     }
+    private function authMeetingEdit($meeting_id,$uername){
+        $meeting = new Meeting();
+        $secretaryMeetingTypes = new secretary_meeting_type;
+        $row=$meeting->select_one(['meeting_id'=>$meeting_id]);
+        $meetingtype=$row[0]->type_id;
+        $secRow=$secretaryMeetingTypes->select_all(['username'=>$_SESSION['userDetails']->username]);
+        $auth=false;
+        foreach ($secRow as $secMeetingType) {
+            $secnewRow=$secMeetingType->meeting_type_id;
+            if($secnewRow==$meetingtype){
+                $auth=true;
+                break;
+            }
+        }
+        return $auth;
+
+    }
+
     private function findMeetingforDate(){
         $date=$_GET['date'];
         $user=$_SESSION['userDetails']->username;
@@ -62,8 +80,14 @@ public function deleteMeeting() {
         $input = json_decode(file_get_contents('php://input'), true);
         $meeting_id = $input['meeting_id'] ?? null;
         if ($meeting_id) {
-            $meeting->delete($meeting_id,'meeting_id');
-            echo json_encode(["success" => "Meeting with ID - $meeting_id Deleted Successfully"]);
+            $auth=$this->authMeetingEdit($meeting_id,$_SESSION['userDetails']->username);
+            if($auth){
+                $meeting->delete($meeting_id,'meeting_id');
+                echo json_encode(["success" => "Meeting with ID - $meeting_id Deleted Successfully"]);
+            }
+            else{
+                echo json_encode(["error" => "You do not have access to delete this meeting"]);
+            }
         } else {
             echo json_encode(["error" => "Meeting ID is missing"]);
         }
@@ -82,6 +106,11 @@ public function rescheduleMeeting() {
         $startTime=$input['startTime'];
         $endTime=$input['endTime'];
         if ($meeting_id) {
+            $auth=$this->authMeetingEdit($meeting_id,$_SESSION['userDetails']->username);
+            if(!$auth){
+                echo json_encode(["error" => "You do not have access to edit this meeting"]);
+                return;
+            }
             $meeting->update($meeting_id,['date'=>$date,'start_time'=>$startTime,'end_time'=>$endTime],'meeting_id');
             echo json_encode(["success" => "Meeting with ID - $meeting_id Rescheduled Successfully"]);
         } else {
