@@ -114,7 +114,7 @@ td:hover {
 }
 
 .today {
-    background-color: #7C4AFF; 
+    background-color: #3b83f6bd; 
     color: white;
     border-radius: 25px;
 }
@@ -124,7 +124,7 @@ td:hover {
     display: inline-block;
     margin-top: 15px;
     padding: 10px 20px;
-    background-color: #7C4AFF;
+    background-color: #3b82f6;
     color: white;
     font-weight: 500;
     border: none;
@@ -136,7 +136,7 @@ td:hover {
 }
 
 .add-event-button:hover {
-    background-color: #5b29d8;
+    background-color: #1e40af;
 }
 
 /* Modal Styles */
@@ -156,7 +156,7 @@ td:hover {
     text-align: center;
     font-family: 'Ubuntu', sans-serif;
     font-size: 1.5rem;
-    color:#2f196e;
+    color:#1e40af;
 }
 .modal-content {
     background-color: #fefefe;
@@ -206,7 +206,7 @@ input[type="date"],input[type='time'], input[type="text"], select {
 .submit-button {
     margin-top: 10px;
     padding: 10px;
-    background-color: #7C4AFF;
+    background-color: #3b82f6;
     color: white;
     border: none;
     border-radius: 5px;
@@ -215,7 +215,7 @@ input[type="date"],input[type='time'], input[type="text"], select {
 }
 
 .submit-button:hover {
-    background-color: #5b29d8;
+    background-color: #1e40af;
 }
 
 /* Message Box Styles */
@@ -235,7 +235,7 @@ input[type="date"],input[type='time'], input[type="text"], select {
     width: 40%;
     background-color: #ffffff; /* Light green for success */
     color: #ffffff; /* Dark green text */
-    border:solid 0.5px #7C4AFF;
+    border:solid 0.5px #3b82f6;
 }
 
 #alertModal .modal-body {
@@ -250,7 +250,7 @@ input[type="date"],input[type='time'], input[type="text"], select {
 }
 
 #alertModal .btn-ok {
-    background-color:#5b29d8;
+    background-color:#3b82f6;
     color: white;
     padding: 10px 20px;
     border: none;

@@ -8,7 +8,7 @@
 
 <body>
     <?php
-    require_once("../app/views/components/navbar.php");
+    require_once("../app/views/components/new_navbar.php");
 
 //placeholders only
 // Dummy data for unread notifications

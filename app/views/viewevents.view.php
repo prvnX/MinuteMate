@@ -15,7 +15,7 @@
     else{
         $menuItems = [ "home" => ROOT."/$user",$notification => ROOT."/$user/notifications", "profile" => ROOT."/$user/viewprofile" , "logout" => ROOT."/$user/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
     }
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
     ?>
 
     <div class="dashboard-container">  
