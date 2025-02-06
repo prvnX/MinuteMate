@@ -4,16 +4,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/search.style.css">
+    <style>
+        .search-nav-bar .search-bar{margin-top: 0rem;} 
+    </style>
 </head>
 <body>
-
+<div class="search-nav-bar">
 <?php
-    require_once("../app/views/components/navbar.php");
+    
+    require_once("../app/views/components/new_navbar.php");
     $memoResultsjson = json_encode($memoResults);
     $memberList= ["Diana", "Jane Doe", "John Smith", "Jane Smith", "John Doe", "Jane Doe", "John Smith", "Jane Smith", "John Doe", "Jane Doe", "John Smith", "Jane Smith", "John Doe", "Jane Doe", "John Smith", "x"];
     $minuteResultsjson = json_encode($minuteResults);
     $user="secretary";
     ?>
+</div>
 <div class="search-heading-container">
     <h1 class="search-heading">Search Results for "<?=$searchtxt?>"</h1>
 </div>
