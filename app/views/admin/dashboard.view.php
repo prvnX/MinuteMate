@@ -39,19 +39,30 @@
     <div class="card">
       <img src="<?=ROOT?>/assets/images/Remove Members.jpeg" alt="Remove Members">
       <a href="<?=ROOT?>/admin/PastMembers">
-      <button>Remove Members</button>
+      <button>Past Members</button>
+    </a>
+    </div>
+    <div class="card">
+      <img src="<?=ROOT?>/assets/images/edit.png" alt="Remove Members">
+      <a href="<?=ROOT?>/admin/vieweditrequests">
+      <button>View Edit Requests</button>
     </a>
     </div>
     </div>
     
     <div class="aside">
-  <?php
+    <?php
     $notificationsArr =[
-        "Requests: 3 Requests are pending.",
-        "Reminder: Meeting shceduled for tommorow at a 3 pm ",
+        "Reminder: Meeting scheduled for tomorrow at 3 PM.",
+        "Update: Minutes from yesterday's meeting are now available.",
        
     ]; //pass the notifications here
-    $name = "John Doe"; //pass the name of the user here  
+
+ 
+    $showAddEvents = false;
+
+    $name = $_SESSION['userDetails']->full_name; //pass the name of the user here  
+
     require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
     ?>
  </div>

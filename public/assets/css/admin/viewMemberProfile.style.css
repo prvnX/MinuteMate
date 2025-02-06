@@ -35,8 +35,9 @@ p {
     cursor: pointer;
     font-size: 1em;
     margin-right: 10px;
-    background-color: #6473d6;
+    background-color: #6164CE;
     color: white;
+    text-decoration: none;  /* Remove the underline */
 }
 
 .btn-edit {

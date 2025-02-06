@@ -97,7 +97,7 @@ td:hover {
 }
 
 .rhd {
-    background-color: #ed5f5f; 
+    background-color: #ff8383; 
     border: solid 2px rgb(255, 255, 255);
 
 }
@@ -114,7 +114,7 @@ td:hover {
 }
 
 .today {
-    background-color: #9e9e9e; 
+    background-color: #7C4AFF; 
     color: white;
     border-radius: 25px;
 }
@@ -128,7 +128,7 @@ td:hover {
     color: white;
     font-weight: 500;
     border: none;
-    border-radius: 25px;
+    border-radius: 10px;
     cursor: pointer;
     text-decoration: none;
     transition: background-color 0.3s;
@@ -154,7 +154,7 @@ td:hover {
 
 .modal h3{
     text-align: center;
-    font-family: poppins;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 1.5rem;
     color:#2f196e;
 }
@@ -164,9 +164,18 @@ td:hover {
     padding: 20px;
     border: 1px solid #888;
     width: 90%;
-    max-width: 400px;
+    max-width: 700px;
     border-radius: 10px;
     text-align: left;
+}
+.modal-content textarea {
+    width: 100%;
+    height: 100px;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
 }
 
 .close {
@@ -222,3 +231,40 @@ input[type="date"],input[type='time'], input[type="text"], select {
     transition: opacity 0.2s ease;
 }
 
+#alertModal .modal-content {
+    width: 40%;
+    background-color: #ffffff; /* Light green for success */
+    color: #ffffff; /* Dark green text */
+    border:solid 0.5px #7C4AFF;
+}
+
+#alertModal .modal-body {
+    padding: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+
+}
+
+#alertModal .modal-actions {
+    text-align: center;
+}
+
+#alertModal .btn-ok {
+    background-color:#5b29d8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#alertModal .btn-ok:hover {
+    background-color: #390ea6; /* Darker green on hover */
+}
+#message{
+    color: rgb(101, 101, 101);
+    font-size: 1rem;
+    font-weight: 300;
+    font-family: "Ubuntu", sans-serif;
+    text-align: center;
+}

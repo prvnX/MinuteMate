@@ -48,7 +48,7 @@ $member = $dummyMembers[$memberId] ?? null;
       </div>
       <div class="action-buttons">
         <a href="<?=ROOT?>/admin/addPastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-add">Add</a>
-        <a href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-delete">Delete</a>
+        <!-- <a href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-delete">Delete</a> -->
       </div>
     </div>
   <?php else: ?>

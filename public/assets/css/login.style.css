@@ -102,6 +102,13 @@ form .btn-long{
     margin-top: 1rem;
 }
 
+.err-login{
+    color: red;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: 500;
+}
+
 @media screen and (max-width: 768px){
     .login-container .left-container{
         display: none;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/viewprofile.style.css">
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/viewprofile.style.css">
     <style>
         /* Modal styles */
         .modal {
@@ -69,12 +69,11 @@
 <body>
     <div class="navbar">
     <?php
-    $user="secretary";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
+    $user=$_SESSION['userDetails']->role;
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep",$memocart => ROOT."/studentrep/memocart", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/navbar.php"); //call the navbar component
-    $profileDetails=["name"=>"Keneth Gunewardana","Email"=>"Email@gmail.com","LectureID"=>"932837273","NIC"=>"9283984743284v","Role"=>" Board Member","Contact_No:"=>"071 283 3684, 077 647 2983","Meeting_types"=>"IUD, RHD, Syndicate"]
+    $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,"Email"=>$_SESSION['userDetails'] -> email,"LectureID"=>"932837273","NIC"=>$_SESSION['userDetails'] ->nic,"Role"=>" Student Rep","Contact_No:"=>"071 283 3684, 077 647 2983","Meeting_types"=>"IUD, RHD, Syndicate"]
    ?>
     </div>
     <div class="title">
@@ -88,7 +87,7 @@
             <div class="profile-right">
                 <p><strong>Name:</strong> <?= $profileDetails['name'] ?></p><br>
                 <p><strong>Email:</strong><?= $profileDetails['Email'] ?></p><br>
-                <p><strong>Lecture ID:</strong><?= $profileDetails['LectureID'] ?></p><br>
+                <p><strong>Student ID:</strong><?= $profileDetails['LectureID'] ?></p><br>
                 <p><strong>NIC:</strong> <?= $profileDetails['NIC'] ?></p><br>
                 <p><strong>Role:</strong><?= $profileDetails['Role'] ?></p><br>
                 <p><strong>Contact No:</strong><?= $profileDetails['Contact_No:'] ?></p><br>
@@ -105,7 +104,9 @@
         <div class="form-buttons-container">
             
             <div class="form-buttons">
-                <button type="button" class="request-change">Request Change </button>
+                
+                <button type="button" class="request-change" onclick="" id="requestchangebtn">Request Change </button>
+               
             </div> 
             <div class="form-buttons">
                  
@@ -149,6 +150,7 @@
             const modal = document.getElementById("passwordModal");
             const openModalBtn = document.getElementById("changePasswordBtn");
             const closeModalBtn = document.getElementById("closeModal");
+            const requestbtn = document.getElementById("requestchangebtn");
 
             // Open modal when the "Change My Password" link is clicked
             openModalBtn.addEventListener("click", (event) => {
@@ -167,6 +169,10 @@
                     modal.style.display = "none";
                 }
             });
+
+            requestbtn.addEventListener("click", ()=>{
+                window.location.href= "<?= ROOT ?>/studentrep/requestchange";
+            })
         });
     </script>
 </body>

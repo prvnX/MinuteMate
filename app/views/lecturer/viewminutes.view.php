@@ -13,10 +13,10 @@
 <body>
 <div class="navbar">
 <?php
-    $user="secretary";
+    $user="lecturer";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/navbar.php"); //call the navbar component
    ?>
 
@@ -65,7 +65,7 @@ $minutes = [
                         <button class="viewbtn">View</button>
                     </a>
                     <a href="<?= ROOT ?>/lecturer/viewminutes/pdf/<?= $id ?>">
-                        <button class="viewbtn">View PDF</button>
+                        <button class="viewbtn">Download PDF</button>
                     </a>
                 </div>
             </div> 

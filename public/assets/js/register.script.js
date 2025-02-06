@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     function addStudentField(){
         dynamicFields.innerHTML=`
              <label for="stu-id">Student ID</label>
-            <input type="text" name="stu-id" id='stu-id' class="roundedge-input-text" placeholder="Enter your Student ID" required>
+            <input type="text" name="lec-id" id='lec-id' class="roundedge-input-text" placeholder="Enter your Student ID" required>
             `     
     }
     function addSecretaryField(){

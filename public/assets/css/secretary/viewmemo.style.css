@@ -26,7 +26,8 @@ h1{
     text-align: left;
     color: #4a008e;
     margin-bottom: 30px;
-    margin-left: 90px;
+    margin-left: 200px;
+    font-weight: bold;
     margin-top: 300px;
     font-family: 'Georgia', sans-serif;
 }
@@ -37,7 +38,9 @@ h1{
     gap: 15px;
     margin-top: 150px;
     width: 1000px;
-    margin-left: 250px;
+    margin-left: 500px;
+    overflow-y: auto;
+    max-height: 800px;
   
 }
 

@@ -1,0 +1,130 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+.heading
+{
+    text-align: center;
+    margin-top: 40px;
+    font-size: 40px;
+    font-family: ubuntu;
+    color: #65558F;
+}
+.memo-details-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #e3f1f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+
+.memo-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.memo-detail {
+    font-size: 16px;
+    color: #1a1919;
+    margin: 10px 0;
+    padding-top: 10px;
+}
+
+.memo-id,
+.memo-title,
+.memo-status,
+.memo-submitted-by,
+.memo-meeting-id {
+  
+    color: #121314;
+    padding-left: 16px;
+    font-size: 20px;
+}
+
+.memo-content-box {
+    margin: 10px 0 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    color: #444;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+     border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    background-color: #7578d4;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 400px;
+}
+
+.btn-back:hover {
+    opacity: 0.8;
+}
+.action-buttons{
+    margin-left: 400px;
+}
+.btn-accept
+{
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+     border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    background-color: #7578d4;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.btn-decline
+{
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+     border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    background-color: #7578d4;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.btn-accept:hover{
+    opacity: 0.8; 
+}
+.btn-decline:hover{
+    opacity: 0.8;
+}
+
+/* Error message style */
+.memo-error {
+    text-align: center;
+    color: #ff0000;
+    font-size: 18px;
+    font-weight: bold;
+}

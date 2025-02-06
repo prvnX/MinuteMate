@@ -37,14 +37,14 @@ p {
 }
 
 .btn-accept {
-    background-color: #6473d6;
+    background-color: #6164CE;
     color: white;
     margin-left: 1000px;
     bottom: 100px;
 }
 
 .btn-decline {
-    background-color: #6473d6;;
+    background-color: #6164CE;;
     color: white;
 }
 
@@ -105,4 +105,19 @@ p {
 /* Label cursor style */
 .meeting-option label {
     cursor: pointer;
+}
+
+/* Hover effects for buttons */
+.btn-accept:hover {
+    background-color: #4b506e; /* Slightly darker shade of blue */
+    color: #f1f1f1; /* Slightly lighter text color */
+    transform: scale(1.05); /* Subtle zoom-in effect */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+}
+
+.btn-decline:hover {
+    background-color: #4b506e; /* Slightly darker shade of blue */
+    color: #f1f1f1; /* Slightly lighter text color */
+    transform: scale(1.05); /* Subtle zoom-in effect */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
 }

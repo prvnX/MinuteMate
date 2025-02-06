@@ -58,21 +58,19 @@
     <div class="state-container">     
         <img src="<?=ROOT?>/assets/images/success.png" alt="Success" class="success-image">
         <h1>Success</h1>
-        <p>Your memo has been successfully submitted.</p>
-        <button onclick="" class="view-memo-btn">View the Memo</button>
+        <p>Your memo is submitted successfully.</p>
+       
         <button onclick="" class="continue-btn">Continue</button>
 
     </div>
     <script>
         const user= "<?= $user ?>";
         const root= "<?= ROOT ?>";
-        const viewMemoBtn = document.querySelector('.view-memo-btn');
         const continueBtn = document.querySelector('.continue-btn');
+      
         continueBtn.addEventListener('click', () => {
             window.location.href = `${root}/${user}`;
         });
-        viewMemoBtn.addEventListener('click', () => {
-            window.location.href = `${root}/${user}/viewmemo?memoid=<?= $memoid ?>`;
-        });
+       
     </script>
 </body>
