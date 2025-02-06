@@ -15,7 +15,7 @@
     else{
         $menuItems = [ "home" => ROOT."/$user",$notification => ROOT."/$user/notifications", "profile" => ROOT."/$user/viewprofile" , "logout" => ROOT."/$user/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
     }
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
     ?>
 
     <div class="dashboard-container">  
@@ -37,6 +37,21 @@
                 // Loop through meeting data if fetchData is valid
                 foreach ($fetchData as $meeting) {
                     echo "<div class='meeting'>";
+                    $meetingType=strtolower($meeting['meeting_type']);
+                    $meetingEditAccess=0;  
+                    if($_SESSION['userDetails']->role=="secretary"){
+                    $secMeetingTypes=($_SESSION['secMeetingTypes']);
+                    foreach($secMeetingTypes as $type){
+                        if(strtolower($type)=="iod"){
+                            $type="iud";
+                        }
+                        if(strtolower($type)==$meetingType){
+                            $meetingEditAccess=1;
+                        }
+                    }
+                }
+
+
                     $meeting['meeting_type'] = $meeting['meeting_type'] == 'syn' ? 'syndicate' : $meeting['meeting_type'];
                     echo "<h1 class='meetingtitle'>" . ucfirst(htmlspecialchars($meeting['meeting_type']))." Meeting </h1><hr>";
                     echo "<table>";
@@ -55,7 +70,7 @@
                     }
                     date_default_timezone_set('Asia/Colombo');
                     $todayDate = date('Y-m-d');
-                    if($_SESSION['userDetails']->role=="secretary" && $meeting['date'] >= $todayDate){
+                    if($_SESSION['userDetails']->role=="secretary" && $meeting['date'] >= $todayDate && $meetingEditAccess){
                         echo "<div class='meeting-action-btns'>
                         <button class='delete-btn action-btn' onclick='handleMeetingDelete(".$meetingid.")'>Delete The Meeting</button>
                         <button class='resch-btn action-btn' onclick='handleMeetingReschedule(".$meetingid.")'>Reschedule The Meeting </button>

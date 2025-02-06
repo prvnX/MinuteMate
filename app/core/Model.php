@@ -53,6 +53,26 @@ Trait Model {
             return $result;
         return false;
     }
+ // select and project
+    public function selectandproject($column, $data, $data_not=[]){
+        $keys=array_keys($data);
+        $keys_not= array_keys($data_not);
+        $query="select $column from $this->table where ";
+        foreach($keys as $key){
+            $query.= $key ." = :". $key . " && ";
+        }
+        foreach($keys_not as $key){
+            $query.= $key ." != :". $key . " && ";
+        }
+        $query=trim($query," && ");
+        $query .= " limit $this->limit offset $this->offset";
+        $data=array_merge($data, $data_not);
+        echo $query;
+        return $this->query($query, $data);
+    }
+
+    
+    
 
 /*Insert to table*/
     public function insert($data){

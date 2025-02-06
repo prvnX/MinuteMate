@@ -71,10 +71,24 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             <form method="post" id="">
                 <label for="class">Event Type:</label>
                 <select id="class" name="meeting_type" required>
-                    <option value="rhd">RHD Meeting</option>
-                    <option value="bom">BOM Meeting</option>
-                    <option value="syn">Syndicate Meeting</option>
-                    <option value="iud">IUD Meeting</option>
+                    <?php
+                    $secMeetingTypes=$_SESSION['secMeetingTypes'];
+                    foreach($secMeetingTypes as $meetingType){
+                        $meetingType = strtolower($meetingType);  
+                        if($meetingType=="bom"){
+                            echo "<option value='bom'>BOM Meeting</option>";
+                        }
+                        else if($meetingType=="rhd"){
+                            echo "<option value='rhd'>RHD Meeting</option>";
+                        }
+                        else if($meetingType=="syn"){
+                            echo "<option value='syn'>Syndicate Meeting</option>";
+                        }
+                        else if($meetingType=="iod"||$meetingType=="iud"){
+                            echo "<option value='iud'>IUD Meeting</option>";
+                        }
+                    }
+                    ?>
                 </select>
 
                 <label for="date">Date:</label>
