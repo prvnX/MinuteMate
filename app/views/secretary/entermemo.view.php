@@ -12,10 +12,10 @@
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/sec_sidebar.php");
    
     ?>
-    <h1 class="memo-heading"> Enter a memo </h1>
 <div class="memo-sub-container">
     <form action="<?=ROOT?>/secretary/submitmemo" method="post" id="memoForm">
         <div class="field">

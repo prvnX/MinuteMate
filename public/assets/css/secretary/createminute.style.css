@@ -1,16 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Katibeh&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
-
+:root {
+    --primary-color: #6164CE;
+    --secondary-color: #3b82f6;
+    --background-color: #f0f9ff;
+    --text-color: #1e293b;
+    --card-bg-color: #ffffff;
+    --navbar-bg-color: #e0f2fe;
+    --border-color: #e2e2e2;
+}
 body{
     padding: 0;
     margin: 0;
 }
-.minute-heading{
-    text-align: center;
-    margin-top: 20px;
-    font-size: 4rem;
-    font-weight:500;
-    color: #6164CE;
+.tab-container {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    width: 90%;
+    margin: auto;
+    font-family:"EB Garamond", serif;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.tab.active {
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
 }
 .minute-form-container{
     margin: auto;
@@ -81,7 +102,7 @@ body{
     margin-left:10px;
 }
 .form-sub-title{
-    color:#00047d;
+    color:var(--primary-color);
     margin: 0 0 20px 0;
     font-weight: 100;
     font-size: 2rem;
@@ -103,16 +124,16 @@ body{
     display: inline;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #6164CE;
+    border: 1px solid var(--secondary-color);;
     font-family: "arial", serif;
     font-size : 1 rem;
     background-color: #ffffff;
-    color: #6164CE;
+    color: var(--secondary-color);;
     margin-left: 10px;
     cursor: pointer;
 }
 .agenda-details button:hover{
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: #ffffff;
     transition: 0.5s;
 }
@@ -141,16 +162,16 @@ body{
     display: inline;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #6164CE;
+    border: 1px solid var(--secondary-color);;
     font-family: "arial", serif;
     font-size : 1 rem;
     background-color: #ffffff;
-    color: #6164CE;
+    color: var(--secondary-color);;
     margin-left: 10px;
     cursor: pointer;
 }
 .add-button:hover { 
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: #ffffff;
     transition: 0.5s;;
  }
@@ -191,10 +212,10 @@ body{
     display: inline;
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid #6164CE;
+    border: 1px solid var(--secondary-color);;
     font-family: "arial", serif;
     font-size : 1rem;
-    background-color: #6164CE;
+    background-color: var(--secondary-color);;
     color: #ffffff;
     margin-left: 0px;
     cursor: pointer;
@@ -204,17 +225,17 @@ body{
     display: inline;
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid #6164CE;
+    border: 1px solid var(--secondary-color);;
     font-family: "arial", serif;
     font-size : 1rem;
     background-color: #ffffff;
-    color: #6164CE;
+    color: var(--secondary-color);;
     margin-left: 10px;
     cursor: pointer;
     width: 100px;
 }
 #backBtntoP1:hover, #backBtntoP2:hover{
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: #ffffff;
     transition: 0.5s;
 }
@@ -240,8 +261,8 @@ body{
     cursor: pointer;
 }
 .attendence-mark-section input[type="checkbox"]:checked{
-    background-color: #6164CE;
-    border-color: #6164CE;
+    background-color: var(--secondary-color);;
+    border-color: var(--secondary-color);;
 }
 
 /*Memo  section */
@@ -272,8 +293,8 @@ td {
 td input[type="checkbox"]{
     height: 15px;
     width: 15px;
-    background-color: #6164CE;
-    border-color: #6164CE;
+    background-color: var(--secondary-color);;
+    border-color: var(--secondary-color);;
 }
 
 /*Link Minute*/
@@ -292,11 +313,11 @@ td input[type="checkbox"]{
     display: inline;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #6164CE;
+    border: 1px solid var(--secondary-color);;
     font-family: "arial", serif;
     font-size : 1 rem;
     background-color: #ffffff;
-    color: #6164CE;
+    color: var(--secondary-color);;
     cursor: pointer;
     margin-top: 10px;
     margin-left: 75%;
@@ -307,7 +328,7 @@ td input[type="checkbox"]{
 }
 
 .minute-Linking button:hover{
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: #ffffff;
     transition: 0.5s;;
 }
@@ -348,4 +369,61 @@ input[type="file"]{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.9rem;
     color:#5d5d5dc1;
+}
+/* .save-draft-btn{
+    display: inline;
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);;
+    font-family: "arial", serif;
+    font-size : 0.8rem;
+    background:transparent;
+    color: var(--primary-color);
+    margin-left: 65%;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 120px;
+    height: 40px;
+} */
+
+.input-container .closeBtn{
+    display: inline;
+    border: 1px solid red;
+    color:red;
+}
+.input-container .closeBtn:hover{
+    background-color: red;
+    color: #ffffff;
+    transition: 0.5s;
+}
+.minute-content .content-section .closeBtn{
+    display: inline;
+    border: 1px solid red;
+    color:red;
+    float: right;
+    background: transparent;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.minute-content .content-section .closeBtn:hover{
+    background-color: red;
+    color: #ffffff;
+    transition: 0.5s;
+}
+.minute-Linking .closeBtn{
+    display: inline;
+    border: 1px solid red;
+    color:red;
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0;
+    position: relative;
+    bottom:47px;
+
+}
+.minute-Linking .closeBtn:hover{
+    background-color: red;
+    color: #ffffff;
+    transition: 0.5s;
 }

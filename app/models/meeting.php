@@ -77,4 +77,64 @@ class Meeting{
             return $this->query($query, $data);
     }
 
+    public function getNoMinuteMeetings($user,$date){
+        $data['username']=$user;
+        $data['date']=$date;
+        $query = "SELECT 
+                    meeting.meeting_id AS id,meeting.meeting_type AS name,meeting.date AS date 
+                FROM
+                    $this->table
+                WHERE 
+                    meeting.date<=:date
+                    AND meeting.is_minute=0
+                    AND meeting.created_by=:username";
+        return $this->query($query,$data);
+    }
+    public function authUserforMinute($meeting_id,$user){
+        $data['meeting_id']=$meeting_id;
+        $data['username']=$user;
+        $query = "SELECT EXISTS(
+                    SELECT 1 FROM $this->table
+                    WHERE 
+                        meeting_id=:meeting_id
+                        AND created_by=:username
+                    ) AS auth";
+        return $this->query($query,$data);
+    }
+
+    public function getParticipants($meeting_id){
+        $data['meeting_id']=$meeting_id;
+        $query = "SELECT 
+                    user_meeting_types.accessible_user AS username,
+                    user.full_name AS name
+                FROM 
+                    $this->table
+                INNER JOIN 
+                    user_meeting_types ON meeting.type_id = user_meeting_types.meeting_type_id
+                INNER JOIN
+                    user ON user_meeting_types.accessible_user = user.username
+                WHERE 
+                    meeting.meeting_id = :meeting_id";
+        return $this->query($query,$data);
+    }
+
+    public function getMeetingsInWeek($today,$lastDate,$username){
+        $data['today']=$today;
+        $data['lastDate']=$lastDate;
+        $data['username']=$username;
+        $query = "SELECT 
+                    meeting.meeting_id AS id,
+                    meeting.date AS date,
+                    meeting.meeting_type AS name
+                FROM 
+                    $this->table
+                INNER JOIN 
+                    user_meeting_types ON meeting.type_id = user_meeting_types.meeting_type_id
+                WHERE 
+                    meeting.date BETWEEN :today AND :lastDate
+                    AND user_meeting_types.accessible_user = :username ";
+        return $this->query($query,$data);
+
+    }
+
 }

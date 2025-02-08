@@ -86,6 +86,28 @@
             ]);
         }
 
+            public function getPendingMemoCount($type) {
+                $data = []; // Initialize an empty array for binding parameters
+                
+                $query = "SELECT COUNT(*) as count
+                          FROM $this->table
+                          INNER JOIN meeting ON memo.meeting_id = meeting.meeting_id
+                          INNER JOIN meeting_types ON meeting.type_id = meeting_types.type_id
+                          WHERE status = 'pending'";
+            
+                if (!empty($type)) {
+                    $placeholders = [];
+                    foreach ($type as $key => $value) {
+                        $param = ":type" . $key;
+                        $placeholders[] = $param;
+                        $data[$param] = $value;
+                    }
+                    $query .= " AND meeting_types.meeting_type IN (" . implode(",", $placeholders) . ")";
+                }            
+                return $this->query($query, $data);
+            }
+        
+
 
 
 
