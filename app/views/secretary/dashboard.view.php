@@ -103,10 +103,10 @@
             ?>
             <div class="message-box">
     <ul>
-        <li><i class="fas fa-tasks"></i> 10 Unfinished Minutes</li>
-        <li><i class="fas fa-file-alt"></i> 5 New Memos</li>
+        <li><i class="fas fa-tasks"></i> <?=$data['MinutesCnt']?> Unfinished Minutes</li>
+        <li><i class="fas fa-file-alt"></i> <?=$data['memoCount']?> Pending Memos </li>
         <li><i class="fas fa-bell"></i> 2 New Notifications</li>
-        <li><i class="fas fa-calendar-alt"></i> 1 Upcoming Meetings</li>
+        <li><i class="fas fa-calendar-alt"></i> <?php $Message=$data['meetingsinweek']==1 ? $data['meetingsinweek']." Upcoming Meeting" : $data['meetingsinweek']." Upcoming Meetings"; echo $Message;  ?> this week</li>
     </ul>
 </div>
             </div>

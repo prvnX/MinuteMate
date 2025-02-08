@@ -1,15 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+:root {
+    --primary-color: #6164CE;
+    --secondary-color: #3b82f6;
+    --background-color: #f0f9ff;
+    --text-color: #1e293b;
+    --card-bg-color: #ffffff;
+    --navbar-bg-color: #e0f2fe;
+}
 body{
     padding: 0;
     margin: 0;
+    
 }
+
 .memo-heading{
     font-family: "EB Garamond", serif;
     text-align: center;
     margin-top: 20px;
     font-size: 4rem;
     font-weight:500;
-    color: #6164CE;
+    color: var(--primary-color);
 }
 .memo-form-container{
     margin: auto;
@@ -19,15 +29,14 @@ body{
 }
 .memo-sub-container{
     font-family:"EB Garamond", serif;
-    margin: 100px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin:100px;
     padding: 40px;
     border: 0.5px solid #bcbcbc;
     border-radius: 10px;
     font-family: "Ubuntu", serif;
     font-size : 1.2rem;
     min-height: 60%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
 
 }
@@ -66,7 +75,7 @@ body{
     border: 1px solid #b1b1b1;
     font-family: Arial, Helvetica, sans-serif;
     font-size : 1.1rem;
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: white;
     display: inline;
     width: 100px;
@@ -75,12 +84,12 @@ body{
     cursor: pointer;
 }
 .cancel-btn{
-    background-color: #ffffff;
-    color: #6164CE;
-    border: 1px solid #6164CE;
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
 }
 .cancel-btn:hover{
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: #ffffff;
     transition: 0.5s;
 }

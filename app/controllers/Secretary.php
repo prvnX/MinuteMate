@@ -2,7 +2,16 @@
 class Secretary extends BaseController {
 
     public function index() {
-        $this->view("secretary/dashboard");
+        date_default_timezone_set('Asia/Colombo');
+        $meeting = new Meeting();
+        $memo = new Memo();
+        $memoCount = $memo->getPendingMemoCount($_SESSION['secMeetingTypes']);
+        $memoCount = $memoCount[0]->count;
+        $MinutesCnt=count($meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d")));
+        $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
+        $today=date("Y-m-d");
+        $meetingsinweek = count($meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username));
+        $this->view("secretary/dashboard",[ "MinutesCnt" => $MinutesCnt, "memoCount" => $memoCount, "meetingsinweek" => $meetingsinweek]);
     }
 
     public function search() {
@@ -274,7 +283,23 @@ class Secretary extends BaseController {
             header("Location: ".ROOT."/secretary/selectmeeting");
         }
         $meetingId = $_GET['meeting'];
-        $this->view("secretary/createminute", ['meetingId' => $meetingId]);
+        //check the user has the authority to create the minute for the meeting
+        $meeting = new Meeting();
+        $department = new Department(); 
+        $memo = new Memo();
+        $minute=new Minute();
+        $meetingType = $meeting->selectandproject("meeting_type",['meeting_id'=>$meetingId])[0]->meeting_type;
+        $deparments = $department->find_all();
+        $Participants = $meeting->getParticipants($meetingId);
+        $auth=$meeting->authUserforMinute($meetingId,$_SESSION['userDetails']->username);
+        $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
+        $minutes = $minute->getMinuteList();
+        if($auth[0]->auth){
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType]);
+        }
+        else{
+            redirect("secretary/selectmeeting");
+        }
     }
     public function notifications() {
         //these are just placeholders
@@ -289,8 +314,10 @@ class Secretary extends BaseController {
         ];
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"memocart" => $memocart, "notification" => $notification]);
     }
-    public function selectmeeting() { //this is the page where the secretary selects the meeting to create a minute for
-        $this->view("secretary/selectmeeting");
+    public function selectmeeting() { //this is the page where the secretary selects the meeting to create a minute 
+        $meeting = new Meeting;
+        $meetings = $meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d"));
+        $this->view("secretary/selectmeeting", ['meetings' => $meetings]);
     }
     public function viewminutes() {
         $this->view("secretary/viewminutes");

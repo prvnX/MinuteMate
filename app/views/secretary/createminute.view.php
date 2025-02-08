@@ -14,63 +14,29 @@
         $notification => ROOT."/secretary/notifications",
         "profile" => ROOT."/secretary/viewprofile"
     ];
-    require_once("../app/views/components/navbar.php");
+    require_once("../app/views/components/new_navbar.php");
+    require_once("../app/views/components/sec_sidebar.php");
     ?>
     
-    <h1 class="minute-heading">Create the minute</h1>
+    <div class="tab-container">
+                <div class="tab active" data-tab="meeting-details">Meeting Details</div>
+                <div class="tab" data-tab="minute-content">Minute Content</div>
+                <div class="tab" data-tab="attachments">Attachments</div>
+            <!-- <button class="save-draft-btn">
+            <i class="fas fa-times"></i> Save To Drafts
+            </button> -->
+
+            </div>
     <div class="minute-form-container">
         <form action="<?=ROOT?>/secretary/submitminute" method="post" id="minuteForm">
             <?php
-
-            //the following arrays are just placeholders for the actual data that will be fetched from the database
-            $departments=["department1","department2","department3","department4","department5","department6","department7","department8","department9","department10"]; //get the departments from the database here
-            $meetingMembers=[
-                "Amelia Rivera",
-                "Liam Harper",
-                "Sophia Jensen",
-                "Elijah Foster",
-                "Olivia Cruz",
-                "Ethan Walker",
-                "Ava Brooks",
-                "Mason Reed",
-                "Mia Bennett",
-                "Noah Hughes",
-                "Emma Knight",
-                "Lucas Morgan",
-                "Isabella Cooper",
-                "Henry Parker",
-                "Lily Torres",
-                "Aiden Murphy",
-                "Grace Edwards",
-                "Benjamin Hayes",
-                "Zoey Mitchell",
-                "Jacob Adams",
-                "Nora Hill"
-            ]; //get the meeting members from the database here
-            $memos = [
-                ['id' => 1, 'name' => '"Integrating AI Tools in Academic Assessments for Enhanced Learning'],
-                ['id' => 2, 'name' => '"Integrating AI Tools in Academic Assessments for Enhanced Learning'],
-                ['id' => 3, 'name' => '"Integrating AI Tools in Academic Assessments for Enhanced Learning'],
-                ['id' => 4, 'name' => '"Integrating AI Tools in Academic Assessments for Enhanced Learning'],
-                ['id' => 5, 'name' => '"Integrating AI Tools in Academic Assessments for Enhanced Learning'],
-                ['id' => 6, 'name' => '"Integrating AI Tools in Academic Assessments for Enhanced Learning'],
-                ['id' => 7, 'name' => 'Memo 7'],
-                ['id' => 8, 'name' => 'Memo 8'],
-                ['id' => 9, 'name' => 'Memo 9'],
-                ['id' => 10, 'name' => 'Memo 10']
-            ]; //get the memos from the database here
-            $minuteList = [
-                ['id' => 1, 'name' => 'Minute 1' , "meeting" => "meeting01" , "date" => "2021-09-01"],
-                ['id' => 2, 'name' => 'Minute 2' , "meeting" => "meeting02" , "date" => "2021-09-02"],
-                ['id' => 3, 'name' => 'Minute 3' , "meeting" => "meeting03" , "date" => "2021-09-03"],
-                ['id' => 4, 'name' => 'Minute 4' , "meeting" => "meeting04" , "date" => "2021-09-04"],
-                ['id' => 5, 'name' => 'Minute 5' , "meeting" => "meeting05" , "date" => "2021-09-05"],
-                ['id' => 6, 'name' => 'Minute 6' , "meeting" => "meeting06" , "date" => "2021-09-06"],
-                ['id' => 7, 'name' => 'Minute 7' , "meeting" => "meeting07" , "date" => "2021-09-07"],
-                ['id' => 8, 'name' => 'Minute 8' , "meeting" => "meeting08" , "date" => "2021-09-08"],
-                ['id' => 9, 'name' => 'Minute 9' , "meeting" => "meeting09" , "date" => "2021-09-09"],
-                ['id' => 10, 'name' => 'Minute 10' , "meeting" => "meeting10" , "date" => "2021-09-10"]
-            ]
+            $meetingMembers=$data['participants'];
+            $memos=$data['memos'];
+            $minuteList=$data['minutes'];
+            $departments=$data['departments'];
+            if($memos==null){
+                $memos=[];
+            }
             ?>
             
             <!-- Page 1 -->
@@ -106,8 +72,8 @@
                     <div class="attendence-mark-section">
                     <?php foreach($meetingMembers as $member){
                        echo "<div class='attendence-item'>
-                            <input type='checkbox' name='attendence[]' value='$member' id='$member'>
-                            <label for='$member' class='member'>$member</label>
+                            <input type='checkbox' name='attendence[]' value='$member->username' id='$member->username'>
+                            <label for='$member->username' class='member'>$member->name</label>
                         </div>";
                     }?>
                 </div>
@@ -118,10 +84,11 @@
 
                     <div id="agendaContainer" class="agendaContainer">
                         <div class="input-container">
-                            <input type="text" name="Agenda[]" placeholder="Enter the Agenda Item 1 here" />
+                            <input type="text" name="Agenda[]" placeholder="Enter the Agenda Item here" />
                         </div>
                     </div>
                     <button type="button" id="addMoreBtn">Add Another Item</button>
+                    
                 </div>
             </div>
             
@@ -137,7 +104,7 @@
                 
             </div>
 
-
+<!-- Page 3 -->
             <div class="minute-page minute-page-3" style="display: none;">
 
                 <div class="sub-container memo-linking">
@@ -152,10 +119,10 @@
                         </tr>
                         <?php foreach($memos as $memo){
                             echo "<tr>
-                            <td>$memo[id] - $memo[name]</td>
-                            <td><input type='checkbox' name='discussed[]' value='$memo[id]'> </td>
-                            <td><input type='checkbox' name='underdiscussion[]' value='$memo[id]'></td>
-                            <td><input type='checkbox' name='parked[]' value='$memo[id]'></td>";}?>
+                            <td>$memo->memo_id - $memo->memo_title</td>
+                            <td><input type='checkbox' name='discussed[]' value='$memo->memo_id'> </td>
+                            <td><input type='checkbox' name='underdiscussion[]' value='$memo->memo_id'></td>
+                            <td><input type='checkbox' name='parked[]' value='$memo->memo_id'></td>";}?>
                      </table>
                      </div>
                 </div>
@@ -166,7 +133,7 @@
                         <select name="LinkedMinutes[]" id="LinkedMinutes">
                             <option value="none">Select Linked Minutes</option>
                             <?php foreach($minuteList as $minute){
-                                echo "<option value='$minute[id]'>$minute[name] - $minute[meeting] - $minute[date]</option>";
+                                echo "<option value='$minute->Minute_id'>$minute->title - $minute->type Meeting - $minute->date </option>";
                             }?>
                         </select>
                     </div>
@@ -196,14 +163,25 @@
     <script >
         // PHP array embedded in JavaScript
         const options = <?php echo json_encode($departments); ?>;
-        const minuteList = <?php echo json_encode($minuteList); ?>;
+        const meetingType = <?php echo json_encode($data['meetingType']); ?>;
 
         //dynamically add input selects
         function addAnotherMinute(){
             const select = document.getElementById("LinkedMinutes");
             const newSelect = select.cloneNode(true);
             newSelect.id = "";
+            const closeBtn=document.createElement("button");
+            closeBtn.innerHTML="X";
+            closeBtn.classList.add("closeBtn");
+            closeBtn.type="button";
+            closeBtn.onclick=function(){
+                if(confirm("Are you sure you want to remove this linked minute?")){
+                    newSelect.remove();
+                    closeBtn.remove();
+                }
+            }
             document.getElementById("LinkedminuteSection").appendChild(newSelect);
+            document.getElementById("LinkedminuteSection").appendChild(closeBtn);
 
         }
         </script>

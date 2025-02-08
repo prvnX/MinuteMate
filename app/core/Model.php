@@ -67,7 +67,6 @@ Trait Model {
         $query=trim($query," && ");
         $query .= " limit $this->limit offset $this->offset";
         $data=array_merge($data, $data_not);
-        echo $query;
         return $this->query($query, $data);
     }
 
