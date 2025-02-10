@@ -73,7 +73,7 @@
     $memocart="memocart";
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/secretary", $memocart => ROOT."/secretary/memocart",$notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
     $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,"Email"=>$_SESSION['userDetails'] -> email,"LectureID"=>"932837273","NIC"=>$_SESSION['userDetails'] ->nic,"Role"=>"Secretary","Contact_No:"=>"071 283 3684","Meeting_types"=>"IUD, RHD, Syndicate"]
    ?>
     </div>
