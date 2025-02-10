@@ -140,4 +140,65 @@ class Studentrep extends BaseController {
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
     }
+
+
+
+
+    // public function requestchange() {
+    //     $this->view("studentrep/requestchange");
+    
+    // }
+
+    public function requestchange(){
+        $responseStatus = "";
+    
+        // Handle POST request
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $field = $_POST['field'] ?? [];
+            $newValue = $_POST['newValue'] ?? [];
+            $message = $_POST['message'] ?? "Message not provided";
+            $requestchange = new User_edit_requests();
+            $requestchange->addUserRequest($field, $newValue, $message);
+            $responseStatus = "success";
+            
+        }
+    
+        // Pass responseStatus to the view
+        $this->view("studentrep/requestchange", [
+            "user" => "studentrep",
+            "responseStatus" => $responseStatus
+        ]);
+    }
+
+
+
+    public function logout() {
+        session_start();
+        // Destroy all session data
+        session_unset();
+        session_destroy();
+        // Redirect to the login page
+        redirect("home");
+    }
+    public function viewmemoreports() {
+        if(!isset($_GET['memo'])) {
+            header("Location: ".ROOT."/studentrep/selectmemo");
+        }
+        $memoid = $_GET['memo'];
+        
+        $data = [
+            'id' =>$memoid,
+            'date' => '2024-11-16',
+            'time' => '2:00 PM',
+            'status' => 'Approved',
+            'linked_memos' => 'Memo #11, Memo #12',
+            'author' => 'John Doe'
+        ];
+    
+        $this->view("studentrep/viewmemoreports", $data);
+    }
+    public function selectmemo (){
+        $this->view("studentrep/selectmemo");
+    }
+
 }
