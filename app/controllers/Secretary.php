@@ -10,7 +10,13 @@ class Secretary extends BaseController {
         $MinutesCnt=count($meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d")));
         $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
         $today=date("Y-m-d");
-        $meetingsinweek = count($meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username));
+        $meetingsinweek = $meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username);
+        if($meetingsinweek){
+            $meetingsinweek = count($meetingsinweek);
+        }
+        else{
+            $meetingsinweek = 0;
+        }
         $this->view("secretary/dashboard",[ "MinutesCnt" => $MinutesCnt, "memoCount" => $memoCount, "meetingsinweek" => $meetingsinweek]);
     }
 
