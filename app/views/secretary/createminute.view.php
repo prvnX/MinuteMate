@@ -118,11 +118,11 @@
                             <th>Parked</th>
                         </tr>
                         <?php foreach($memos as $memo){
-                            echo "<tr>
+                            echo "<tr id='row-".$memo->memo_id."'>
                             <td>$memo->memo_id - $memo->memo_title</td>
-                            <td><input type='checkbox' name='discussed[]' value='$memo->memo_id'> </td>
-                            <td><input type='checkbox' name='underdiscussion[]' value='$memo->memo_id'></td>
-                            <td><input type='checkbox' name='parked[]' value='$memo->memo_id'></td>";}?>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)'> </td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>";}?>
                      </table>
                      </div>
                 </div>
@@ -184,6 +184,10 @@
             document.getElementById("LinkedminuteSection").appendChild(closeBtn);
 
         }
+        document.getElementById("minuteForm").addEventListener("submit", function(e){
+            e.preventDefault();
+            console.log("Form Submitted");
+        });
         </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
     <script src="<?=ROOT?>/assets/js/secretary/createminute.script.js"></script>
