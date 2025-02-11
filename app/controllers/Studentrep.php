@@ -1,10 +1,29 @@
 <?php
 class Studentrep extends BaseController {
-    public function index() {
-         
-        $this->view("studentrep/dashboard");
+    
 
+    public function index() {
+        date_default_timezone_set('Asia/Colombo');
+        $meeting = new Meeting();
+        $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
+        $today=date("Y-m-d");
+        $meetingsinweek = $meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username);
+        if($meetingsinweek){
+            $meetingsinweek = count($meetingsinweek);
+        }
+        else{
+            $meetingsinweek = 0;
+        }
+        $this->view("studentrep/dashboard",["meetingsinweek" => $meetingsinweek]);
     }
+
+
+
+
+
+
+
+
     public function search() {
         echo "search";
         $this->view("404");
@@ -24,6 +43,14 @@ class Studentrep extends BaseController {
         }
        
     }
+
+
+
+
+
+
+
+    
     public function findMeetingsToEnterMemos($date){
         $user=$_SESSION['userDetails']->username;
         $meeting = new Meeting();
