@@ -134,13 +134,14 @@ class Studentrep extends BaseController {
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
 
     }
-
     public function viewprofile(){
         $this->view("studentrep/viewprofile");
     }
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
     }
+
+
 
 
     // public function requestchange() {
@@ -178,6 +179,26 @@ class Studentrep extends BaseController {
         session_destroy();
         // Redirect to the login page
         redirect("home");
+    }
+    public function viewmemoreports() {
+        if(!isset($_GET['memo'])) {
+            header("Location: ".ROOT."/studentrep/selectmemo");
+        }
+        $memoid = $_GET['memo'];
+        
+        $data = [
+            'id' =>$memoid,
+            'date' => '2024-11-16',
+            'time' => '2:00 PM',
+            'status' => 'Approved',
+            'linked_memos' => 'Memo #11, Memo #12',
+            'author' => 'John Doe'
+        ];
+    
+        $this->view("studentrep/viewmemoreports", $data);
+    }
+    public function selectmemo (){
+        $this->view("studentrep/selectmemo");
     }
 
 }
