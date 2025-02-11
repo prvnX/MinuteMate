@@ -1,7 +1,7 @@
 
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/viewevents.style.css">
-    <title>Secretary Dashboard</title>
+    <title>View Events</title>
     
 </head>
 <body>
@@ -91,24 +91,41 @@
         
     </div>
     <div class="viewevent-sidebar">   
-   
+    <div class='events-side'>
    <?php
-   
-
-
-
+    
     $showAddEvents=false;
-    $notificationsArr =[
-        "Reminder: Meeting scheduled for tomorrow at 3 PM.",
-        "Update: Minutes from yesterday's meeting are now available.",
-        "Memo Added: A new memo has been attached to this week’s meeting."    ]; //pass the notifications here
     $name = $_SESSION['userDetails']->full_name; //pass the name of the user here
     $role = $_SESSION['userDetails']->role;
     if($role=="secretary"){
         $showAddEvents=true;
     }
-    require_once("../app/views/components/dashboard-sidebar.php"); //call the dashboard sidebar component
+    require_once("../app/views/components/Calender/calandar-view.php");
     ?>
+    <div class="meeting-detail">
+    <div class="name-item"><div class="yellow circle"></div>IUD </div>
+    <div class="name-item"><div class="red circle"></div>RHD </div>
+    <div class="name-item"><div class="blue circle"></div>BOM </div>
+    <div class="name-item"><div class="green circle"></div>Syndicate </div>
+
+    </div>
+    <div class="message-box">
+    <ul>
+        <li class="week_meeting_title">Meetings in this week</li>
+        <?php
+            $Meetings=$data['meetingsinweek'];
+            if($Meetings){            
+            foreach ($Meetings as $Meeting) {
+                
+                echo "<li class='meeting-li'><i class='fas fa-calendar-alt'></i>".strtoupper($Meeting->name)." Meeting -  ".$Meeting->date."</li>";
+            }
+        }
+        else{
+            echo "<li>No upcoming meetings in this week</li>";
+        }
+        ?>
+    </ul>
+</div>
     </div>
     </div>
 <!-- Delete Confirm Modal -->

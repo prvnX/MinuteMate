@@ -7,7 +7,13 @@ class Secretary extends BaseController {
         $memo = new Memo();
         $memoCount = $memo->getPendingMemoCount($_SESSION['secMeetingTypes']);
         $memoCount = $memoCount[0]->count;
-        $MinutesCnt=count($meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d")));
+        $Minutes=$meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d"));
+        if($Minutes){
+            $MinutesCnt = count($Minutes);
+        }
+        else{
+            $MinutesCnt = 0;
+        }
         $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
         $today=date("Y-m-d");
         $meetingsinweek = $meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username);

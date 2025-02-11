@@ -259,7 +259,7 @@ input[type="date"],input[type='time'], input[type="text"], select {
 }
 
 #alertModal .btn-ok:hover {
-    background-color: #390ea6; /* Darker green on hover */
+    background-color:#0c68fc
 }
 #message{
     color: rgb(101, 101, 101);

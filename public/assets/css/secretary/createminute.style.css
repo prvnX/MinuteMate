@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Katibeh&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
 :root {
-    --primary-color: #6164CE;
+    --primary-color: #1e40af;
     --secondary-color: #3b82f6;
     --background-color: #f0f9ff;
     --text-color: #1e293b;
@@ -295,7 +295,14 @@ td input[type="checkbox"]{
     width: 15px;
     background-color: var(--secondary-color);;
     border-color: var(--secondary-color);;
+    cursor: pointer;
 }
+.memo-linking table td .disabledCheckBox{
+    background-color: #f0f0f0;
+    border-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
 
 /*Link Minute*/
 .minute-Linking select {

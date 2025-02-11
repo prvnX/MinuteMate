@@ -170,10 +170,38 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             const end_time = document.getElementById('Endtime').value;
             const location = document.getElementById('location').value;
             const additional_note = document.getElementById('note').value;
+            const dateObj=new Date();
+            const currentDate=dateObj.toLocaleDateString();
+            let insertedDateObj=new Date(date); // Convert to JS Date object
+            const insertedDate=insertedDateObj.toLocaleDateString();
+            let startT = new Date(`2000-01-01T${start_time}:00`); // Defaulting date to 2000-01-01
+            let endT = new Date(`2000-01-01T${end_time}:00`);
+            let diffMs = Math.abs(startT - endT); // Absolute difference
+            let diffMins = Math.floor((diffMs/1000)/60); // Convert to minutes
+
+            
+            console.log(startT,endT);
             if(date=="" || meeting_type=="" || start_time=="" || end_time=="" || location==""){
                 showAlert("Please fill all the fields");
                 return;
             }
+            else if(insertedDate<currentDate){
+                showAlert("Error:Cannot add an event to a past date");
+                return;
+            }
+            else if(startT>endT){
+                showAlert("Error: Start time should be before the end time");
+                return;
+            }
+            else if(diffMins<45){
+                showAlert("Error: Meeting duration should be at least 45 minutes");
+                return;
+            }
+            else if(diffMins>480){
+                showAlert("Error: Meeting duration should be at most 8 hours");
+                return;
+            }
+            else if(date)
             fetch('<?= ROOT ?>/Events/addMeeting', {
                 method: 'POST',
                 headers: {
