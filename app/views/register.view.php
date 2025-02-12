@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Account</title>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/register.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
 </head>
     <div class="flex-container">
         <div class="register-left-container">

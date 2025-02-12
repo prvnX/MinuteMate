@@ -147,7 +147,6 @@ document.getElementById("addMoreBtn").addEventListener("click", function() {
     newInputContainer.appendChild(closeBtn)
     newInputContainer.style.display = "block";
     document.getElementById("agendaContainer").appendChild(newInputContainer);
-    i++;
 });
 
 function addContentSection(title = '', content = '') {
