@@ -373,6 +373,5 @@ window.addEventListener('click', (event) => {
 });
 
 
-
     </script>
 </body>

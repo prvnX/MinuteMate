@@ -44,6 +44,8 @@
                 $memoCount=count($memos);
             }
             ?>
+            <input type="hidden" name="meetingID" value="<?= $meetingId ?>">
+            <input type="hidden" name="minuteTitle" value="<?= $meetingId ?>-<?= strtoupper($meetingDetails[0]->meeting_type) ?> Meeting ">
             
             <!-- Page 1 -->
             <div class="minute-page minute-page-1">
@@ -168,9 +170,11 @@
         </form>
     </div>
     <script >
-        // PHP array embedded in JavaScript
+
         const options = <?php echo json_encode($departments); ?>;
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
+
+        const form=document.getElementById("minuteForm");
 
         //dynamically add input selects
         function addAnotherMinute(){
@@ -205,6 +209,9 @@
             const underDiscussionMemos=[]; //under discussion memos
             const parkedMemos=[]; //parked memos
             const LinkedMinuteList=[]; //linked minutes
+            const mediaArr=[]; //media files
+            let sectionsData = []; // content sections
+
 
             const attendence = document.querySelectorAll('input[name="attendence[]"]:checked');
             attendence.forEach(attendee=>{
@@ -255,7 +262,44 @@
                 document.getElementsByClassName("agenda-details")[0].style.border="0.5px solid #bcbcbc";
             }
 
-            //minute content will be added here
+            //minute contents
+            let Contenterror=false;
+            const contentSections = document.querySelectorAll('.content-section');
+            contentSections.forEach((section, index) =>{
+                const title = section.querySelector('.title-input').value;
+                const selectedRadio = section.querySelector(`input[name="options-${index+1}"]:checked`);
+                const selectedRadioValue = selectedRadio ? selectedRadio.value : '';
+                const selectedDepartment = section.querySelector('.select-dropdown').value;
+                const editorInstance = editors.find(e => e.titleInput === section.querySelector('.title-input'));
+                const insertedcontent = editorInstance ? editorInstance.editor.getData() : '';
+                if(title==""|| title=="You can type content title here" || insertedcontent==""||insertedcontent=="<p>This is <strong>sample</strong> content with <i>italic</i> text with formatting.</p><p><br><br><br><br>&nbsp;</p><p>Click add more to add another content.</p>"){
+                    Swal.fire({
+                    text: "Fill all the content sections",
+                    icon: "warning",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#3b82f6",
+                    customClass: {
+                        popup: "warning-font"
+                    }
+                    });
+                    document.getElementsByClassName("minute-content")[0].style.border="1px solid red";
+                    Contenterror=true;
+                    return;
+                }
+                else{
+                    document.getElementsByClassName("minute-content")[0].style.border="0.5px solid #bcbcbc";
+                    sectionsData.push({
+                    insertedcontent,
+                    selectedRadioValue,
+                    selectedDepartment,
+                    title
+                });
+                    Contenterror=false;
+                }
+
+            });
+
+
 
 
             // memo
@@ -283,20 +327,46 @@
                     }
                     });             
                     document.getElementsByClassName("memo-linking")[0].style.border="1px solid red";
-                return;
+                    return;
             }
             else{
                 document.getElementsByClassName("memo-linking")[0].style.border="0.5px solid #bcbcbc";
             }
+            
             //linked minutes
-            console.log("No of memos: "+memoCount);
-            console.log(attendenceList);
-            console.log(agendaList);
-            console.log(DiscussedMemos);
-            console.log(underDiscussionMemos);
-            console.log(parkedMemos);
             const linkedMinutes=document.querySelectorAll('select[name="LinkedMinutes[]"]');
-            console.log(linkedMinutes[0].value+" "+linkedMinutes.length);
+            linkedMinutes.forEach(minute=>{
+                if(minute.value!="none" && !LinkedMinuteList.includes(minute.value)){   
+                    LinkedMinuteList.push(minute.value);
+                }
+            });
+
+            //linked media files
+            const fileInput = document.getElementById("media");
+            for(const file of fileInput.files){
+                mediaArr.push(file);
+
+            }
+            const sectionHiddenInput= document.createElement('input');
+            sectionHiddenInput.type = 'hidden';
+            sectionHiddenInput.name = 'sections'; 
+            sectionHiddenInput.value = JSON.stringify(sectionsData); 
+            form.appendChild(sectionHiddenInput);
+
+            const minutesHiddenInput= document.createElement('input');
+            minutesHiddenInput.type = 'hidden';
+            minutesHiddenInput.name = 'Linkedminutes';
+            minutesHiddenInput.value = JSON.stringify(LinkedMinuteList);
+            form.appendChild(minutesHiddenInput);
+
+            if(!Contenterror){
+                if(confirm("Are you sure you want to submit the minute?")){
+                    form.submit();
+                }
+            }
+
+
+
         });
 
 
@@ -306,5 +376,6 @@
         </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <script src="<?=ROOT?>/assets/js/secretary/createminute.script.js"></script>
 </body>
