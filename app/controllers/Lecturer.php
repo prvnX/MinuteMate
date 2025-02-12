@@ -1,8 +1,20 @@
 <?php
 class Lecturer extends BaseController {
     public function index() {
-        $this->view("lecturer/dashboard");
+        date_default_timezone_set('Asia/Colombo');
+        $meeting = new Meeting();
+        $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
+        $today=date("Y-m-d");
+        $meetingsinweek = $meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username);
+        if($meetingsinweek){
+            $meetingsinweek = count($meetingsinweek);
+        }
+        else{
+            $meetingsinweek = 0;
+        }
+        $this->view("lecturer/dashboard",["meetingsinweek" => $meetingsinweek]);
     }
+
 
     public function search() {
         $searchtxt=$_POST['search'];
