@@ -1,6 +1,7 @@
  
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/lecturer.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <title>lecturer Dashboard</title>

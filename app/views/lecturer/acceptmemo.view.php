@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <title>View Memo Details</title>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/secretary/viewmemodetails.style.css">
 </head>

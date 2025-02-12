@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/selectminute.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <title>Please Select a Minute</title>
     
 </head>
