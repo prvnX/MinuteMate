@@ -34,15 +34,17 @@ body {
 
 .content-wrapper {
   display: flex;
-  gap: 20px;
+  gap: 0px;
   margin-bottom: 20px;
 }
 
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  gap:10px;
   flex: 2;
+  margin-top: 120px;
+  margin-bottom: 100px;
 }
 
 .calendar-section {
