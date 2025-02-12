@@ -13,7 +13,7 @@
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/lecturer",$memocart => ROOT."/lecturer/memocart", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" , "logout" => ROOT."/lecturer/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/sec_sidebar.php"); //call the sidebar component
+    require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
     ?>
     <main class="main-content">
       <div class="container">
