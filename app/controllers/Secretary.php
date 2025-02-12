@@ -304,10 +304,11 @@ class Secretary extends BaseController {
         $deparments = $department->find_all();
         $Participants = $meeting->getParticipants($meetingId);
         $auth=$meeting->authUserforMinute($meetingId,$_SESSION['userDetails']->username);
+        $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType]);
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails]);
         }
         else{
             redirect("secretary/selectmeeting");

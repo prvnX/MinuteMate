@@ -2,6 +2,8 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/viewevents.style.css">
     <title>View Events</title>
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
     
 </head>
 <body>

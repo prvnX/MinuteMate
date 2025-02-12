@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/notifications.style.css">
     <title>Notifications</title>
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
     <style>
 
     </style>

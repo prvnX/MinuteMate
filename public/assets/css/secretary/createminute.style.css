@@ -434,3 +434,7 @@ input[type="file"]{
     color: #ffffff;
     transition: 0.5s;
 }
+.warning-font{
+    font-size: 0.8rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
