@@ -2,6 +2,8 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/dashboard.style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
 
     <title>Secretary Dashboard</title>
     

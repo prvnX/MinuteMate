@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/search.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
     <style>
         .search-nav-bar .search-bar{margin-top: 0rem;} 
     </style>

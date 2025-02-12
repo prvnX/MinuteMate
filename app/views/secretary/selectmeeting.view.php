@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/selectmeeting.style.css">
     <title>Please Select a meeting</title>
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
     
 </head>
 <body>

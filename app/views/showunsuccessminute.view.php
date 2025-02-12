@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
     <style>
         body {
             font-family: 'Ubuntu', sans-serif;

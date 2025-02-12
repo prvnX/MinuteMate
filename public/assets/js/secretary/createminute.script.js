@@ -147,7 +147,6 @@ document.getElementById("addMoreBtn").addEventListener("click", function() {
     newInputContainer.appendChild(closeBtn)
     newInputContainer.style.display = "block";
     document.getElementById("agendaContainer").appendChild(newInputContainer);
-    i++;
 });
 
 function addContentSection(title = '', content = '') {
@@ -299,5 +298,16 @@ window.onload = function() {
         '<p>This is <strong>sample</strong> content with <em>italic</em> text with formatting.</p><br><br><br><br><p>Click add more to add another content.</p>'
     );
 };
-
-
+function toggleCheckBox(row,selectedCheckBox){
+    $checkBoxes = document.querySelectorAll(`.rowID-${row}`);
+    $checkBoxes.forEach(checkBox => {
+        if(checkBox !== selectedCheckBox){
+            checkBox.disabled = selectedCheckBox.checked;
+            checkBox.classList.add('disabledCheckBox');
+            if(!selectedCheckBox.checked){
+                checkBox.disabled = false;
+                checkBox.classList.remove('disabledCheckBox');
+            }
+        }
+    });
+}

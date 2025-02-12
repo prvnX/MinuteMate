@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignIn</title>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/login.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
 </head>
 <body>
     <div class="login-container">

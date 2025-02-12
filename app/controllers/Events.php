@@ -3,13 +3,16 @@ class Events extends Controller
 {
     private $fetchData;
     public function index()
-    {
+    {   date_default_timezone_set(timezoneId: 'Asia/Colombo');
+
         $date=$_GET['date'];
         if($this->isValidRequest()){
+            $meeting = new Meeting();
             $this->findMeetingforDate();
-
-
-            $this->view("viewevents",['date'=>$date,'fetchData'=>$this->fetchData]);
+            $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
+            $today=date("Y-m-d");
+            $meetingsinweek = $meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username);
+            $this->view("viewevents",['date'=>$date,'fetchData'=>$this->fetchData,'meetingsinweek'=>$meetingsinweek]);
         }
         else{
             redirect("login");

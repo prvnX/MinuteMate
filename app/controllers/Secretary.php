@@ -7,7 +7,13 @@ class Secretary extends BaseController {
         $memo = new Memo();
         $memoCount = $memo->getPendingMemoCount($_SESSION['secMeetingTypes']);
         $memoCount = $memoCount[0]->count;
-        $MinutesCnt=count($meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d")));
+        $Minutes=$meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d"));
+        if($Minutes){
+            $MinutesCnt = count($Minutes);
+        }
+        else{
+            $MinutesCnt = 0;
+        }
         $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
         $today=date("Y-m-d");
         $meetingsinweek = $meeting->getMeetingsInWeek($today, $lastDayOfWeek, $_SESSION['userDetails']->username);
@@ -298,10 +304,11 @@ class Secretary extends BaseController {
         $deparments = $department->find_all();
         $Participants = $meeting->getParticipants($meetingId);
         $auth=$meeting->authUserforMinute($meetingId,$_SESSION['userDetails']->username);
+        $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType]);
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -486,14 +493,41 @@ class Secretary extends BaseController {
     }
     
     public function submitminute() {
-        $memosuccess = false;
-        $minuteid = 1;
-        if($memosuccess) {
-            $this->view("showsuccessminute",["user"=>"secretary","minuteid"=>$minuteid]);
-    }
-    else {
-        $this->view("showunsuccessminute",["user"=>"secretary"]);
-    }
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $meetingID = $_POST['meetingID'];
+            $attendence = $_POST['attendence'];
+            $agendaItems = $_POST['Agenda'];
+            $discussedMemos = $_POST['discussed'] ?? [];
+            $underDiscussionMemos = $_POST['underdiscussion'] ?? [];
+            $parkedMemos= $_POST['parked'] ?? [];
+            $LinkedMinutes = json_decode($_POST['Linkedminutes']) ?? [];
+            $sections= json_decode($_POST['sections'], true);
+            $minuteTitle = $_POST['minuteTitle'];
+
+            show($sections[0]['insertedcontent']);
+            echo htmlspecialchars($sections[0]['insertedcontent']);
+            show($meetingID);
+            show($attendence);
+            show($agendaItems);
+            show($discussedMemos);
+            show($underDiscussionMemos);
+            show($parkedMemos);
+            show($LinkedMinutes);
+            show($sections);
+            foreach($LinkedMinutes as $Minute){
+                show($Minute);
+            }}
+        else{
+            echo "Invalid request";
+        }
+    //     $memosuccess = false;
+    //     $minuteid = 1;
+    //     if($memosuccess) {
+    //         $this->view("showsuccessminute",["user"=>"secretary","minuteid"=>$minuteid]);
+    // }
+    // else {
+    //     $this->view("showunsuccessminute",["user"=>"secretary"]);
+    // }
     }
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"Secretary"]);

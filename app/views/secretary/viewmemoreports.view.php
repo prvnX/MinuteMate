@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewmemoreports.style.css">
     <title>Memo Report</title>
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
 </head>
 <body>
 

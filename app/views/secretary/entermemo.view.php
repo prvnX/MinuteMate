@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/entermemo.style.css">
     <link href="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/theme.css" rel="stylesheet">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
 
     <title>Enter Memo</title>
     
