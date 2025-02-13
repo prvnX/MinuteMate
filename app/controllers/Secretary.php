@@ -503,6 +503,10 @@ class Secretary extends BaseController {
             $LinkedMinutes = json_decode($_POST['Linkedminutes']) ?? [];
             $sections= json_decode($_POST['sections'], true);
             $minuteTitle = $_POST['minuteTitle'];
+            $meeting = new Meeting();
+            $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
+            if($meetingMinuteStatus==0){ //if the minute is not already created
+
 
             show($sections[0]['insertedcontent']);
             echo htmlspecialchars($sections[0]['insertedcontent']);
@@ -517,7 +521,17 @@ class Secretary extends BaseController {
             show($_POST);
             foreach($LinkedMinutes as $Minute){
                 show($Minute);
+
+
+
+
+
             }}
+            else{
+                echo "Minute already created";
+            }
+        }
+            
         else{
             echo "Invalid request";
         }

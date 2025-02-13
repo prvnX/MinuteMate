@@ -1,6 +1,7 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/createminute.style.css">
     <link href="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/theme.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <title>Create a Minute</title>
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 </head>
@@ -266,12 +267,13 @@
             let Contenterror=false;
             const contentSections = document.querySelectorAll('.content-section');
             contentSections.forEach((section, index) =>{
+                let forwardDepartments=[];
                 const title = section.querySelector('.title-input').value;
                 const selectedRadio = section.querySelector(`input[name="options-${index+1}"]:checked`);
                 const selectedRadioValue = selectedRadio ? selectedRadio.value : '';
-                const selectedDepartment = section.querySelector('.select-dropdown').value;
                 const editorInstance = editors.find(e => e.titleInput === section.querySelector('.title-input'));
                 const insertedcontent = editorInstance ? editorInstance.editor.getData() : '';
+                const forwardDeps = section.querySelectorAll(`input[name="forwardDep[]"]:checked`);
                 if(title==""|| title=="You can type content title here" || insertedcontent==""||insertedcontent=="<p>This is <strong>sample</strong> content with <i>italic</i> text with formatting.</p><p><br><br><br><br>&nbsp;</p><p>Click add more to add another content.</p>"){
                     Swal.fire({
                     text: "Fill all the content sections",
@@ -287,15 +289,21 @@
                     return;
                 }
                 else{
+                    if(forwardDeps){
+                    forwardDeps.forEach(dep=>{
+                        forwardDepartments.push(dep.value);
+                    });
+                }
+
                     const sectionId = index + 1;
                     const selectedRestrictions = sectionRestrictions[sectionId] || [];
                     document.getElementsByClassName("minute-content")[0].style.border="0.5px solid #bcbcbc";
                     sectionsData.push({
                     insertedcontent,
                     selectedRadioValue,
-                    selectedDepartment,
                     title,
-                    selectedRestrictions
+                    selectedRestrictions,
+                    forwardDepartments
                 });
                     Contenterror=false;
                 }
@@ -355,7 +363,6 @@
             sectionHiddenInput.name = 'sections'; 
             sectionHiddenInput.value = JSON.stringify(sectionsData); 
             form.appendChild(sectionHiddenInput);
-
             const minutesHiddenInput= document.createElement('input');
             minutesHiddenInput.type = 'hidden';
             minutesHiddenInput.name = 'Linkedminutes';
@@ -363,6 +370,7 @@
             form.appendChild(minutesHiddenInput);
 
             if(!Contenterror){
+                
                 if(confirm("Are you sure you want to submit the minute?")){
                     form.submit();
                 }
@@ -371,11 +379,6 @@
 
 
         });
-
-
-
-
-
         </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
