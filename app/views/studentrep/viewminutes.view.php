@@ -5,20 +5,30 @@
     
     <meta charset= "UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>View memo</title>
-     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewminute.style.css">
+     <title>View minutes</title>
+     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/viewminutes.style.css">
   
 </head>
 
 <body>
 <div class="navbar">
 <?php
-    $user="secretary";
+    $user="studentrep";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+    $menuItems = [ "home" => ROOT."/studentrep" , $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
    ?>
+
+
+
+
+
+
+ 
+
 
 <?php
 $minutes = [
@@ -35,10 +45,10 @@ $minutes = [
 ];
 ?>
 
-   <h1 class="heading">Minutes</h1>
+ 
 
    <div class="meetinglist">
-   
+   <h1 class="heading">Minutes</h1>
    <button class="rhdbtn" id="rhd" >RHD</button> 
    <button class="iudbtn" id="iud">IUD </button>
    <button class="syndicatebtn" id="syn">SYNDICATE </button>

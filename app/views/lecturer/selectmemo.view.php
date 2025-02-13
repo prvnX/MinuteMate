@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/selectmemo.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <title>Please Select a memo</title>
     
 </head>

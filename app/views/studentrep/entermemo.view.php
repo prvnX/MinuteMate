@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/entermemo.style.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <link href="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/theme.css" rel="stylesheet">
 
     <title>Enter Memo</title>
@@ -7,13 +8,22 @@
     
 </head>
 <body>
+ 
 <?php
     $user="studentrep";
+    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
-?>
-<h1 class="memo-heading"> Enter a memo </h1>
+    $menuItems = [ "home" => ROOT."/studentrep" , $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
+    ?>
+
+
+
+
+
+
+<h1 class="memo-heading">   </h1>
 <div class="memo-sub-container">
     <form action="<?=ROOT?>/studentrep/submitmemo" method="post" id="memoForm">
         <div class="field">

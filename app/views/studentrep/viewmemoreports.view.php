@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/viewmemoreports.style.css">
     <title>Memo Report</title>
 </head>
 <body>
 
-<div class="navbar">
+ 
 <?php
     $user="studentrep";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep",$memocart => ROOT."/studentrep/memocart", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
-   ?>
-
-   
-</div>
-
+    $menuItems = [ "home" => ROOT."/studentrep" , $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
+    ?>
 
 
 
