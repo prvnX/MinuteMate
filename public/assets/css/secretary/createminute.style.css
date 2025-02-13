@@ -479,11 +479,32 @@ input[type="file"]{
     font-size: 0.9rem;
     font-family: 'EB Garamond', serif;
     margin-bottom: 10px;
-    color:#d00000
+    color:#d00000;
+    margin-top: 10px;
 }
 .no-res-txt{
     font-size: 1rem;
     font-family: 'EB Garamond', serif;
     margin-bottom: 10px;
     color:#828282
+}
+.forward-option{
+    display: inline;
+    width:100px;
+    font-family: "EB Garamond", serif;
+    font-size : 0.9rem;
+    
+}
+.forward-div{
+    display: inline;
+    margin-left: 10px;
+    border: 1px solid #b1b1b1;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+}
+.forward-div input[type="checkbox"]:checked{
+    background-color: black;
+    color: black;
 }

@@ -244,24 +244,24 @@ function addContentSection(title = '', content = '') {
     selectText.innerText = "Forward to the following department (If applicable): ";
     selectText.classList.add('select-text');
     sectionDiv.appendChild(selectText); // Append the label before select
-
-    const selectDropdown = document.createElement('select');
-    selectDropdown.classList.add('select-dropdown');
-    selectDropdown.style.marginBottom = '10px';
-    const option = document.createElement('option');
-    option.value = '';
-    option.text = 'Select department';
-    option.disabled = true;
-    option.selected = true;
-
-    selectDropdown.appendChild(option);
-    options.forEach(optionText => {
-        const option = document.createElement('option');
-        option.value = optionText.id;
-        option.text = optionText.dep_name;
-        selectDropdown.appendChild(option);
-    });
-    sectionDiv.appendChild(selectDropdown);
+        const forwarddiv=document.createElement('div');
+        forwarddiv.classList.add('forward-div');
+        options.forEach(optionText => {
+            const optiondiv=document.createElement('div');
+            optiondiv.classList.add('forward-option');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'forwardDep[]';
+            checkbox.value = optionText.id;
+            checkbox.style.marginRight = '10px';
+            const label = document.createElement('label');
+            label.innerText = optionText.dep_name;
+            optiondiv.appendChild(checkbox);
+            optiondiv.appendChild(label);
+            forwarddiv.appendChild(optiondiv);
+        });
+        sectionDiv.appendChild(forwarddiv);
+    
 
     // user restriction button
     const restrictionButton = document.createElement('button');
