@@ -241,7 +241,7 @@ function addContentSection(title = '', content = '') {
 
     // Select label and dropdown
     const selectText = document.createElement('label');
-    selectText.innerText = "Forward to the following department (If applicable): ";
+    selectText.innerText = "Forward to the following department(s) (If applicable): ";
     selectText.classList.add('select-text');
     sectionDiv.appendChild(selectText); // Append the label before select
         const forwarddiv=document.createElement('div');
