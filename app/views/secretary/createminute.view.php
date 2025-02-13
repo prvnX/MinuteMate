@@ -173,7 +173,7 @@
 
         const options = <?php echo json_encode($departments); ?>;
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
-
+        const users = <?php echo json_encode($data['participants']); ?>;
         const form=document.getElementById("minuteForm");
 
         //dynamically add input selects
@@ -287,12 +287,15 @@
                     return;
                 }
                 else{
+                    const sectionId = index + 1;
+                    const selectedRestrictions = sectionRestrictions[sectionId] || [];
                     document.getElementsByClassName("minute-content")[0].style.border="0.5px solid #bcbcbc";
                     sectionsData.push({
                     insertedcontent,
                     selectedRadioValue,
                     selectedDepartment,
-                    title
+                    title,
+                    selectedRestrictions
                 });
                     Contenterror=false;
                 }

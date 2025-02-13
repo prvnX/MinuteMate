@@ -438,3 +438,52 @@ input[type="file"]{
     font-size: 0.8rem;
     font-family: Arial, Helvetica, sans-serif;
 }
+.select-res-font{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/*restriction styles*/
+.select-res-font{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.restriction-btn{
+    display: inline;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid rgb(89, 89, 89);
+    font-family: "arial", serif;
+    font-size : 0.5 rem;
+    background: transparent;
+    color: rgb(89, 89, 89);
+    margin-left: 10px;
+    cursor: pointer;
+    float:right;
+}
+.restriction-btn:hover{
+    background-color: rgb(89, 89, 89);
+    color: #ffffff;
+    transition: 0.5s;
+}
+.restriction-btn .button-txt{
+    font-size: 0.8rem;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 5px;
+}
+.restriction-title{
+    font-size: 1rem;
+    font-family: 'EB Garamond', serif;
+    margin-bottom: 10px;
+    color:#000000
+}
+.restriction-display{
+    font-size: 0.9rem;
+    font-family: 'EB Garamond', serif;
+    margin-bottom: 10px;
+    color:#d00000
+}
+.no-res-txt{
+    font-size: 1rem;
+    font-family: 'EB Garamond', serif;
+    margin-bottom: 10px;
+    color:#828282
+}

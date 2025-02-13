@@ -514,6 +514,7 @@ class Secretary extends BaseController {
             show($parkedMemos);
             show($LinkedMinutes);
             show($sections);
+            show($_POST);
             foreach($LinkedMinutes as $Minute){
                 show($Minute);
             }}
