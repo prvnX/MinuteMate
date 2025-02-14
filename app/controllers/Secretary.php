@@ -300,6 +300,8 @@ class Secretary extends BaseController {
         $department = new Department(); 
         $memo = new Memo();
         $minute=new Minute();
+        $agenda=new Agenda();
+        $agendaItems=$agenda->select_all(['meeting_id'=>$meetingId]);
         $meetingType = $meeting->selectandproject("meeting_type",['meeting_id'=>$meetingId])[0]->meeting_type;
         $deparments = $department->find_all();
         $Participants = $meeting->getParticipants($meetingId);
@@ -308,7 +310,7 @@ class Secretary extends BaseController {
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails]);
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -494,6 +496,7 @@ class Secretary extends BaseController {
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $secretary=$_SESSION['userDetails']->username;
             $meetingID = $_POST['meetingID'];
             $attendence = $_POST['attendence'];
             $agendaItems = $_POST['Agenda'];
@@ -506,27 +509,34 @@ class Secretary extends BaseController {
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
             if($meetingMinuteStatus==0){ //if the minute is not already created
+            
+            $mediaArr=[];
 
+            if (isset($_FILES['media']) && !empty($_FILES['media']['name'][0])) {
+                foreach ($_FILES['media']['tmp_name'] as $key => $tmpFilePath) {
+                        $mediaArr[] = rand(1000, 1000000) ;
+                    }
+                }
 
-            show($sections[0]['insertedcontent']);
-            echo htmlspecialchars($sections[0]['insertedcontent']);
-            show($meetingID);
-            show($attendence);
-            show($agendaItems);
-            show($discussedMemos);
-            show($underDiscussionMemos);
-            show($parkedMemos);
-            show($LinkedMinutes);
-            show($sections);
+            $Minute_Transaction=new Minute_Transaction();
+            // $Minute_Transaction->testData(['sections'=>$sections]);
+            // $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections]);
+            // if($dataInsert){
+            //     echo $dataInsert;
+            // }
             show($_POST);
-            foreach($LinkedMinutes as $Minute){
-                show($Minute);
-
-
-
-
-
-            }}
+            
+            // show($mediaArr);
+            // foreach($LinkedMinutes as $Minute){
+            //     show($Minute);
+            // }
+            //show($sections);
+            
+        
+        
+        
+        
+        }
             else{
                 echo "Minute already created";
             }

@@ -229,7 +229,12 @@ function addContentSection(title = '', content = '') {
         radioInput.type = 'radio';
         radioInput.name = `options-${sectionCount}`;
         radioInput.value = label;
-
+        radioInput.onclick = function() {
+            const btnID = this.name.split('-')[1];
+            this.parentElement.parentElement.querySelectorAll('.radio-clearBtn').forEach(btn => {
+                btn.style.display = 'inline';
+            });
+        };
         const radioLabel = document.createElement('label');
         radioLabel.innerText = label;
         radioLabel.style.marginRight = '20px';
@@ -237,6 +242,21 @@ function addContentSection(title = '', content = '') {
         radioContainer.appendChild(radioInput);
         radioContainer.appendChild(radioLabel);
     });
+    const clearBtn=document.createElement('button');
+    clearBtn.type='button';
+    clearBtn.innerHTML='<i class="fa-solid fa-eraser"></i> Clear Selection';
+    clearBtn.classList.add('radio-clearBtn');
+    clearBtn.style.display='none';
+    clearBtn.id=`${sectionCount}`;
+    clearBtn.addEventListener('click',function(){
+        radioLabels.forEach(label => {
+            const radioInput = document.querySelector(`input[name="options-${this.id}"][value="${label}"]`);
+            radioInput.checked=false;
+            this.style.display='none';
+        });
+    });
+    radioContainer.appendChild(clearBtn);
+
     sectionDiv.appendChild(radioContainer);
 
     // Select label and dropdown

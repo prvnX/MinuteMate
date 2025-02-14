@@ -508,3 +508,21 @@ input[type="file"]{
     background-color: black;
     color: black;
 }
+
+.radio-clearBtn{
+    display: inline;
+    padding: 3px;
+    border-radius: 5px;
+    border: 1px solid rgb(89, 89, 89);
+    font-family: "arial", serif;
+    font-size : 0.5 rem;
+    background: transparent;
+    color: rgb(89, 89, 89);
+    margin-left: 10px;
+    cursor: pointer;
+}
+.radio-clearBtn:hover{
+    background-color: rgb(89, 89, 89);
+    color: #ffffff;
+    transition: 0.5s;
+}
