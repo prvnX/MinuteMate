@@ -44,6 +44,10 @@ trait Database{
         $this->connect()->rollBack(); //rollback the transaction with calling pdo rollBack
     }
 
+    public function getLastInsertID(){
+        return $this->connect()->lastInsertId(); //get the last inserted id
+    }
+
     /*get_row Only returns a one result*/
     public function get_row($query,$data=[]){
         $conn= $this->connect();

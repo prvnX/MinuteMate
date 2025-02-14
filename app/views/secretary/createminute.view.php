@@ -30,7 +30,7 @@
 
             </div>
     <div class="minute-form-container">
-        <form action="<?=ROOT?>/secretary/submitminute" method="post" id="minuteForm">
+        <form action="<?=ROOT?>/secretary/submitminute" method="post" id="minuteForm" enctype="multipart/form-data">
             <?php
             $memoCount=0;
             $meetingMembers=$data['participants'];
@@ -38,6 +38,11 @@
             $minuteList=$data['minutes'];
             $departments=$data['departments'];
             $meetingDetails=$data['meetingDetails'];
+            $AgendaItems=$data['agendaItems'];
+
+            if($AgendaItems==null){
+                $AgendaItems=[];
+            }
             if($memos==null){
                 $memos=[];
             }
@@ -94,6 +99,14 @@
 
                     <div id="agendaContainer" class="agendaContainer">
                         <div class="input-container">
+                            <?php
+                            if(count($AgendaItems)>0){
+                            foreach($data['agendaItems'] as $AgendaItem){
+                                echo '<input type="text" name="AlreadyAgenda[]" value="'.$AgendaItem->agenda_item.'" readonly/>';
+                            }
+                            }
+                        
+                            ?>
                             <input type="text" name="Agenda[]" placeholder="Enter the Agenda Item here" />
                         </div>
                     </div>
