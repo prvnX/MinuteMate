@@ -32,24 +32,27 @@ class Minute_Transaction{
     protected $forwardMeetingColumns = ['content_id','meeting_type','forward_by'];
 
     //memo table
+    protected $memoTable = 'memo';
+    protected $memoColumns = ['memo_id','memo_title','memo_content','status','submitted_by','meeting_id'];
+    protected $forupdateMemoColumns = ['memo_id','memo_title','memo_content','status','submitted_by','meeting_id','closed_at'];
+
+    //memo discussed meetings table
+    protected $memodiscussedTable = 'memo_discussed_meetings';
+    protected $memodiscussedColumns = ['memo_id','meeting_id'];
+
+    protected $linkedminuteTable='minutes_linked';
+    protected $linkedminutColumns=['minute_id','minutes_linked'];
+
+    //media files table
+    protected $mediaFilesTable='Linked_Media';
+    protected $mediaFilesColumns=['Name','minute_id','media_location','ext'];
+
+    //meeting table
+    protected $meetingTable='meeting';
+    protected $meetingColumns=['meeting_id','data','start_time','end_time','location','created_by','is_minute','type_id','meeting_type','additional_note'];
 
     public $MinuteID;
 
-
-
-
-    protected function insertToTable($table,$columns=[],$data=[]){
-        if(!empty($columns)){
-            foreach($data as $key=>$value){
-                if(!in_array($key, $columns)){
-                        unset($data[$key]);
-                    }
-                }
-            }    
-        $keys=array_keys($data);
-        $query="insert into $table (".implode(",",$keys).") values (:".implode(",:",$keys).")";
-        return $this->queryExec($query, $data);
-    }
 
     public function insertMinute($data){
         try{
@@ -159,6 +162,105 @@ class Minute_Transaction{
                 }
             }
         }
+
+        /*Memo Status Update*/
+        $discussedMemos=$data['discussedMemos'];
+        $underDiscussionMemos=$data['underDiscussionMemos'];
+        $parkedMemos=$data['parkedMemos'];
+
+        //if there are discussed memos
+        if(count($discussedMemos)){
+            foreach($discussedMemos as $memo){
+                $discussedMemoData=[
+                    'status'=>'discussed',
+                    'closed_at'=>$data['MeetingID']
+                ];
+                $isdataUpdated = $this->updateTheTable($this->memoTable,$memo,$this->forupdateMemoColumns,$discussedMemoData,'memo_id');
+                if(!$isdataUpdated){
+                    throw new Exception("Failed to update Memo Status.");
+                }
+                $memoDiscussedData=[
+                    'memo_id'=>$memo,
+                    'meeting_id'=>$data['MeetingID']
+                ];
+                $isdataInserted=$this->insertToTable($this->memodiscussedTable,$this->memodiscussedColumns,$memoDiscussedData);
+                if(!$isdataInserted){
+                    throw new Exception("Failed to insert Memo Discussed Meetings.");
+                }
+            }
+        }
+        //if there are parked memos
+        if(count($parkedMemos)){
+            foreach($parkedMemos as $memo){
+                $parkedMemoData=[
+                    'status'=>'parked',
+                ];
+                $isdataUpdated = $this->updateTheTable($this->memoTable,$memo,$this->forupdateMemoColumns,$parkedMemoData,'memo_id');
+                if(!$isdataUpdated){
+                    throw new Exception("Failed to update Memo Status.");
+                }
+            }
+        }
+        //if there are under discussion memos
+        if(count($underDiscussionMemos)){
+            foreach($underDiscussionMemos as $memo){
+                $underDiscussionMemoData=[
+                    'status'=>'under_discussion',
+                ];
+                $isdataUpdated = $this->updateTheTable($this->memoTable,$memo,$this->forupdateMemoColumns,$underDiscussionMemoData,'memo_id');
+                if(!$isdataUpdated){
+                    throw new Exception("Failed to update Memo Status.");
+                }
+                $underdiscussionData=[
+                    'memo_id'=>$memo,
+                    'meeting_id'=>$data['MeetingID']
+                ];
+                $isdataInserted=$this->insertToTable($this->memodiscussedTable,$this->memodiscussedColumns,$underdiscussionData);
+                if(!$isdataInserted){
+                    throw new Exception("Failed to insert Memo Discussed Meetings.");
+                }
+            }
+        }
+
+        /*Link Minutes*/
+        $linkedMinutes=$data['LinkedMinutes'];
+        foreach($linkedMinutes as $minute){
+            $linkedMinuteData=[
+                'minute_id'=> $this->MinuteID,
+                'minutes_linked' => $minute
+            ];
+            $isdataInserted=$this->insertToTable($this->linkedminuteTable,$this->linkedminutColumns,$linkedMinuteData);
+            if(!$isdataInserted){
+                throw new Exception("Failed to insert the linked minutes");
+            }
+        }
+
+        /*Linked Media Files*/
+        $mediaFiles=$data['mediaFiles'];
+        foreach($mediaFiles as $mediaFile){
+            $mediaFileData=[
+                'Name'=>$mediaFile['name'],
+                'minute_id'=>$this->MinuteID,
+                'media_location'=>$mediaFile['url'],
+                'ext'=>$mediaFile['ext']
+            ];
+            $isdataInserted=$this->insertToTable($this->mediaFilesTable,$this->mediaFilesColumns,$mediaFileData);
+            if(!$isdataInserted){
+                throw new Exception("Failed to insert the linked media files");
+            }
+        }
+
+        $meetingData=[
+            'is_minute'=>1
+        ];
+
+        //update the meeting is_minute to 1
+        $isdataUpdated=$this->updateTheTable($this->meetingTable,$data['MeetingID'],$this->meetingColumns,$meetingData,'meeting_id');
+        if(!$isdataUpdated){
+            throw new Exception("Failed to update the isminute field on meeting table");
+        }
+    
+        //commit the changes
         $this->commit();
         return true;        
     }
@@ -170,7 +272,8 @@ class Minute_Transaction{
     }
 
     // public function testData($data){
-        
+
+
     // }
         
 

@@ -119,4 +119,41 @@ Trait Model {
         return false;
     }
 
+/*Table insertion - Transaction*/
+    protected function insertToTable($table,$columns=[],$data=[]){
+        if(!empty($columns)){
+            foreach($data as $key=>$value){
+                if(!in_array($key, $columns)){
+                        unset($data[$key]);
+                    }
+                }
+            }    
+        $keys=array_keys($data);
+        $query="insert into $table (".implode(",",$keys).") values (:".implode(",:",$keys).")";
+        return $this->queryExec($query, $data);
+    }
+
+/*Table update - Transaction*/
+
+    protected function updateTheTable($table,$id,$columns=[],$data=[],$id_column= "id"){
+        if($columns){
+            foreach($data as $key=>$value){
+                if(!in_array($key,$columns)){
+                    unset($data[$key]);
+                }
+            }
+        }
+
+        $keys=array_keys($data);
+        $query="update $table set ";
+        foreach($keys as $key){
+            $query.= $key ." = :". $key . ", ";
+        }
+        $query=trim($query,", ");
+        $query .= " where $id_column = :$id_column";
+        $data[$id_column] = $id;
+        return $this->queryExec($query, $data);
+    }
+        
+
 }

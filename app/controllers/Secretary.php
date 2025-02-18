@@ -509,22 +509,21 @@ class Secretary extends BaseController {
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
             if($meetingMinuteStatus==0){ //if the minute is not already created
-            
             $mediaArr=[];
+            if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
+                $cloudinaryUpload = new CloudinaryUpload();
+                $mediaArr = $cloudinaryUpload->uploadFiles($_FILES['media']);
+                show($mediaArr);
+            }
+            //$Minute_Transaction=new Minute_Transaction();
+             //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
 
-            if (isset($_FILES['media']) && !empty($_FILES['media']['name'][0])) {
-                foreach ($_FILES['media']['tmp_name'] as $key => $tmpFilePath) {
-                        $mediaArr[] = rand(1000, 1000000) ;
-                    }
-                }
-
-            $Minute_Transaction=new Minute_Transaction();
-            // $Minute_Transaction->testData(['sections'=>$sections]);
-            // $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections]);
+            //  $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
             // if($dataInsert){
             //     echo $dataInsert;
             // }
-            show($_POST);
+            
+            //show($_POST);
             
             // show($mediaArr);
             // foreach($LinkedMinutes as $Minute){

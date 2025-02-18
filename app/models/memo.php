@@ -9,7 +9,7 @@
             'memo_content',
             'status',
             'submitted_by',
-            'meeting_id'
+            'meeting_id',
         ];
         public function insert($data)
         {
