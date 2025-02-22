@@ -19,7 +19,10 @@
     require_once("../app/views/components/new_navbar.php");
     require_once("../app/views/components/sec_sidebar.php");
     ?>
-    
+    <!-- Loading Overlay -->
+      <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
     <div class="tab-container">
                 <div class="tab active" data-tab="meeting-details">Meeting Details</div>
                 <div class="tab" data-tab="minute-content">Minute Content</div>
@@ -385,6 +388,7 @@
             if(!Contenterror){
                 
                 if(confirm("Are you sure you want to submit the minute?")){
+                    document.getElementById('loadingOverlay').style.visibility = 'visible';
                     form.submit();
                 }
             }

@@ -1,6 +1,12 @@
 <?php
 class Secretary extends BaseController {
 
+    // private function getLatestMeeting($meeting_id){
+    //     $meeting=new Meeting;
+    //     $type=$meeting->selectandproject('meeting_type',['meeting_id'=>$meeting_id])[0]->meeting_type;
+    //     return $meeting->getLatestMeeting($type);
+    // }
+
     public function index() {
         date_default_timezone_set('Asia/Colombo');
         $meeting = new Meeting();
@@ -508,6 +514,7 @@ class Secretary extends BaseController {
             $minuteTitle = $_POST['minuteTitle'];
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
+            $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
             if($meetingMinuteStatus==0){ //if the minute is not already created
             $mediaArr=[];
             if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
@@ -516,12 +523,72 @@ class Secretary extends BaseController {
                 show($mediaArr);
             }
             //$Minute_Transaction=new Minute_Transaction();
-             //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
+            //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
 
-            //  $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
-            // if($dataInsert){
-            //     echo $dataInsert;
-            // }
+            //$dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr]);
+            $dataInsert=1;
+              if($dataInsert==1 || $dataInsert==true){
+                //  echo $dataInsert;
+                 $cfd=new Content_forward_dep;
+                 $forwardDepContents=$cfd->get_dep_forwarded_content($meetingID);
+                 
+
+                 
+                 if(isset($forwardDepContents) && $forwardDepContents!=null){
+                        foreach($forwardDepContents as $forwardcontent){
+                            show($forwardcontent);
+                            $contentTitle=$forwardcontent->title;
+                            $minuteID=$forwardcontent->Minute_ID;
+                            $meetingDate=$forwardcontent->date;
+                            $secname=$forwardcontent->full_name;
+                            $meetingType=$forwardcontent->meeting_type;
+                            $depEmail=$forwardcontent->dep_email;
+                            $contentinD=$forwardcontent->content;
+                            $dheadmail=$forwardcontent->dheadmail;
+                            $dhead=$forwardcontent->dhead;
+                            $depname=$forwardcontent->dep_name;
+                        //     //send the releavent content as a mail
+                        //     $mail = new Mail();
+                        //     $mailstautus=$mail->forwardMinuteContent($depEmail,$depname,$contentTitle,$contentinD,$minuteID,$meetingDate,$secname,$meetingType,$dheadmail,$dhead);
+                        //     if($mailstautus){
+                        //         $status="Mail sent";
+                            
+                        //     }
+                        //     else{
+                        //         $status="Mail not sent";
+                        // }
+                 }   
+
+            }
+            // after mail sending - meeting content forward for future - THIS IS WRONG
+            $cfm=new Content_forward_meeting;
+            $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
+           
+            if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
+                
+                $latestmeeting=$this->getLatestMeeting($meetingID);
+                if(isset($latestmeeting) && $latestmeeting!=null){
+                    $forwardToMeeting=$latestmeeting[0]->meeting_id;
+                    $forwardedMeetingType=$latestmeeting[0]->meeting_type;
+                    foreach($MtForwardedContent as $content){
+                       $contentID= $content->content_id;
+                       $agendaTitle=$content->title;
+                       $agendaTitle.=" (From ". strtoupper($forwardedMeetingType)."Meeting On : ".$meetingDate.")";
+                       show($agendaTitle);
+
+                        
+                    }
+                }
+
+            }
+
+
+
+
+
+            }
+
+
             
             //show($_POST);
             

@@ -137,4 +137,13 @@ class Meeting{
 
     }
 
+    public function getLatestMeeting($type){
+        $data['type']=$type;
+        $data['date']=date("Y-m-d");
+        $query="SELECT m.meeting_id,m.meeting_type
+                FROM $this->table m
+                WHERE m.meeting_type=:type AND date > :date ORDER BY date ASC LIMIT 1";
+        return $this->query($query,$data);
+    }
+
 }
