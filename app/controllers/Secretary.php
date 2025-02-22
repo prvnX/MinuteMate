@@ -561,26 +561,26 @@ class Secretary extends BaseController {
 
             }
             // after mail sending - meeting content forward for future - THIS IS WRONG
-            $cfm=new Content_forward_meeting;
-            $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
+            // $cfm=new Content_forward_meeting;
+            // $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
            
-            if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
+            // if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
                 
-                $latestmeeting=$this->getLatestMeeting($meetingID);
-                if(isset($latestmeeting) && $latestmeeting!=null){
-                    $forwardToMeeting=$latestmeeting[0]->meeting_id;
-                    $forwardedMeetingType=$latestmeeting[0]->meeting_type;
-                    foreach($MtForwardedContent as $content){
-                       $contentID= $content->content_id;
-                       $agendaTitle=$content->title;
-                       $agendaTitle.=" (From ". strtoupper($forwardedMeetingType)."Meeting On : ".$meetingDate.")";
-                       show($agendaTitle);
+            //     $latestmeeting=$this->getLatestMeeting($meetingID);
+            //     if(isset($latestmeeting) && $latestmeeting!=null){
+            //         $forwardToMeeting=$latestmeeting[0]->meeting_id;
+            //         $forwardedMeetingType=$latestmeeting[0]->meeting_type;
+            //         foreach($MtForwardedContent as $content){
+            //            $contentID= $content->content_id;
+            //            $agendaTitle=$content->title;
+            //            $agendaTitle.=" (From ". strtoupper($forwardedMeetingType)."Meeting On : ".$meetingDate.")";
+            //            show($agendaTitle);
 
                         
-                    }
-                }
+            //         }
+            //     }
 
-            }
+            // }
 
 
 
