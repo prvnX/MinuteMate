@@ -1,5 +1,5 @@
 <?php
-include '../app/views/admin/adminsidebar.view.php';
+include '../app/views/components/admin_sidebar.php';
 
 // Dummy data for past members
 $dummyMembers = [
