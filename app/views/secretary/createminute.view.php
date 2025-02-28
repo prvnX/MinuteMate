@@ -1,6 +1,7 @@
 <head>
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/createminute.style.css">
     <link href="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/theme.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <title>Create a Minute</title>
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 </head>
@@ -18,7 +19,10 @@
     require_once("../app/views/components/new_navbar.php");
     require_once("../app/views/components/sec_sidebar.php");
     ?>
-    
+    <!-- Loading Overlay -->
+      <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
     <div class="tab-container">
                 <div class="tab active" data-tab="meeting-details">Meeting Details</div>
                 <div class="tab" data-tab="minute-content">Minute Content</div>
@@ -29,7 +33,7 @@
 
             </div>
     <div class="minute-form-container">
-        <form action="<?=ROOT?>/secretary/submitminute" method="post" id="minuteForm">
+        <form action="<?=ROOT?>/secretary/submitminute" method="post" id="minuteForm" enctype="multipart/form-data">
             <?php
             $memoCount=0;
             $meetingMembers=$data['participants'];
@@ -37,6 +41,11 @@
             $minuteList=$data['minutes'];
             $departments=$data['departments'];
             $meetingDetails=$data['meetingDetails'];
+            $AgendaItems=$data['agendaItems'];
+
+            if($AgendaItems==null){
+                $AgendaItems=[];
+            }
             if($memos==null){
                 $memos=[];
             }
@@ -93,6 +102,14 @@
 
                     <div id="agendaContainer" class="agendaContainer">
                         <div class="input-container">
+                            <?php
+                            if(count($AgendaItems)>0){
+                            foreach($data['agendaItems'] as $AgendaItem){
+                                echo '<input type="text" name="AlreadyAgenda[]" value="'.$AgendaItem->agenda_item.'" readonly/>';
+                            }
+                            }
+                        
+                            ?>
                             <input type="text" name="Agenda[]" placeholder="Enter the Agenda Item here" />
                         </div>
                     </div>
@@ -173,7 +190,7 @@
 
         const options = <?php echo json_encode($departments); ?>;
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
-
+        const users = <?php echo json_encode($data['participants']); ?>;
         const form=document.getElementById("minuteForm");
 
         //dynamically add input selects
@@ -266,12 +283,13 @@
             let Contenterror=false;
             const contentSections = document.querySelectorAll('.content-section');
             contentSections.forEach((section, index) =>{
+                let forwardDepartments=[];
                 const title = section.querySelector('.title-input').value;
                 const selectedRadio = section.querySelector(`input[name="options-${index+1}"]:checked`);
                 const selectedRadioValue = selectedRadio ? selectedRadio.value : '';
-                const selectedDepartment = section.querySelector('.select-dropdown').value;
                 const editorInstance = editors.find(e => e.titleInput === section.querySelector('.title-input'));
                 const insertedcontent = editorInstance ? editorInstance.editor.getData() : '';
+                const forwardDeps = section.querySelectorAll(`input[name="forwardDep[]"]:checked`);
                 if(title==""|| title=="You can type content title here" || insertedcontent==""||insertedcontent=="<p>This is <strong>sample</strong> content with <i>italic</i> text with formatting.</p><p><br><br><br><br>&nbsp;</p><p>Click add more to add another content.</p>"){
                     Swal.fire({
                     text: "Fill all the content sections",
@@ -287,12 +305,21 @@
                     return;
                 }
                 else{
+                    if(forwardDeps){
+                    forwardDeps.forEach(dep=>{
+                        forwardDepartments.push(dep.value);
+                    });
+                }
+
+                    const sectionId = index + 1;
+                    const selectedRestrictions = sectionRestrictions[sectionId] || [];
                     document.getElementsByClassName("minute-content")[0].style.border="0.5px solid #bcbcbc";
                     sectionsData.push({
                     insertedcontent,
                     selectedRadioValue,
-                    selectedDepartment,
-                    title
+                    title,
+                    selectedRestrictions,
+                    forwardDepartments
                 });
                     Contenterror=false;
                 }
@@ -352,7 +379,6 @@
             sectionHiddenInput.name = 'sections'; 
             sectionHiddenInput.value = JSON.stringify(sectionsData); 
             form.appendChild(sectionHiddenInput);
-
             const minutesHiddenInput= document.createElement('input');
             minutesHiddenInput.type = 'hidden';
             minutesHiddenInput.name = 'Linkedminutes';
@@ -360,7 +386,9 @@
             form.appendChild(minutesHiddenInput);
 
             if(!Contenterror){
+                
                 if(confirm("Are you sure you want to submit the minute?")){
+                    document.getElementById('loadingOverlay').style.visibility = 'visible';
                     form.submit();
                 }
             }
@@ -368,11 +396,6 @@
 
 
         });
-
-
-
-
-
         </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

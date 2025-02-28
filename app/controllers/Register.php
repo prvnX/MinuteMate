@@ -39,7 +39,7 @@ class Register extends Controller {
                 $stmt->bindParam(4, $nic, PDO::PARAM_STR);
                 $stmt->bindParam(5, $email, PDO::PARAM_STR);
                 $stmt->bindParam(6, $tpno, PDO::PARAM_STR);
-                $stmt->bindParam(7, $additionaltpno, PDO::PARAM_STR);
+                $stmt->bindParam(7, $additionalTpno, PDO::PARAM_STR);
                 $stmt->bindParam(8, $department, PDO::PARAM_STR);
                 $stmt->bindParam(9, $status, PDO::PARAM_STR);
 

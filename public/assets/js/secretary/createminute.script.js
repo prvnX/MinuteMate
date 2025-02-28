@@ -2,6 +2,7 @@ let currentPage = 1;
 let sectionCount = 0;
 let editors = [];
 
+
 // Function to set active tab
 function setActiveTab(tabName) {
     document.querySelectorAll(".tab").forEach(tab => {
@@ -149,6 +150,8 @@ document.getElementById("addMoreBtn").addEventListener("click", function() {
     document.getElementById("agendaContainer").appendChild(newInputContainer);
 });
 
+let sectionRestrictions = {}; // To store restrictions for each section
+
 function addContentSection(title = '', content = '') {
     sectionCount++;
     // close button
@@ -226,7 +229,12 @@ function addContentSection(title = '', content = '') {
         radioInput.type = 'radio';
         radioInput.name = `options-${sectionCount}`;
         radioInput.value = label;
-
+        radioInput.onclick = function() {
+            const btnID = this.name.split('-')[1];
+            this.parentElement.parentElement.querySelectorAll('.radio-clearBtn').forEach(btn => {
+                btn.style.display = 'inline';
+            });
+        };
         const radioLabel = document.createElement('label');
         radioLabel.innerText = label;
         radioLabel.style.marginRight = '20px';
@@ -234,31 +242,65 @@ function addContentSection(title = '', content = '') {
         radioContainer.appendChild(radioInput);
         radioContainer.appendChild(radioLabel);
     });
+    const clearBtn=document.createElement('button');
+    clearBtn.type='button';
+    clearBtn.innerHTML='<i class="fa-solid fa-eraser"></i> Clear Selection';
+    clearBtn.classList.add('radio-clearBtn');
+    clearBtn.style.display='none';
+    clearBtn.id=`${sectionCount}`;
+    clearBtn.addEventListener('click',function(){
+        radioLabels.forEach(label => {
+            const radioInput = document.querySelector(`input[name="options-${this.id}"][value="${label}"]`);
+            radioInput.checked=false;
+            this.style.display='none';
+        });
+    });
+    radioContainer.appendChild(clearBtn);
+
     sectionDiv.appendChild(radioContainer);
 
     // Select label and dropdown
     const selectText = document.createElement('label');
-    selectText.innerText = "Forward to the following department (If applicable): ";
+    selectText.innerText = "Forward to the following department(s) (If applicable): ";
     selectText.classList.add('select-text');
     sectionDiv.appendChild(selectText); // Append the label before select
+        const forwarddiv=document.createElement('div');
+        forwarddiv.classList.add('forward-div');
+        options.forEach(optionText => {
+            const optiondiv=document.createElement('div');
+            optiondiv.classList.add('forward-option');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'forwardDep[]';
+            checkbox.value = optionText.id;
+            checkbox.style.marginRight = '10px';
+            const label = document.createElement('label');
+            label.innerText = optionText.dep_name;
+            optiondiv.appendChild(checkbox);
+            optiondiv.appendChild(label);
+            forwarddiv.appendChild(optiondiv);
+        });
+        sectionDiv.appendChild(forwarddiv);
+    
 
-    const selectDropdown = document.createElement('select');
-    selectDropdown.classList.add('select-dropdown');
-    selectDropdown.style.marginBottom = '10px';
-    const option = document.createElement('option');
-    option.value = '';
-    option.text = 'Select department';
-    option.disabled = true;
-    option.selected = true;
+    // user restriction button
+    const restrictionButton = document.createElement('button');
+    restrictionButton.type = 'button';
+    restrictionButton.innerHTML = '<i class="fa-solid fa-lock"></i><span class="button-txt">&nbsp;Restrict Users</span>';
+    restrictionButton.classList.add('restriction-btn');
+    restrictionButton.id = `Res_btn-${sectionCount}`;
+    restrictionButton.onclick = function() {
+            RestrictionID= this.id.split('-')[1];
+            showRestrictionPopup(RestrictionID);
+    };
+    sectionDiv.appendChild(restrictionButton);
 
-    selectDropdown.appendChild(option);
-    options.forEach(optionText => {
-        const option = document.createElement('option');
-        option.value = optionText.id;
-        option.text = optionText.dep_name;
-        selectDropdown.appendChild(option);
-    });
-    sectionDiv.appendChild(selectDropdown);
+    // Display selected restrictions
+    const restrictionDisplay = document.createElement('div');
+    restrictionDisplay.classList.add('restriction-display');
+    restrictionDisplay.id = `restrictions-${sectionCount}`;
+    sectionDiv.appendChild(restrictionDisplay);
+
 
     // Editor container
     const editorDiv = document.createElement('div');
@@ -310,4 +352,61 @@ function toggleCheckBox(row,selectedCheckBox){
             }
         }
     });
+}
+
+function showRestrictionPopup(sectionId) {
+    let restrictionHtml = users.map(user => 
+        `<div style="display:block;">
+         <label for="user-${user.username}-${sectionId}">${user.name}</label>
+         <input type="checkbox" class="restriction-checkbox" value="${user.username}" id="user-${user.username}-${sectionId}" style="float:right"> </div>`
+    ).join('');
+
+    Swal.fire({
+        title: 'Restrict Access to This Section',
+        html: restrictionHtml,
+        showCancelButton: true,
+        confirmButtonText: 'Save Restrictions',
+        confirmButtonColor: "#3b82f6",
+        customClass: {
+            popup: "select-res-font"
+        },
+        preConfirm: () => {
+            let selectedUsers = [];
+            document.querySelectorAll(`.restriction-checkbox:checked`).forEach(checkbox => {
+                selectedUsers.push(checkbox.value);
+            });
+            return selectedUsers;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sectionRestrictions[sectionId] = result.value || [];
+            updateRestrictionDisplay(sectionId);
+        }
+    });
+}
+
+function updateRestrictionDisplay(sectionId) {
+    const restrictionDisplay = document.getElementById(`restrictions-${sectionId}`);
+    restrictionDisplay.innerHTML = "<span class='restriction-title'>Restrictions : </span>";
+    const sizeofSection=sectionRestrictions[sectionId].length;
+    if(sizeofSection === 0) {
+        restrictionDisplay.innerHTML += "<span class='no-res-txt'>No restrictions are added for this section</span>";
+        return;
+    }
+    else{
+        restrictionDisplay.innerHTML = "<span class='restriction-title'>Restrictions : </span> <span class='res-users'>";
+        sectionRestrictions[sectionId].forEach(Restrictuser => {
+            users.forEach(user => {
+                if(user.username === Restrictuser){
+                    restrictionDisplay.innerHTML += user.name;
+                    if(sectionRestrictions[sectionId].indexOf(Restrictuser) !== sizeofSection-1){
+                        restrictionDisplay.innerHTML += " , ";
+                    }
+
+                }
+            });
+            restrictionDisplay.innerHTML += "</span>";
+    });
+    return;
+}
 }

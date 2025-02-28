@@ -1,6 +1,12 @@
 <?php
 class Secretary extends BaseController {
 
+    // private function getLatestMeeting($meeting_id){
+    //     $meeting=new Meeting;
+    //     $type=$meeting->selectandproject('meeting_type',['meeting_id'=>$meeting_id])[0]->meeting_type;
+    //     return $meeting->getLatestMeeting($type);
+    // }
+
     public function index() {
         date_default_timezone_set('Asia/Colombo');
         $meeting = new Meeting();
@@ -300,6 +306,8 @@ class Secretary extends BaseController {
         $department = new Department(); 
         $memo = new Memo();
         $minute=new Minute();
+        $agenda=new Agenda();
+        $agendaItems=$agenda->select_all(['meeting_id'=>$meetingId]);
         $meetingType = $meeting->selectandproject("meeting_type",['meeting_id'=>$meetingId])[0]->meeting_type;
         $deparments = $department->find_all();
         $Participants = $meeting->getParticipants($meetingId);
@@ -308,7 +316,7 @@ class Secretary extends BaseController {
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails]);
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -494,6 +502,7 @@ class Secretary extends BaseController {
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $secretary=$_SESSION['userDetails']->username;
             $meetingID = $_POST['meetingID'];
             $attendence = $_POST['attendence'];
             $agendaItems = $_POST['Agenda'];
@@ -503,20 +512,102 @@ class Secretary extends BaseController {
             $LinkedMinutes = json_decode($_POST['Linkedminutes']) ?? [];
             $sections= json_decode($_POST['sections'], true);
             $minuteTitle = $_POST['minuteTitle'];
+            $meeting = new Meeting();
+            $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
+            $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
+            if($meetingMinuteStatus==0){ //if the minute is not already created
+            $mediaArr=[];
+            if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
+                $cloudinaryUpload = new CloudinaryUpload();
+                $mediaArr = $cloudinaryUpload->uploadFiles($_FILES['media']);
+                show($mediaArr);
+            }
+            //$Minute_Transaction=new Minute_Transaction();
+            //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
 
-            show($sections[0]['insertedcontent']);
-            echo htmlspecialchars($sections[0]['insertedcontent']);
-            show($meetingID);
-            show($attendence);
-            show($agendaItems);
-            show($discussedMemos);
-            show($underDiscussionMemos);
-            show($parkedMemos);
-            show($LinkedMinutes);
-            show($sections);
-            foreach($LinkedMinutes as $Minute){
-                show($Minute);
-            }}
+            //$dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr]);
+            $dataInsert=1;
+              if($dataInsert==1 || $dataInsert==true){
+                //  echo $dataInsert;
+                 $cfd=new Content_forward_dep;
+                 $forwardDepContents=$cfd->get_dep_forwarded_content($meetingID);
+                 
+
+                 
+                 if(isset($forwardDepContents) && $forwardDepContents!=null){
+                        foreach($forwardDepContents as $forwardcontent){
+                            show($forwardcontent);
+                            $contentTitle=$forwardcontent->title;
+                            $minuteID=$forwardcontent->Minute_ID;
+                            $meetingDate=$forwardcontent->date;
+                            $secname=$forwardcontent->full_name;
+                            $meetingType=$forwardcontent->meeting_type;
+                            $depEmail=$forwardcontent->dep_email;
+                            $contentinD=$forwardcontent->content;
+                            $dheadmail=$forwardcontent->dheadmail;
+                            $dhead=$forwardcontent->dhead;
+                            $depname=$forwardcontent->dep_name;
+                        //     //send the releavent content as a mail
+                        //     $mail = new Mail();
+                        //     $mailstautus=$mail->forwardMinuteContent($depEmail,$depname,$contentTitle,$contentinD,$minuteID,$meetingDate,$secname,$meetingType,$dheadmail,$dhead);
+                        //     if($mailstautus){
+                        //         $status="Mail sent";
+                            
+                        //     }
+                        //     else{
+                        //         $status="Mail not sent";
+                        // }
+                 }   
+
+            }
+            // after mail sending - meeting content forward for future - THIS IS WRONG
+            // $cfm=new Content_forward_meeting;
+            // $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
+           
+            // if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
+                
+            //     $latestmeeting=$this->getLatestMeeting($meetingID);
+            //     if(isset($latestmeeting) && $latestmeeting!=null){
+            //         $forwardToMeeting=$latestmeeting[0]->meeting_id;
+            //         $forwardedMeetingType=$latestmeeting[0]->meeting_type;
+            //         foreach($MtForwardedContent as $content){
+            //            $contentID= $content->content_id;
+            //            $agendaTitle=$content->title;
+            //            $agendaTitle.=" (From ". strtoupper($forwardedMeetingType)."Meeting On : ".$meetingDate.")";
+            //            show($agendaTitle);
+
+                        
+            //         }
+            //     }
+
+            // }
+
+
+
+
+
+            }
+
+
+            
+            //show($_POST);
+            
+            // show($mediaArr);
+            // foreach($LinkedMinutes as $Minute){
+            //     show($Minute);
+            // }
+            //show($sections);
+            
+        
+        
+        
+        
+        }
+            else{
+                echo "Minute already created";
+            }
+        }
+            
         else{
             echo "Invalid request";
         }
