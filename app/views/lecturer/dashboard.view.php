@@ -37,15 +37,20 @@
 
         <div class="content-wrapper">
           <div class="quick-actions">
-            <div class="card" id="create-minute">
-              <div class="icon-bg">
-                
-                <i class="fas fa-file-alt"></i>
-              </div>
-              <h2>Enter a Memo</h2>
-              <p>Create a new meeting minutes with ease</p>
-              <a href="<?=ROOT?>/lecturer/selectmeeting"><button>Create Now</button></a>
-            </div>
+             
+              
+            <div class="card" id="enter-memo">
+                        <div class="icon-bg">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h2>Enter a Memo</h2>
+                        <p>Create and attach memos for a meeting</p>
+                        <a href="<?=ROOT?>/lecturer/entermemo">
+                        <button>New Memo</button>
+                        </a>
+                    </div>
+
+
             <div class="card" id="enter-memo">
               <div class="icon-bg">
               
@@ -53,7 +58,7 @@
               </div>
               <h2>Review Student Memos</h2>
               <p>Create and attach memos for a meeting</p>
-              <a href="<?=ROOT?>/lecturer/entermemo">
+              <a href="<?=ROOT?>/lecturer/reviewstudentmemo">
               <button>New Memo</button>
               </a>
             </div>
@@ -73,7 +78,7 @@
               </div>
               <h2>View Submitted Memos</h2>
               <p>Access all memos</p>
-              <a href="<?=ROOT?>/lecturer/viewmemos">
+              <a href="<?=ROOT?>/lecturer/viewsubmittedmemos">
               <button>View Memos</button>
               </a>
             </div>
