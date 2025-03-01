@@ -86,7 +86,7 @@ body {
 .title{
     text-align: center;
     font-size: 2.3rem;
-    color:#65558F;
+    color: #1e40af;
     font-weight: 700;
     margin-bottom:10px;
     display: inline;
@@ -136,7 +136,7 @@ body {
     border: 1px solid #b1b1b1;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.1rem;
-    background-color: #6164CE;
+    background-color: #3b82f6;
     color: white;
     width: 230px;
     height: 50px; /* Fixed height for uniformity */
@@ -169,7 +169,7 @@ body {
 
  
 .subbtn button{
-    background-color: #6164CE;
+    background-color: #3b82f6;
 }
 /* Modal content container */
 .modal-content {
@@ -226,7 +226,7 @@ body {
     padding: 12px 30px;
     font-size: 1.1rem;
     color: #ffffff;
-    background-color: #65558F;
+    background-color: #3b82f6;
     border: none;
     border-radius: 25px;
     cursor: pointer;
