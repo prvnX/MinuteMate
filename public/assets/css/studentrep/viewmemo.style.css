@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+body{
+    padding:0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+h1{
+    font-size: 2.5em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+}
+.navbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+   height: 60px;
+  }
+
+.heading{
+    text-align: left;
+    color: #4a008e;
+    margin-bottom: 30px;
+    margin-left: 200px;
+    font-weight: bold;
+    margin-top: 300px;
+    font-family: 'Georgia', sans-serif;
+}
+
+.memolist {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 150px;
+    width: 1000px;
+    margin-left: 500px;
+    overflow-y: auto;
+    max-height: 800px;
+  
+}
+
+.memoitem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e0e7ff;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.memocontent h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.memocontent p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.viewbtn {
+    background-color: #6b5b95;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.viewbtn:hover {
+    background-color: #57467b;
+}
+
+
+  
