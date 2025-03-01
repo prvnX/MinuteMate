@@ -138,7 +138,7 @@ class Meeting{
     }
 
     public function getLatestMeeting($type){
-        $data['type']=$type;
+        $data['type']=strtolower($type);
         $data['date']=date("Y-m-d");
         $query="SELECT m.meeting_id,m.meeting_type
                 FROM $this->table m

@@ -68,7 +68,7 @@
                     echo "<tr><td>Memos Submitted:</td><td>" . htmlspecialchars($meeting['memos']) . " memos submitted for this meeting.</td></tr>";
                     echo "</table>";
                     if($_SESSION['userDetails']->role=="secretary"|| $_SESSION['userDetails']->role=="lecturer"){
-                        echo "<button id='view-meeting-agenda'>View Agenda Details</button>";
+                        echo "<button id='view-meeting-agenda'>View Agenda Details and Submitted Memos</button>";
                     }
                     date_default_timezone_set('Asia/Colombo');
                     $todayDate = date('Y-m-d');
@@ -185,9 +185,7 @@
     <div class="section">
       <h3 class="section-title">Agenda Items</h3>
       <ul class="item-list" id="agenda-list">
-        <li>Budget Allocation Review</li>
-        <li>Quarterly Team Feedback</li>
-        <li>Future Project Planning</li>
+        <!-- List of agenda items will be displayed here -->
       </ul>
     </div>
 
@@ -200,6 +198,20 @@
     </div>
   </div>
 </div>
+    <!-- Quick View -->
+    <div class="quick-view-popup" id="quick-view-popup">
+        <div class="quick-view">
+        <span class="close-btn quick-view-close" onclick="closequickview()">&times;</span>
+        <div class="quick-view-inside">
+            <div class="quick-view-item" id="quick-view-title">
+                <!--title here-->
+            </div>
+            <div class="quick-view-content" id="quick-view-content">
+                <!--content here-->
+            </div>
+            </div>
+            </div>
+    </div>
 
     <script>
         function handleMeetingDelete(meetingId) {
@@ -297,6 +309,7 @@ function handleMeetingReschedule(meetingId) {
 
 
 
+
     //function for handling the alert
     function showAlert(message) {
             const modal = document.getElementById('alertModal');
@@ -357,18 +370,67 @@ agendaButton.addEventListener('click', () => {
     .catch(error => {
         console.error('Error:', error);
     });
-});
+
+    //get agenda List
+    const agendaUrl='<?=ROOT?>/Events/getAgendaList';
+    fetch(agendaUrl,{
+        method: 'POST',
+        headers :{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({meeting_id: meetingID})
+    }
+    ).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    }).then(data =>{
+        if(data.success){
+            console.log(data);
+            const agenda=data.agendas;
+            const agendaList = document.getElementById('agenda-list');
+            agendaList.innerHTML = '';
+            if(agenda.length > 0){
+                agenda.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span id="agenda-item" onclick="showquickview('${item.type}', '${item.title}', '${item.content}')">${item.title} (From ${item.type.toUpperCase()} Meeting On: ${item.date})</span>`;                    agendaList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No agenda items found.';
+                agendaList.appendChild(li);
+            }
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+    });
 
 
 // Close the popup when the close button is clicked
 closeButton.addEventListener('click', () => {
-  popupBox.style.display = 'none';
+   popupBox.style.display = 'none';
 });
+
+function showquickview(type='',title='',content=''){
+    const quickview=document.getElementById('quick-view-popup');
+     quickview.style.display='flex';
+     quickview.getElementsByClassName('quick-view-item')[0].innerText=title;
+     quickview.getElementsByClassName('quick-view-content')[0].innerHTML=content;
+
+}
+function closequickview(){
+    const quickview=document.getElementById('quick-view-popup');
+    quickview.style.display='none';
+}
 
 // Close the popup when clicking outside the content box
 window.addEventListener('click', (event) => {
   if (event.target === popupBox) {
     popupBox.style.display = 'none';
+    document.getElementById('quick-view-popup').style.display='none';
+
   }
 });
 

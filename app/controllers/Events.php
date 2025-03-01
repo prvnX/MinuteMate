@@ -153,7 +153,23 @@ public function addMeeting() {
         }
         if($input){
             $meeting->insert(['date'=>$date,'meeting_type'=>$meetingType,'start_time'=>$startTime,'end_time'=>$endTime,'location'=>$location,'additional_note'=>$additionalNote,'created_by'=>$createdBy,'type_id'=>$type_id]);
-            echo json_encode(["success" => "Meeting Added Successfully"]);
+            $meetingid=$meeting->getLastInsertID();
+            $cfm=new Content_forward_meeting;
+            $meeting_fwd_trans=new Meeting_forward_Transaction;
+            $cfdata=$cfm->getforwardedListByType($meetingType);
+            if(isset($cfdata) && $cfdata!=null){
+                foreach ($cfdata as $content) {
+                        $contentID= $content->content_id;
+                        $agendaTitle=$content->title;
+                        $meeting_type=$content->meeting_type;
+                        $meetingDate=$content->meeting_date;
+                        $agendaTitle.=" (From ". strtoupper($meeting_type)." Meeting On : ".$meetingDate.")";
+                        $meeting_fwd_trans->forwardcontent($meetingid,$agendaTitle,$contentID);
+
+            }
+        }
+                
+            echo json_encode(["success" => "Meeting Added Successfully with ID - ".$meetingid]);
         }
         else{
             echo json_encode(["error" => "No Data Provided"]);
@@ -162,6 +178,7 @@ public function addMeeting() {
         echo json_encode(["error" => "Invalid request"]);
     }
 }
+
 
 public function  getMemoList(){
     $memo = new Memo();
@@ -187,7 +204,17 @@ public function  getMemoList(){
     } else {
         echo json_encode(["error" => "Meeting ID is missing"]);
     }
-}
+    }
+    public function getAgendaList(){
+        $input= json_decode(file_get_contents('php://input'),true);
+        $meeting_id=$input['meeting_id'] ?? null;
+        $agenda= new Agenda;
+        if($meeting_id){
+            $agendaList=$agenda->getAgendaItems($meeting_id);
+            echo json_encode(["success" => true, "agendas" => $agendaList]);
+        }
+    }
+
 }
 
         

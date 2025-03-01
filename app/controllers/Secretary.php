@@ -1,11 +1,6 @@
 <?php
 class Secretary extends BaseController {
 
-    // private function getLatestMeeting($meeting_id){
-    //     $meeting=new Meeting;
-    //     $type=$meeting->selectandproject('meeting_type',['meeting_id'=>$meeting_id])[0]->meeting_type;
-    //     return $meeting->getLatestMeeting($type);
-    // }
 
     public function index() {
         date_default_timezone_set('Asia/Colombo');
@@ -560,12 +555,33 @@ class Secretary extends BaseController {
                  }   
 
             }
+            
             // after mail sending - meeting content forward for future - THIS IS WRONG
-            // $cfm=new Content_forward_meeting;
-            // $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
+            $cfm=new Content_forward_meeting;
+            $agendafwd=new Meeting_forward_Transaction;
+            $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
            
-            // if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
+            if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
                 
+                    show($MtForwardedContent);
+                    foreach($MtForwardedContent as $content){
+                        $contentID= $content->content_id;
+                        $agendaTitle=$content->title;
+                        $meeting_type=$content->meeting_type;
+                        $meetingDate=$content->meeting_date;
+                        $forwardMeetingID=$meeting->getLatestMeeting($meeting_type)[0]->meeting_id;
+                        $agendaTitle.=" (From ". strtoupper($meeting_type)." Meeting On : ".$meetingDate.")";
+                        $status=$agendafwd->forwardcontent($forwardMeetingID,$agendaTitle,$contentID);
+                        // if($status){
+                        //     echo "Agenda forwarded";
+                        // }
+                        // else{
+                        //     echo "Agenda not forwarded";
+                        // }
+                        
+                    }
+
+            }
             //     $latestmeeting=$this->getLatestMeeting($meetingID);
             //     if(isset($latestmeeting) && $latestmeeting!=null){
             //         $forwardToMeeting=$latestmeeting[0]->meeting_id;
