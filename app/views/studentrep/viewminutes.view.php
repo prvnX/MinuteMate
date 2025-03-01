@@ -71,7 +71,7 @@ $minutes = [
                 </div>
 
                 <div class="buttons">
-                    <a href="<?= ROOT ?>/studdentrep/viewminutes/<?= $id ?>">
+                    <a href="<?= ROOT ?>/studentrep/viewminutes/<?= $id ?>">
                         <button class="viewbtn">View</button>
                     </a>
                     <a href="<?= ROOT ?>/studentrep/viewminutes/pdf/<?= $id ?>">

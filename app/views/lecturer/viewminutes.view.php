@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
      <title>View memo</title>
-     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewminute.style.css">
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/viewminutes.style.css">
   
 </head>
 
@@ -36,10 +36,8 @@ $minutes = [
 ];
 ?>
 
+<div class="meetinglist">
    <h1 class="heading">Minutes</h1>
-
-   <div class="meetinglist">
-   
    <button class="rhdbtn" id="rhd" >RHD</button> 
    <button class="iudbtn" id="iud">IUD </button>
    <button class="syndicatebtn" id="syn">SYNDICATE </button>
