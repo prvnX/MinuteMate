@@ -1,8 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+:root {
+    --primary-color: #1e40af;
+    --secondary-color: #3b82f6;
+    --background-color: #f0f9ff;
+    --text-color: #1e293b;
+    --card-bg-color: #ffffff;
+    --navbar-bg-color: #e0f2fe;
+}
+
 body{
     padding: 0;
     margin: 0;
+    background-color: var(--background-color);
 }
 .select-memo-container{
     margin: auto;
@@ -16,21 +26,23 @@ body{
     font-size : 1.2rem;
     box-shadow: 0 0 10px #0a0a0a3c;
     text-align: center;
+    background-color: #ffffff84;
+
 }
 .select-memo-container h1{
     font-family: "Ubuntu", serif;
     font-size: 2rem;
     font-weight:500;
-    color: #100683;
+    color: var(--primary-color);
 }
 .select-memo-container select{
     width: 60%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #6164CE;
+    border: 1px solid var(--secondary-color);
     font-family: "EB Garamond", serif;
     font-size : 1.1rem;
-    color: #6164CE;
+    color: var(--secondary-color);
 }
 .select-memo-container button{
     padding: 10px;
@@ -38,7 +50,7 @@ body{
     border: 1px solid #b1b1b1;
     font-family: Arial, Helvetica, sans-serif;
     font-size : 1.2rem;
-    background-color: #6164CE;
+    background-color: var(--secondary-color);
     color: white;
     display: block;
     width: 20%;
@@ -47,8 +59,8 @@ body{
 }
 #cancelButton{
     background-color: #ffffff;
-    color: #6164CE;
-    border: 1px solid #6164CE;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
 
 }
  .calender{

@@ -36,7 +36,7 @@ $minutes = [
 ];
 ?>
 
-<div class="meetinglist">
+   <div class="meetinglist">
    <h1 class="heading">Minutes</h1>
    <button class="rhdbtn" id="rhd" >RHD</button> 
    <button class="iudbtn" id="iud">IUD </button>

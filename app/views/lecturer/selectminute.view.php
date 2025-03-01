@@ -1,16 +1,29 @@
 <head>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/selectminute.style.css">
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/selectminute.style.css">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <title>Please Select a Minute</title>
     
 </head>
 <body>
 <?php
+   
     $user="lecturer";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/lecturer",$memocart => ROOT."/lecturer/memocart", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+    $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" ]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
+    
+
+
+
+
+
+
+
+
+
+
     $minutes= [
         1 => array(
             'id' => 12,
