@@ -24,7 +24,7 @@
         .state-container h1 {
             font-size: 4rem;
             margin: 0 1rem 0.5rem ;
-            color:#65558F;
+            color:#1e40af;
         }
         .state-container p {
             font-size: 1.5rem;
@@ -38,13 +38,13 @@
             margin: 5px;
             border: none;
             background-color: white;
-            border:solid 1px #65558F;
-            color: #65558F;
+            border:solid 1px #3b82f6;
+            color: #3b82f6;
             cursor: pointer;
             border-radius: 15px;
         }
         .state-container button:hover {
-            background-color: #65558F;
+            background-color: #3b82f6;
             color: white;
             transition: 0.5s ease;
 
