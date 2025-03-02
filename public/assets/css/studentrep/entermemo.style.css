@@ -9,7 +9,7 @@ body{
     margin-top: 20px;
     font-size: 4rem;
     font-weight:500;
-    color: #6164CE;
+    color: #3b82f6;
 }
 .memo-form-container{
     margin: auto;
@@ -66,7 +66,7 @@ body{
     border: 1px solid #b1b1b1;
     font-family: Arial, Helvetica, sans-serif;
     font-size : 1.1rem;
-    background-color: #6164CE;
+    background-color: #3b82f6;
     color: white;
     display: inline;
     width: 100px;
@@ -76,11 +76,11 @@ body{
 }
 .cancel-btn{
     background-color: #ffffff;
-    color: #6164CE;
-    border: 1px solid #6164CE;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
 }
 .cancel-btn:hover{
-    background-color: #6164CE;
+    background-color: #3b82f6;
     color: #ffffff;
     transition: 0.5s;
 }

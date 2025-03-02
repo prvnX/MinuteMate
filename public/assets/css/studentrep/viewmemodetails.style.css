@@ -6,7 +6,7 @@
     margin-top: 40px;
     font-size: 40px;
     font-family: ubuntu;
-    color: #65558F;
+    color: #1e40af;
 }
 .memo-details-container {
     max-width: 1000px;
@@ -69,7 +69,7 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #3b82f6;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
@@ -93,7 +93,7 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #3b82f6;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
@@ -109,7 +109,7 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #3b82f6;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
