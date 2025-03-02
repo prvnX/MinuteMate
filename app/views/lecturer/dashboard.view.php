@@ -14,6 +14,7 @@
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" , "logout" => ROOT."/lecturer/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/lec_sidebar.php");
  
     ?>
     <main class="main-content">
