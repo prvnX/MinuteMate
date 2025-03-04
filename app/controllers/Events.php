@@ -8,6 +8,7 @@ class Events extends Controller
         $date=$_GET['date'];
         if($this->isValidRequest()){
             $meeting = new Meeting();
+            $memofwd = new Memo_forwards;
             $this->findMeetingforDate();
             $lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
             $today=date("Y-m-d");
@@ -168,6 +169,21 @@ public function addMeeting() {
 
             }
         }
+        $memos=new memo;
+        $memofwd=new Memo_forwards;
+        $memotofwd=$memos->getMemosByMeetingType($meetingType);
+        if(isset($memotofwd) && $memotofwd!=null){
+             foreach ($memotofwd as $memo) {
+                $memoID=$memo->memo_id;
+               $memofwd->insert(['Forwarded_Memo_id'=>$memoID,'Forwarded_to'=>$meetingid,'Forwarded_Date'=>date("Y-m-d")]);
+               $memos->update($memoID,['is_forwarded'=>1],'memo_id');
+               
+           }
+                
+        }
+
+
+
                 
             echo json_encode(["success" => "Meeting Added Successfully with ID - ".$meetingid]);
         }
@@ -182,18 +198,23 @@ public function addMeeting() {
 
 public function  getMemoList(){
     $memo = new Memo();
+    $memofwd= new Memo_forwards;
     $input = json_decode( file_get_contents('php://input'), true);
     $meeting_id = $input['meeting_id'] ?? null;
     if ($meeting_id) {
-
-
         $memosList = $memo->select_all(['meeting_id' => $meeting_id]);
-        if($memosList){
-            echo json_encode(["success" => true, "memos" => $memosList]);
-        }
-        else{
-            echo json_encode(["error" => "No memos found for the given meeting ID"]);
-        }
+        $forwardedMemos=$memofwd->getmemoList($meeting_id);
+        // if($forwardedMemos){
+        //     // $newMemoList=array_merge(arrays: $memosList, $forwardedMemos);
+        //     echo json_encode(["success" => true, "memos" => $memosList]);
+        // }
+        echo json_encode(["success" => true, "memos" => $memosList,"forwardedMemos"=>$forwardedMemos]);
+        // if($memosList){
+        //     echo json_encode(["success" => true, "memos" => $memosList]);
+        // }
+        // else{
+        //     echo json_encode(["error" => "No memos found for the given meeting ID"]);
+        // }
         // if($memosList){
         //     echo json_encode(["success" => true, "memos" => $memosList]);
         // }

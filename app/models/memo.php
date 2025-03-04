@@ -10,6 +10,7 @@
             'status',
             'submitted_by',
             'meeting_id',
+            'is_forwarded'
         ];
         public function insert($data)
         {
@@ -106,10 +107,20 @@
                 }            
                 return $this->query($query, $data);
             }
-        
 
+            public function getTobeForwardedMemos($meeting_id){
+                $data['meeting_id']=$meeting_id;
+                $query="SELECT * FROM $this->table WHERE meeting_id=:meeting_id AND is_forwarded=0 AND (status='parked' OR status='under_discussion')";
+                return $this->query($query,$data);
+            }
 
-
+            public function getMemosByMeetingType($meeting_type){
+                $data['meeting_type']=$meeting_type;
+                $query="SELECT me.memo_id FROM `memo` me 
+                        INNER JOIN meeting m ON me.meeting_id=m.meeting_id 
+                        WHERE m.meeting_type=:meeting_type AND me.is_forwarded=0 AND (me.status='parked' OR me.status='under_discussion')";
+                return $this->query($query,$data);
+            }
 
     }
 

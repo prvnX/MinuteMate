@@ -34,7 +34,7 @@ class Minute_Transaction{
     //memo table
     protected $memoTable = 'memo';
     protected $memoColumns = ['memo_id','memo_title','memo_content','status','submitted_by','meeting_id'];
-    protected $forupdateMemoColumns = ['memo_id','memo_title','memo_content','status','submitted_by','meeting_id','closed_at'];
+    protected $forupdateMemoColumns = ['memo_id','memo_title','memo_content','status','submitted_by','meeting_id','closed_at','is_forwarded'];
 
     //memo discussed meetings table
     protected $memodiscussedTable = 'memo_discussed_meetings';
@@ -50,6 +50,9 @@ class Minute_Transaction{
     //meeting table
     protected $meetingTable='meeting';
     protected $meetingColumns=['meeting_id','data','start_time','end_time','location','created_by','is_minute','type_id','meeting_type','additional_note'];
+
+    protected $keywordTable='minute_Keywords';
+    protected $keywordColumns=['Minute_ID','Keyword'];
 
     public $MinuteID;
 
@@ -153,7 +156,7 @@ class Minute_Transaction{
                 //forward meeting handle
                 $forwardMeetingData=[
                     'content_id'=>$LastInsertedContentID,
-                    'meeting_type'=>$forwardMeeting,
+                    'meeting_type'=>strtolower($forwardMeeting),
                     'forward_by'=>$data['secretary']
                 ];
                 $isdataInserted = $this->insertToTable($this->forwardMeetingTable,$this->forwardMeetingColumns,$forwardMeetingData);
@@ -173,7 +176,8 @@ class Minute_Transaction{
             foreach($discussedMemos as $memo){
                 $discussedMemoData=[
                     'status'=>'discussed',
-                    'closed_at'=>$data['MeetingID']
+                    'closed_at'=>$data['MeetingID'],
+                    'is_forwarded'=>0
                 ];
                 $isdataUpdated = $this->updateTheTable($this->memoTable,$memo,$this->forupdateMemoColumns,$discussedMemoData,'memo_id');
                 if(!$isdataUpdated){
@@ -194,6 +198,7 @@ class Minute_Transaction{
             foreach($parkedMemos as $memo){
                 $parkedMemoData=[
                     'status'=>'parked',
+                    'is_forwarded'=>0
                 ];
                 $isdataUpdated = $this->updateTheTable($this->memoTable,$memo,$this->forupdateMemoColumns,$parkedMemoData,'memo_id');
                 if(!$isdataUpdated){
@@ -206,6 +211,7 @@ class Minute_Transaction{
             foreach($underDiscussionMemos as $memo){
                 $underDiscussionMemoData=[
                     'status'=>'under_discussion',
+                    'is_forwarded'=>0
                 ];
                 $isdataUpdated = $this->updateTheTable($this->memoTable,$memo,$this->forupdateMemoColumns,$underDiscussionMemoData,'memo_id');
                 if(!$isdataUpdated){
@@ -259,6 +265,21 @@ class Minute_Transaction{
         if(!$isdataUpdated){
             throw new Exception("Failed to update the isminute field on meeting table");
         }
+
+        $keywords=$data['keywords'];
+        foreach($keywords as $keyword){
+            $keywordData=[
+                'Minute_ID'=>$this->MinuteID,
+                'Keyword'=>$keyword
+            ];
+            $isdataInserted=$this->insertToTable($this->keywordTable,$this->keywordColumns,$keywordData);
+            if(!$isdataInserted){
+                throw new Exception("Failed to insert the keywords");
+            }
+            
+        }
+            
+
     
         //commit the changes
         $this->commit();
