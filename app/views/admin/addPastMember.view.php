@@ -1,6 +1,6 @@
 <?php
 // Include sidebar and other layout components
-include '../app/views/admin/adminsidebar.view.php';
+include '../app/views/components/admin_sidebar.php';
 
 // Dummy data for past members (use a database in production)
 $dummyMembers = [

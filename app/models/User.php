@@ -36,8 +36,8 @@ class User {
         }
 
         // Proceed with the insert if no duplicate username
-        $query = "INSERT INTO user (username, password, nic, full_name, email, role, status) 
-                  VALUES (:username, :password, :nic, :full_name, :email, :role, :status)";
+        $query = "INSERT INTO user (username, password, nic, full_name, email, status) 
+                  VALUES (:username, :password, :nic, :full_name, :email, :status)";
         $this->query($query, $data);
 
         // Get the username of the newly inserted user
@@ -75,37 +75,44 @@ class User {
     }
 
     public function getUserById($userId) {
-        $query = "SELECT u.username, u.full_name, u.email, u.nic, u.role, u.status,
+        $query = "SELECT u.username, u.full_name, u.email, u.nic, u.status,
+                         ur.role,
+                         c.contact_no,
                          m.meeting_type_id, mt.meeting_type 
                   FROM user u
+                  LEFT JOIN user_roles ur ON u.username = ur.username
+                  LEFT JOIN user_contact_nums c ON u.username = c.username
                   LEFT JOIN user_meeting_types m ON u.username = m.accessible_user
                   LEFT JOIN meeting_types mt ON m.meeting_type_id = mt.type_id
                   WHERE u.username = :username";
-
+    
         $result = $this->query($query, ['username' => $userId]);
-
+    
         if (empty($result)) {
-            return null; // Return null if no user found
+            return null;
         }
-
-        $userData = $result[0]; // Assuming one user
+    
+        // Base user info from the first row
+        $userData = $result[0];
+    
+        // Extract meeting types into an array
         $userData->meetingTypes = array_map(fn($row) => $row->meeting_type, $result);
-
-        // Fetch the phone number from the user_contact_nums table
-        require 'UserContactNums.php'; // Explicitly include the model
-        $contactNums = new UserContactNums(); // Instantiate the `UserContactNums` model
-        $userData->contact_no = $contactNums->getContactByUsername($userId);
-
+    
+        // Ensure contact number and role are present (handle nulls gracefully)
+        $userData->contact_no = $userData->contact_no ?? null;
+        $userData->role = $userData->role ?? null;
+    
         return $userData;
     }
+    
 
     // Fetch the user ID by username
-    public function getUserIdByUsername($username) {
+    /*public function getUserIdByUsername($username) {
         $query = "SELECT username FROM user WHERE username = :username";
         $result = $this->query($query, ['username' => $username]);
 
-        return $result[0]['username'] ?? null; // Return the username if found, or null
-    }
+       return $result[0]['username'] ?? null; // Return the username if found, or null
+    }*/
 
     public function updateContactInfo($username, $newPhone) {
         
@@ -116,7 +123,7 @@ class User {
 
     public function updateUserByUsername($username, $data) {
         $query = "UPDATE user 
-                  SET full_name = :full_name, email = :email, nic = :nic, role = :role 
+                  SET full_name = :full_name, email = :email, nic = :nic,
                   WHERE username = :username";
         $data['username'] = $username;
         return $this->query($query, $data);
@@ -130,19 +137,6 @@ class User {
         // Call the updateMeetingTypes method from User_Meeting_Types model
         $userMeetingTypesModel->updateMeetingTypes($username, $meetingTypeIds);
     }
-
-    // public function updateUserStatus($username, $status) {
-    //     // Prepare the query to update the user's status by username
-    //     $query = "UPDATE user SET status = :status WHERE username = :username";
-        
-    //     // Prepare and execute the query
-    //     // $stmt = $this->db->prepare($query);
-    //     $stmt->bindParam(':status', $status);
-    //     $stmt->bindParam(':username', $username);
-    
-    //     // Execute the query and return whether it was successful
-    //     return $stmt->execute();
-    // }
     
 
 

@@ -1,5 +1,5 @@
 <?php
-include '../app/views/admin/adminsidebar.view.php';
+include '../app/views/components/admin_sidebar.php';
 
 // Retrieve the meeting type from the URL
 $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';

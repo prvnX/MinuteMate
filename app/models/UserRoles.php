@@ -6,4 +6,4 @@
             'username',
             'role'
         ]; 
-    }
+}
