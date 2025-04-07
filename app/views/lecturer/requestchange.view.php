@@ -10,16 +10,14 @@
 </head>
 
 <body>
-    <div class="navbar">
-    <?php
-        $user="lecturer";
-        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-        $notification="notification"; //use notification-dot if there's a notification
-        $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-        require_once("../app/views/components/navbar.php"); //call the navbar component
-        $showAddEvents = false;
-        ?>
-    </div>
+<?php
+    $user="lecturer";
+    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" , "logout" => ROOT."/lecturer/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
+    ?>
     <h1>Request Change</h1>
     <div class="container">
        

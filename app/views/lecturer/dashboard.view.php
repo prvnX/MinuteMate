@@ -4,7 +4,7 @@
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <title>lecturer Dashboard</title>
+    <title>lecturer board</title>
     
 </head>
 <body>
@@ -14,7 +14,7 @@
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" , "logout" => ROOT."/lecturer/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
+ 
     ?>
     <main class="main-content">
       <div class="container">
@@ -37,15 +37,20 @@
 
         <div class="content-wrapper">
           <div class="quick-actions">
-            <div class="card" id="create-minute">
-              <div class="icon-bg">
-                
-                <i class="fas fa-file-alt"></i>
-              </div>
-              <h2>Enter a Memo</h2>
-              <p>Create a new meeting minutes with ease</p>
-              <a href="<?=ROOT?>/lecturer/selectmeeting"><button>Create Now</button></a>
-            </div>
+             
+              
+            <div class="card" id="enter-memo">
+                        <div class="icon-bg">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h2>Enter a Memo</h2>
+                        <p>Create and attach memos for a meeting</p>
+                        <a href="<?=ROOT?>/lecturer/entermemo">
+                        <button>New Memo</button>
+                        </a>
+                    </div>
+
+
             <div class="card" id="enter-memo">
               <div class="icon-bg">
               
@@ -53,7 +58,7 @@
               </div>
               <h2>Review Student Memos</h2>
               <p>Create and attach memos for a meeting</p>
-              <a href="<?=ROOT?>/lecturer/entermemo">
+              <a href="<?=ROOT?>/lecturer/reviewstudentmemo">
               <button>New Memo</button>
               </a>
             </div>
@@ -73,7 +78,7 @@
               </div>
               <h2>View Submitted Memos</h2>
               <p>Access all memos</p>
-              <a href="<?=ROOT?>/lecturer/viewmemos">
+              <a href="<?=ROOT?>/lecturer/viewsubmittedmemos">
               <button>View Memos</button>
               </a>
             </div>

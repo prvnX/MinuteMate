@@ -232,7 +232,7 @@ $readnotifications = [
                         $id=$notification['Notification_ID'];
                         $notificationDateObj = new DateTime( $notification['Created_At'],new DateTimeZone('Asia/Colombo'));
                         $duration=showDuration($notificationDateObj);
-                        echo "<div class='notification-item' id='Notification-{$id}'>";
+                        echo "<div class='notificationpage-item' id='Notification-{$id}'>";
                         echo "<p class='notification-message'>" . $notification['Message'] . "</p>";
                         echo "<p class='duration'>".$duration ."</p>";
                         echo "<button class='notification-read-button' id='{$id}' onclick='handleMark(this)'>"."<img src='".ROOT."/assets/images/markasread.png'><span>Mark as read<span></button>";
@@ -242,7 +242,7 @@ $readnotifications = [
                         $id=$notification['Notification_ID'];
                         $notificationDateObj = new DateTime( $notification['Created_At'],new DateTimeZone('Asia/Colombo'));
                         $duration=showDuration($notificationDateObj);
-                        echo "<div class='notification-item read-notification' id='.$id.'>";
+                        echo "<div class='notificationpage-item read-notification' id='.$id.'>";
                         echo "<p class='notification-message'>" . $notification['Message'] . "</p>";
                         echo "<p class='duration'>". $duration ."</p>";
                         echo "</div>";

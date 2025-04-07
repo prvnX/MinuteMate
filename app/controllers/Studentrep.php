@@ -98,6 +98,19 @@ class Studentrep extends BaseController {
         
     }
 
+    
+
+
+
+
+
+
+
+
+
+
+
+
     public function viewminutes() {
         $this->view("studentrep/viewminutes");
     }
@@ -207,6 +220,31 @@ class Studentrep extends BaseController {
         // Redirect to the login page
         redirect("home");
     }
+    
+    public function viewmemos() {
+        $user=$_SESSION['userDetails']->username;
+
+        if($this->isValidRequest())
+        {
+            $memo = new Memo();
+            $memos = $memo->getAllAcceptedMemos();
+            $this->view("studentrep/viewmemos", ['memos'=> $memos]);
+        }
+        else
+        {
+            redirect("login");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
     public function viewmemoreports() {
         if(!isset($_GET['memo'])) {
             header("Location: ".ROOT."/studentrep/selectmemo");

@@ -1,11 +1,6 @@
 <?php
 class Secretary extends BaseController {
 
-    // private function getLatestMeeting($meeting_id){
-    //     $meeting=new Meeting;
-    //     $type=$meeting->selectandproject('meeting_type',['meeting_id'=>$meeting_id])[0]->meeting_type;
-    //     return $meeting->getLatestMeeting($type);
-    // }
 
     public function index() {
         date_default_timezone_set('Asia/Colombo');
@@ -307,6 +302,8 @@ class Secretary extends BaseController {
         $memo = new Memo();
         $minute=new Minute();
         $agenda=new Agenda();
+        $memofwd=new Memo_forwards;
+        $fwdmemos=$memofwd->getmemoList($meetingId);
         $agendaItems=$agenda->select_all(['meeting_id'=>$meetingId]);
         $meetingType = $meeting->selectandproject("meeting_type",['meeting_id'=>$meetingId])[0]->meeting_type;
         $deparments = $department->find_all();
@@ -314,9 +311,10 @@ class Secretary extends BaseController {
         $auth=$meeting->authUserforMinute($meetingId,$_SESSION['userDetails']->username);
         $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
+        
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems]);
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -502,6 +500,8 @@ class Secretary extends BaseController {
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $success=true;
+            $mailstautus=true;
             $secretary=$_SESSION['userDetails']->username;
             $meetingID = $_POST['meetingID'];
             $attendence = $_POST['attendence'];
@@ -512,31 +512,53 @@ class Secretary extends BaseController {
             $LinkedMinutes = json_decode($_POST['Linkedminutes']) ?? [];
             $sections= json_decode($_POST['sections'], true);
             $minuteTitle = $_POST['minuteTitle'];
+            $keywords = $_POST['keywordlist'] ?? [];
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
             $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
+            $keywordList=[];
             if($meetingMinuteStatus==0){ //if the minute is not already created
             $mediaArr=[];
             if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
                 $cloudinaryUpload = new CloudinaryUpload();
                 $mediaArr = $cloudinaryUpload->uploadFiles($_FILES['media']);
-                show($mediaArr);
+                //show($mediaArr);
+                if($mediaArr==null){
+                    $success=false;
+                }
             }
-            //$Minute_Transaction=new Minute_Transaction();
-            //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
+            if(isset($keywords) && $keywords[0]!=null){
+                foreach($keywords as $keyword){
+                    if($keyword!=""){
+                        $keywordList[]=$keyword;
+                    }
+                
+                }
+            }
 
-            //$dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr]);
-            $dataInsert=1;
+
+            if($success){
+                $Minute_Transaction=new Minute_Transaction();
+                //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
+    
+                $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'attendence'=>$attendence,'agenda'=>$agendaItems,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList]);
+            }
+
+
+
+
+           
+            //  $dataInsert=1;
               if($dataInsert==1 || $dataInsert==true){
-                //  echo $dataInsert;
+                  //echo $dataInsert;
                  $cfd=new Content_forward_dep;
                  $forwardDepContents=$cfd->get_dep_forwarded_content($meetingID);
                  
 
-                 
+                 //mmail sending for the releavent deps
                  if(isset($forwardDepContents) && $forwardDepContents!=null){
                         foreach($forwardDepContents as $forwardcontent){
-                            show($forwardcontent);
+                            //show($forwardcontent);
                             $contentTitle=$forwardcontent->title;
                             $minuteID=$forwardcontent->Minute_ID;
                             $meetingDate=$forwardcontent->date;
@@ -548,44 +570,97 @@ class Secretary extends BaseController {
                             $dhead=$forwardcontent->dhead;
                             $depname=$forwardcontent->dep_name;
                         //     //send the releavent content as a mail
-                        //     $mail = new Mail();
-                        //     $mailstautus=$mail->forwardMinuteContent($depEmail,$depname,$contentTitle,$contentinD,$minuteID,$meetingDate,$secname,$meetingType,$dheadmail,$dhead);
-                        //     if($mailstautus){
-                        //         $status="Mail sent";
+                            $mail = new Mail();
+                            $mailstautus=$mail->forwardMinuteContent($depEmail,$depname,$contentTitle,$contentinD,$minuteID,$meetingDate,$secname,$meetingType,$dheadmail,$dhead);
+                            if($mailstautus){
+                                $status="Mail sent";
                             
-                        //     }
-                        //     else{
-                        //         $status="Mail not sent";
-                        // }
+                            }
+                            else{
+                                $status="Mail not sent";
+                                $mailstautus=false;
+                        }
                  }   
 
             }
-            // after mail sending - meeting content forward for future - THIS IS WRONG
-            // $cfm=new Content_forward_meeting;
-            // $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
+            
+            // after mail sending - meeting content forward for future 
+            $cfm=new Content_forward_meeting;
+            $agendafwd=new Meeting_forward_Transaction;
+            $MtForwardedContent=$cfm->forwardedContentMeetings($meetingID);
            
-            // if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
+            if(isset($MtForwardedContent)&& $MtForwardedContent!=null){
                 
-            //     $latestmeeting=$this->getLatestMeeting($meetingID);
-            //     if(isset($latestmeeting) && $latestmeeting!=null){
-            //         $forwardToMeeting=$latestmeeting[0]->meeting_id;
-            //         $forwardedMeetingType=$latestmeeting[0]->meeting_type;
-            //         foreach($MtForwardedContent as $content){
-            //            $contentID= $content->content_id;
-            //            $agendaTitle=$content->title;
-            //            $agendaTitle.=" (From ". strtoupper($forwardedMeetingType)."Meeting On : ".$meetingDate.")";
-            //            show($agendaTitle);
-
+                    //show($MtForwardedContent);
+                    foreach($MtForwardedContent as $content){ //if theres already scheduled meeting on the forwarded meeting type
+                        $contentID= $content->content_id;
+                        $agendaTitle=$content->title;
+                        $meeting_type=$content->meeting_type;
+                        $meetingDate=$content->meeting_date;
+                        $forwardMeeting=$meeting->getLatestMeeting($meeting_type);
+                        if(isset($forwardMeeting)&& $forwardMeeting!=null){
+                        $forwardMeetingID=$forwardMeeting[0]->meeting_id;
+                        $agendaTitle.=" (From ". strtoupper($meeting_type)." Meeting On : ".$meetingDate.")";
+                        // $status=1;
+                        $status=$agendafwd->forwardcontent($forwardMeetingID,$agendaTitle,$contentID);
+                        // if($status){
+                        //     echo "Agenda forwarded";
+                        // }
+                        // else{
+                        //     echo "Agenda not forwarded";
+                        // }
+                        }
                         
-            //         }
-            //     }
+                    }
 
-            // }
+            
+
+            }
+
+            //after content forwarding for meetings - memo linking for the meetings
+            $memo=new memo;
+            $memofwd=new Memo_forwards;
+            $meetingType=$meeting->selectandproject("meeting_type",['meeting_id'=>$meetingID])[0]->meeting_type;
+            $memotolink=$memo->getTobeForwardedMemos($meetingID);
+            //find the next meeting of the same type
+            $latestMeeting=$meeting->getLatestMeeting($meetingType);
+            if(isset($memotolink)&& $memotolink!=null){
+                if(isset($latestMeeting)&& $latestMeeting!=null){
+                $nextMeetingID=$latestMeeting[0]->meeting_id;    
+                foreach($memotolink as $memos){
+                    $memoID=$memos->memo_id;
+                    $memofwd->insert(['Forwarded_Memo_id'=>$memoID,'Forwarded_to'=>$nextMeetingID,'Forwarded_Date'=>date("Y-m-d")]);
+                    $memo->update($memoID,['is_forwarded'=>1],'memo_id');
+                    
+                }
+                    
+            }
+        }
+        
 
 
 
 
 
+
+
+            }
+            // $mailstautus=false;
+            // $success=false;
+            if($success && $dataInsert==1 && $mailstautus==true){
+                $minutemodel=new minute;
+                $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
+                $minuteid=$minuteid[0]->Minute_ID;
+                $this->view("showsuccessminute",["user"=>"secretary","minuteid"=>$minuteid]);
+            }
+            else if($success && $dataInsert==1 && $mailstautus==false){
+                $minutemodel=new minute;
+                $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
+                $minuteid=$minuteid[0]->Minute_ID;
+                $this->view("showwarningminute",["user"=>"secretary","minuteid"=>$minuteid]);
+            }
+            else{
+                $this->view("showunsuccessminute",['meetingid'=>$meetingID]);
             }
 
 
@@ -604,7 +679,7 @@ class Secretary extends BaseController {
         
         }
             else{
-                echo "Minute already created";
+                $this->view("minutecreatedmsg",["user"=>"secretary"]);
             }
         }
             

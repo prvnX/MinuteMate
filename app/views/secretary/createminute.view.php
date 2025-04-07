@@ -52,6 +52,12 @@
             else{
                 $memoCount=count($memos);
             }
+            if($fwdmemos==null){
+                $fwdmemos=[];
+            }
+            else{
+                $memoCount+=count($fwdmemos);
+            }
             ?>
             <input type="hidden" name="meetingID" value="<?= $meetingId ?>">
             <input type="hidden" name="minuteTitle" value="<?= $meetingId ?>-<?= strtoupper($meetingDetails[0]->meeting_type) ?> Meeting ">
@@ -149,6 +155,13 @@
                             <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)'> </td>
                             <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>
                             <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>";}?>
+
+                            <?php foreach($fwdmemos as $memo){
+                            echo "<tr id='row-".$memo->memo_id."'>
+                            <td>$memo->memo_id - $memo->memo_title</td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)'> </td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>";}?>
                      </table>
                      </div>
                 </div>
@@ -173,6 +186,21 @@
                         <input type="file" name="media[]" id="media" multiple> 
                     </div>
                 </div>
+
+                <div class="sub-container keyword-add">
+                    <h1 class="form-sub-title">Add some keywords for search purposes (Optional)</h1>
+                    <div class="keyword-container">
+                    <div class="keyword-section">
+                        <div class="keyword-input">
+                            
+                        <input type="text" name="keywordlist[]" id="keyword">  
+                        </div>
+                    </div>
+                        <button type="button" id="addkeyword" onclick="addAnotherKeyword()">+</button>
+                    </div>
+                    </div>
+               
+
                 
             </div>
 
@@ -192,6 +220,27 @@
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
         const users = <?php echo json_encode($data['participants']); ?>;
         const form=document.getElementById("minuteForm");
+        function addAnotherKeyword(){
+            const keywordInput = document.getElementsByClassName("keyword-section")[0];
+            const inputbox = document.createElement("div");
+            inputbox.classList.add("keyword-input");
+            const input = document.createElement("input");
+            input.type="text";
+            input.name="keywordlist[]";
+            input.id="keyword";
+            const btn=document.createElement("button");
+            btn.innerHTML="X";
+            btn.type="button";
+            btn.id="keywordClose";
+            btn.onclick=function(){
+                this.parentElement.remove();
+            }
+            btn.classList.add("closeBtn");
+            inputbox.appendChild(input);
+            inputbox.appendChild(btn);
+            keywordInput.appendChild(inputbox);
+
+        }
 
         //dynamically add input selects
         function addAnotherMinute(){
