@@ -1,5 +1,13 @@
 <?php 
-include '../app/views/admin/adminsidebar.view.php'; 
+  $user = "admin";
+  $notification = "notification"; //use notification-dot if there's a notification
+  $menuItems = [
+      "home" => ROOT."/admin",
+      $notification => ROOT."/admin/notifications",
+      "profile" => ROOT."/admin/viewprofile"
+  ];
+  require_once("../app/views/components/new_navbar.php");
+  require_once("../app/views/components/sec_sidebar.php");
 
 // Fetch the user data passed from the controller
 $userData = $data['userData'] ?? null;
