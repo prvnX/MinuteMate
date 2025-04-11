@@ -336,4 +336,105 @@ class Lecturer extends BaseController {
     $this->view("lecturer/acceptmemo");
 
 }
+private function isRestrict($username,$contentID){
+    $restrictions=new Content_restrictions();
+    $res_status=$restrictions->checkRestrictions($username,$contentID);
+    if($res_status[0]->is_restricted==1){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+public function viewminute(){
+    $user=$_SESSION['userDetails']->username;
+    $minuteID=$_GET['minuteID'];
+
+    // get minute details
+    $minute = new Minute();
+    $Meeting_attendence=new Meeting_attendence();
+    $Agenda= new Agenda();
+    $content= new Content();
+    $memo_discussed= new Memo_discussed_meetings();
+    $linkedMinutes=new Minutes_linked();
+    $linkedMedia=new Linked_Media();
+    $minuteDetails = $minute->getMinuteDetails($minuteID);
+    $contentrestrict=false;
+    
+    if(!$minuteDetails) {
+        $this->view('minutenotfound');           
+        return;
+    }
+    else{
+    $user_meetings=$_SESSION['meetingTypes'];
+    $minuteType=$minuteDetails[0]->meeting_type;
+    for($i=0;$i<count($user_meetings);$i++){
+        if($user_meetings[$i]=="IOD"){
+            $user_meetings[$i]="IUD";
+        }
+        $user_meetings[$i]=strtolower($user_meetings[$i]);
+        }
+
+    if(!in_array($minuteType,$user_meetings)){
+
+        $this->view('accessdenied');
+        return;
+    }
+    else{
+    // show($_SESSION);
+    $user_accessible_content=[];
+    $linked_minutes=[];
+    $isContentRestricted=false;
+    $attendence = $Meeting_attendence->getAttendees($minuteDetails[0]->meeting_id);
+    $agendaItems=$Agenda->selectandproject('agenda_item',['meeting_id'=>$minuteDetails[0]->meeting_id]);
+    $contentDetails=$content->select_all(['minute_id'=>$minuteID]);
+    $discussed_memos=$memo_discussed->getMemos($minuteDetails[0]->meeting_id);
+    $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
+    $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
+
+    if($linkedMinutes!= null){
+        if(count($linkedMinutes)>0){
+            foreach($linkedMinutes as $linkedMinute){
+                $linkedMinuteID=$linkedMinute->minutes_linked;
+                $otherMinuteID=$linkedMinute->minute_id;
+                if($linkedMinuteID!=$minuteID){
+                    $linked_minutes[]=$linkedMinuteID;
+                }
+                else if($otherMinuteID!=$minuteID){
+                    $linked_minutes[]=$otherMinuteID;
+                }
+            }
+        }
+
+    }
+    $linked_minutes=array_unique($linked_minutes);
+
+    foreach ($contentDetails as $contentDetail) {
+        $contentID=$contentDetail->content_id;
+        if($this->isRestrict($user,$contentID)){
+            $isContentRestricted=true;
+           continue;
+        }else{
+            $user_accessible_content[]=$contentDetail;
+        }
+    }
+
+    // show($contentDetails);
+    $minuteDetails[0]->attendence = $attendence;
+    $minuteDetails[0]->agendaItems = $agendaItems;
+    $minuteDetails[0]->discussed_memos = $discussed_memos;
+    $minuteDetails[0]->linked_minutes = $linked_minutes;
+    $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
+    // show($minuteDetails[0]);
+    //  show($minuteDetails);
+    $this->view("lecturer/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted]);
+    }
+}
+
+
+
+
+
+}
 }

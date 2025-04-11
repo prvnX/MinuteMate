@@ -61,10 +61,10 @@ $minutes = [
                 </div>
 
                 <div class="buttons">
-                    <a href="<?= ROOT ?>/secretary/viewminutes/<?= $id ?>">
+                    <a href="<?= ROOT ?>/secretary/viewminute?minuteID=<?= $id ?>">
                         <button class="viewbtn">View</button>
                     </a>
-                    <a href="<?= ROOT ?>/secretary/viewminutes/pdf/<?= $id ?>">
+                    <a href="<?= ROOT ?>/secretary/viewminutes/pdf/minuteID=<?= $id ?>">
                         <button class="viewbtn">Download PDF</button>
                     </a>
                 </div>
