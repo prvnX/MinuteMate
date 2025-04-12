@@ -26,5 +26,17 @@ class Minute{
                     WHERE minute.Minute_id= :minute_id";
         return $this->query($query, $data);
     }
+    public function MinuteListByUser($username){
+        $data['username']=$username;
+        $query="SELECT mi.Minute_ID,mi.title,m.meeting_id,m.start_time,m.date,m.meeting_type 
+                FROM $this->table mi
+                INNER JOIN `meeting` m ON mi.MeetingID = m.meeting_id
+                INNER JOIN `meeting_types` mty ON m.type_id = mty.type_id
+                INNER JOIN `user_meeting_types` u ON mty.type_id = u.meeting_type_id
+                WHERE u.accessible_user = :username
+                ORDER BY m.date DESC";
+        return $this->query($query, $data);
+    }
+    
     
 }

@@ -224,7 +224,10 @@ class Lecturer extends BaseController {
         $this->view("lecturer/reviewmemos");
     }
     public function viewminutes() {
-        $this->view("lecturer/viewminutes");
+        $user = $_SESSION['userDetails']->username;
+        $minute = new Minute();
+        $minuteList = $minute->MinuteListByUser($user);
+        $this->view("lecturer/viewminutes", ['minutes' => $minuteList]);
     }
     public function viewsubmittedmemos() {
         $this->view("lecturer/viewsubmittedmemos");

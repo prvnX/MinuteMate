@@ -7,7 +7,7 @@
 </head>
 <body>
 <?php
-    $user="secretary";
+    $user="studentrep";
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile" , "logout" => ROOT."/studentrep/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
