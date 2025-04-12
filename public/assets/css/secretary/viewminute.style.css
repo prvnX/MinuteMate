@@ -1,142 +1,495 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
-
-.navbar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 99%;
-    z-index: 1000;
-   height: 60px;
-  }
-
-.heading{
-    text-align: left;
-    color: #4a008e;
-    margin-bottom: 30px;
-    margin-left: 130px;
-    margin-top: 200px;
-    font-family: 'Georgia', sans-serif;
+:root {
+    --primary: #3b82f6;
+    --secondary: #1e40af;
+    --primary-light: #EEF2FF;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --background: #F8FAFC;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --rhd: #F87171;
+    --iud: #FBBF24;
+    --bom: #60A5FA;
+    --syn: #4ADE80;
 }
-.container{
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+.minute-list-navbar .navbar{
+    height: 55px;
+}
+.minute-list-navbar .navbar form{
+    margin-bottom: 15px;
+}
+.minute-list-navbar .notification-titles{
+    height: 3rem;
+}
+.minute-list-navbar .notification-footer{
+    height: 3rem;
+}
+
+
+/* Main Layout */
+.main-container {
+    margin: auto;
+    width: 90%;
+    height: 80%;
     display: flex;
-    flex-direction: row;
-    gap: 20px;
-    padding: 20px;
+    gap: 2rem;
 }
-.minutelist {
+
+.content-area {
+    flex: 1;
+}
+
+.sidebar {
+    width: 27rem;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+    margin-left: 6rem;
+    margin-top:1rem
+}
+
+.page-header h1 {
+    font-size: 2.3rem;
+    font-weight: 900;
+    color:var(--secondary);
+
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Minutes List */
+.minutes-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 100px;
-    width: 1100px;
-    margin-left: 400px; 
+    gap: 1rem;
+    max-height: 75vh;
     overflow-y: auto;
-    max-height: 800px;
 }
 
-.minuteitem {
+.minute-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #e0e7ff;
-    padding: 15px;
-    border-radius: 20px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.minutecontent h3 {
-    margin: 0;
-    font-size: 18px;
+.minute-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.minutecontent p {
-    margin: 0;
-    font-size: 14px;
-    color: #555;
+.minute-info {
+    flex: 1;
 }
 
-.viewbtn {
-    background-color: #6b5b95;
-    color: #fff;
-    border: none;
-    border-radius: 15px;
-    padding: 10px 20px;
+.minute-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.minute-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.minute-id {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+}
+
+.department-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.rhd {
+    background-color: rgba(248, 113, 113, 0.2);
+    color: var(--rhd);
+}
+
+.iud {
+    background-color: rgba(251, 191, 36, 0.2);
+    color: #B45309;
+}
+
+.bom {
+    background-color: rgba(96, 165, 250, 0.2);
+    color: #1D4ED8;
+}
+
+.syn, .syndicate {
+    background-color: rgba(74, 222, 128, 0.2);
+    color: #15803D;
+}
+
+.minute-details {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.detail-icon {
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.calendar-icon {
+    position: relative;
+}
+
+.time-icon {
+    position: relative;
+}
+
+
+
+.minute-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-button {
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    text-align: center;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.viewbtn:hover {
-    background-color: #3c2d5b;
+.view-button {
+    background-color: var(--primary-light);
+    color: var(--primary);
 }
- 
- 
-.meetinglist {
+
+.view-button:hover {
+    background-color: #d1edff;
+}
+
+.download-button {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.download-button:hover {
+    background-color: #1e40af;
+}
+
+/* Filter Sidebar */
+.filter-sidebar {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    height:75vh;
+}
+
+.filter-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--secondary);
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+
+.filter-section-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.date-inputs {
+    margin-bottom: 1rem;
+}
+
+.date-input {
+    display: block;
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-top: 0.7rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+
+
+
+.checkbox-group {
     display: flex;
     flex-direction: column;
-    margin-top: 200px;
-    gap: 15px;
-    align-items: flex-start;
-    margin-left: 0;
-}
-.rhdbtn{
-    width: 150px;
-    background-color: #ed5f5f;
-    color: black;
-    border: none;
-    border-radius: 15px;
-    padding: 10px 20px;
+    gap: 10px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+   
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Hide the default checkbox */
+  .checkbox-item input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #848484;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;  
-    margin-left: 110px; 
-}
-.rhdbtn:hover {
-    background-color: rgb(201, 52, 52);
+    position: relative;
+  }
+
+  /* Add a checkmark on checked state */
+  .checkbox-item input[type="checkbox"]::after {
+    color: white;
+    position: absolute;
+    font-size: 14px;
+    top: 0;
+    left: 3px;
+    display: none;
+  }
+
+  .checkbox-item input[type="checkbox"]:checked::after {
+    display: block;
+  }
+
+  /* IUD - Yellow */
+  #iud-checkbox:checked {
+    background-color: gold;
+    border-color: gold;
+  }
+
+  /* RHD - Red */
+  #rhd-checkbox:checked {
+    background-color: var(--rhd);
+    border-color: var(--rhd);
+  }
+
+  /* BOM - Blue */
+  #bom-checkbox:checked {
+    background-color: var(--bom);
+    border-color: var(--bom);
+  }
+
+  /* Syndicate - Green */
+  #syndicate-checkbox:checked {
+    background-color: var(--syn);
+    border-color: var(--syn);
+  }
+.checkbox-item label {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-left: 0.5rem;
 }
 
-.iudbtn{
-    width: 150px;
-    background-color: #ffe923;
-    color: black;
-    border: none;
-    border-radius: 15px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;  
-    margin-left: 110px; 
+.filter-select {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
 }
-.iudbtn:hover {
-    background-color: rgb(152, 152, 41);
+.filter-btns{
+    margin-top: 13rem;
 }
 
-.syndicatebtn{
-    width: 150px;
-    background-color: #5fff3b;
-    color: black;
+.filter-button {
+    width: 100%;
+    padding: 0.75rem;
     border: none;
-    border-radius: 15px;
-    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease;  
-    margin-left: 110px; 
-}
-.syndicatebtn:hover {
-    background-color: rgb(43, 138, 43);
-}
-.bombtn{
-    width: 150px;
-    background-color: #58aff6;
-    color: black;
-    border: none;
-    border-radius: 15px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;  
-    margin-left: 110px; 
-}
-.bombtn:hover {
-    background-color: rgb(39, 39, 109);
+    transition: background-color 0.2s;
+    margin-bottom: 0.75rem;
 }
 
-a{
-    text-decoration: none;
+.apply-button {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.apply-button:hover {
+    background-color: #1e40af;
+}
+
+.clear-button {
+    background-color: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.clear-button:hover {
+    background-color: #E2E8F0;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.empty-icon:before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 50px;
+    border: 3px solid var(--text-secondary);
+    border-radius: 4px;
+    top: 5px;
+    left: 10px;
+}
+
+.empty-icon:after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    background: var(--text-secondary);
+    top: 15px;
+    left: 20px;
+    box-shadow: 0 8px 0 var(--text-secondary), 0 16px 0 var(--text-secondary);
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.create-button {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.create-button:hover {
+    background-color: #3730A3;
+}
+
+.hidden{
+    display: none;
+}
+.date-label{
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+.filter-btns{
+    margin-top: 4rem;
+}
+
+
+
+
+
+
+
+
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-container {
+        padding: 1.5rem;
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        order: -1;
+    }
+    
+    .minute-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .minute-actions {
+        margin-top: 1rem;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .search-container {
+        display: none;
+    }
+    
+    .minute-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 }

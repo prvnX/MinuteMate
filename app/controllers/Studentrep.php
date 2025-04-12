@@ -112,7 +112,10 @@ class Studentrep extends BaseController {
 
 
     public function viewminutes() {
-        $this->view("studentrep/viewminutes");
+        $user = $_SESSION['userDetails']->username;
+        $minute = new Minute();
+        $minuteList = $minute->MinuteListByUser($user);
+        $this->view("studentrep/viewminutes", ['minutes' => $minuteList]);
     }
     public function viewsubmittedmemos() {
         $user=$_SESSION['userDetails']->username;

@@ -339,7 +339,10 @@ class Secretary extends BaseController {
         $this->view("secretary/selectmeeting", ['meetings' => $meetings]);
     }
     public function viewminutes() {
-        $this->view("secretary/viewminutes");
+        $user = $_SESSION['userDetails']->username;
+        $minute = new Minute();
+        $minuteList = $minute->MinuteListByUser($user);
+        $this->view("secretary/viewminutes", ['minutes' => $minuteList]);
     }
 
     public function memocart() {

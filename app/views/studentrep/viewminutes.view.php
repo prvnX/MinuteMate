@@ -1,112 +1,161 @@
 <!DOCTYPE html>
-<html lang = "en">
-
+<html lang="en">
 <head>
-    
-    <meta charset= "UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>View minutes</title>
-     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
-     <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/viewminutes.style.css">
-  
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewminute.style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+    <title>Minutes List</title>
 </head>
 
 <body>
-<div class="navbar">
 <?php
-    $user="studentrep";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep" , $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
-   ?>
-
-
-
-
-
-
- 
-
-
-<?php
-$minutes = [
-    "M001" =>[ "title"=>"Minute Title 1", "type" => "rhd"],
-    "M002" =>[ "title"=>"Minute Title 2", "type" => "iud"],
-    "M003" =>[ "title"=>"Minute Title 3", "type" => "bom"],
-    "M004" =>[ "title"=>"Minute Title 4", "type" => "rhd"],
-    "M005" =>[ "title"=>"Minute Title 5", "type" => "syn"],
-    "M006" =>[ "title"=>"Minute Title 6", "type" => "rhd"],
-    "M007" =>[ "title"=>"Minute Title 7", "type" => "syn"],
-    "M008" =>[ "title"=>"Minute Title 8", "type" => "rhd"],
-    "M009" =>[ "title"=>"Minute Title 9", "type" => "iud"],
-    "M0010"=>[ "title"=>"Minute Title 10", "type" => "bom"] 
-];
+    $user = "studentrep";
+    $notification = "notification";
+    $menuItems = [
+        "home" => ROOT . "/studentrep",
+        $notification => ROOT . "/studentrep/notifications",
+        "profile" => ROOT . "/studentrep/viewprofile"
+    ];
+    echo "<div class='minute-list-navbar'>";
+    require_once("../app/views/components/new_navbar.php");
+    echo "</div>";
+    require_once("../app/views/components/std_sidebar.php");
+    $minuteList=$data['minutes'];
 ?>
+    <header class="page-header">
+        <h1>Minutes</h1>
+        <p class="subtitle">View and manage all meeting minutes</p>
+    </header>
 
- 
+    <div class="main-container">
+        <div class="content-area">
+            <div class="minutes-list" id="minutes-list">
+                <?php foreach($minuteList as $minuteCard): ?>
+                <div class="minute-card" data-type=<?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?> data-date=<?=htmlspecialchars($minuteCard->date)?> >
+                    <div class="minute-info">
+                        <h2 class="minute-title">Minute - <?=htmlspecialchars($minuteCard->Minute_ID)?></h2>
+                        <div class="minute-meta">
+                            <span class="minute-id"><?=htmlspecialchars($minuteCard->meeting_id)?></span>
+                            <span class="department-badge <?= htmlspecialchars($minuteCard->meeting_type)?>"><?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?></span>
+                        </div>
+                        <div class="minute-details">
+                            <div class="detail-item"><i class="far fa-calendar"></i><span><?=htmlspecialchars((new DateTime($minuteCard->date))->format('d, F Y'))?></span></div>
+                            <div class="detail-item"><i class="far fa-clock"></i><span><?=htmlspecialchars(substr($minuteCard->start_time,0,-3))?></span></div>
+                        </div>
+                    </div>
+                    <div class="minute-actions">
+                        <a href="<?=ROOT?>/studentrep/viewminute?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button view-button">View</a>
+                        <a href="#" class="action-button download-button">Download</a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+           
+            </div>
 
-   <div class="meetinglist">
-   <h1 class="heading">Minutes</h1>
-   <button class="rhdbtn" id="rhd" >RHD</button> 
-   <button class="iudbtn" id="iud">IUD </button>
-   <button class="syndicatebtn" id="syn">SYNDICATE </button>
-   <button class="bombtn" id="bom">BOM </button>
-</div>
-</div>
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon"></div>
+                <h3>No minutes found</h3>
+                <p>Try adjusting the filters</p>
+            </div>
+        </div>
 
+        <div class="sidebar">
+            <div class="filter-sidebar">
+                <h2 class="filter-header">Apply Filters Here</h2>
 
-
-<div class="container">
-    <div class="minutelist">
-        <?php foreach ($minutes as $id => $details): ?>
-            <div class="minuteitem" data-id="<?= $id ?>">
-                <div class="minutecontent">
-                    <h3><?= $details['title'] ?></h3>
-                    <p><?= $id ?></p>
-                    <span class="minute-type <?= strtolower($details['type']) ?>">
-                    <?= strtoupper($details['type']) ?>
-                    </span>
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Meeting Dates</h3>
+                    <div class="date-inputs">
+                        <label for="date-from" class="date-label">From</label>
+                        <input type="date" id="date-from" class="date-input" placeholder="From">
+                        <label for="date-to" class="date-label">To</label>
+                        <input type="date" id="date-to" class="date-input" placeholder="To">
+                    </div>
                 </div>
 
-                <div class="buttons">
-                    <a href="<?= ROOT ?>/studentrep/viewminutes/<?= $id ?>">
-                        <button class="viewbtn">View</button>
-                    </a>
-                    <a href="<?= ROOT ?>/studentrep/viewminutes/pdf/<?= $id ?>">
-                        <button class="viewbtn">Download PDF</button>
-                    </a>
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Meeting Type</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="iud-checkbox" value="IUD"><label for="iud-checkbox">IUD</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="rhd-checkbox" value="RHD"><label for="rhd-checkbox">RHD</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="bom-checkbox" value="BOM"><label for="bom-checkbox">BOM</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="syndicate-checkbox" value="SYN"><label for="syndicate-checkbox">Syndicate</label></div>
+                    </div>
                 </div>
-            </div> 
-        <?php endforeach; ?>
-    </div> 
-</div> 
 
 
-<script>
-    const minutes = <?= json_encode(array_map(function($item, $id) {
-        return ['id' => $id, 'title' => $item['title'], 'type' => $item['type']];
-    }, $minutes, array_keys($minutes))); ?>;
+            <div class="filter-btns">
+                <button id="apply-filters" class="filter-button apply-button">Apply Filters</button>
+                <button id="clear-filters" class="filter-button clear-button">Clear Filters</button>
+            </div>
+            </div>
+        </div>
+    </div>
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const buttons = ['rhd', 'iud', 'syn', 'bom'];
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateFrom = document.getElementById('date-from');
+            const dateTo = document.getElementById('date-to');
+            const iudCheckbox = document.getElementById('iud-checkbox');
+            const rhdCheckbox = document.getElementById('rhd-checkbox');
+            const bomCheckbox = document.getElementById('bom-checkbox');
+            const syndicateCheckbox = document.getElementById('syndicate-checkbox');
 
-        buttons.forEach(type => {
-            document.getElementById(type).addEventListener('click', () => filterMinutes(type));
-        });
+            const applyButton = document.getElementById('apply-filters');
+            const clearButton = document.getElementById('clear-filters');
+            const minutesList = document.getElementById('minutes-list');
+            const emptyState = document.getElementById('empty-state');
 
-        function filterMinutes(type) {
-            minutes.forEach(item => {
-                const element = document.querySelector(`[data-id="${item.id}"]`);
-                if (element) {
-                    element.style.display = (item.type === type) ? 'flex' : 'none';
-                }
+            applyButton.addEventListener('click', () => {
+                const selectedTypes = [];
+                if (iudCheckbox.checked) selectedTypes.push('IUD');
+                if (rhdCheckbox.checked) selectedTypes.push('RHD');
+                if (bomCheckbox.checked) selectedTypes.push('BOM');
+                if (syndicateCheckbox.checked) selectedTypes.push('SYN');
+
+                const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
+                const toDate = dateTo.value ? new Date(dateTo.value) : null;
+  
+
+                const cards = minutesList.querySelectorAll('.minute-card');
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const type = card.dataset.type;
+                    const date = new Date(card.dataset.date);
+                    const submitter = card.dataset.submittedBy;
+
+                    let isVisible = true;
+
+                    if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
+                    if (fromDate && date < fromDate) isVisible = false;
+                    if (toDate && date > toDate) isVisible = false;
+                    if(!isVisible){
+                        card.classList.add('hidden');
+                    }
+                    if (isVisible) visibleCount++;
+                });
+
+                emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
             });
-        }
-    });
-</script>
 
+            clearButton.addEventListener('click', () => {
+                dateFrom.value = '';
+                dateTo.value = '';
+                iudCheckbox.checked = false;
+                rhdCheckbox.checked = false;
+                bomCheckbox.checked = false;
+                syndicateCheckbox.checked = false;
+
+                document.querySelectorAll('.minute-card').forEach(card => {
+                    card.classList.remove('hidden');
+                });
+                emptyState.style.display = 'none';
+            });
+        });
+    </script>
 </body>
-
 </html>
