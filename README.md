@@ -19,7 +19,7 @@
   <h1>DB got changed(Again 😁)</h1>
 
 
-download the latest db here : <a href='https://drive.google.com/file/d/1Qtf3ArBasbz8gzp5DXKCSTrfnrW8CNBr/view?usp=drive_link'> click here </a>
+download the latest db here : <a href='https://drive.google.com/file/d/1FeokL2N4qzSWAi4OBlbcJpaWe5q4FC5i/view?usp=sharing'> click here </a>
 
 
 install composer to use phpmailer(phpmailer is used to send emails using php) <br>
