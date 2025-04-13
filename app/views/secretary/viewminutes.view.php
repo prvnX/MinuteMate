@@ -138,7 +138,10 @@
                     if(!isVisible){
                         card.classList.add('hidden');
                     }
-                    if (isVisible) visibleCount++;
+                    if (isVisible){
+                        visibleCount++;
+                        card.classList.remove('hidden');
+                    } 
                 });
 
                 emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
