@@ -68,7 +68,7 @@ textarea {
  
 
 .submit-btn {
-    background-color: #7578d4;
+    background-color: #3532dc;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -77,7 +77,7 @@ textarea {
 }
 
 .cancel-btn {
-    background-color:#7578d4;
+    background-color:#f53f3f;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -86,7 +86,7 @@ textarea {
 }
 
 .addfieldbtn {
-    background-color: #7578d4;
+    background-color: #3532dc;
     color: white;
     margin-bottom: 20px;
     padding: 10px 20px;
@@ -136,7 +136,7 @@ button:hover {
     width: 40%;
     background-color: #cb1717; /* Light green for success */
     color: #14c12e; /* Dark green text */
-    border:solid 0.5px #7C4AFF;
+    border:solid 0.5px #5f82f6;
 }
 
 #alertModal .modal-body {
@@ -151,7 +151,7 @@ button:hover {
 }
 
 #alertModal .btn-ok {
-    background-color:#8694e8;
+    background-color:#e886a4;
     color: white;
     padding: 10px 20px;
     border: none;

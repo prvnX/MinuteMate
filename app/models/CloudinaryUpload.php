@@ -28,7 +28,10 @@ class CloudinaryUpload{
 
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
-            echo "cURL Error: " . curl_error($ch) . "<br>";
+            // require_once ROOT.'/assests/showsuccessminute.view.php';
+            require_once __DIR__ . '/../../public/assets/showunsuccessminute.view.php';
+            die;
+            // echo "cURL Error: " . curl_error($ch) . "<br>";
         }
         curl_close($ch);
 

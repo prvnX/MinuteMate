@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unsuccessful</title>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/minuteunsuccess.style.css">
-    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
-
 
 </head>
 <body>
@@ -26,26 +24,16 @@
                 <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="status-text">There was an error uploading media files to the cloud.Check your internet connection</span>
+                <span class="status-text">Please Check your internet connection</span>
             </div>
-            <div class="status-item">
-                <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="status-text">Content forwarding to departments was incompleted</span>
-            </div>
-            <div class="status-item">
-                <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="status-text">Your minute could not be created at this time</span>
-            </div>
+
         </div>
         
         <div class="button-container">
             <button class="btn btn-primary" onclick="tryAgain()">Try Again</button>
             <button class="btn btn-secondary" onclick="contactSupport()">Contact Support</button>
             <button class="btn btn-secondary" onclick="gotodashboard()">Go to the Dashboard</button>
+
         </div>
     </div>
 
@@ -62,6 +50,7 @@
         function gotodashboard(){
             window.location.href='dashboard';
         }
+
 
         // Add shake animation on load
         document.addEventListener('DOMContentLoaded', function() {

@@ -1,4 +1,4 @@
-<?php include '../app/views/admin/adminsidebar.view.php'; ?>
+<?php include '../app/views/components/admin_sidebar.php'; ?>
 
 
 <div class="content">

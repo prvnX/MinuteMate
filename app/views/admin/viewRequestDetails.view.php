@@ -1,6 +1,6 @@
 <?php 
 // Include sidebar and other layout components
-include '../app/views/admin/adminsidebar.view.php'; 
+include '../app/views/components/admin_sidebar.php'; 
 
 // Retrieve the user details passed from the controller
 $userDetails = $data['userDetails']; // The fetched user details

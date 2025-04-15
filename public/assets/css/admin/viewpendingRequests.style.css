@@ -1,7 +1,7 @@
 /* ViewpendingRequests.style.css */
 .content {
     margin-top: 100px; /* Moves the content down */
-    margin-left: 190px; /* Moves the content to the right */
+    margin-left: 50px; /* Moves the content to the right */
 }
 
 /* Position the pending request list relative to the sidebar */

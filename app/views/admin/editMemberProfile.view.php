@@ -1,6 +1,6 @@
 <?php
 // Include sidebar and other layout components
-include '../app/views/admin/adminsidebar.view.php'; 
+include '../app/views/components/admin_sidebar.php'; 
 
 // Use the $userData object passed from the controller
 $userData = $data['userData'];
