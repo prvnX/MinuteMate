@@ -61,7 +61,7 @@
               </div>
               <h2>Past Members</h2>
               <p>view removed members here</p>
-              <a href="<?=ROOT?>/admin/PastMembers">">
+              <a href="<?=ROOT?>/admin/PastMembers">
               <button>view</button>
               </a>
             </div>
@@ -82,13 +82,7 @@
               $showAddEvents=true;
           require_once("../app/views/components/Calender/calandar-view.php"); //call the calander component
         ?>
-        <div class="message-box">
-        <ul>
         
-        <li><i class="fas fa-bell"></i> 2 New Notifications</li>
-        <li><i class="fas fa-calendar-alt"></i> <?php $Message=$data['meetingsinweek']==1 ? $data['meetingsinweek']." Upcoming Meeting" : $data['meetingsinweek']." Upcoming Meetings"; echo $Message;  ?> this week</li>
-    </ul>
-    </div>
         </div>
       </div>
 
