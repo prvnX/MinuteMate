@@ -23,7 +23,7 @@
 
     <input type="text" placeholder="Search within this minute..." class="search-within-minute" id="search-box" oninput="searchContent()">
     <div class="btn-container">
-        <button class="download-btn"><i class="fas fa-download"></i><span> Download</span></button>
+        <button class="download-btn" onclick="trigDownload()"><i class="fas fa-download" ></i><span> Download</span></button>
         <button class="print-btn" onclick="printtrig()"><i class="fas fa-print"></i><span> Print</span></button>
         <button class="report-issue-btn"><i class="fas  fa-file-lines"></i><span>View Report</span></button>
         <button class="comment-btn"><i class="fas fa-comment"></i><span> Comments</span></button>
@@ -231,5 +231,9 @@ function searchContent() {
             }
         }
         }
+
+function trigDownload() {
+    window.location.href = "<?=ROOT?>/download?minuteID=<?=$data['minuteDetails'][0]->Minute_id?>";
+}
 </script>
 </body>
