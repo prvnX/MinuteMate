@@ -117,12 +117,7 @@ class Admin extends BaseController {
         echo json_encode(['success' => false, 'message' => 'Invalid request']);
     }
     
-    
-    
-    
-    
-
-    public function viewRequestDetails() {
+     public function viewRequestDetails() {
         // Retrieve the request ID from the URL
         $requestId = $_GET['id'] ?? null;
         
@@ -193,9 +188,6 @@ class Admin extends BaseController {
             ]);
         }
     }
-    
-    
-   // Controller - Admin.php
 
 public function viewMemberProfile() {
     // Get the user ID from the URL
@@ -431,4 +423,33 @@ public function viewMemberProfile() {
     
     
 }
+function department(){
+
+    $department = new Department();
+    $data['department'] = $department->find_all();
+
+    $this->view('admin/department', $data);
+}
+
+function saveDepartment(){
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $department = new Department();
+
+        $data = [
+            'dep_name' => $_POST['dep_name'],
+            'department_head' => $_POST['department_head'],
+            'dep_email' => $_POST['dep_email']
+        ];
+
+        if (!empty($_POST['id'])) {
+            $department->update($_POST['id'], $data);
+        } else {
+            $department->insert($data);
+        }
+
+        redirect('admin/department');
+    }
+}
+
 }
