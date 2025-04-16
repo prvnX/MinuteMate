@@ -48,7 +48,7 @@
                     </div>
                     <div class="minute-actions">
                         <a href="<?=ROOT?>/lecturer/viewminute?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button view-button">View</a>
-                        <a href="#" class="action-button download-button">Download</a>
+                        <a href="<?=ROOT?>/download?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button download-button">Download</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
