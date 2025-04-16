@@ -5,7 +5,7 @@ class Department{
     protected $allowedColumns = [
         'id',
         'dep_name',
-        'dep_head',
+        'department_head',
         'dep_email'
     ];
 }
