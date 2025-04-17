@@ -64,9 +64,9 @@
                         <div class="icon-bg">
                             <i class="fas fa-sticky-note"></i>
                         </div>
-                        <h2>View Memos</h2>
-                        <p>Access all memos</p>
-                        <a href="<?=ROOT?>/studentrep/viewmemos">
+                        <h2>View Submitted Memos</h2>
+                        <p>Access submitted memos</p>
+                        <a href="<?=ROOT?>/studentrep/viewsubmittedmemos">
                         <button>View Memos</button>
                         </a>
                     </div>
