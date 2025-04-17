@@ -224,29 +224,6 @@ class Studentrep extends BaseController {
         redirect("home");
     }
     
-    public function viewmemos() {
-        $user=$_SESSION['userDetails']->username;
-
-        if($this->isValidRequest())
-        {
-            $memo = new Memo();
-            $memos = $memo->getAllAcceptedMemos();
-            $this->view("studentrep/viewmemos", ['memos'=> $memos]);
-        }
-        else
-        {
-            redirect("login");
-        }
-    }
-
-
-
-
-
-
-
-
-
 
     public function viewmemoreports() {
         if(!isset($_GET['memo'])) {
