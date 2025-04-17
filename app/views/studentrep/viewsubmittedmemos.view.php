@@ -41,7 +41,16 @@
                                     <span class="memo-id"><?=htmlspecialchars($memoitem->meeting_id)?></span>
                                     <span class="department-badge <?= htmlspecialchars($memoitem->meeting_type)?>"><?=htmlspecialchars(strtoupper($memoitem->meeting_type))?></span>
                             </div>
-                            <p>Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?></p>
+                            
+                            <div class="detail-item">
+                                <i class="far fa-calendar"></i>
+                                <span><?= htmlspecialchars((new DateTime($memoitem->date))->format('d, F Y')) ?></span>
+                            </div>
+
+                            <div class="detail-item">
+                                 Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?>
+                            </div>
+
                         </div>
                             <a href="<?=ROOT?>/studentrep/viewmemodetails/?memo_id=<?= $memoitem->memo_id ?>">
                                 <button class="viewbtn">View</button>
