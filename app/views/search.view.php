@@ -1,371 +1,508 @@
 <!DOCTYPE html>
-<head lang="en">
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/search.style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/searching.style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
-
-    <style>
-        .search-nav-bar .search-bar{margin-top: 0rem;} 
-    </style>
+    <title>Search Results</title>
 </head>
+
 <body>
-<div class="search-nav-bar">
 <?php
-    
+    $userType=($_SESSION['userDetails']->role);
+    $user = $userType;
+    $notification = "notification";
+    $menuItems = [
+        "home" => ROOT . "/".$user,
+        $notification => ROOT . "/".$user."/notifications",
+        "profile" => ROOT . "/".$user."/viewprofile"
+    ];
+
+
+    echo "<div class='minute-list-navbar'>";
     require_once("../app/views/components/new_navbar.php");
-    $memoResultsjson = json_encode($memoResults);
-    $memberList= ["Diana", "Jane Doe", "John Smith", "Jane Smith", "John Doe", "Jane Doe", "John Smith", "Jane Smith", "John Doe", "Jane Doe", "John Smith", "Jane Smith", "John Doe", "Jane Doe", "John Smith", "x"];
-    $minuteResultsjson = json_encode($minuteResults);
-    $user="secretary";
-    ?>
-</div>
-<div class="search-heading-container">
-    <h1 class="search-heading">Search Results for "<?=$searchtxt?>"</h1>
-</div>
-<div class="search-item-select">
+    echo "</div>";
+    switch ($userType) {
+        case 'secretary':
+            require_once("../app/views/components/sec_sidebar.php");
+            break;
+        case 'lecturer':
+            require_once("../app/views/components/lec_sidebar.php");
+            break;
+        case 'studentrep':
+            require_once("../app/views/components/std_sidebar.php");
+            break;
+    }
+    $memoList = [
+        (object)[
+            "memo_id" => "MEM001",
+            "meeting_id" => "MTG101",
+            "meeting_type" => "iud",
+            "submitted_date" => "2025-04-02",
+            "submitted_by" => "John Doe"
+        ],
+        (object)[
+            "memo_id" => "MEM002",
+            "meeting_id" => "MTG102",
+            "meeting_type" => "rhd",
+            "submitted_date" => "2025-04-06",
+            "submitted_by" => "Jane Smith"
+        ],
+        (object)[
+            "memo_id" => "MEM003",
+            "meeting_id" => "MTG103",
+            "meeting_type" => "bom",
+            "submitted_date" => "2025-03-29",
+            "submitted_by" => "Alice Johnson"
+        ],
+        (object)[
+            "memo_id" => "MEM004",
+            "meeting_id" => "MTG104",
+            "meeting_type" => "syndicate",
+            "submitted_date" => "2025-04-11",
+            "submitted_by" => "Bob Williams"
+        ],
+        (object)[
+            "memo_id" => "MEM003",
+            "meeting_id" => "MTG103",
+            "meeting_type" => "bom",
+            "submitted_date" => "2025-03-29",
+            "submitted_by" => "Alice Johnson"
+        ],
+        (object)[
+            "memo_id" => "MEM004",
+            "meeting_id" => "MTG104",
+            "meeting_type" => "syndicate",
+            "submitted_date" => "2025-04-11",
+            "submitted_by" => "Bob Williams"
+        ],
+        (object)[
+            "memo_id" => "MEM003",
+            "meeting_id" => "MTG103",
+            "meeting_type" => "bom",
+            "submitted_date" => "2025-03-29",
+            "submitted_by" => "Alice Johnson"
+        ],
+        (object)[
+            "memo_id" => "MEM004",
+            "meeting_id" => "MTG104",
+            "meeting_type" => "syndicate",
+            "submitted_date" => "2025-04-11",
+            "submitted_by" => "Bob Williams"
+        ],
+        (object)[
+            "memo_id" => "MEM003",
+            "meeting_id" => "MTG103",
+            "meeting_type" => "bom",
+            "submitted_date" => "2025-03-29",
+            "submitted_by" => "Alice Johnson"
+        ],
+        (object)[
+            "memo_id" => "MEM004",
+            "meeting_id" => "MTG104",
+            "meeting_type" => "syndicate",
+            "submitted_date" => "2025-04-11",
+            "submitted_by" => "Bob Williams"
+        ]
+    ];
+    $minuteList = [
+        (object)[
+            "Minute_ID" => "MNT001",
+            "meeting_id" => "MTG001",
+            "meeting_type" => "iud",
+            "date" => "2025-04-01",
+            "start_time" => "09:00:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT002",
+            "meeting_id" => "MTG002",
+            "meeting_type" => "rhd",
+            "date" => "2025-04-05",
+            "start_time" => "10:30:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT003",
+            "meeting_id" => "MTG003",
+            "meeting_type" => "bom",
+            "date" => "2025-03-28",
+            "start_time" => "11:00:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT004",
+            "meeting_id" => "MTG004",
+            "meeting_type" => "syndicate",
+            "date" => "2025-04-10",
+            "start_time" => "13:00:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT004",
+            "meeting_id" => "MTG004",
+            "meeting_type" => "syndicate",
+            "date" => "2025-04-10",
+            "start_time" => "13:00:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT004",
+            "meeting_id" => "MTG004",
+            "meeting_type" => "syndicate",
+            "date" => "2025-04-10",
+            "start_time" => "13:00:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT004",
+            "meeting_id" => "MTG004",
+            "meeting_type" => "syndicate",
+            "date" => "2025-04-10",
+            "start_time" => "13:00:00"
+        ],
+        (object)[
+            "Minute_ID" => "MNT004",
+            "meeting_id" => "MTG004",
+            "meeting_type" => "syndicate",
+            "date" => "2025-04-10",
+            "start_time" => "13:00:00"
+        ]
+    ];
+    $minuteListSize= count($minuteList);
+    $memoListSize= count($memoList);
+?>
+    <header class="page-header">
+        <h1>Search Results for "<?=$searchtxt?>"</h1>
+        <div class="search-item-select">
         <div class="btn-container">
-        <button class="search-item-btn clicked-btn" id="memo-btn"onclick="document.querySelector('.memo-results').style.display='block';document.querySelector('.minute-results').style.display='none';document.querySelector('#minutes-btn').classList.remove('clicked-btn');document.querySelector('#memo-btn').classList.add('clicked-btn');">Memos</button>
-        <button class="search-item-btn" id="minutes-btn" onclick="document.querySelector('.minute-results').style.display='block';document.querySelector('.memo-results').style.display='none';document.querySelector('#minutes-btn').classList.add('clicked-btn');document.querySelector('#memo-btn').classList.remove('clicked-btn');">Minutes</button>
-        </div> 
-    </div>
+        <button class="search-item-btn clicked-btn" id="minutes-btn" onclick="handle_minutetab_click()">Minutes</button>
+        <button class="search-item-btn" id="memo-btn"onclick="handle_memotab_click()">Memos</button>
 
-<div class="memo-results">
-    <p><span class="search-count-memo"><?= count($memoResults) ?> </span>memos found</p>
-    <div class="memo-results-container">
-        <div class="memo-results-list">
-           <!-- Results will be displayed here -->
-            </div>
-            <div class="memo-results-filter">
-                <p class="filter-heading">Apply Filters Here</p>
-                <hr>
-                <div class="date-filter">
-                <p>Filter By Submitted  Dates</p>
-                    <label for="date">From</label>
-                    <input type="date" name="from-date" id="from-memo-date">
-                    <label for="date">To</label>
-                    <input type="date" name="end- date" id="to-memo-date">
-                </div>
-                <div class="type-filter">
-                    <p>Filter By Meeting Type</p>
-                 
-                    <label class="checkbox-container iud" >
-                    <input type="checkbox" name="iud" id="memo-iud"/>
-                    <span class="checkmark"></span>
-                    IUD
-                    </label>
-                    <label class="checkbox-container rhd">
-                    <input type="checkbox" name="rhd" id="memo-rhd"/>
-                    <span class="checkmark"></span>
-                    RHD
-                    </label>
-                    <label class="checkbox-container bom">
-                    <input type="checkbox" name="bom" id="memo-bom"/>
-                    <span class="checkmark"></span>
-                     BOM
-                    </label>
-                    <label class="checkbox-container syndicate">
-                    <input type="checkbox" name="syndicate" id="memo-syndicate" />
-                    <span class="checkmark"></span>
-                        Syndicate
-                    </label>
+    </div> 
+    <hr class="main-hr">   
+    </div>
+    <div class="result_count"><span id="count"><?=$minuteListSize?> </span><span id="type"> minutes</span> found.</div>
+
+    </header>
+
+    <div class="main-container">
+        
+        <div class="minute-results">
+        <div class="content-area">
+            <div class="minutes-list" id="minutes-list">
+                <?php foreach($minuteList as $minuteCard): ?>
+                <div class="minute-card" data-type=<?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?> data-date=<?=htmlspecialchars($minuteCard->date)?> >
+                    <div class="minute-info">
+                        <h2 class="minute-title">Minute - <?=htmlspecialchars($minuteCard->Minute_ID)?></h2>
+                        <div class="minute-meta">
+                            <span class="minute-id"><?=htmlspecialchars($minuteCard->meeting_id)?></span>
+                            <span class="department-badge <?= htmlspecialchars($minuteCard->meeting_type)?>"><?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?></span>
+                        </div>
+                        <div class="minute-details">
+                            <div class="detail-item"><i class="far fa-calendar"></i><span><?=htmlspecialchars((new DateTime($minuteCard->date))->format('d, F Y'))?></span></div>
+                            <div class="detail-item"><i class="far fa-clock"></i><span><?=htmlspecialchars(substr($minuteCard->start_time,0,-3))?></span></div>
+                        </div>
                     </div>
-
-                <div class="name-filter">
-                    <p>Filter By Submitted By</p>
-                    <select name="submitted-by" id="submitted-by">
-                        <option value="all">All</option>
-                        <?php foreach ($memberList as $member): ?>
-                            <option value="<?= $member ?>"><?= $member ?></option>
-                        <?php endforeach; ?>
-                        </select>
+                    <div class="minute-actions">
+                        <a href="<?=ROOT?>/secretary/viewminute?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button view-button">View</a>
+                        <a href="<?=ROOT?>/download?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button download-button">Download</a>
+                    </div>
                 </div>
-                <div class="filter-btns-list">
-                    <button class="filter-btns" onclick="applyMemoFilters()">Apply Filters</button>
-                    <button class="filter-btns" onclick="clearMemoFilters()">Clear Filters</button>
-                </div>
+                <?php endforeach; ?>
+           
             </div>
-    </div>
-</div>
 
-<div class="minute-results" style="display:none">
-<p><span class="search-count-minute">
-    <?= count($minuteResults) ?> </span>contents in minutes found</p>
-    <div class="minute-results-container">
-        <div class="minute-results-list">
-           <!-- Results will be displayed here -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon"></div>
+                <h3>No minutes found</h3>
+                <p>Try adjusting the filters</p>
+            </div>
         </div>
-       
-        <div class="memo-results-filter">
-                <p class="filter-heading">Apply Filters Here</p>
-                <hr>
-                <div class="date-filter">
-                <p>Filter By Submitted  Dates</p>
-                    <label for="date">From</label>
-                    <input type="date" name="from-date" id="minute-from-date">
-                    <label for="date">To</label>
-                    <input type="date" name="end- date" id="minute-to-date">
-                </div>
-                <div class="type-filter">
-                    <p>Filter By Meeting Type</p>
-                 
-                    <label class="checkbox-container iud" >
-                    <input type="checkbox" name="iud" id="minute-iud"/>
-                    <span class="checkmark"></span>
-                    IUD
-                    </label>
-                    <label class="checkbox-container rhd">
-                    <input type="checkbox" name="rhd" id="minute-rhd"/>
-                    <span class="checkmark"></span>
-                    RHD
-                    </label>
-                    <label class="checkbox-container bom">
-                    <input type="checkbox" name="bom" id="minute-bom"/>
-                    <span class="checkmark"></span>
-                     BOM
-                    </label>
-                    <label class="checkbox-container syndicate">
-                    <input type="checkbox" name="syndicate" id="minute-syndicate" />
-                    <span class="checkmark"></span>
-                        Syndicate
-                    </label>
+
+        <div class="sidebar">
+            <div class="filter-sidebar">
+                <h2 class="filter-header">Apply Filters Here</h2>
+
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Meeting Dates</h3>
+                    <div class="date-inputs">
+                        <label for="date-from" class="date-label">From</label>
+                        <input type="date" id="date-from" class="date-input" placeholder="From">
+                        <label for="date-to" class="date-label">To</label>
+                        <input type="date" id="date-to" class="date-input" placeholder="To">
                     </div>
-                <div class="filter-btns-list">
-                    <button class="filter-btns" onclick="applyMinuteFilters()">Apply Filters</button>
-                    <button class="filter-btns" onclick="clearMinuteFilters()">Clear Filters</button>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Meeting Type</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="iud-checkbox" value="IUD"><label for="iud-checkbox">IUD</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="rhd-checkbox" value="RHD"><label for="rhd-checkbox">RHD</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="bom-checkbox" value="BOM"><label for="bom-checkbox">BOM</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="syndicate-checkbox" value="SYN"><label for="syndicate-checkbox">Syndicate</label></div>
+                    </div>
+                </div>
+
+
+            <div class="filter-btns">
+                <button id="apply-filters" class="filter-button apply-button">Apply Filters</button>
+                <button id="clear-filters" class="filter-button clear-button">Clear Filters</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="memo-results hide">
+            <div class="content-area">
+                <div class="memo-list" id="memos-list">
+                <?php foreach($memoList as $memo): ?>
+                <div class="memo-card" 
+                    data-type="<?=htmlspecialchars(strtoupper($memo->meeting_type))?>" 
+                    data-date="<?=htmlspecialchars($memo->submitted_date)?>" 
+                    data-submittedBy="<?=htmlspecialchars($memo->submitted_by)?>">
+                <div class="memo-info">
+                <h2 class="memo-title">Memo - <?=htmlspecialchars($memo->memo_id)?></h2>
+                <div class="memo-meta">
+                    <span class="memo-id"><?=htmlspecialchars($memo->meeting_id)?></span>
+                    <span class="department-badge <?=htmlspecialchars($memo->meeting_type)?>">
+                        <?=htmlspecialchars(strtoupper($memo->meeting_type))?>
+                    </span>
+                </div>
+                <div class="memo-details">
+                    <div class="detail-item"><i class="far fa-calendar"></i>
+                        <span><?=htmlspecialchars((new DateTime($memo->submitted_date))->format('d, F Y'))?></span>
+                    </div>
+                    <div class="detail-item"><i class="fas fa-user"></i>
+                        <span><?=htmlspecialchars($memo->submitted_by)?></span>
+                    </div>
                 </div>
             </div>
+            <div class="memo-actions">
+                <a href="<?=ROOT?>/secretary/viewmemo?memoID=<?=$memo->memo_id?>" class="action-button view-button">View</a>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
-<script>
-    const data = <?php echo $memoResultsjson; ?>;
-    const memoResultsList = document.querySelector(".memo-results-list");
-    const minutesData = <?php echo $minuteResultsjson; ?>;
-    const minuteResultsList = document.querySelector(".minute-results-list");
-    function displayMemoResults(dataList){
-        memoResultsList.innerHTML = "";
-        if (dataList.length === 0){
-            memoResultsList.innerHTML = "<p class='no-memos'>0 memos found</p>";
-            return;
-        }
-        dataList.forEach(memo => {
-            const memoItem = document.createElement("div");
-            memoItem.classList.add("memo-item");
-            memoItem.innerHTML = `
-                <div class="memo-content">
-                    <p class="memo-title">${memo.title}</p>
-                    <p>By, ${memo.submitted_by}</p>
-                    <p>- ${memo.date}</p>
-                    <div class="view-btns">
-                    <button class="view-memo-btn" onclick="viewMemo('${memo.id}')">View Memo</button>
-                    <button class="view-memo-btn" onclick="viewMemoReport('${memo.id}')">View Report</button>
+
+    <div id="memos-empty-state" class="empty-state" style="display: none;">
+        <div class="empty-icon"></div>
+        <h3>No memos found</h3>
+        <p>Try adjusting the filters</p>
+    </div>
+
+    </div>
+        <div class="sidebar">
+            <div class="filter-sidebar">
+                <h2 class="filter-header">Apply Filters Here</h2>
+
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Submitted Dates</h3>
+                    <div class="date-inputs">
+                        <label for="memos-date-from" class="date-label">From</label>
+                        <input type="date" id="memos-date-from" class="date-input" placeholder="From">
+                        <label for="memos-date-to" class="date-label">To</label>
+                        <input type="date" id="memos-date-to" class="date-input" placeholder="To">
                     </div>
                 </div>
-            `;
-            memoResultsList.appendChild(memoItem);
-        });
-    }
 
-    function displayMinuteResults(dataList){
-        minuteResultsList.innerHTML = "";
-        if (dataList.length === 0){
-            minuteResultsList.innerHTML = "<p class='no-memos'>0 contents found</p>";
-            return;
-        }
-        dataList.forEach(minute => {
-            const minuteItem = document.createElement("div");
-            minuteItem.classList.add("minute-item");
-            minuteItem.innerHTML = `
-                <div class="minute-content">
-                    <p class="minute-title">${minute.content_title}</p>
-                    <p>Meeting type : ${minute.meeting_type}</p>
-                    <p>- ${minute.meeting_date}</p>
-                    <div class="view-btns">
-                    <button class="view-minute-btn" onclick="viewContent('${minute.content_id}')">View Content</button>
-                    <button class="view-minute-btn" onclick="viewMinute('${minute.minute_id}')">View Minute</button>
-                    <button class="view-minute-btn" onclick="viewMinuteReport('${minute.minute_id}')">View Report</button>
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Submitted Meeting Type</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="memos-iud-checkbox" value="IUD"><label for="iud-checkbox">IUD</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="memos-rhd-checkbox" value="RHD"><label for="rhd-checkbox">RHD</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="memos-bom-checkbox" value="BOM"><label for="bom-checkbox">BOM</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="memos-syndicate-checkbox" value="SYN"><label for="syndicate-checkbox">Syndicate</label></div>
+                    </div>
                 </div>
-                </div>
-            `;
-            minuteResultsList.appendChild(minuteItem);
-        });
-    }
-    displayMemoResults(data);
-    displayMinuteResults(minutesData);
+                <?php 
+                $memoSubmitters = [
+                    "John Doe",
+                    "Jane Smith",
+                    "Alice Johnson",
+                    "Bob Williams",
+                    "Charlie Adams",
+                    "Diana Lewis",
+                    "Ethan Clark",
+                    "Fiona Thompson",
+                    "George Baker",
+                    "Hannah Davis"
+                ];
+                ?>
 
-    function viewMemo(id){
-        window.location.href = `<?=ROOT?>/<?=$user?>/viewmemo?memo=${id}`;
-    }
-    function viewMemoReport(id){
-        window.location.href = `<?=ROOT?>/<?=$user?>/viewmemoreports?memo=${id}`;
-    }
-    function viewMinute(id){
-        window.location.href = `<?=ROOT?>/<?=$user?>/viewminute?minute=${id}`;
-    }
-    function viewMinuteReport(id){
-        window.location.href = `<?=ROOT?>/<?=$user?>/viewminutereports?minute=${id}`;
-    }
-    function viewContent(id){
-        window.location.href = `<?=ROOT?>/<?=$user?>/viewcontent?content=${id}`;
-    }
-    function applyMemoFilters(){
-        const submittedBy = document.getElementById("submitted-by").value;
-        const iud = document.getElementById("memo-iud").checked;
-        const rhd = document.getElementById("memo-rhd").checked;
-        const bom = document.getElementById("memo-bom").checked;
-        const syndicate = document.getElementById("memo-syndicate").checked;
-        const fromDate = document.getElementById("from-memo-date").value;
-        const toDate = document.getElementById("to-memo-date").value;
-        console.log(submittedBy, iud, rhd, bom, syndicate, fromDate, toDate , data);
-        const filteredData = data.filter(memo => {
-            let result = true;
-            if (submittedBy !== "all"){
-                result = (memo.submitted_by.toLowerCase() === submittedBy.toLowerCase());
-            }
-            if (iud && rhd && bom && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "rhd" || memo.meeting_type.toLowerCase() === "bom" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(iud && rhd && bom){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "rhd" || memo.meeting_type.toLowerCase() === "bom");
-            }
-            else if(iud && rhd && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "rhd" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(iud && bom && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "bom" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(rhd && bom && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "rhd" || memo.meeting_type.toLowerCase() === "bom" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(iud && rhd){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "rhd");
-            }
-            else if(iud && bom){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "bom");
-            }
-            else if(iud && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "iud" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(rhd && bom){
-                result = result && (memo.meeting_type.toLowerCase() === "rhd" || memo.meeting_type.toLowerCase() === "bom");
-            }
-            else if(rhd && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "rhd" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(bom && syndicate){
-                result = result && (memo.meeting_type.toLowerCase() === "bom" || memo.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if (iud){
-                result = result && memo.meeting_type.toLowerCase() === "iud";
-            }
-            else if (rhd){
-                result = result && memo.meeting_type.toLowerCase() === "rhd";
-            }
-            else if (bom){
-                result = result && memo.meeting_type.toLowerCase() === "bom";
-            }
-            else if (syndicate){
-                result = result && memo.meeting_type.toLowerCase() === "syndicate";
-            }
-            if (fromDate){
-                result = result && memo.date >= fromDate;
-            }
-            if (toDate){
-                result = result && memo.date <= toDate;
-            }
-            return result;
-        });
-        displayMemoResults(filteredData);
-        updateSearchCount("memo",filteredData.length);
-        }
-    function clearMemoFilters(){
-        document.getElementById("submitted-by").value = "all";
-        document.getElementById("memo-iud").checked = false;
-        document.getElementById("memo-rhd").checked = false;
-        document.getElementById("memo-bom").checked = false;
-        document.getElementById("memo-syndicate").checked = false;
-        document.getElementById("from-memo-date").value = "";
-        document.getElementById("to-memo-date").value = "";
-        displayMemoResults(data);
-        updateSearchCount("memo",data.length);
-        }
-    
-    function applyMinuteFilters(){
-        const iud = document.getElementById("minute-iud").checked;
-        const rhd = document.getElementById("minute-rhd").checked;
-        const bom = document.getElementById("minute-bom").checked;
-        const syndicate = document.getElementById("minute-syndicate").checked;
-        const fromDate = document.getElementById("minute-from-date").value;
-        const toDate = document.getElementById("minute-to-date").value;
-        console.log(iud, rhd, bom, syndicate, fromDate, toDate , minutesData);
-        const filteredData = minutesData.filter(minute => {
-            let result = true;
-            if (iud && rhd && bom && syndicate){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "rhd" || minute.meeting_type.toLowerCase() === "bom" || minute.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(iud && rhd && bom){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "rhd" || minute.meeting_type.toLowerCase() === "bom");
-            }
-            else if(iud && rhd && syndicate){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "rhd" || minute.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(iud && bom && syndicate){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "bom" || minute.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(iud && rhd){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "rhd");
-            }
-            else if(iud && bom){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "bom");
-            }
-            else if(iud && syndicate){
-                result = result && (minute.meeting_type.toLowerCase() === "iud" || minute.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(rhd && bom){
-                result = result && (minute.meeting_type.toLowerCase() === "rhd" || minute.meeting_type.toLowerCase() === "bom");
-            }
-            else if(rhd && syndicate){
-                result = result && (minute.meeting_type.toLowerCase() === "rhd" || minute.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if(bom && syndicate){
-                result = result && (minute.meeting_type.toLowerCase() === "bom" || minute.meeting_type.toLowerCase() === "syndicate");
-            }
-            else if (iud){
-                result = result && minute.meeting_type.toLowerCase() === "iud";
-            }
-            else if (rhd){
-                result = result && minute.meeting_type.toLowerCase() === "rhd";
-            }
-            else if (bom){
-                result = result && minute.meeting_type.toLowerCase() === "bom";
-            }
-            else if (syndicate){
-                result = result && minute.meeting_type.toLowerCase() === "syndicate";
-            }
-            if (fromDate){
-                result = result && minute.meeting_date >= fromDate;
-            }
-            if (toDate){
-                result = result && minute.meeting_date <= toDate;
-            }
-            return result;
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Submitted Member</h3>
+                    <div class="select-group">
+                        <select id="memos-submitted-by" class="select-input">
+                            <option value="all">All</option>
+                            <?php foreach($memoSubmitters as $submitter): ?>
+                                <option value="<?=htmlspecialchars($submitter)?>"><?=htmlspecialchars($submitter)?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+
+            <div class="filter-btns">
+                <button id="memos-apply-filters" class="filter-button apply-button">Apply Filters</button>
+                <button id="memos-clear-filters" class="filter-button clear-button">Clear Filters</button>
+            </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            //minutes
+            const dateFrom = document.getElementById('date-from');
+            const dateTo = document.getElementById('date-to');
+            const iudCheckbox = document.getElementById('iud-checkbox');
+            const rhdCheckbox = document.getElementById('rhd-checkbox');
+            const bomCheckbox = document.getElementById('bom-checkbox');
+            const syndicateCheckbox = document.getElementById('syndicate-checkbox');
+
+            const applyButton = document.getElementById('apply-filters');
+            const clearButton = document.getElementById('clear-filters');
+            const minutesList = document.getElementById('minutes-list');
+            const emptyState = document.getElementById('empty-state');
+
+            //memos
+            const memosDateFrom = document.getElementById('memos-date-from');
+            const memosDateTo = document.getElementById('memos-date-to');
+            const memosIudCheckbox = document.getElementById('memos-iud-checkbox');
+            const memosRhdCheckbox = document.getElementById('memos-rhd-checkbox');
+            const memosBomCheckbox = document.getElementById('memos-bom-checkbox');
+            const memosSyndicateCheckbox = document.getElementById('memos-syndicate-checkbox');
+            const memosSubmitterSelect = document.getElementById('memos-submitted-by');
+
+            const memosApplyButton = document.getElementById('memos-apply-filters');
+            const memosClearButton = document.getElementById('memos-clear-filters');
+            const memosList = document.getElementById('memos-list');
+            const memosEmptyState = document.getElementById('memos-empty-state');
+
+            // Apply filters for minutes
+
+            applyButton.addEventListener('click', () => {
+                const selectedTypes = [];
+                if (iudCheckbox.checked) selectedTypes.push('IUD');
+                if (rhdCheckbox.checked) selectedTypes.push('RHD');
+                if (bomCheckbox.checked) selectedTypes.push('BOM');
+                if (syndicateCheckbox.checked) selectedTypes.push('SYN');
+
+                const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
+                const toDate = dateTo.value ? new Date(dateTo.value) : null;
+  
+
+                const cards = minutesList.querySelectorAll('.minute-card');
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const type = card.dataset.type;
+                    const date = new Date(card.dataset.date);
+                    
+
+                    let isVisible = true;
+
+                    if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
+                    if (fromDate && date < fromDate) isVisible = false;
+                    if (toDate && date > toDate) isVisible = false;
+                    if(!isVisible){
+                        card.classList.add('hidden');
+                    }
+                    if (isVisible){
+                        visibleCount++;
+                        card.classList.remove('hidden');
+                    } 
+                });
+
+                emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
             });
-        displayMinuteResults(filteredData);
-        updateSearchCount("minute",filteredData.length);
-    }
-    function clearMinuteFilters(){
-        document.getElementById("minute-iud").checked = false;
-        document.getElementById("minute-rhd").checked = false;
-        document.getElementById("minute-bom").checked = false;
-        document.getElementById("minute-syndicate").checked = false;
-        document.getElementById("minute-from-date").value = "";
-        document.getElementById("minute-to-date").value = "";
-        displayMinuteResults(minutesData);
-        updateSearchCount("minute",minutesData.length);
-    }
 
-    function updateSearchCount(type,count){
-        document.querySelector(".search-count-"+type).textContent = count+" ";
-    }           
-</script>
+            clearButton.addEventListener('click', () => {
+                dateFrom.value = '';
+                dateTo.value = '';
+                iudCheckbox.checked = false;
+                rhdCheckbox.checked = false;
+                bomCheckbox.checked = false;
+                syndicateCheckbox.checked = false;
+
+                document.querySelectorAll('.minute-card').forEach(card => {
+                    card.classList.remove('hidden');
+                });
+                emptyState.style.display = 'none';
+            });
+
+            // Apply filters for memos
+            memosApplyButton.addEventListener('click', () => {
+                const selectedTypes = [];
+                if (memosIudCheckbox.checked) selectedTypes.push('IUD');
+                if (memosRhdCheckbox.checked) selectedTypes.push('RHD');
+                if (memosBomCheckbox.checked) selectedTypes.push('BOM');
+                if (memosSyndicateCheckbox.checked) selectedTypes.push('SYN');
+
+                const fromDate = memosDateFrom.value ? new Date(memosDateFrom.value) : null;
+                const toDate = memosDateTo.value ? new Date(memosDateTo.value) : null;
+
+                const cards = memosList.querySelectorAll('.memo-card');
+                let visibleCount = 0;
+                cards.forEach(card => {
+                    const type = card.dataset.type;
+                    const date = new Date(card.dataset.date);
+                    const submitter = card.getAttribute('data-submittedBy').toLowerCase();
+                    const selectedSubmitter = memosSubmitterSelect.value.toLowerCase();
+                    console.log(selectedSubmitter);
+                    console.log(submitter);
+
+                    let isVisible = true;
+
+                    if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
+                    if (fromDate && date < fromDate) isVisible = false;
+                    if (toDate && date > toDate) isVisible = false;
+                    if (selectedSubmitter !== 'all' && selectedSubmitter !== '') {
+                        if (submitter !== selectedSubmitter) isVisible = false;
+                    }
+                    if(!isVisible){
+                        card.classList.add('hidden');
+                    }
+                    if (isVisible){
+                        visibleCount++;
+                        card.classList.remove('hidden');
+                    }
+                });
+                memosEmptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
+            });
+            memosClearButton.addEventListener('click', () => {
+                memosDateFrom.value = '';
+                memosDateTo.value = '';
+                memosIudCheckbox.checked = false;
+                memosRhdCheckbox.checked = false;
+                memosBomCheckbox.checked = false;
+                memosSyndicateCheckbox.checked = false;
+                memosSubmitterSelect.value = 'all';
+
+
+                document.querySelectorAll('.memo-card').forEach(card => {
+                    card.classList.remove('hidden');
+                });
+                memosEmptyState.style.display = 'none';
+            });
+        });
+
+        function handle_minutetab_click(){
+            document.querySelector('.minute-results').classList.remove('hide');
+            document.querySelector('.memo-results').classList.add('hide');
+            document.querySelector("#minutes-btn").classList.add('clicked-btn');
+            document.querySelector("#memo-btn").classList.remove('clicked-btn');
+            document.querySelector("#count").innerText = <?=$minuteListSize?>;
+            document.querySelector("#type").innerText = " Minutes";
+        }
+        function handle_memotab_click(){
+            document.querySelector('.minute-results').classList.add('hide');
+            document.querySelector('.memo-results').classList.remove('hide');
+            document.querySelector("#memo-btn").classList.add('clicked-btn');
+            document.querySelector("#minutes-btn").classList.remove('clicked-btn');
+            document.querySelector("#count").innerText = <?=$memoListSize?>;
+            document.querySelector("#type").innerText = " Memos";
+        }   
+    </script>
 </body>
+</html>
