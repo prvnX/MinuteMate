@@ -230,8 +230,54 @@ class Lecturer extends BaseController {
         $this->view("lecturer/viewminutes", ['minutes' => $minuteList]);
     }
     public function viewsubmittedmemos() {
-        $this->view("lecturer/viewsubmittedmemos");
+        $user = $_SESSION['userDetails']->username;
+        $memo = new Memo();
+        $memoList = $memo->getMemosByUser($user);
+        $this->view("lecturer/viewsubmittedmemos", ['memos'=>$memoList]);
     }
+
+    public function isValidRequest(){
+        if(isset($_SESSION['userDetails'])){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function viewMemoDetails()
+    
+    {$memo_id=$_GET['memo_id'];
+    error_log("Memo ID: " . $memo_id); //debugging
+    if($this->isValidRequest())
+    {
+       if(!$memo_id)
+       {
+        $_SESSION['flash_error'] = "Memo ID not provided.";
+        redirect("secretary/viewsubmittedmemos");
+        return;
+       }
+
+        $memoModel = new Memo;
+        $memo = $memoModel->getMemoById($memo_id);
+
+        error_log("Memo Data: " . json_encode($memo)); //debugging
+
+        if($memo)
+        {
+            $this->view("secretary/viewmemodetails", ['memo'=>$memo]);
+        }
+        else
+        {
+            $_SESSION['flash_error'] = "Memo not found.";
+            redirect("secretary/viewmemos");
+        }
+    }
+    else
+    {
+        redirect("login");
+    }
+}
      
     
 

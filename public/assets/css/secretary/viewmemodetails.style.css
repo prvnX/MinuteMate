@@ -1,5 +1,20 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+.memo-list-navbar .navbar{
+    height: 55px;
+}
+.memo-list-navbar .navbar form{
+    margin-bottom: 15px;
+}
+.memo-list-navbar .notification-titles{
+    height: 3rem;
+}
+.memo-list-navbar .notification-footer{
+    height: 3rem;
+}
+
+
 .heading
 {
     text-align: center;
