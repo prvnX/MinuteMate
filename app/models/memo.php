@@ -23,20 +23,19 @@
         }
 
         public function getAllMemos(){
-            $query = "SELECT * 
-                      FROM $this->table
-                      ORDER BY memo_id 
-                      DESC;";
+            $query = "SELECT memo.*, meeting.meeting_type, meeting.date
+                      FROM $this->table AS memo
+                      LEFT JOIN meeting ON memo.meeting_id = meeting.meeting_id
+                      ORDER BY memo.memo_id DESC;";
             return $this->query($query);
         }
 
         public function getAllAcceptedMemos(){
-            $query = "SELECT * 
-                      FROM $this->table
-                      WHERE status='accepted'
-                      ORDER BY memo_id 
-                      DESC;";
-            return $this->query($query);
+            $query = "SELECT memo.*, meeting.meeting_type, meeting.date
+                      FROM $this->table AS memo
+                      LEFT JOIN meeting ON memo.meeting_id = meeting.meeting_id
+                      ORDER BY memo.memo_id DESC;";
+            return $this->query($query);;
         }
 
         public function getMemoById($memo_id)
