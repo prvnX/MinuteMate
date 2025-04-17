@@ -25,8 +25,14 @@ class Studentrep extends BaseController {
 
 
     public function search() {
-        echo "search";
-        $this->view("404");
+        
+        $searchtxt=$_POST['search'];
+        if($searchtxt=="" || !$searchtxt){
+            $this->view("studentrep/dashboard");
+        }
+        else{
+        $this->view("search",["searchtxt"=>$searchtxt]);
+        }
     }
     public function entermemo() {
         $user=$_SESSION['userDetails']->username;

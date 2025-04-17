@@ -1,0 +1,561 @@
+:root {
+    --primary: #3b82f6;
+    --secondary: #1e40af;
+    --primary-light: #EEF2FF;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --background: #F8FAFC;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --rhd: #F87171;
+    --iud: #FBBF24;
+    --bom: #60A5FA;
+    --syn: #4ADE80;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+.minute-list-navbar .navbar{
+    height: 55px;
+}
+.minute-list-navbar .navbar form{
+    margin-bottom: 15px;
+}
+.minute-list-navbar .notification-titles{
+    height: 3rem;
+}
+.minute-list-navbar .notification-footer{
+    height: 3rem;
+}
+
+.page-header .result_count {
+    font-size: 1.1rem;
+    font-weight:normal;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+
+}
+.page-header .result_count #count{
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: var(--secondary);
+}
+.search-item-btn{
+    background: transparent;
+    border: none;
+    cursor:pointer;
+    margin-top: 20px;
+    margin-right:20px;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    font-weight: 500;
+
+}
+.search-item-btn:hover{
+    color: var(--secondary);
+}
+.page-header .main-hr{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    border: 0;
+    height: 1px;
+    background-color: var(--border);
+    width: 65%;
+    display: inline-block;
+
+}
+.page-header .clicked-btn{
+    color: var(--secondary);
+    border-bottom: 4px solid var(--secondary);
+    padding-bottom: 0.5rem;
+    font-weight: 600;
+    
+}
+
+
+
+
+
+.minute-results {
+    margin: auto;
+    width: 90%;
+    height: 80%;
+    display: flex;
+    gap: 2rem;
+}
+.memo-results {
+    margin: auto;
+    width: 90%;
+    height: 80%;
+    display: flex;
+    gap: 2rem;
+}
+.hide{
+    display: none;
+}
+
+.content-area {
+    flex: 1;
+}
+
+.sidebar {
+    width: 27rem;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+    margin-left: 6rem;
+    margin-top:1rem
+}
+
+.page-header h1 {
+    font-size: 2.3rem;
+    font-weight: 900;
+    color:var(--secondary);
+
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Minutes List */
+.minutes-list,.memo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+.minute-card, .memo-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.minute-card:hover ,.memo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.minute-info, .memo-info {
+    flex: 1;
+}
+
+.minute-title, .memo-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.minute-meta, .memo-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.minute-id, .memo-id {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+}
+
+.department-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.rhd {
+    background-color: rgba(248, 113, 113, 0.2);
+    color: var(--rhd);
+}
+
+.iud {
+    background-color: rgba(251, 191, 36, 0.2);
+    color: #B45309;
+}
+
+.bom {
+    background-color: rgba(96, 165, 250, 0.2);
+    color: #1D4ED8;
+}
+
+.syn, .syndicate {
+    background-color: rgba(74, 222, 128, 0.2);
+    color: #15803D;
+}
+
+.minute-details, .memo-details {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.detail-icon {
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.calendar-icon {
+    position: relative;
+}
+
+.time-icon {
+    position: relative;
+}
+
+
+
+.minute-actions, .memo-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-button {
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    text-align: center;
+    cursor: pointer;
+}
+
+.view-button {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.view-button:hover {
+    background-color: #d1edff;
+}
+
+.download-button {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.download-button:hover {
+    background-color: #1e40af;
+}
+
+/* Filter Sidebar */
+.filter-sidebar {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    height:75vh;
+}
+
+.filter-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--secondary);
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+
+.filter-section-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.date-inputs {
+    margin-bottom: 1rem;
+}
+
+.date-input {
+    display: block;
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-top: 0.7rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+
+
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+   
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Hide the default checkbox */
+  .checkbox-item input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #848484;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  /* Add a checkmark on checked state */
+  .checkbox-item input[type="checkbox"]::after {
+    color: white;
+    position: absolute;
+    font-size: 14px;
+    top: 0;
+    left: 3px;
+    display: none;
+  }
+
+  .checkbox-item input[type="checkbox"]:checked::after {
+    display: block;
+  }
+
+  /* IUD - Yellow */
+  #iud-checkbox:checked, #memos-iud-checkbox:checked {
+    background-color: gold;
+    border-color: gold;
+  }
+
+  /* RHD - Red */
+  #rhd-checkbox:checked, #memos-rhd-checkbox:checked {
+    background-color: var(--rhd);
+    border-color: var(--rhd);
+  }
+
+  /* BOM - Blue */
+  #bom-checkbox:checked, #memos-bom-checkbox:checked {
+    background-color: var(--bom);
+    border-color: var(--bom);
+  }
+
+  /* Syndicate - Green */
+  #syndicate-checkbox:checked , #memos-syndicate-checkbox:checked {
+    background-color: var(--syn);
+    border-color: var(--syn);
+  }
+.checkbox-item label {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-left: 0.5rem;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+.filter-btns{
+    margin-top: 13rem;
+}
+
+.filter-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 0.75rem;
+}
+
+.apply-button {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.apply-button:hover {
+    background-color: #1e40af;
+}
+
+.clear-button {
+    background-color: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.clear-button:hover {
+    background-color: #E2E8F0;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.empty-icon:before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 50px;
+    border: 3px solid var(--text-secondary);
+    border-radius: 4px;
+    top: 5px;
+    left: 10px;
+}
+
+.empty-icon:after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    background: var(--text-secondary);
+    top: 15px;
+    left: 20px;
+    box-shadow: 0 8px 0 var(--text-secondary), 0 16px 0 var(--text-secondary);
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.create-button {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.create-button:hover {
+    background-color: #3730A3;
+}
+
+.hidden{
+    display: none;
+}
+.date-label{
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+.filter-btns{
+    margin-top: 4rem;
+}
+.memo-results .filter-sidebar .date-input {
+    width: 40%;
+    display: inline-block;
+
+}
+.memo-results .filter-sidebar select{
+    width: 100%;
+    display: inline-block;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .minute-results {
+        padding: 1.5rem;
+        flex-direction: column;
+    }
+    .memo-results {
+        padding: 1.5rem;
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        order: -1;
+    }
+    
+    .minute-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .minute-actions {
+        margin-top: 1rem;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .search-container {
+        display: none;
+    }
+    
+    .minute-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
