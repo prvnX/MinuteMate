@@ -41,8 +41,12 @@
                 <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?>">
                     <div class="memocontent">
                     <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
-                    <p>Meeting ID: <?= htmlspecialchars($memoitem->memo_id) ?></p>
-            </div>
+                    <div class="memo-meta">
+                            <span class="memo-id"><?=htmlspecialchars($memoitem->meeting_id)?></span>
+                            <span class="department-badge <?= htmlspecialchars($memoitem->meeting_type)?>"><?=htmlspecialchars(strtoupper($memoitem->meeting_type))?></span>
+                        </div>
+                    <p>Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?></p>
+                </div>
             <a href="<?=ROOT?>/secretary/viewmemodetails/?memo_id=<?= $memoitem->memo_id ?>">
                 <button class="viewbtn">View</button>
             </a>

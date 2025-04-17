@@ -106,6 +106,46 @@ body {
     font-size: 14px;
     color: #555;
 }
+.memo-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.memo-id {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+}
+
+.department-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.rhd {
+    background-color: rgba(248, 113, 113, 0.2);
+    color: var(--rhd);
+}
+
+.iud {
+    background-color: rgba(251, 191, 36, 0.2);
+    color: #B45309;
+}
+
+.bom {
+    background-color: rgba(96, 165, 250, 0.2);
+    color: #1D4ED8;
+}
+
+.syn, .syndicate {
+    background-color: rgba(74, 222, 128, 0.2);
+    color: #15803D;
+}
+
 
 .viewbtn {
     background-color: var(--primary);
