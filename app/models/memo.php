@@ -48,11 +48,13 @@
 
         public function getMemosByUser($user)
         {
-            $query = "SELECT *
-                      FROM $this->table 
-                      WHERE submitted_by=:user;";
+            $query = "SELECT m.*, mt.meeting_type, mt.date 
+              FROM $this->table m
+              JOIN meeting mt ON m.meeting_id = mt.meeting_id
+              WHERE m.submitted_by = :username
+              ORDER BY m.memo_id DESC";
 
-            return $this->query($query, ['user'=> $user]);
+                return $this->query($query, ['username' => $user]);
         }
 
         public function getMemosForMemocart($user)

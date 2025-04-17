@@ -12,20 +12,21 @@
 
 <body>
 
-<?php
-    $user="secretary";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    
-    echo "<div class='memo-list-navbar'>";
-    require_once("../app/views/components/new_navbar.php");
-    echo "</div>";
-    require_once("../app/views/components/sec_sidebar.php");
-
-    
-
-   ?>
+    <div class= "navbar">
+        <?php
+            $user = "lecturer";
+            $notification = "notification";
+            $menuItems = [
+                "home" => ROOT . "/lecturer",
+                $notification => ROOT . "/lecturer/notifications",
+                "profile" => ROOT . "/lecturer/viewprofile"
+            ];
+            echo "<div class='minute-list-navbar'>";
+            require_once("../app/views/components/new_navbar.php");
+            echo "</div>";
+            require_once("../app/views/components/lec_sidebar.php");
+        ?>
+    </div>
 
     <div class="heading">
              <h1 class="memo-title">Memo Details</h1>
@@ -49,7 +50,7 @@
         </div>
 
        
-        <a href="<?= ROOT ?>/secretary/viewmemos" class="btn-back">Back to Memos</a>
+        <a href="<?= ROOT ?>/lecturer/viewsubmittedmemos" class="btn-back">Back to Memos</a>
     <?php else : ?>
         <p class="memo-error">Memo not found.</p>
     <?php endif; ?>
