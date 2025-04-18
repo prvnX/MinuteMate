@@ -17,13 +17,6 @@ class Studentrep extends BaseController {
         $this->view("studentrep/dashboard",["meetingsinweek" => $meetingsinweek]);
     }
 
-
-
-
-
-
-
-
     public function search() {
         
         $searchtxt=$_POST['search'];
@@ -31,7 +24,17 @@ class Studentrep extends BaseController {
             $this->view("studentrep/dashboard");
         }
         else{
-        $this->view("search",["searchtxt"=>$searchtxt]);
+            $searchModel=new Search();
+            $users=new User();
+            $minuteResults=$searchModel->minute_search($searchtxt);
+            $memoResults=$searchModel->memo_search($searchtxt);
+            $names=$users->getUserNameList();
+            $memosSubmitters=[];
+            foreach($names as $name){
+                $memosSubmitters[]=$name->full_name;
+            }
+                
+            $this->view("search",["searchtxt"=>$searchtxt,"minuteResults"=>$minuteResults,"memoResults"=>$memoResults,'memosSubmitters'=>$memosSubmitters]);
         }
     }
     public function entermemo() {
@@ -49,12 +52,6 @@ class Studentrep extends BaseController {
         }
        
     }
-
-
-
-
-
-
 
     
     public function findMeetingsToEnterMemos($date){
@@ -101,20 +98,11 @@ class Studentrep extends BaseController {
             $memo->insert($memoData);
              $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
+        else{
+            $this->view("showunsuccessmememo", ["user"=> "studentrep"])
+        }
         
     }
-
-    
-
-
-
-
-
-
-
-
-
-
 
 
     public function viewminutes() {

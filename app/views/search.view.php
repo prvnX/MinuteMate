@@ -36,138 +36,21 @@
             require_once("../app/views/components/std_sidebar.php");
             break;
     }
-    $memoList = [
-        (object)[
-            "memo_id" => "MEM001",
-            "meeting_id" => "MTG101",
-            "meeting_type" => "iud",
-            "submitted_date" => "2025-04-02",
-            "submitted_by" => "John Doe"
-        ],
-        (object)[
-            "memo_id" => "MEM002",
-            "meeting_id" => "MTG102",
-            "meeting_type" => "rhd",
-            "submitted_date" => "2025-04-06",
-            "submitted_by" => "Jane Smith"
-        ],
-        (object)[
-            "memo_id" => "MEM003",
-            "meeting_id" => "MTG103",
-            "meeting_type" => "bom",
-            "submitted_date" => "2025-03-29",
-            "submitted_by" => "Alice Johnson"
-        ],
-        (object)[
-            "memo_id" => "MEM004",
-            "meeting_id" => "MTG104",
-            "meeting_type" => "syndicate",
-            "submitted_date" => "2025-04-11",
-            "submitted_by" => "Bob Williams"
-        ],
-        (object)[
-            "memo_id" => "MEM003",
-            "meeting_id" => "MTG103",
-            "meeting_type" => "bom",
-            "submitted_date" => "2025-03-29",
-            "submitted_by" => "Alice Johnson"
-        ],
-        (object)[
-            "memo_id" => "MEM004",
-            "meeting_id" => "MTG104",
-            "meeting_type" => "syndicate",
-            "submitted_date" => "2025-04-11",
-            "submitted_by" => "Bob Williams"
-        ],
-        (object)[
-            "memo_id" => "MEM003",
-            "meeting_id" => "MTG103",
-            "meeting_type" => "bom",
-            "submitted_date" => "2025-03-29",
-            "submitted_by" => "Alice Johnson"
-        ],
-        (object)[
-            "memo_id" => "MEM004",
-            "meeting_id" => "MTG104",
-            "meeting_type" => "syndicate",
-            "submitted_date" => "2025-04-11",
-            "submitted_by" => "Bob Williams"
-        ],
-        (object)[
-            "memo_id" => "MEM003",
-            "meeting_id" => "MTG103",
-            "meeting_type" => "bom",
-            "submitted_date" => "2025-03-29",
-            "submitted_by" => "Alice Johnson"
-        ],
-        (object)[
-            "memo_id" => "MEM004",
-            "meeting_id" => "MTG104",
-            "meeting_type" => "syndicate",
-            "submitted_date" => "2025-04-11",
-            "submitted_by" => "Bob Williams"
-        ]
-    ];
-    $minuteList = [
-        (object)[
-            "Minute_ID" => "MNT001",
-            "meeting_id" => "MTG001",
-            "meeting_type" => "iud",
-            "date" => "2025-04-01",
-            "start_time" => "09:00:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT002",
-            "meeting_id" => "MTG002",
-            "meeting_type" => "rhd",
-            "date" => "2025-04-05",
-            "start_time" => "10:30:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT003",
-            "meeting_id" => "MTG003",
-            "meeting_type" => "bom",
-            "date" => "2025-03-28",
-            "start_time" => "11:00:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT004",
-            "meeting_id" => "MTG004",
-            "meeting_type" => "syndicate",
-            "date" => "2025-04-10",
-            "start_time" => "13:00:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT004",
-            "meeting_id" => "MTG004",
-            "meeting_type" => "syndicate",
-            "date" => "2025-04-10",
-            "start_time" => "13:00:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT004",
-            "meeting_id" => "MTG004",
-            "meeting_type" => "syndicate",
-            "date" => "2025-04-10",
-            "start_time" => "13:00:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT004",
-            "meeting_id" => "MTG004",
-            "meeting_type" => "syndicate",
-            "date" => "2025-04-10",
-            "start_time" => "13:00:00"
-        ],
-        (object)[
-            "Minute_ID" => "MNT004",
-            "meeting_id" => "MTG004",
-            "meeting_type" => "syndicate",
-            "date" => "2025-04-10",
-            "start_time" => "13:00:00"
-        ]
-    ];
-    $minuteListSize= count($minuteList);
-    $memoListSize= count($memoList);
+    $memoList = $data['memoResults'];
+    if($memoList!=null){
+        $memoListSize= count($memoList);
+    }
+    else{
+        $memoListSize=0;
+    }
+    $minuteList = $data['minuteResults'];
+    if($minuteList!=null){
+        $minuteListSize= count($minuteList);
+    }
+    else{
+        $minuteListSize=0;
+    }
+
 ?>
     <header class="page-header">
         <h1>Search Results for "<?=$searchtxt?>"</h1>
@@ -188,6 +71,7 @@
         <div class="minute-results">
         <div class="content-area">
             <div class="minutes-list" id="minutes-list">
+                <?php if($minuteListSize>0): ?>
                 <?php foreach($minuteList as $minuteCard): ?>
                 <div class="minute-card" data-type=<?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?> data-date=<?=htmlspecialchars($minuteCard->date)?> >
                     <div class="minute-info">
@@ -202,11 +86,17 @@
                         </div>
                     </div>
                     <div class="minute-actions">
-                        <a href="<?=ROOT?>/secretary/viewminute?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button view-button">View</a>
-                        <a href="<?=ROOT?>/download?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button download-button">Download</a>
+                        <a href="<?=ROOT?>/<?=$user?>/viewminute?minuteID=<?=$minuteCard->Minute_ID?>" class="action-button view-button">View</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
+                <?php else: ?>
+                    <div id="empty-state-search" class="empty-state" >
+                    <div class="empty-icon"></div>
+                    <h3>No minutes found for the search term</h3>
+                    <p>Try adjusting the search term</p>
+                    </div>
+                <?php endif; ?>
            
             </div>
 
@@ -253,13 +143,14 @@
         <div class="memo-results hide">
             <div class="content-area">
                 <div class="memo-list" id="memos-list">
+                <?php if($memoListSize>0): ?>
                 <?php foreach($memoList as $memo): ?>
                 <div class="memo-card" 
                     data-type="<?=htmlspecialchars(strtoupper($memo->meeting_type))?>" 
                     data-date="<?=htmlspecialchars($memo->submitted_date)?>" 
                     data-submittedBy="<?=htmlspecialchars($memo->submitted_by)?>">
                 <div class="memo-info">
-                <h2 class="memo-title">Memo - <?=htmlspecialchars($memo->memo_id)?></h2>
+                <h2 class="memo-title"> <?=htmlspecialchars($memo->memo_title)?></h2>
                 <div class="memo-meta">
                     <span class="memo-id"><?=htmlspecialchars($memo->meeting_id)?></span>
                     <span class="department-badge <?=htmlspecialchars($memo->meeting_type)?>">
@@ -276,10 +167,17 @@
                 </div>
             </div>
             <div class="memo-actions">
-                <a href="<?=ROOT?>/secretary/viewmemo?memoID=<?=$memo->memo_id?>" class="action-button view-button">View</a>
+                <a href="<?=ROOT?>/<?=$user?>/viewmemodetails/?memo_id=<?=$memo->memo_id?>" class="action-button view-button">View</a>
             </div>
         </div>
         <?php endforeach; ?>
+        <?php else: ?>
+            <div id="empty-state-memo-search" class="empty-state" >
+            <div class="empty-icon"></div>
+            <h3>No memos found for the search term</h3>
+            <p>Try adjusting the search term</p>
+            </div>
+        <?php endif; ?>
     </div>
 
     <div id="memos-empty-state" class="empty-state" style="display: none;">
@@ -313,18 +211,7 @@
                     </div>
                 </div>
                 <?php 
-                $memoSubmitters = [
-                    "John Doe",
-                    "Jane Smith",
-                    "Alice Johnson",
-                    "Bob Williams",
-                    "Charlie Adams",
-                    "Diana Lewis",
-                    "Ethan Clark",
-                    "Fiona Thompson",
-                    "George Baker",
-                    "Hannah Davis"
-                ];
+                $memoSubmitters = $data['memosSubmitters'];
                 ?>
 
                 <div class="filter-section">
@@ -359,11 +246,21 @@
             const rhdCheckbox = document.getElementById('rhd-checkbox');
             const bomCheckbox = document.getElementById('bom-checkbox');
             const syndicateCheckbox = document.getElementById('syndicate-checkbox');
+            const minutecnt= <?= $minuteListSize ?>;
+            
+                
 
             const applyButton = document.getElementById('apply-filters');
             const clearButton = document.getElementById('clear-filters');
             const minutesList = document.getElementById('minutes-list');
             const emptyState = document.getElementById('empty-state');
+            if(minutecnt==0){
+                applyButton.disabled = true;
+                applyButton.style.cursor = 'not-allowed';
+                applyButton.style.backgroundColor = '#ccc';
+                clearButton.disabled = true;
+                clearButton.style.cursor = 'not-allowed';
+            }
 
             //memos
             const memosDateFrom = document.getElementById('memos-date-from');
@@ -373,15 +270,25 @@
             const memosBomCheckbox = document.getElementById('memos-bom-checkbox');
             const memosSyndicateCheckbox = document.getElementById('memos-syndicate-checkbox');
             const memosSubmitterSelect = document.getElementById('memos-submitted-by');
+            const memocnt= <?= $memoListSize ?>;
+
 
             const memosApplyButton = document.getElementById('memos-apply-filters');
             const memosClearButton = document.getElementById('memos-clear-filters');
             const memosList = document.getElementById('memos-list');
             const memosEmptyState = document.getElementById('memos-empty-state');
+            if(memocnt==0){
+                memosApplyButton.disabled = true;
+                memosApplyButton.style.cursor = 'not-allowed';
+                memosApplyButton.style.backgroundColor = '#ccc';
+                memosClearButton.disabled = true;
+                memosClearButton.style.cursor = 'not-allowed';
+            }
 
             // Apply filters for minutes
 
             applyButton.addEventListener('click', () => {
+                
                 const selectedTypes = [];
                 if (iudCheckbox.checked) selectedTypes.push('IUD');
                 if (rhdCheckbox.checked) selectedTypes.push('RHD');
