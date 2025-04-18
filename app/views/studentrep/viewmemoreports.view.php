@@ -26,9 +26,20 @@
     <!-- Header -->
     <div class="header">
         <h1>Memo Report</h1>
+        <h2>Memo Details</h2>
     </div>
 
-    <!-- Date and Time -->
+ 
+    <div class="form-group">
+        <label>Title:</label>
+        <span><?= htmlspecialchars($data['title']) ?></span>
+    </div>
+    <div class="form-group">
+        <label>Meeting Type:</label>
+        <span><?= htmlspecialchars($data['meeting_type']) ?></span>
+    </div>
+
+
     <div class="form-group">
         <label>memo Id:</label>
         <span><?= htmlspecialchars($data['id']) ?></span>
@@ -49,13 +60,26 @@
         <label>Status:</label>
         <span><?= htmlspecialchars($data['status']) ?></span>
     </div>
-    <div class="form-group">
-        <label>Linked Memos:</label>
-        <span><?= htmlspecialchars($data['linked_memos']) ?></span>
-    </div>
+    
     <div class="form-group">
         <label>Author:</label>
         <span><?= htmlspecialchars($data['author']) ?></span>
+    </div>
+    <div class="header">
+    <h3>Flow of the Memo through Different Meetings</h3>
+
+    <div class="timeline">
+    <?php foreach ($data['timeline'] as $step): ?>
+        <div class="timeline-step">
+            <div class="dot-wrapper">
+                <div class="dot" data-tooltip="<?= htmlspecialchars($step['label'] . ': ' . $step['date']) ?>"></div>
+            </div>
+            <div class="label"><?= htmlspecialchars($step['label']) ?></div>
+            <div class="date"><?= htmlspecialchars($step['date']) ?></div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
     </div>
 
     <!-- Footer -->

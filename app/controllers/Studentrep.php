@@ -256,11 +256,24 @@ class Studentrep extends BaseController {
         
         $data = [
             'id' =>$memoid,
-            'date' => '2024-11-16',
+            
             'time' => '2:00 PM',
             'status' => 'Approved',
-            'linked_memos' => 'Memo #11, Memo #12',
-            'author' => 'John Doe'
+             
+            'author' => 'John Doe',
+            'title' => 'Project X',
+            'date' => 'March 4, 2025',
+            'meeting_type' => 'IUD',
+           
+            
+            'timeline' => [
+                ['label' => 'Accepted', 'date' => 'Mar 1, 2025'],
+                ['label' => 'Parked', 'date' => 'Mar 2, 2025'],
+                ['label' => 'Discussed', 'date' => 'Mar 3, 2025'],
+                ['label' => 'Finished Discussion', 'date' => 'Mar 4, 2025']
+            ]
+ 
+
         ];
     
         $this->view("studentrep/viewmemoreports", $data);
