@@ -31,7 +31,17 @@ class Studentrep extends BaseController {
             $this->view("studentrep/dashboard");
         }
         else{
-        $this->view("search",["searchtxt"=>$searchtxt]);
+            $searchModel=new Search();
+            $users=new User();
+            $minuteResults=$searchModel->minute_search($searchtxt);
+            $memoResults=$searchModel->memo_search($searchtxt);
+            $names=$users->getUserNameList();
+            $memosSubmitters=[];
+            foreach($names as $name){
+                $memosSubmitters[]=$name->full_name;
+            }
+                
+            $this->view("search",["searchtxt"=>$searchtxt,"minuteResults"=>$minuteResults,"memoResults"=>$memoResults,'memosSubmitters'=>$memosSubmitters]);
         }
     }
     public function entermemo() {
