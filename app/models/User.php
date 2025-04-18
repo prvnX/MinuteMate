@@ -116,6 +116,12 @@ class User {
         $userMeetingTypesModel->updateMeetingTypes($username, $meetingTypeIds);
     }
     
+    public function getUserNameList(){
+        $query = "SELECT DISTINCT full_name FROM $this->table 
+                  INNER JOIN user_roles ur ON $this->table.username = ur.username
+                  WHERE ur.role != 'admin'";
+        return $this->query($query);
+    }
 
 
 }
