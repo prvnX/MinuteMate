@@ -65,6 +65,18 @@
               <button>view</button>
               </a>
             </div>
+
+            <div class="card" id="departments">
+              <div class="icon-bg">
+                <i class="fas fa-list"></i>
+              </div>
+              <h2>departments</h2>
+              <p>Add Departments here </p>
+              <a href="<?=ROOT?>/admin/department">
+              <button>view</button>
+              </a>
+            </div>
+
             <div class="card" id="view-edit-requests">
               <div class="icon-bg">
                 <i class="fas fa-sticky-note"></i>

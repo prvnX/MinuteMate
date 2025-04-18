@@ -17,16 +17,25 @@ class Studentrep extends BaseController {
         $this->view("studentrep/dashboard",["meetingsinweek" => $meetingsinweek]);
     }
 
-
-
-
-
-
-
-
     public function search() {
-        echo "search";
-        $this->view("404");
+        
+        $searchtxt=$_POST['search'];
+        if($searchtxt=="" || !$searchtxt){
+            $this->view("studentrep/dashboard");
+        }
+        else{
+            $searchModel=new Search();
+            $users=new User();
+            $minuteResults=$searchModel->minute_search($searchtxt);
+            $memoResults=$searchModel->memo_search($searchtxt);
+            $names=$users->getUserNameList();
+            $memosSubmitters=[];
+            foreach($names as $name){
+                $memosSubmitters[]=$name->full_name;
+            }
+                
+            $this->view("search",["searchtxt"=>$searchtxt,"minuteResults"=>$minuteResults,"memoResults"=>$memoResults,'memosSubmitters'=>$memosSubmitters]);
+        }
     }
     public function entermemo() {
         $user=$_SESSION['userDetails']->username;
@@ -43,12 +52,6 @@ class Studentrep extends BaseController {
         }
        
     }
-
-
-
-
-
-
 
     
     public function findMeetingsToEnterMemos($date){
@@ -95,20 +98,11 @@ class Studentrep extends BaseController {
             $memo->insert($memoData);
              $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
+        else{
+            $this->view("showunsuccessmememo", ["user"=> "studentrep"])
+        }
         
     }
-
-    
-
-
-
-
-
-
-
-
-
-
 
 
     public function viewminutes() {
@@ -224,29 +218,6 @@ class Studentrep extends BaseController {
         redirect("home");
     }
     
-    public function viewmemos() {
-        $user=$_SESSION['userDetails']->username;
-
-        if($this->isValidRequest())
-        {
-            $memo = new Memo();
-            $memos = $memo->getAllAcceptedMemos();
-            $this->view("studentrep/viewmemos", ['memos'=> $memos]);
-        }
-        else
-        {
-            redirect("login");
-        }
-    }
-
-
-
-
-
-
-
-
-
 
     public function viewmemoreports() {
         if(!isset($_GET['memo'])) {

@@ -18,14 +18,9 @@
     require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
     ?>
 
-
-
-
-
-
 <h1 class="memo-heading">   </h1>
 <div class="memo-sub-container">
-    <form action="<?=ROOT?>/studentrep/submitmemo" method="post" id="memoForm">
+    <form action="<?=ROOT?>/studentrep/submitmemo" method="post" id="memoForm" onsubmit = "return submitForm(event);">
         <div class="field">
             <label for="meeting" class="input-label">Meeting : </label>
             <select name="meeting" id="meeting" class="select-meeting" required>
@@ -63,7 +58,7 @@
 
         <div class="form-buttons">
             <button type="button" class="cancel-btn" onclick="handleCancel()">Cancel</button>
-            <button type="submit" class="submit-btn" onclick="submitForm()">Submit</button>
+            <button type="submit" class="submit-btn">Submit</button>
         </div>
     </form>
 
@@ -106,12 +101,18 @@
 
     // Sync CKEditor data to the hidden textarea when submitting the form
     function submitForm(event) {
-        // Update the hidden textarea with the CKEditor content
+        event.preventDefault(); // Prevent default form submission
+
+        if (editor) {
+      // Update the hidden textarea with the CKEditor content
         const editorContent = editor.getData();
         document.getElementById('editor-content').value = editorContent;
 
-        // Submit the form
+        //  submit the form
         document.getElementById('memoForm').submit();
+        } else {
+            alert("Editor not ready. Please try again.");
+        }
     }
 
     function handleCancel() {

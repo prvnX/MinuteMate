@@ -1,0 +1,140 @@
+.main-content {
+    padding: 40px;
+    background-color: #f7faff;
+    min-height: 100vh;
+  }
+  
+  .page-title {
+    font-size: 28px;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+  }
+  
+  .card-container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    overflow-x: auto;
+  }
+  
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .styled-table th, .styled-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: left;
+  }
+  
+  .styled-table th {
+    background-color: #f1f5f9;
+    color: #1e3a8a;
+  }
+  
+  .edit-btn {
+    background-color: #60a5fa;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .add-button-wrapper {
+    margin-top: 25px;
+    text-align: right;
+  }
+  
+  .add-btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+/* Modal Background */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+  overflow: auto;
+  padding-top: 60px;
+}
+
+/* Input fields */
+.modal-box input[type="text"],
+.modal-box input[type="email"] {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* Buttons */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+}
+
+/* Close Button */
+.close {
+  color: #1e293b;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  background-color: #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Add additional styling for form elements if needed */
+input, textarea, button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+
+  

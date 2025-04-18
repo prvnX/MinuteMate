@@ -24,23 +24,20 @@
                 <p>Select Your Role</p>
                 <div class="radio-group"> 
                 <label>
-                    <input type="radio" name="userType" value="lecturer" id="secretaryRadio" class="radio-btn" checked>
+                    <input type="checkbox" name="userType[]" value="secretary" id="secretaryCheck" class="radio-btn">
                     Secretary
                     </label>
                     <label>
-                     <input type="radio" name="userType" value="student" id="studentRadio" class="radio-btn" >
+                     <input type="checkbox" name="userType[]" value="student" id="studentCheck" class="radio-btn" >
                     Student Representative
                     </label>
                     <label>
-                     <input type="radio" name="userType" value="lecturer" id="lecturerRadio" class="radio-btn">
+                     <input type="checkbox" name="userType[]" value="lecturer" id="lecturerCheck" class="radio-btn">
                     Board Member (Lecturer)
                     </label>
                 </div>
                 <div class="input-group">
                 <div class="dynamic-fields" id="dynamic-fields">
-                <label for="lec-id">Lecturer ID</label>
-                    <input type="text" name="lec-id" id='lec-id' class="roundedge-input-text" placeholder="Enter your Lecturer ID" required>
-                
                 </div>
                     <label for="nic">NIC</label>
                     <input type="text" name="nic" id="nic" class="roundedge-input-text" placeholder="Enter your Username" required>
@@ -49,7 +46,7 @@
                     <label for="tpno">Telephone Number</label>
                     <input type="text" name="tpno" id="tpno" placeholder="Enter your Telephone Address" class="roundedge-input-text"required>
                     <label for="tpno">Additional Telephone Number (If any)</label>
-                    <input type="text" name="tpno" id="tpno" placeholder="Enter your Telephone Address" class="roundedge-input-text">
+                    <input type="text" name="additional_tp_no" id="additional_tp_no" placeholder="Enter your Telephone Address" class="roundedge-input-text">
                 </div>
                 <button type="submit" class="btn-long">Request Account</button>
             </form>
