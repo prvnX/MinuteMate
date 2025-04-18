@@ -43,9 +43,9 @@
                         <span><?= htmlspecialchars((new DateTime($memoitem->date))->format('d, F Y')) ?></span>
                     </div>
     
-    <div class="detail-item">
-        Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?>
-    </div>
+                    <div class="detail-item">
+                        Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?>
+                    </div>
 
 
 

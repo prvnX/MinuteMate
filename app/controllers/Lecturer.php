@@ -218,8 +218,26 @@ class Lecturer extends BaseController {
         $this->view("lecturer/reviewstudentmemo");
     }
     public function entermemo() {
-        $this->view("lecturer/entermemo");
+        $user=$_SESSION['userDetails']->username;
+        $date = date("Y-m-d");
+        if($this->isValidRequest()){
+            $meetings = ($this->findMeetingsToEnterMemos($date));
+
+            $this->view("lecturer/entermemo", ['meetings' => $meetings]);
+        }
+        else{
+            redirect("login");
+        }
     }
+
+    public function findMeetingsToEnterMemos($date){
+        $user=$_SESSION['userDetails']->username;
+        $meeting = new Meeting();
+        $meetinglist = $meeting->getmeetingsforuser($date, $user);
+        
+        return $meetinglist ?: [];
+    }
+
     public function reviewmemos() {
         $this->view("lecturer/reviewmemos");
     }
@@ -298,13 +316,34 @@ class Lecturer extends BaseController {
     }
 
     public function submitmemo() {
-        $memosuccess = false;
-        $memoid = 1;
-        if($memosuccess) {
-            $this->view("showsuccessmemo",["user"=>"lecturer","memoid"=>$memoid]);
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            $memoTitle = htmlspecialchars($_POST['memo-subject']);
+            $memoContent = htmlspecialchars($_POST['memo-content']);
+            $meetingId = htmlspecialchars($_POST['meeting']);
+            $submittedBy=$_SESSION['userDetails']->username;
+
+            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
+            {
+                // $_SESSION['flash_error'] = "All fields are required.";
+                // redirect("studentrep/entermemo");
+                echo "All fields are required";
+                return;
+            }
+
+            $memoData = [
+                'memo_title' => $memoTitle,
+                'memo_content' => $memoContent,
+                'status' => 'pending', // Set default status
+                'submitted_by' => $submittedBy,
+                'meeting_id' => $meetingId,
+            ];
+            $memo = new Memo();
+            $memo->insert($memoData);
+             $this->view("showsuccessmemo",["user"=>"lecturer"]);
         }
-        else {
-            $this->view("showunsuccessmemo",["user"=>"lecturer"]);
+        else{
+            $this->view("showunsuccessmememo", ["user"=> "lecturer"]);
         }
     }
     public function confirmlogout() {
