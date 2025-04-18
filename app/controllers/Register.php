@@ -7,7 +7,8 @@ class Register extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Collect and sanitize form data
             $fullName = htmlspecialchars(trim($_POST['username']));
-            $role = htmlspecialchars(trim($_POST['userType']));
+            $roles = isset($_POST['userType']) ? $_POST['userType'] : []; // array
+            $roleString = implode(',', $roles);
             $lecStuId = htmlspecialchars(trim($_POST['lec-id']));
             $nic = htmlspecialchars(trim($_POST['nic']));
             $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL); // Sanitizing email
@@ -15,7 +16,6 @@ class Register extends Controller {
 
             // Handle optional fields with default values
             $additionalTpno = !empty($_POST['additional_tp_no']) ? htmlspecialchars(trim($_POST['additional_tp_no'])) : "Not Provided";
-            $department = !empty($_POST['department']) ? htmlspecialchars(trim($_POST['department'])) : "Not Specified";
 
             // Validate email format
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -28,19 +28,18 @@ class Register extends Controller {
 
             try {
                 // Prepare the SQL statement to insert data
-                $stmt = $db->prepare("INSERT INTO user_requests (full_name, role, lec_stu_id, nic, email, tp_no, additional_tp_no, department, status) 
-                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $db->prepare("INSERT INTO user_requests (full_name, role, lec_stu_id, nic, email, tp_no, additional_tp_no, status) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 $status = 'pending';
 
                 // Bind parameters
                 $stmt->bindParam(1, $fullName, PDO::PARAM_STR);
-                $stmt->bindParam(2, $role, PDO::PARAM_STR);
+                $stmt->bindParam(2, $roleString, PDO::PARAM_STR);
                 $stmt->bindParam(3, $lecStuId, PDO::PARAM_STR);
                 $stmt->bindParam(4, $nic, PDO::PARAM_STR);
                 $stmt->bindParam(5, $email, PDO::PARAM_STR);
                 $stmt->bindParam(6, $tpno, PDO::PARAM_STR);
                 $stmt->bindParam(7, $additionalTpno, PDO::PARAM_STR);
-                $stmt->bindParam(8, $department, PDO::PARAM_STR);
                 $stmt->bindParam(9, $status, PDO::PARAM_STR);
 
                 if ($stmt->execute()) {

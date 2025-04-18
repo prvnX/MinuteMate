@@ -6,12 +6,17 @@ class UserContactNums {
     protected $table = "user_contact_nums"; // Define table name
 
     public function insert($data) {
-        $fields = array_keys($data);
-        $placeholders = array_map(fn($field) => ":$field", $fields);
-    
-        $query = "INSERT INTO $this->table (" . implode(", ", $fields) . ") 
-                  VALUES (" . implode(", ", $placeholders) . ")";
+        // Insert primary contact number
+        $query = "INSERT INTO $this->table (username, contact_no) VALUES (:username, :contact_no)";
         $this->query($query, $data);
+
+        // If there's an additional contact number, insert it
+        if (isset($data['add_tp'])) {
+            $query = "INSERT INTO $this->table (username, contact_no) VALUES (:username, :add_tp)";
+            $this->query($query, $data);
+        }
+
+        return ['success' => true, 'message' => 'Contact numbers successfully added.'];
     }
     
 
