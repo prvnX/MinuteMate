@@ -17,13 +17,6 @@ class Studentrep extends BaseController {
         $this->view("studentrep/dashboard",["meetingsinweek" => $meetingsinweek]);
     }
 
-
-
-
-
-
-
-
     public function search() {
         
         $searchtxt=$_POST['search'];
@@ -49,12 +42,6 @@ class Studentrep extends BaseController {
         }
        
     }
-
-
-
-
-
-
 
     
     public function findMeetingsToEnterMemos($date){
@@ -101,20 +88,11 @@ class Studentrep extends BaseController {
             $memo->insert($memoData);
              $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
+        else{
+            $this->view("showunsuccessmememo", ["user"=> "studentrep"])
+        }
         
     }
-
-    
-
-
-
-
-
-
-
-
-
-
 
 
     public function viewminutes() {

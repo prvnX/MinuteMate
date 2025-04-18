@@ -61,20 +61,23 @@
         <img src="<?=ROOT?>/assets/images/unsuccess.png" alt="Success" class="success-image">
         <h1>UnSuccess</h1>
         <p>Your memo could not be submitted. Please try again.</p>
-        <button onclick="" class="try-again-btn">Try Again</button>
-        <button onclick="" class="continue-btn">Continue</button>
+        <button onclick=tryAgain() class="try-again-btn">Try Again</button>
+        <button onclick="" class="dashboard-btn">Go to Dashboard</button>
 
     </div>
     <script>
         const user= "<?= $user ?>";
         const root= "<?= ROOT ?>";
-        const tryagainBtn = document.querySelector('.try-again-btn');
-        const continueBtn = document.querySelector('.continue-btn');
-        continueBtn.addEventListener('click', () => {
+        const goToDashboardBtn = document.querySelector('.dashboard-btn');
+
+        function tryAgain() {
+           
+           window.history.back();
+       }
+
+       goToDashboardBtn.addEventListener('click', () => {
             window.location.href = `${root}/${user}`;
         });
-        tryagainBtn.addEventListener('click', () => {
-            window.location.href = `${root}/${user}/entermemo`;
-        });
+
     </script>
 </body>

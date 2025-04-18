@@ -280,15 +280,13 @@ class Secretary extends BaseController {
             ];
 
             $memo = new Memo();
-            if($memo->insert($memoData))
-            {
-                $this->view("showsuccessmemo",["user"=>"secretary"]);
-            }
+            $memo->insert($memoData);
+            $this->view("showsuccessmemo",["user"=>"lecturer"]);
+        }
             else
             {
                 $this->view("showunsuccessmemo",["user"=>"secretary"]); 
-            }
-        }
+            }       
         
     }
     public function createminute() {
