@@ -38,9 +38,6 @@
                 </div>
                 <div class="input-group">
                 <div class="dynamic-fields" id="dynamic-fields">
-                <label for="lec-id">Lecturer ID</label>
-                    <input type="text" name="lec-id" id='lec-id' class="roundedge-input-text" placeholder="Enter your Lecturer ID" required>
-                
                 </div>
                     <label for="nic">NIC</label>
                     <input type="text" name="nic" id="nic" class="roundedge-input-text" placeholder="Enter your Username" required>

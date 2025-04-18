@@ -25,6 +25,13 @@ class User {
         }
     }
 
+    public function usernameExists($lecStuId) {
+        $query = "SELECT COUNT(*) AS count FROM user WHERE username = :username";
+        $result = $this->query($query, ['username' => $lecStuId]);
+        return $result[0]->count > 0;
+    }
+    
+
     // Insert user and add to user_meeting_types table
     public function insert($data) {
         // Check if the username already exists
