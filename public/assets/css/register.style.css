@@ -4,12 +4,13 @@ body{
 }
 .flex-container{
     background-color: #E3F5F9;
+    gap:30px
 }
 .register-right-container{
     background-color: white;
     padding: 1rem;
     height: 85vh;
-    width: 60vh;
+    width: 70vh;
     margin-left: 10rem;
     border-radius: 3rem;
     box-shadow: 0 1px 50px rgba(0, 0, 0, 0.2);
@@ -60,5 +61,32 @@ body{
     margin: 0.5rem;
 }
 .register-right-container .btn-long{
-    width: 95%;
+    width: 90%;
 }
+@media screen and (max-width: 768px) {
+    .flex-container{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+    .register-right-container{
+        width: 100%;
+        margin-left: 0px;
+        padding: 1rem;
+    }
+    .register-left-container{
+        width: 100%;
+        margin-left: 0px;
+        padding: 0;
+    }
+    .register-left-container img{
+        width: 100%;
+        margin-left: 0px;
+    }
+    .register-right-container form label{
+        display: block;
+        margin-left: 1rem;
+    }
+
+}
+
