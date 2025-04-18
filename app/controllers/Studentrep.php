@@ -96,10 +96,10 @@ class Studentrep extends BaseController {
             ];
             $memo = new Memo();
             $memo->insert($memoData);
-             $this->view("showsuccessmemo",["user"=>"studentrep"]);
+            $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
         else{
-            $this->view("showunsuccessmememo", ["user"=> "studentrep"])
+            $this->view("showunsuccessmememo", ["user"=> "studentrep"]);
         }
         
         
