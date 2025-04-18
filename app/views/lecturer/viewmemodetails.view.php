@@ -4,24 +4,33 @@
 <head>
     <meta charset= "UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
      <title>View memo Details</title>
-     <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/viewmemodetails.style.css">
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewmemodetails.style.css">
+     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
 </head>
 
 <body>
 
-     
-<?php
-    $user="studentrep";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep" , $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
-    ?>
-    
-    <div><h1 class="heading">Memo Details</h1></div>
+    <div class= "navbar">
+        <?php
+            $user = "lecturer";
+            $notification = "notification";
+            $menuItems = [
+                "home" => ROOT . "/lecturer",
+                $notification => ROOT . "/lecturer/notifications",
+                "profile" => ROOT . "/lecturer/viewprofile"
+            ];
+            echo "<div class='minute-list-navbar'>";
+            require_once("../app/views/components/new_navbar.php");
+            echo "</div>";
+            require_once("../app/views/components/lec_sidebar.php");
+        ?>
+    </div>
+
+    <div class="heading">
+             <h1 class="memo-title">Memo Details</h1>
+    </div>
 
     <div class="memo-details-container">
     <?php
@@ -31,7 +40,6 @@
         <p class="memo-detail"><strong>Title:</strong> <span class="memo-title"><?= htmlspecialchars($memo->memo_title) ?></span></p>
         <p class="memo-detail"><strong>Status:</strong> <span class="memo-status"><?= htmlspecialchars($memo->status) ?></span></p>
         <p class="memo-detail"><strong>Submitted By:</strong> <span class="memo-submitted-by"><?= htmlspecialchars($memo->submitted_by) ?></span></p>
-
         
         <p class="memo-detail"><strong>Content:</strong></p>
         <div class="memo-content-box">
@@ -41,8 +49,8 @@
             ?>
         </div>
 
-
-        <a href="<?= ROOT ?>/studentrep/viewsubmittedmemos" class="btn-back">Back to Memos</a>
+       
+        <a href="<?= ROOT ?>/lecturer/viewsubmittedmemos" class="btn-back">Back to Memos</a>
     <?php else : ?>
         <p class="memo-error">Memo not found.</p>
     <?php endif; ?>

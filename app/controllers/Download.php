@@ -1,7 +1,11 @@
 <?php
 use Dompdf\Dompdf;
 require __DIR__ . '/../../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../../');
+$dotenv->load();
+
 class Download extends Controller{
+    
     
 public function index(){
     if($this->isValidRequest()){
@@ -272,17 +276,87 @@ public function index(){
         $html.= "</div></div>";
 
         $html .= '
-        <div style="page-break-before: always; padding-top:500px;text-align: center; color: gray;">
-            <hr>
-<p>This is an original document verified and signed by MinuteMate. You can confirm its authenticity using the attached digital signature.</p>        </div>
-        
+        <div style="page-break-before: always; padding-top:500px;text-align: center; color: gray;font-family:Arial, sans-serif;font-size:10px">
+        <hr>
+        <p>This is an authenticated document electronically signed by MinuteMate. Verification of its integrity and origin can be performed using the digital signature enclosed in the distributed ZIP package.</p>        
+        </div>
         ';
         
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-         $dompdf->stream("Minute_$minuteID.pdf", ["Attachment" => true]); // false = open in browser
+        $pdfOutput = $dompdf->output(); // PDF binary
+
+        //  $dompdf->stream("Minute_$minuteID.pdf", ["Attachment" => true]); // if attachment false-pdf opens in browser.(uncomment this line to download unsigned pdf)
         // show(data: $minuteDetails);
+
+        //signing process
+        $passPhrase=$_ENV['PASSPHRASE'];
+        $privateKey = openssl_pkey_get_private(file_get_contents(__DIR__."/../keys/private.key"), $passPhrase); // Load private key
+        openssl_sign($pdfOutput, $signature, $privateKey, OPENSSL_ALGO_SHA256); // Generate signature
+
+        //adding readme file
+        $readmeContent = <<<TXT
+        README: Digital Signature Verification Instructions
+
+        This ZIP archive contains the following files:
+        - Minute_$minuteID.pdf         → The digitally signed PDF document
+        - Signature_Minute_$minuteID.sig → The digital signature file for the PDF
+
+
+        To verify the authenticity and integrity of the signed document, please follow these steps:
+        (1) Ensure you have OpenSSL installed on your system. You can download it from https://www.openssl.org/.
+
+        (2) Use the command line to navigate to the directory where you have unzipped this archive.
+
+        (3) Follow these steps to verify the signature:
+
+        1. Request the official public key from the MinuteMate administrator via email: minutemate111@gmail.com. The key will be provided as a file named `public.key`.
+        
+        2. Unzip the archive to access the files.
+        
+        3. Place the `public.key` file in the same directory as the provided PDF and signature files.
+        
+        4. Open a terminal and run the following OpenSSL command to verify the signature:
+             
+            openssl dgst -sha256 -verify public.key -signature Signature_Minute_$minuteID.sig Minute_$minuteID.pdf
+
+            
+        **Important:** Ensure you are using the exact same PDF file (`Minute_$minuteID.pdf`) that was included in this ZIP archive for the verification process to succeed.
+        If the verification is successful, the file has not been tampered with and is verified to be signed by the authorized party.
+        
+        
+        
+        Generated with care by **MinuteMate** 🕊️
+        TXT;
+
+        $zip = new ZipArchive();
+        $zipFile = __DIR__ . "/../../tmp/Minute_{$minuteID}_signed_package.zip";
+        if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            // Add files directly from memory
+            $zip->addFromString('Minute_'.$minuteID.'.pdf', $pdfOutput);
+            $zip->addFromString('Signature_Minute_'.$minuteID.'.sig', $signature);
+            $zip->addFromString('README.txt', $readmeContent);
+            $zip->close();
+
+            // Send ZIP to browser
+            header('Content-Type: application/zip');
+            header('Content-Disposition: attachment; filename="' . basename($zipFile) . '"');
+            header('Content-Length: ' . filesize($zipFile));
+            header('Pragma: public');
+            header('Cache-Control: must-revalidate');
+            header('Expires: 0');
+
+            ob_clean();
+            flush();
+            readfile($zipFile);
+            unlink($zipFile);
+            exit;
+        }
+        else {
+            echo "Failed to create ZIP.";
+        }
+        // End of signing process    
     
     }
     else{

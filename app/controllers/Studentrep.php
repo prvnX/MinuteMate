@@ -25,8 +25,14 @@ class Studentrep extends BaseController {
 
 
     public function search() {
-        echo "search";
-        $this->view("404");
+        
+        $searchtxt=$_POST['search'];
+        if($searchtxt=="" || !$searchtxt){
+            $this->view("studentrep/dashboard");
+        }
+        else{
+        $this->view("search",["searchtxt"=>$searchtxt]);
+        }
     }
     public function entermemo() {
         $user=$_SESSION['userDetails']->username;
@@ -224,29 +230,6 @@ class Studentrep extends BaseController {
         redirect("home");
     }
     
-    public function viewmemos() {
-        $user=$_SESSION['userDetails']->username;
-
-        if($this->isValidRequest())
-        {
-            $memo = new Memo();
-            $memos = $memo->getAllAcceptedMemos();
-            $this->view("studentrep/viewmemos", ['memos'=> $memos]);
-        }
-        else
-        {
-            redirect("login");
-        }
-    }
-
-
-
-
-
-
-
-
-
 
     public function viewmemoreports() {
         if(!isset($_GET['memo'])) {

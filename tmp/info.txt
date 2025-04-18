@@ -1,0 +1,2 @@
+Temporary zip files are created in this directory.
+ The files are deleted after the zip file is created.
