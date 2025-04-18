@@ -21,7 +21,7 @@ class Register extends Controller {
             $lecStuId = $studentId ?? $lecturerId ?? null;
 
             if (!$lecStuId) {
-                echo "<script>alert('Please enter a valid Student ID or Lecturer ID.');</script>";
+                echo "<script>alert('Please enter a valid Student ID or Lecturer ID.');window.history.back();</script>";
                 return;
             }
 
@@ -36,18 +36,18 @@ class Register extends Controller {
 
             // Validate email format
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email format.";
+                echo "<script>alert('Invalid email format.');window.history.back();</script>";
                 return;
             }
 
             // Validate tpno and additional_tpno
             if (!preg_match('/^\d{10}$/', $tpno)) {
-                echo "<script>alert('Primary contact number must be exactly 10 digits.');</script>";
+                echo "<script>alert('Primary contact number must be exactly 10 digits.');window.history.back();</script>";
                 return;
             }
 
             if ($additionalTpno !== "Not Provided" && !preg_match('/^\d{10}$/', $additionalTpno)) {
-                echo "<script>alert('Additional contact number must be exactly 10 digits if provided.');</script>";
+                echo "<script>alert('Additional contact number must be exactly 10 digits if provided.');window.history.back();</script>";
                 return;
             }
 
@@ -75,7 +75,7 @@ class Register extends Controller {
                     // Success: Inject JavaScript for alert
                     echo "<script>
                         alert('Your request has been successfully sent to the admin!');
-                        window.location.href = '" . ROOT . "/register/success';
+                        window.location.href = '" . ROOT . "/register';
                     </script>";
                     exit();
                 } else {

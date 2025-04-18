@@ -57,10 +57,13 @@ class Admin extends BaseController {
                         }
     
                         // Insert into user_roles
-                        $userRolesModel->insert([
-                            'username' => $username,
-                            'role' => $userDetails->role
-                        ]);
+                        foreach (explode(',', $userDetails->role) as $role) {
+                            $userRolesModel->insert([
+                                'username' => $username,
+                                'role' => trim($role) // trim in case there are spaces
+                            ]);
+                        }
+
     
                         // Insert contact number(s)
                         $userContactNumsModel->insert([
