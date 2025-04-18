@@ -18,6 +18,8 @@ $userId = $_GET['id'];
     <p>NIC: <?php echo htmlspecialchars($userDetails->nic); ?></p>
     <p>Role: <?php echo htmlspecialchars($userDetails->role); ?></p>
     <p>Contact No.: <?php echo htmlspecialchars($userDetails->tp_no); ?></p>
+    <p>Additional Contact No. if any : <?php echo htmlspecialchars($userDetails->additional_tp_no); ?></p>
+
 
    <!-- Meeting Type Selection (allow multiple) -->
 <label>Select Meeting Type(s):</label>
@@ -57,14 +59,16 @@ $userId = $_GET['id'];
         document.querySelectorAll('input[name="meetingType[]"]:checked')
     ).map(input => input.value);
 
-    fetch(`<?= ROOT ?>/admin/handleRequest`, {
+    const userId = "<?= $userId ?>";
+
+    fetch("<?= ROOT ?>/admin/handleRequest", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            id: <?= json_encode($userId); ?>,
             action: action,
+            id: userId,
             meetingTypes: selectedMeetingTypes,
         }),
     })
