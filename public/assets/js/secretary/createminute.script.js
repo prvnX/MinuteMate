@@ -1,6 +1,8 @@
 let currentPage = 1;
 let sectionCount = 0;
 let editors = [];
+let editorInitPromises = [];
+let autoSaveState = true ;
 
 
 // Function to set active tab
@@ -328,10 +330,12 @@ function addContentSection(title = '', content = '') {
     .then(editor => {
         editor.setData(content);  // Set the saved HTML content into CKEditor
         editors.push({ titleInput, editor });
+        
     })
     .catch(error => {
         console.error('Error initializing CKEditor:', error);
     });
+
 }
 
 window.onload = function() {
@@ -339,6 +343,20 @@ window.onload = function() {
         'You can type content title here',
         '<p>This is <strong>sample</strong> content with <em>italic</em> text with formatting.</p><br><br><br><br><p>Click add more to add another content.</p>'
     );
+    if(draftStatus==1){
+        document.getElementById('loadDraftPopup').style.display='flex';
+    }
+        // Function to show alert
+        function showAlert() {
+            alert("Keyboard or mouse input detected!");
+          }
+          document.querySelectorAll('.sub-container').forEach(container => {
+            container.addEventListener("click", startAutoSave);
+          });
+          // Listen for keyboard input
+          document.addEventListener("keydown", startAutoSave);
+    
+
 };
 function toggleCheckBox(row,selectedCheckBox){
     $checkBoxes = document.querySelectorAll(`.rowID-${row}`);
@@ -410,3 +428,303 @@ function updateRestrictionDisplay(sectionId) {
     return;
 }
 }
+
+//  Draft features
+
+
+//saving draft
+function saveDraft() {
+    let attendees = [];
+    let agendaItems=[];
+    let Sections = [];
+    let discussedMemos = [];
+    let parkedMemos = [];
+    let underDiscussionMemos = [];
+    let linkedMinutes = [];
+    let keywords = [];
+
+
+    console.log("Saving as draft...");
+    // Get meeting attendees
+    const attendenceSec=document.getElementsByClassName("attendence-section")[0]
+    attendenceSec.querySelectorAll("input[name='attendence[]']:checked").forEach((checkbox) => {
+        attendees.push(checkbox.value);
+    }
+    );
+    //get agenda items
+    document.querySelectorAll("input[name='Agenda[]']").forEach((Input)=>{
+        agendaItems.push(Input.value);
+    });
+    // Get content sections
+    const contentSections = document.querySelectorAll('.content-section');
+    contentSections.forEach((section, index) =>{
+        let forwardDepartments=[];
+        const title = section.querySelector('.title-input').value;
+        const selectedRadio = section.querySelector(`input[name="options-${index+1}"]:checked`);
+        const selectedRadioValue = selectedRadio ? selectedRadio.value : '';
+        const editorInstance = editors.find(e => e.titleInput === section.querySelector('.title-input'));
+        const insertedcontent = editorInstance ? editorInstance.editor.getData() : '';
+        const forwardDeps = section.querySelectorAll(`input[name="forwardDep[]"]:checked`);
+        forwardDeps.forEach(dep=>{
+            forwardDepartments.push(dep.value);
+        })
+        const sectionId = index + 1;
+        const selectedRestrictions = sectionRestrictions[sectionId] || [];
+        Sections.push({
+            insertedcontent,
+            selectedRadioValue,
+            title,
+            selectedRestrictions,
+            forwardDepartments
+        });
+    })
+   
+
+    // get the memo status
+    //Discussed
+    document.querySelectorAll("input[name='discussed[]']:checked").forEach((checkbox) => {
+        discussedMemos.push(checkbox.value);
+    });
+    //Parked
+    document.querySelectorAll("input[name='parked[]']:checked").forEach((checkbox) => {
+        parkedMemos.push(checkbox.value);
+    });
+    //Under Discussion
+    document.querySelectorAll("input[name='underdiscussion[]']:checked").forEach((checkbox) => {
+        underDiscussionMemos.push(checkbox.value);
+    });
+
+    // linked minutes
+    document.querySelectorAll("select[name='LinkedMinutes[]']").forEach((select) => {
+        linkedMinutes.push(select.value);
+    });
+
+    // keywords
+    document.querySelectorAll("input[name='keywordlist[]']").forEach((input) => {
+        keywords.push(input.value);
+    }
+    );
+
+    const data={attendees,agendaItems,Sections,discussedMemos,parkedMemos,underDiscussionMemos,linkedMinutes,keywords}; 
+    // console.log("Data to be saved as draft:", data);
+    // console.log(meetingId);
+    // console.log(username);
+    // console.log(fetchURL);
+    fetch(fetchURL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            draftMeeting: meetingId,
+            draftAddedUser: username,
+            draftData: data       
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data.response);
+        })
+        .catch(err => {
+            console.error("Failed to save", err);
+          });
+
+}
+//loading draft
+function handleLoadDraft() {
+    console.log("Loading draft...");
+    loadDraft();
+    document.getElementById('loadDraftPopup').style.display='none';
+}
+function handleCancelDraft() {
+    document.getElementById('loadDraftPopup').style.display='none';
+}
+
+//auto save on off
+function handleAutoSave (){
+    const autoSaveBtn= document.getElementById('autoSaveBtn');
+    if(autoSaveState){
+        autoSaveBtn.innerHTML='<i class="fa-solid fa-toggle-off"></i><span class="button-txt">&nbsp;&nbsp; Auto Save is Off</span>';
+        autoSaveState=false;
+    }
+    else{
+        autoSaveBtn.innerHTML='<i class="fa-solid fa-toggle-on"></i><span class="button-txt">&nbsp;Auto Save is On</span>';
+        autoSaveState=true;
+    }
+}
+
+function loadDraft(){
+    fetch(fetchGetURL, {
+        method :'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+            loadDraft:meetingId,
+            loadAddedUser:username
+        })
+    }).then(response=>response.json())
+    .then(data=>{
+         const responseData=data.response;
+         loadDraftToPage(responseData);         
+    })
+    .catch(err =>{
+        console.log(err);
+    })
+
+    
+}
+
+function loadDraftToPage(draftData){
+    // load attendence
+    const attendenceDraft=draftData.attendees;
+    attendenceDraft.forEach((draftAttendee) => {
+    if(attendenceDraft.length>0){
+        document.querySelectorAll("input[name='attendence[]']").forEach((checkbox) => {
+            if(checkbox.value===draftAttendee){
+                checkbox.checked=true;
+            }
+        })
+    }
+    });
+
+    //load agenda Details
+    const agendaDraft=draftData.agendaItems;
+    const agendaInputs=agendaDraft.length;
+    const addAgendaBtn=document.getElementById('addMoreBtn');
+    if(agendaInputs>1){
+        for (let i = 0; i < agendaInputs-1; i++) {
+            addAgendaBtn.click();
+        }
+    }
+    document.querySelectorAll("input[name='Agenda[]']").forEach((Input,index)=>{
+        Input.value=agendaDraft[index];
+    })
+
+    //load  sections
+    //loading content title and content
+    draftData.Sections.forEach((section,index) => {
+        if(index==0){
+            let title = section.title;
+            let content = section.insertedcontent;
+            section=document.querySelectorAll('.content-section')[0];
+            const titleElement=section.querySelector('.title-input');
+            const editorInstance = editors.find(e => e.titleInput === section.querySelector('.title-input'));
+            titleElement.value=title;
+            const editor = editorInstance.editor;
+            editor.setData(content);
+        }
+        else{
+            addContentSection(section.title, section.insertedcontent);
+        }
+    });
+
+    const contentSections = document.querySelectorAll('.content-section');
+    contentSections.forEach((section, index) =>{
+        // load forward to buttons
+        section.querySelectorAll(`input[type="radio"]`).forEach((radio) => {
+            if(radio.value===draftData.Sections[index].selectedRadioValue){
+                radio.checked=true;
+            }
+        })
+        
+        // load forward departments
+        draftData.Sections[index].forwardDepartments.forEach((forwardDep) => {
+            section.querySelectorAll(`input[name="forwardDep[]"]`).forEach((checkbox,index) => {
+            if(checkbox.value===forwardDep){
+                checkbox.checked=true;
+            }
+        }
+        );
+        }
+        );
+
+        // load restrictions
+        sectionRestrictions[index+1]=draftData.Sections[index].selectedRestrictions;
+        updateRestrictionDisplay(index+1);
+
+    })
+    //load discussed memos
+    const discussedDraft=draftData.discussedMemos;
+    const discussedInputs=discussedDraft.length;
+    if(discussedInputs>0){
+        discussedDraft.forEach((draftDiscussed) => {
+            document.querySelectorAll("input[name='discussed[]']").forEach((checkbox) => {
+                if(checkbox.value===draftDiscussed){
+                    checkbox.click();
+                }
+            })
+        });
+    }
+    //load parked memos
+    const parkedDraft=draftData.parkedMemos;
+    const parkedInputs=parkedDraft.length;
+    if(parkedInputs>0){
+        parkedDraft.forEach((draftParked) => {
+            document.querySelectorAll("input[name='parked[]']").forEach((checkbox) => {
+                if(checkbox.value===draftParked){
+                    checkbox.click();
+                }
+            })
+        });
+    }
+    //load under discussion memos
+    const underDiscussionDraft=draftData.underDiscussionMemos;
+    const underDiscussionInputs=underDiscussionDraft.length;
+    if(underDiscussionInputs>0){
+        underDiscussionDraft.forEach((draftUnderDiscussion) => {
+            document.querySelectorAll("input[name='underdiscussion[]']").forEach((checkbox) => {
+                if(checkbox.value===draftUnderDiscussion){
+                    checkbox.click();
+                }
+            })
+        });
+    }
+    //load linked minutes
+    const linkedMinutesDraft=draftData.linkedMinutes;
+    const linkedMinutesInputs=linkedMinutesDraft.length;
+    if(linkedMinutesInputs>0){
+        for (let i = 0; i < linkedMinutesInputs-1; i++) {
+            addAnotherMinute();
+        }
+    }
+
+    document.querySelectorAll("select[name='LinkedMinutes[]']").forEach((select,index) => {
+            const draftLinkedMinutes=linkedMinutesDraft[index];
+            if(draftLinkedMinutes!=="none"){
+                select.value=draftLinkedMinutes;
+            }
+        })
+
+    //load keywords
+    const keywordsDraft=draftData.keywords;
+    const keywordsInputs=keywordsDraft.length;
+    if(keywordsInputs>0){
+        for (let i = 0; i < keywordsInputs-1; i++) {
+            addAnotherKeyword();
+        }
+    }
+    document.querySelectorAll("input[name='keywordlist[]']").forEach((Input,index)=>{
+        Input.value=keywordsDraft[index];
+    })
+
+
+}
+
+
+let autoSaveTimer;
+if(autoSaveState){
+function startAutoSave() {
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+        if(autoSaveState){
+            saveDraft();
+        }
+    }, 2000);
+
+ } // Auto-save every 2 seconds
+}
+else{
+    clearTimeout(autoSaveTimer);
+}
+
