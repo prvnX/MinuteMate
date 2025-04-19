@@ -18,18 +18,36 @@
     ];
     require_once("../app/views/components/new_navbar.php");
     require_once("../app/views/components/sec_sidebar.php");
+    $draftStatus=$data['minuteDraft'][0]->is_present;
     ?>
     <!-- Loading Overlay -->
       <div id="loadingOverlay">
-    <div class="spinner"></div>
-  </div>
+        <div class="spinner"></div>
+    </div>
+
+    <div class="load-draft-msg" id="loadDraftPopup">
+    <div class="load-draft-content">
+    <i class="fa-solid fa-file-import"></i>
+        <h1>Draft Minute Found</h1>
+        <p>Do you want to load the draft minute?</p>
+        <button id="loadDraftBtn" onclick="handleLoadDraft()">Load Draft</button>
+        <button id="discardDraftBtn" onclick="handleCancelDraft()">Cancel</button>
+    </div>
+</div>
+
     <div class="tab-container">
                 <div class="tab active" data-tab="meeting-details">Meeting Details</div>
                 <div class="tab" data-tab="minute-content">Minute Content</div>
                 <div class="tab" data-tab="attachments">Attachments</div>
-            <!-- <button class="save-draft-btn">
-            <i class="fas fa-times"></i> Save To Drafts
-            </button> -->
+                <div class="draft-btns">
+                <button class="load-draft-btn" id="autoSaveBtn" onclick="handleAutoSave()">
+                <i class="fa-solid fa-toggle-on"></i> &nbsp; Auto Save is On
+            </button>
+            <button class="save-draft-btn" onclick="saveDraft()">
+                <i class="fas fa-save"></i> &nbsp; Save to Drafts
+            </button>
+
+            </div>
 
             </div>
     <div class="minute-form-container">
@@ -213,9 +231,14 @@
                 <button type="submit" id="submitBtn" style="display: none;">Submit</button>
             </div>
         </form>
+
     </div>
     <script >
-
+        const draftStatus = <?= $draftStatus ?>;
+        const fetchURL = "<?=ROOT?>/secretary/inputDraftData";
+        const fetchGetURL = "<?=ROOT?>/secretary/getDraftData";
+        const meetingId = <?= $meetingId ?>;
+        const username = "<?=$_SESSION['userDetails']->username?>";
         const options = <?php echo json_encode($departments); ?>;
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
         const users = <?php echo json_encode($data['participants']); ?>;
