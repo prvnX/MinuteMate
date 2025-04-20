@@ -465,7 +465,7 @@ public function removeMember() {
 
     // Other logic for removing member
     $userModel = new User();
-    if (!$userModel->find($removedBy)) {
+    if (!$userModel->getUserById($removedBy)) {
         echo json_encode(['error' => 'Invalid admin username.']);
         exit;
     }
@@ -479,7 +479,12 @@ public function removeMember() {
     ]);
 
     $userModel->update($username, ['status' => 'inactive'], 'username');
-    echo json_encode(['success' => true]);
+    echo "<script>
+    alert('Member successfully removed.');
+    window.location.href = '" . ROOT . "/admin/viewMembers';
+</script>";
+exit;
+
     exit;
 }
 
