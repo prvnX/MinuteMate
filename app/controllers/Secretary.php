@@ -138,6 +138,25 @@ class Secretary extends BaseController {
             redirect("secretary/selectmeeting");
         }
     }
+    public function viewmemoreport() {
+    if (!isset($_GET['memo'])) {
+        header("Location: " . ROOT . "/secretary/selectmemo");
+        exit;
+    }
+
+    $memoId = $_GET['memo'];
+    $memo = new Memo();
+    $memoDetails = $memo->getMemoById($memoId);
+
+    if (!$memoDetails) {
+        $_SESSION['flash_error'] = "Memo not found.";
+        redirect("secretary/selectmemo");
+        return;
+    }
+
+    $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
+    }
+    
     public function notifications() {
         //these are just placeholders
         $user = "secretary";
@@ -156,6 +175,14 @@ class Secretary extends BaseController {
         $meetings = $meeting->getNoMinuteMeetings($_SESSION['userDetails']->username, date("Y-m-d"));
         $this->view("secretary/selectmeeting", ['meetings' => $meetings]);
     }
+    public function selectmemo() { //this is the page where the secretary selects the memo to view details
+    $memo = new Memo();
+    $memos = $memo->getMemos($_SESSION['userDetails']->username, date("Y-m-d"));
+
+    
+        $this->view("secretary/selectmemo", ['memos' => $memos]);
+     
+}
     public function viewminutes() {
         $user = $_SESSION['userDetails']->username;
         $minute = new Minute();
@@ -283,24 +310,7 @@ class Secretary extends BaseController {
         }
     }
 
-    public function viewmemoreports() {
-        if(!isset($_GET['memo'])) {
-            header("Location: ".ROOT."/secretary/selectmemo");
-        }
-        $memoid = $_GET['memo'];
-        
-        $data = [
-            'id' =>$memoid,
-            'date' => '2024-11-16',
-            'time' => '2:00 PM',
-            'status' => 'Approved',
-            'linked_memos' => 'Memo #11, Memo #12',
-            'author' => 'John Doe'
-        ];
-    
-        $this->view("secretary/viewmemoreports", $data);
-    }
-    
+ 
     public function viewminutereports() {
         if(!isset($_GET['minute'])) {
             header("Location: ".ROOT."/secretary/selectminute");
@@ -531,9 +541,7 @@ class Secretary extends BaseController {
         // Redirect to the login page
         redirect("home");
             }
-    public function selectmemo (){
-        $this->view("secretary/selectmemo");
-    }
+ 
     public function selectminute (){
         $this->view("secretary/selectminute");
     }
