@@ -69,40 +69,40 @@ body {
     gap: 20px;
 }
 
-.meeting-selection {
+.memo-selection {
     display: grid;
     grid-template-columns: 1.75fr 1fr;
     gap: 30px;
 }
 
 @media (max-width: 768px) {
-    .meeting-selection {
+    .memo-selection {
         grid-template-columns: 1fr;
     }
 }
 
-.meeting-list {
+.memo-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
 
 }
 
-.meeting-list-header {
+.memo-list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.meeting-list-title {
+.memo-list-title {
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0;
     color:black;
 }
 
-.meeting-filter {
+.memo-filter {
     display: flex;
     gap: 10px;
 }
@@ -129,7 +129,7 @@ body {
     color: var(--primary);
 }
 
-.meeting-item {
+.memo-item {
     padding: 15px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
@@ -141,17 +141,17 @@ body {
     margin-bottom: 5px;
 }
 
-.meeting-item:hover {
+.memo-item:hover {
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(74, 107, 223, 0.1);
 }
 
-.meeting-item.selected {
+.memo-item.selected {
     border-color: var(--primary);
     background-color: var(--primary-light);
 }
 
-.meeting-icon {
+.memo-icon {
     width: 40px;
     height: 40px;
     border-radius: 12px;
@@ -164,31 +164,31 @@ body {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.meeting-icon.bom {
+.memo-icon.bom {
     background-color: #4a6bdf;
 }
 
-.meeting-icon.iud {
+.memo-icon.iud {
     background-color: #fab43c;
 }
 
-.meeting-icon.syn {
+.memo-icon.syn {
     background-color: #10b981;
 }
-.meeting-icon.rhd{
+.memo-icon.rhd{
     background-color: #ef4444;
 }
 
-.meeting-details {
+.memo-details {
     flex: 1;
 }
 
-.meeting-name {
+.memo-name {
     font-weight: 600;
     margin-bottom: 5px;
 }
 
-.meeting-date {
+.memo-date {
     font-size: 13px;
     color: var(--text-light);
 }
@@ -237,12 +237,12 @@ body {
     background-color: #f5f5f5;
 }
 
-.meeting-search {
+.memo-search {
     position: relative;
     margin-bottom: 15px;
 }
 
-.meeting-search input {
+.memo-search input {
     width: 100%;
     padding: 10px 15px;
     padding-left: 40px;
@@ -253,19 +253,19 @@ body {
 }
 
 
-.no-meetings {
+.no-memos {
     text-align: center;
     padding: 30px;
     color: var(--text-light);
 }
-.no-meetings-detail{
+.no-memos-detail{
     font-size: 12px;
     margin-top: 8px;
     text-align: center;
     color:#ababab;
 } 
 
-.meeting-list-container {
+.memo-list-container {
     max-height: 300px;
     min-height: 300px;
     overflow-y: auto;
