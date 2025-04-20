@@ -10,15 +10,16 @@
 </head>
 
 <body>
-    <div class= "navbar">
+    
         <?php
+            $user= 'lecturer';
              $notification="notification"; //use notification-dot if there's a notification
              $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
              require_once("../app/views/components/new_navbar.php"); //call the navbar component
              require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
              $memoList=$data['memos'];    
         ?>
-    </div>
+   
 
     <header class="page-header">
         <h1>Submitted memos </h1>
@@ -29,6 +30,7 @@
 <div class="main-container">
     <div class="content-area">
         <div class="memolist" id="memolist">
+        <?php if (!empty($memoList) && is_array($memoList)): ?>
             <?php foreach ($memoList as $memoitem): ?>
                 <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?>">
                     <div class="memocontent">
@@ -46,16 +48,20 @@
                     <div class="detail-item">
                         Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?>
                     </div>
-
-
-
-                   
+ 
                 </div>
                 <a href="<?=ROOT?>/lecturer/viewmemodetails/?memo_id=<?= $memoitem->memo_id ?>">
                      <button class="viewbtn">View</button>
                  </a>
                 </div>
             <?php endforeach; ?>
+            <?php else: ?>
+                <!-- No memos at all -->
+                <div class="no-memos-message" style="text-align: center; margin-top: 40px;">
+                    <h3>No memos submitted yet.</h3>
+                    <p>Please check back later.</p>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div id="empty-state" class="empty-state" style="display: none;">

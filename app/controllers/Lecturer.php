@@ -71,7 +71,7 @@ class Lecturer extends BaseController {
     public function viewsubmittedmemos() {
         $user = $_SESSION['userDetails']->username;
         $memo = new Memo();
-        $memoList = $memo->getMemosByUser($user);
+        $memoList = $memo->getMemosByUser($user) ?? [];
         $this->view("lecturer/viewsubmittedmemos", ['memos'=>$memoList]);
     }
 
