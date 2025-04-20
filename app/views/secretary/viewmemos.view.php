@@ -38,7 +38,7 @@
     <div class="content-area">
         <div class="memolist" id="memolist">
             <?php foreach ($memoList as $memoitem): ?>
-                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?>">
+                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?> data-submitted-by="<?= htmlspecialchars(strtolower($memoitem->submitted_by)) ?>">
                     <div class="memocontent">
                     <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
                     <div class="memo-meta">
@@ -85,6 +85,19 @@
                         </div>
                     </div>
 
+                    <div class="filter-section">
+                        <h3 class="filter-section-title">Filter By Submitted Member</h3>
+                        <select id="member-select" class="date-input">
+                            <option value="">-- Select Member --</option>
+                            <?php foreach ($submittedMembers as $member): ?>
+                                <option value="<?= htmlspecialchars(strtolower($member->username)) ?>">
+                                    <?= htmlspecialchars($member->username) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+
 
                     <div class="filter-btns">
                         <button id="apply-filters" class="filter-button apply-button">Apply Filters</button>
@@ -102,6 +115,8 @@
             const rhdCheckbox = document.getElementById('rhd-checkbox');
             const bomCheckbox = document.getElementById('bom-checkbox');
             const syndicateCheckbox = document.getElementById('syndicate-checkbox');
+            const memberSelect = document.getElementById('member-select');
+
 
             const applyButton = document.getElementById('apply-filters');
             const clearButton = document.getElementById('clear-filters');
@@ -117,6 +132,7 @@
 
                 const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
                 const toDate = dateTo.value ? new Date(dateTo.value) : null;
+                const selectedMember = memberSelect.value;
   
 
                 const cards = memoList.querySelectorAll('.memoitem');
@@ -132,6 +148,8 @@
                     if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
                     if (fromDate && date < fromDate) isVisible = false;
                     if (toDate && date > toDate) isVisible = false;
+                    if (selectedMember && submitter !== selectedMember) isVisible = false;
+
                     if(!isVisible){
                         card.classList.add('hidden');
                     }
@@ -151,6 +169,7 @@
                 rhdCheckbox.checked = false;
                 bomCheckbox.checked = false;
                 syndicateCheckbox.checked = false;
+                memberSelect.value = '';
 
                 document.querySelectorAll('.memoitem').forEach(card => {
                     card.classList.remove('hidden');
