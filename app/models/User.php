@@ -71,7 +71,7 @@ class User {
     public function getUserById($userId) {
         $query = "SELECT u.username, u.full_name, u.email, u.nic, u.status,
                          ur.role,
-                         c.contact_no,
+                         c.contact_no, 
                          m.meeting_type_id, mt.meeting_type 
                   FROM user u
                   LEFT JOIN user_roles ur ON u.username = ur.username
@@ -91,10 +91,15 @@ class User {
     
         // Extract meeting types into an array
         $userData->meetingTypes = array_map(fn($row) => $row->meeting_type, $result);
-    
+        
+        $contactModel = new UserContactNums();
+        $contacts = $contactModel->getContactByUsername($userId);
+
         // Ensure contact number and role are present (handle nulls gracefully)
-        $userData->contact_no = $userData->contact_no ?? null;
-        $userData->role = $userData->role ?? null;
+        $userData->contact_no = $contacts[0];
+        $userData->additional_tp_no = $contacts[1] ?? null;
+
+        $userData->role = array_unique(array_map(fn($row) => $row->role, $result));
     
         return $userData;
     }

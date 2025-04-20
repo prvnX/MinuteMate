@@ -22,7 +22,12 @@ class UserContactNums {
 
     public function getContactByUsername($username) {
         $result = $this->select_all(['username' => $username]);
-        return $result ? $result[0]->contact_no : null; // Return the contact number if found
+
+        if(!$result){
+            return null;
+        }
+
+        return array_map(fn($r) => $r->contact_no, $result);
     }
 
     public function updateContactByUsername($username, $newPhone) {
