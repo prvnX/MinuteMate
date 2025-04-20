@@ -23,8 +23,9 @@ $currentPage = 'viewMembers'; // For navbar highlighting
     <p>Email: <?= htmlspecialchars($userData->email); ?></p>
     <p>Username: <?= htmlspecialchars($userData->username); ?></p>
     <p>NIC: <?= htmlspecialchars($userData->nic); ?></p>
-    <p>Role: <?= htmlspecialchars($userData->role); ?></p>
+    <p>Role: <?= implode(', ', array_map('htmlspecialchars' ,$userData->role)); ?></p>
     <p>Contact No.: <?= htmlspecialchars($userData->contact_no ?? 'N/A'); ?></p>
+    <p>Additional Contact No.: <?= htmlspecialchars($userData->additional_tp_no ?? 'N/A'); ?></p>
 
     <label>Select Meeting Type(s):</label>
     <div class="meeting-options">

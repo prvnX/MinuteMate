@@ -38,12 +38,18 @@ class User_Meeting_Types
      * @return array - An array of usernames
      */
     public function getUsernamesByMeetingTypeId(int $meetingTypeId): array
-    {
-        $query = "SELECT accessible_user AS username FROM $this->table WHERE meeting_type_id = :meeting_type_id";
-        $data = [':meeting_type_id' => $meetingTypeId];
-        $result = $this->query($query, $data);
-        return $result ? $result : [];
-    }
+{
+    $query = "SELECT u.username
+              FROM user_meeting_types umt
+              JOIN user u ON umt.accessible_user = u.username
+              WHERE umt.meeting_type_id = :meeting_type_id
+              AND u.status = 'active'";
+
+    $data = [':meeting_type_id' => $meetingTypeId];
+    $result = $this->query($query, $data);
+    return $result ? $result : [];
+}
+
 
     public function updateMeetingTypes($username, $meetingTypeIds) {
         // Delete existing records for the user
