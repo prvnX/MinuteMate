@@ -21,7 +21,9 @@
     require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
     ?>
     
-    <div><h1 class="heading">Memo Details</h1></div>
+    <header class="page-header">
+         <h1>Memo Details </h1>
+    </header>
 
     <div class="memo-details-container">
     <?php

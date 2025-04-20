@@ -128,3 +128,15 @@
     font-size: 18px;
     font-weight: bold;
 }
+.page-header {
+    margin-bottom: 2rem;
+    margin-left: 60rem;
+    margin-top:3rem
+}
+
+.page-header h1 {
+    font-size: 2.3rem;
+    font-weight: 900;
+    color:var(--secondary);
+
+}
