@@ -397,6 +397,14 @@ body {
 .filter-btns{
     margin-top: 4rem;
 }
+.no-memos-message {
+    text-align: center;
+    font-size: 1.1em;
+    font-size: 1.3rem;
+    font-weight: 100;
+    color: #666;
 
+
+}
 
   
