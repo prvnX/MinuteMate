@@ -47,13 +47,62 @@ $currentPage = 'viewMembers'; // For navbar highlighting
 
     <div class="action-buttons">
     <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($userData->username) ?>" class="btn-edit">Edit</a>
-    <button class="btn-remove" onclick="handleMemberAction('remove')">Remove</button>
+    <div class="remove-button-wrapper">
+    <button class="remove-btn" onclick="openRemoveModal()">Remove</button>
+</div>
+
+<div id="removeModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="modalTitle">Remove Member</h3>
+        <form action="<?= ROOT ?>/admin/removeMember" method="post">
+            <!-- Editable Inputs for Username and Full Name -->
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" value="<?= htmlspecialchars($userData->username); ?>" required>
+            </div>
+            <div>
+                <label for="full_name">Full Name:</label>
+                <input type="text" name="full_name" id="full_name" value="<?= htmlspecialchars($userData->full_name); ?>" required>
+            </div>
+
+            <!-- Reason for Removal -->
+            <div>
+                <label for="reason">Reason for Removal:</label>
+                <input type="text" name="reason" id="reason" required>
+            </div>
+
+            <!-- Hidden input for removed_by populated from session -->
+            <input type="hidden" name="removed_by" value="<?=  $_SESSION['userdetails']->username ?? ''; ?>" id="removed_by">
+
+            <div class="modal-buttons">
+                <button type="submit" class="btn-remove-confirm">Confirm Remove</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <link rel="stylesheet" href="<?= ROOT ?>/assets/css/admin/viewMemberProfile.style.css">
 
 <script>
+
+function openRemoveModal() {
+    document.getElementById("modalTitle").innerText = "Remove Member";
+    document.getElementById("removeModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("removeModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target === document.getElementById("removeModal")) {
+        closeModal();
+    }
+}
+
+
     function handleMemberAction(action) {
         if (action === 'remove' && !confirm('Are you sure you want to remove this member?')) return;
 

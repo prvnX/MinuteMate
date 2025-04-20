@@ -446,4 +446,47 @@ function saveDepartment(){
     }
 }
 
+public function removeMember() {
+    // Ensure the session is started
+    session_start();
+
+    // Check if admin is logged in
+    if (!isset($_SESSION['userdetails']) || !isset($_SESSION['userdetails']->username)) {
+        echo json_encode(['error' => 'Admin not logged in.']);
+        exit;
+    }
+
+    // Admin is logged in, proceed with removal
+    $username = $_POST['username'] ?? '';
+    $fullName = $_POST['full_name'] ?? '';
+    $reason = $_POST['reason'] ?? '';
+
+    $removedBy = $_SESSION['userdetails']->username;  // Using session username
+
+    // Other logic for removing member
+    $userModel = new User();
+    if (!$userModel->find($removedBy)) {
+        echo json_encode(['error' => 'Invalid admin username.']);
+        exit;
+    }
+
+    $deletedModel = new DeletedUsers();
+    $deletedModel->insert([
+        'username' => $username,
+        'full_name' => $fullName,
+        'reason' => $reason,
+        'removed_by' => $removedBy
+    ]);
+
+    $userModel->update($username, ['status' => 'inactive'], 'username');
+    echo json_encode(['success' => true]);
+    exit;
 }
+
+
+
+
+
+}
+
+
