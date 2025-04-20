@@ -38,6 +38,19 @@
                 <p class="subtitle">View memos to be accepted</p>
             </header>
 
+            <?php if (isset($_SESSION['flash_message'])): ?>
+                <div class="flash-message success">
+                    <?= $_SESSION['flash_message']; unset($_SESSION['flash_message']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['flash_error'])): ?>
+                <div class="flash-message error">
+                    <?= $_SESSION['flash_error']; unset($_SESSION['flash_error']); ?>
+                </div>
+            <?php endif; ?>
+
+
 
     <div class="main-container">
         <div class="content-area">
@@ -57,3 +70,15 @@
             </div>
     </div>
 </body>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const flashMessage = document.querySelector('.flash-message');
+        if (flashMessage) {
+            setTimeout(() => {
+                flashMessage.style.transition = "opacity 0.5s ease-out";
+                flashMessage.style.opacity = '0';
+                setTimeout(() => flashMessage.style.display = 'none', 500);
+            }, 4000); // waits 4 seconds before starting to fade
+        }
+    });
+</script>
