@@ -135,5 +135,11 @@ class User {
         return $this->query($query);
     }
 
+    public function deactivateUser($username)
+{
+    return $this->update($username, ['status' => 'inactive'], 'username');
+}
+
+
 
 }
