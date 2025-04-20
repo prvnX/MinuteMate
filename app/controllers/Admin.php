@@ -448,10 +448,10 @@ function saveDepartment(){
 
 public function removeMember() {
     // Ensure the session is started
-    session_start();
+    $removedBy = $_SESSION['userDetails']->username;  // Using session username
 
     // Check if admin is logged in
-    if (!isset($_SESSION['userdetails']) || !isset($_SESSION['userdetails']->username)) {
+    if (!isset($removedBy)) {
         echo json_encode(['error' => 'Admin not logged in.']);
         exit;
     }
@@ -461,7 +461,7 @@ public function removeMember() {
     $fullName = $_POST['full_name'] ?? '';
     $reason = $_POST['reason'] ?? '';
 
-    $removedBy = $_SESSION['userdetails']->username;  // Using session username
+
 
     // Other logic for removing member
     $userModel = new User();
