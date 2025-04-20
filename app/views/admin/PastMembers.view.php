@@ -1,4 +1,10 @@
-<?php include '../app/views/components/admin_sidebar.php'; ?>
+<?php
+
+$user="admin";
+$notification="notification"; //use notification-dot if there's a notification
+$menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+require_once("../app/views/components/new_navbar.php"); //call the navbar component
+include '../app/views/components/admin_sidebar.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,24 +13,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Past Members</title>
   <link rel="stylesheet" href="<?=ROOT?>/assets/css/admin/viewMembers.style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
 
-<div class="members-container">
-  <h2 class="title">Past Members</h2>
-  <div class="meeting-list">
-    <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=RHD" class="meeting-item">
-      <span class="dot red"></span> RHD
-    </a>
-    <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=IOD" class="meeting-item">
-      <span class="dot yellow"></span> IOD
-    </a>
-    <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=SYN" class="meeting-item">
-      <span class="dot green"></span> SYN
-    </a>
-    <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=BOM" class="meeting-item">
-      <span class="dot blue"></span> BOM
-    </a>
+<main class="main-content">
+  <div class="container">
+    <div class="card-grid">
+      <div class="card">
+        <div class="icon-circle red"><i class="fas fa-users"></i></div>
+        <h3 class="card-title">View Past RHD Members</h3>
+        <p class="card-description">View Past members of the RHD committee</p>
+        <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=RHD" class="card-btn">RHD</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-circle yellow"><i class="fas fa-users"></i></div>
+        <h3 class="card-title">View Past IOD Members</h3>
+        <p class="card-description">View Past members of the IOD committee</p>
+        <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=IOD" class="card-btn">IOD</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-circle green"><i class="fas fa-users"></i></div>
+        <h3 class="card-title">View Past SYN Members</h3>
+        <p class="card-description">View Past members of the SYN committee</p>
+        <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=SYN" class="card-btn">SYN</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-circle green"><i class="fas fa-users"></i></div>
+        <h3 class="card-title">View Past SYN Members</h3>
+        <p class="card-description">View Past members of the SYN committee</p>
+        <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=BOM" class="card-btn">BOM</a>
+      </div>
   </div>
 </div>
 
