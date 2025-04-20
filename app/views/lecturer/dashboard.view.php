@@ -59,7 +59,7 @@
               <h2>Review Student Memos</h2>
               <p>Create and attach memos for a meeting</p>
               <a href="<?=ROOT?>/lecturer/reviewstudentmemo">
-              <button>New Memo</button>
+              <button>Review Memo</button>
               </a>
             </div>
             <div class="card" id="view-minutes">
