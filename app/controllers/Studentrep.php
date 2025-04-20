@@ -118,7 +118,7 @@ class Studentrep extends BaseController {
         if($this->isValidRequest())
         {
             $memo = new Memo();
-            $memos = $memo->getMemosByUser($user);
+            $memos = $memo->getMemosByUser($user) ?? [];
             $this->view("studentrep/viewsubmittedmemos", ['memos'=> $memos]);
         }
         else

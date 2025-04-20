@@ -28,9 +28,9 @@
         ?>
     </div>
 
-    <div class="heading">
-             <h1 class="memo-title">Memo Details</h1>
-    </div>
+    <header class="page-header">
+         <h1>Memo Details </h1>
+    </header>
 
     <div class="memo-details-container">
     <?php

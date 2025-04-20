@@ -115,6 +115,8 @@ class Secretary extends BaseController {
         }
         $meetingId = $_GET['meeting'];
         //check the user has the authority to create the minute for the meeting
+        $user=$_SESSION['userDetails']->username;
+        $drafts= new Minute_Draft();
         $meeting = new Meeting();
         $department = new Department(); 
         $memo = new Memo();
@@ -129,10 +131,11 @@ class Secretary extends BaseController {
         $auth=$meeting->authUserforMinute($meetingId,$_SESSION['userDetails']->username);
         $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
+        $draftStatus=$drafts->isDraftExist($user,$meetingId);
         
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos]);
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -268,7 +271,11 @@ class Secretary extends BaseController {
         {
             $memo = new Memo();
             $memos = $memo->getAllAcceptedMemos();
-            $this->view("secretary/viewmemos", ['memos'=> $memos]);
+
+            $userModel = new User();
+            $submittedMembers = $userModel->query("SELECT DISTINCT username FROM user");
+
+            $this->view("secretary/viewmemos", ['memos'=> $memos, 'submittedMembers'=>$submittedMembers]);
         }
         else
         {
@@ -667,5 +674,55 @@ class Secretary extends BaseController {
 
 
     }
+    
+    //handling the ajax requests for drafting the minutes
+    private function isSecretary(){
+        if($_SESSION['userDetails']->role=="secretary"){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public function inputDraftData(){
+        if($this->isSecretary()){
+  
+            $input = json_decode(file_get_contents("php://input"), true);
+            $meetingID = $input['draftMeeting'] ?? null;
+            $username = $input['draftAddedUser'] ?? null;
+            $draftData = $input['draftData'] ?? null;
+            $draftData = json_encode($draftData);
+            $draft = new Minute_Draft();
+            $state=$draft->addToDraft($username, $meetingID, $draftData);
+  
+
+            echo json_encode([ 'success' => true,'response' => 'data recieved'  ]);
+        }
+        else{
+            echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
+        }
+    }
+
+    public function getDraftData(){
+        if($this->isSecretary()){
+            $input = json_decode(file_get_contents("php://input"), true);
+            $meetingID = $input['loadDraft'] ?? null;
+            $username = $input['loadAddedUser'] ?? null;
+            $draft = new Minute_Draft();
+            $draftData=$draft->selectandproject('draft_data',['meeting_id'=>$meetingID,'username'=>$username]);
+            if($draftData){
+                $draftData = json_decode($draftData[0]->draft_data, true);
+                echo json_encode([ 'success' => true,'response' => $draftData  ]);
+            }
+            else{
+                echo json_encode([  'success' => false,'response' => 'no data found'  ]);
+            }
+        }
+        else{
+            echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
+        }
+    }
+                
+
     
 }

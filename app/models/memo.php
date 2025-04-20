@@ -72,10 +72,14 @@
                     SET status = :status 
                     WHERE memo_id = :memo_id";
 
-            return $this->query($query, [
+            $conn = $this->connect();
+            $stm = $conn->prepare($query);
+            $check = $stm->execute([
                 'status' => $status,
                 'memo_id' => $memoId
             ]);
+
+            return $check;
         }
 
         public function deleteMemo($memoId)
@@ -83,9 +87,13 @@
             $query = "DELETE FROM $this->table 
                     WHERE memo_id = :memo_id";
 
-            return $this->query($query, [
+            $conn = $this->connect();
+            $stm = $conn->prepare($query);
+            $check = $stm->execute([
                 'memo_id' => $memoId
             ]);
+
+            return $check; 
         }
 
             public function getPendingMemoCount($type) {

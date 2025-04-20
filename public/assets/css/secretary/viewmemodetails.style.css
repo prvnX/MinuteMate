@@ -1,5 +1,30 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+:root {
+    --primary: #3b82f6;
+    --secondary: #1e40af;
+    --primary-light: #EEF2FF;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --background: #F8FAFC;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --rhd: #F87171;
+    --iud: #FBBF24;
+    --bom: #60A5FA;
+    --syn: #4ADE80;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
 
 .memo-list-navbar .navbar{
     height: 55px;
@@ -13,16 +38,19 @@
 .memo-list-navbar .notification-footer{
     height: 3rem;
 }
-
-
-.heading
-{
-    text-align: center;
-    margin-top: 40px;
-    font-size: 40px;
-    font-family: ubuntu;
-    color: #65558F;
+.page-header {
+    margin-bottom: 2rem;
+    margin-left: 60rem;
+    margin-top:3rem
 }
+
+.page-header h1 {
+    font-size: 2.3rem;
+    font-weight: 900;
+    color:var(--secondary);
+
+}
+
 .memo-details-container {
     max-width: 1000px;
     margin: 50px auto;
