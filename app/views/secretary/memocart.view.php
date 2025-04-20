@@ -18,30 +18,42 @@
 </head>
 
 <body>
-<div class="navbar">
-<?php
-    $user="secretary";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/navbar.php"); //call the navbar component
+
+    <?php
+        $user="secretary";
+        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
+        $notification="notification"; //use notification-dot if there's a notification
+        $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+        
+        echo "<div class='memo-list-navbar'>";
+        require_once("../app/views/components/new_navbar.php");
+        echo "</div>";
+        require_once("../app/views/components/sec_sidebar.php");
+        $memoList=$data['memos'];
    ?>
 
-   <div>
-        <h1 class="heading">MemoCart</h1>
-   </div>
 
-   <div class="memolist">
-    <?php foreach ($memos as $memo): ?>
-        <div class="memoitem">
-            <div class="memocontent">
-            <h3><?= htmlspecialchars($memo->memo_title) ?></h3>
-            <p><?= htmlspecialchars($memo->memo_id) ?></p>
-         </div>
-            <a href="<?=ROOT?>/secretary/acceptmemo/?memo_id=<?= $memo->memo_id ?>">
-                <button class="viewbtn">View</button>
-            </a>
-        </div>
-    <?php endforeach; ?>
- </div>
+             <header class="page-header">
+                <h1>Memo Cart </h1>
+                <p class="subtitle">View memos to be accepted</p>
+            </header>
+
+
+    <div class="main-container">
+        <div class="content-area">
+            <div class="memolist" id="memolist">
+                <?php foreach ($memoList as $memoitem): ?>
+                    <div class="memoitem" >
+                        <div class="memocontent">
+                        <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
+                       
+                        <p>Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?></p>
+                    </div>
+                        <a href="<?=ROOT?>/secretary/acceptmemo/?memo_id=<?= $memoitem->memo_id ?>">
+                            <button class="viewbtn">View</button>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+    </div>
 </body>
