@@ -40,7 +40,7 @@ class Minute{
     public function getMinutes()
     {
          
-           $query = "SELECT Minute_id, title, created_date, meeting.meeting_type 
+           $query = "SELECT minute_id, title, created_date, meeting.meeting_type 
                       FROM $this->table
                       INNER JOIN meeting ON minute.Meetingid = meeting.Meeting_id";
             return $this->query(query: $query);
