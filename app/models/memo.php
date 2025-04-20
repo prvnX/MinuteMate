@@ -130,6 +130,15 @@
                         WHERE m.meeting_type=:meeting_type AND me.is_forwarded=0 AND (me.status='parked' OR me.status='under_discussion')";
                 return $this->query($query,$data);
             }
+            public function getMemos()
+            {
+                $query = "SELECT memo_id, memo_title, submitted_date, meeting.meeting_type
+                          FROM $this->table 
+                          INNER JOIN meeting ON memo.meeting_id = meeting.meeting_id";
+                return $this->query(query: $query);
+            }
+            
+
 
     }
 
