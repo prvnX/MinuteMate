@@ -93,7 +93,7 @@ class Lecturer extends BaseController {
        if(!$memo_id)
        {
         $_SESSION['flash_error'] = "Memo ID not provided.";
-        redirect("secretary/viewsubmittedmemos");
+        redirect("lecturer/viewsubmittedmemos");
         return;
        }
 
@@ -104,12 +104,12 @@ class Lecturer extends BaseController {
 
         if($memo)
         {
-            $this->view("secretary/viewmemodetails", ['memo'=>$memo]);
+            $this->view("lecturer/viewmemodetails", ['memo'=>$memo]);
         }
         else
         {
             $_SESSION['flash_error'] = "Memo not found.";
-            redirect("secretary/viewmemos");
+            redirect("lecturer/viewsubmittedmemos");
         }
     }
     else

@@ -143,7 +143,7 @@ class User {
     public function deactivateUser($username){
     return $this->update($username, ['status' => 'inactive'], 'username');
 }
-
+  
 public function reactivateStatus($username) {
     $query = "UPDATE user SET status = 'active' WHERE username = :username";
     return $this->query($query, ['username' => $username]);
@@ -151,5 +151,14 @@ public function reactivateStatus($username) {
 
 
 
+public function getUsersForMeetingType($meetingTypeId)
+        {
+            $query = "SELECT DISTINCT full_name
+                    FROM $this->table 
+                    INNER JOIN user_meeting_types umt ON $this->table.username = umt.accessible_user
+                    WHERE umt.meeting_type_id = :meetingTypeId";
 
-}
+            return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
+
+    }
+    

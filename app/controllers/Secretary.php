@@ -159,7 +159,28 @@ class Secretary extends BaseController {
 
     $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
     }
+
     
+    public function viewminutereports() {
+        if (!isset($_GET['minute'])) {
+            header("Location: " . ROOT . "/secretary/selectminute");
+            exit;
+        }
+
+        $minuteId = $_GET['minute'];
+        $minute = new Minute();
+        $minuteDetails = $minute->getMinuteDetails($minuteId);
+
+        if (!$minuteDetails) {
+            $_SESSION['flash_error'] = "Minute not found.";
+            redirect("secretary/selectminute");
+            return;
+        }
+
+        $this->view("secretary/viewminutereports", ['minuteDetails' => $minuteDetails]);
+    }
+
+
     public function notifications() {
         //these are just placeholders
         $user = "secretary";
@@ -180,11 +201,17 @@ class Secretary extends BaseController {
     }
     public function selectmemo() { //this is the page where the secretary selects the memo to view details
     $memo = new Memo();
-    $memos = $memo->getMemos($_SESSION['userDetails']->username, date("Y-m-d"));
+    $memos = $memo->getMemos();
 
     
         $this->view("secretary/selectmemo", ['memos' => $memos]);
      
+}
+public function selectminute() { //this is the page where the secretary selects the minute to view details
+    $minute = new Minute();
+    $minutes = $minute->getMinutes($_SESSION['userDetails']->username, date("Y-m-d"));
+    
+    $this->view("secretary/selectminute", ['minutes' => $minutes]);
 }
     public function viewminutes() {
         $user = $_SESSION['userDetails']->username;
@@ -273,7 +300,7 @@ class Secretary extends BaseController {
             $memos = $memo->getAllAcceptedMemos();
 
             $userModel = new User();
-            $submittedMembers = $userModel->query("SELECT DISTINCT username FROM user");
+            $submittedMembers = $userModel->query("SELECT DISTINCT full_name FROM user");
 
             $this->view("secretary/viewmemos", ['memos'=> $memos, 'submittedMembers'=>$submittedMembers]);
         }
@@ -318,23 +345,7 @@ class Secretary extends BaseController {
     }
 
  
-    public function viewminutereports() {
-        if(!isset($_GET['minute'])) {
-            header("Location: ".ROOT."/secretary/selectminute");
-        }
-        $memoid = $_GET['minute'];
-        $data = [
-            'date' => '2024-11-16',
-            'time' => '10:00 AM',
-            'meeting_type' => 'Team Meeting',
-            'meeting_minute' => 'Discussed project updates and next steps.',
-            'linked_minutes' => 'Minute #14, Minute #15',
-            'linked_memos' => 'Memo #12',
-            'recording' => 'https://example.com/recording.mp4',
-            'attendees' => 'Alice, Bob, Charlie'
-        ];
-        $this->view("secretary/viewminutereports", $data);
-    }
+   
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -410,14 +421,10 @@ class Secretary extends BaseController {
                         //     //send the releavent content as a mail
                             $mail = new Mail();
                             $mailstautus=$mail->forwardMinuteContent($depEmail,$depname,$contentTitle,$contentinD,$minuteID,$meetingDate,$secname,$meetingType,$dheadmail,$dhead);
-                            if($mailstautus){
-                                $status="Mail sent";
+                            if(!$mailstautus){
+                                $mailstautus=false;
                             
                             }
-                            else{
-                                $status="Mail not sent";
-                                $mailstautus=false;
-                        }
                  }   
 
             }
@@ -483,18 +490,35 @@ class Secretary extends BaseController {
 
 
             }
+            $notification = new Notification();
             // $mailstautus=false;
             // $success=false;
             if($success && $dataInsert==1 && $mailstautus==true){
                 $minutemodel=new minute;
                 $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
                 $minuteid=$minuteid[0]->Minute_ID;
+                $message="Minute for the meeting with ID ". $meetingID ."on ". $meetingDate ." has been created. View Now";
+                $recivers=$meeting->getParticipants($meetingID);
+                
+                foreach($recivers as $reciever){
+                    $reciever=$reciever->username;
+                    $notification->insert(['reciptient'=>$reciever,'notification_type'=>'minute','notification_message'=>$message,'Ref_ID'=>$minuteid,'link'=>'viewminute?minuteID='.$minuteid]);
+                
+                }
                 $this->view("showsuccessminute",["user"=>"secretary","minuteid"=>$minuteid]);
             }
             else if($success && $dataInsert==1 && $mailstautus==false){
                 $minutemodel=new minute;
                 $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
                 $minuteid=$minuteid[0]->Minute_ID;
+                $message="Minute for the meeting with ID ". $meetingID ."on ". $meetingDate ." has been created. View Now";
+                $recivers=$meeting->getParticipants($meetingID);
+                
+                foreach($recivers as $reciever){
+                    $reciever=$reciever->username;
+                    $notification->insert(['reciptient'=>$reciever,'notification_type'=>'minute','notification_message'=>$message,'Ref_ID'=>$minuteid,'link'=>'viewminute?minuteID='.$minuteid]);
+                
+                }
                 $this->view("showwarningminute",["user"=>"secretary","minuteid"=>$minuteid]);
             }
             else{
@@ -549,10 +573,7 @@ class Secretary extends BaseController {
         redirect("home");
             }
  
-    public function selectminute (){
-        $this->view("secretary/selectminute");
-    }
-
+     
     public function requestchange(){
         $responseStatus = "";
     
@@ -722,7 +743,19 @@ class Secretary extends BaseController {
             echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
         }
     }
+    // public function testModels(){
+    //     $notification = new Notification();
+    //     $meeting = new Meeting();
+    //     $meetingID=1;
+    //     $recivers=$meeting->getParticipants($meetingID);
+    //     $message="Minute for the meeting with ID ". $meetingID ."on   has been created. View Now";
+    //     $minuteid=1;
+    //     show($recivers);
+  
+    // }
                 
 
     
 }
+
+
