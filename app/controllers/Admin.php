@@ -302,18 +302,28 @@ public function viewMemberProfile() {
         $this->view(name: "admin/PastMembers");
     }
 
-    public function PastMembersList(): void{
-        $this->view(name: "admin/PastMembersList");
-    }
-
     public function viewPastMembersByType() {
-        // Retrieve the meeting type from the URL
-        $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';
+        $meetingType = $_GET['meetingType'] ?? null;
     
-        // Pass the meeting type to the view
-        $this->view("admin/PastMembersList", [
-            "meetingType" => $meetingType
-        ]);
+        if ($meetingType) {
+            // Load the required models
+            $meetingTypesModel = $this->model("meeting_types");
+            $userMeetingTypesModel = $this->model("user_meeting_types");
+    
+            // Retrieve the type_id for the given meeting type
+            $meetingTypeId = $meetingTypesModel->getTypeIdByMeetingType($meetingType);
+    
+            if ($meetingTypeId) {
+                // Fetch the usernames of users who have been removed for this meeting type
+                $removedMembers = $userMeetingTypesModel->getInactiveMembersByMeetingType($meetingTypeId);
+    
+                // Pass the data to the view
+                $this->view("admin/PastMembersList", [
+                    "meetingType" => $meetingType,
+                    "removedMembers" => $removedMembers
+                ]);
+            }
+        }
     }
     
     public function pastMemberProfile(): void{
