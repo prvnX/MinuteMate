@@ -261,11 +261,26 @@ public function selectminute() { //this is the page where the secretary selects 
         }
 
         $memo = new Memo();
+        $notification = new Notification();
+        $memoSubmitter= $memo->selectandproject('submitted_by',['memo_id'=>$memo_id])[0]->submitted_by;
+   
 
         if ($action === 'accept') {
             $updated = $memo->updateStatus($memo_id, 'accepted');
+            $notification->insert([
+                'reciptient' => $memoSubmitter,
+                'notification_message' => "Your memo with ID $memo_id has been approved.",
+                'notification_type' => 'approved',
+                'Ref_ID' => $memo_id,
+                'link'=>"viewmemodetails/?memo_id=$memo_id"]);
         } elseif ($action === 'decline') {
             $updated = $memo->deleteMemo($memo_id);
+            $notification->insert([
+                'reciptient' => $memoSubmitter,
+                'notification_message' => "Your memo with ID $memo_id has been declined.",
+                'notification_type' => 'declined',
+                'Ref_ID' => $memo_id,
+                'link'=>"viewmemodetails/?memo_id=$memo_id"]);
         } else {
             $_SESSION['flash_error'] = 'Invalid action.';
             redirect("secretary/memocart");
@@ -497,7 +512,7 @@ public function selectminute() { //this is the page where the secretary selects 
                 $minutemodel=new minute;
                 $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
                 $minuteid=$minuteid[0]->Minute_ID;
-                $message="Minute for the meeting with ID ". $meetingID ."on ". $meetingDate ." has been created. View Now";
+                $message="Meeting minute (ID ".$meetingID." , ".$meetingDate." ) is created. View now.";
                 $recivers=$meeting->getParticipants($meetingID);
                 
                 foreach($recivers as $reciever){
@@ -511,7 +526,7 @@ public function selectminute() { //this is the page where the secretary selects 
                 $minutemodel=new minute;
                 $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
                 $minuteid=$minuteid[0]->Minute_ID;
-                $message="Minute for the meeting with ID ". $meetingID ."on ". $meetingDate ." has been created. View Now";
+                $message="Meeting minute (ID ".$meetingID." , ".$meetingDate." ) is created. View now.";
                 $recivers=$meeting->getParticipants($meetingID);
                 
                 foreach($recivers as $reciever){
