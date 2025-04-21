@@ -104,16 +104,21 @@ class User {
         return $userData;
     }
 
-    public function updateContactInfo($username, $newPhone) {
-        
-        require 'UserContactNums.php';
-        $contactNums = new UserContactNums();
-        $contactNums->updateContactByUsername($username, $newPhone);
+    public function updateContactInfo($username, $contact_no) {
+        require_once __DIR__ . '/UserContactNums.php'; 
+        $contactModel = new UserContactNums();
+    
+        // Handle single or multiple numbers
+        $numbers = is_array($contact_no) ? $contact_no : [$contact_no];
+    
+        $contactModel->updateOrInsertContactNumbers($username, $numbers);
     }
+    
+    
 
     public function updateUserByUsername($username, $data) {
         $query = "UPDATE user 
-                  SET full_name = :full_name, email = :email, nic = :nic,
+                  SET full_name = :full_name, email = :email, nic = :nic
                   WHERE username = :username";
         $data['username'] = $username;
         return $this->query($query, $data);
@@ -135,10 +140,16 @@ class User {
         return $this->query($query);
     }
 
-    public function deactivateUser($username)
-{
+    public function deactivateUser($username){
     return $this->update($username, ['status' => 'inactive'], 'username');
 }
+  
+public function reactivateStatus($username) {
+    $query = "UPDATE user SET status = 'active' WHERE username = :username";
+    return $this->query($query, ['username' => $username]);
+}
+
+
 
 public function getUsersForMeetingType($meetingTypeId)
         {
@@ -148,7 +159,6 @@ public function getUsersForMeetingType($meetingTypeId)
                     WHERE umt.meeting_type_id = :meetingTypeId";
 
             return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
-        }
 
     }
     

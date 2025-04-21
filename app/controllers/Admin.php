@@ -524,6 +524,42 @@ exit;
     exit;
 }
 
+public function reactivateMember() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+       
+        // Dynamically load models as needed
+        $userModel = $this->model("user");
+        $userRolesModel = $this->model("UserRoles");
+        $meetingTypesModel = $this->model("meeting_types");
+        $userMeetingTypesModel = $this->model("user_meeting_types");
+        $deletedUsersModel = $this->model("DeletedUsers");
+
+        $username = $_POST['username'];
+
+        // Use models to update data
+        $userModel->updateUserByUsername($username, [
+            'full_name' => $_POST['full_name'],
+            'email' => $_POST['email'],
+            'nic' => $_POST['nic']
+        ]);
+        
+
+        $userModel->updateContactInfo($username, $_POST['contact_no']);
+        $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meeting_types']);
+        $userRolesModel->updateRoles($username, $_POST['roles']);
+
+        // Reactivate the user
+        $userModel->reactivateStatus($username);
+
+        $deletedUsersModel->deleteByUsername($username);
+        
+        echo "<script>alert('Member reactivated successfully.'); window.location.href='your_url_here';</script>";
+
+    }
+}
+
+
+
 
 
 

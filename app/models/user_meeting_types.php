@@ -51,18 +51,22 @@ class User_Meeting_Types
 }
 
 
-    public function updateMeetingTypes($username, $meetingTypeIds) {
+    public function updateMeetingTypes($username, $meetingTypes) {
         // Delete existing records for the user
         $query = "DELETE FROM user_meeting_types WHERE accessible_user = :username";
         $this->query($query, ['username' => $username]);
 
         // Insert new meeting types
-        foreach ($meetingTypeIds as $typeId) {
+        foreach ($meetingTypes as $type) {
+            $queryx="SELECT type_id FROM meeting_types WHERE meeting_type=:type";
+            $typeID=($this->query($queryx,['type'=>$type]))[0]->type_id;
+            
+
             $query = "INSERT INTO user_meeting_types (accessible_user, meeting_type_id) 
                       VALUES (:accessible_user, :meeting_type_id)";
             $this->query($query, [
                 'accessible_user' => $username,
-                'meeting_type_id' => $typeId,
+                'meeting_type_id' => $typeID
             ]);
         }
     }
