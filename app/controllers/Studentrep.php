@@ -220,39 +220,35 @@ class Studentrep extends BaseController {
     }
     
 
-    public function viewmemoreports() {
-        if(!isset($_GET['memo'])) {
-            header("Location: ".ROOT."/studentrep/selectmemo");
+    public function viewmemoreport() {
+        if (!isset($_GET['memo'])) {
+            header("Location: " . ROOT . "/studentrep/selectmemo");
+            exit;
         }
-        $memoid = $_GET['memo'];
-        
-        $data = [
-            'id' =>$memoid,
-            
-            'time' => '2:00 PM',
-            'status' => 'Approved',
-             
-            'author' => 'John Doe',
-            'title' => 'Project X',
-            'date' => 'March 4, 2025',
-            'meeting_type' => 'IUD',
-           
-            
-            'timeline' => [
-                ['label' => 'Accepted', 'date' => 'Mar 1, 2025'],
-                ['label' => 'Parked', 'date' => 'Mar 2, 2025'],
-                ['label' => 'Discussed', 'date' => 'Mar 3, 2025'],
-                ['label' => 'Finished Discussion', 'date' => 'Mar 4, 2025']
-            ]
- 
-
-        ];
     
-        $this->view("studentrep/viewmemoreports", $data);
-    }
-    public function selectmemo (){
-        $this->view("studentrep/selectmemo");
-    }
+        $memoId = $_GET['memo'];
+        $memo = new Memo();
+        $memoDetails = $memo->getMemoById($memoId);
+    
+        if (!$memoDetails) {
+            $_SESSION['flash_error'] = "Memo not found.";
+            redirect("studentrep/selectmemo");
+            return;
+        }
+    
+        $this->view("studentrep/viewmemoreports", ['memoDetails' => $memoDetails]);
+        }
+    
+
+
+        public function selectmemo() { //this is the page where the studentrep selects the memo to view details
+            $memo = new Memo();
+            $memos = $memo->getMemos($_SESSION['userDetails']->username, date("Y-m-d"));
+        
+            
+                $this->view("studentrep/selectmemo", ['memos' => $memos]);
+             
+        }
     private function isRestrict($username,$contentID){
         $restrictions=new Content_restrictions();
         $res_status=$restrictions->checkRestrictions($username,$contentID);
