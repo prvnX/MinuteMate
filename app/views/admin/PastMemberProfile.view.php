@@ -6,13 +6,10 @@ $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notificat
 require_once("../app/views/components/new_navbar.php"); 
 include '../app/views/components/admin_sidebar.php';
 
-
-// Retrieve member ID from the URL
-$memberId = $_GET['id'] ?? null;
-
-// Fetch the member's details
-$member = $dummyMembers[$memberId] ?? null;
+$userData = $data['userData'] ?? null;
+$deletedData = $data['deletedData'] ?? null;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,8 +21,7 @@ $member = $dummyMembers[$memberId] ?? null;
 <body>
 
 <div class="profile-container">
-  <?php if ($member): ?>
-    <h2 class="profile-title">Profile Details</h2>
+  <?php if ($userData && $deletedData): ?>
     <div class="profile-details">
       <div class="content">
         <div class="profile-header">
@@ -36,9 +32,12 @@ $member = $dummyMembers[$memberId] ?? null;
               <p><strong>Email:</strong> <?= htmlspecialchars($userData->email) ?></p>
               <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($userData->username) ?></p>
               <p><strong>NIC:</strong> <?= htmlspecialchars($userData->nic) ?></p>
-              <p><strong>Role:</strong> <?= htmlspecialchars($userData->roles) ?></p>
-              <p><strong>Phone:</strong> <?= htmlspecialchars($userData->contact_no) ?></p>
+              <p><strong>Role:</strong> <?= htmlspecialchars(implode(', ', $userData->role )) ?></p>
+              <p><strong>Contact No.:</strong> <?= htmlspecialchars($userData->contact_no) ?></p>
+              <p><strong>Additional Contact No.:</strong> <?= htmlspecialchars($userData->additional_tp_no) ?></p>
+              <p><strong>Removed By:</strong> <?= htmlspecialchars($deletedData->removed_by) ?></p>
               <p><strong>Status:</strong> <?= htmlspecialchars($userData->status) ?></p>
+              <p><strong>Reason:</strong> <?= htmlspecialchars($deletedData->reason) ?></p>
 
               <label>Select Meeting Type(s):</label>
               <div class="meeting-options">
@@ -64,7 +63,6 @@ $member = $dummyMembers[$memberId] ?? null;
       </div>
       <div class="action-buttons">
         <a href="<?=ROOT?>/admin/addPastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-add">Add</a>
-        <!-- <a href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-delete">Delete</a> -->
       </div>
     </div>
   <?php else: ?>
