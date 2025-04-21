@@ -86,7 +86,17 @@ public function deleteMeeting() {
         if ($meeting_id) {
             $auth=$this->authMeetingEdit($meeting_id,$_SESSION['userDetails']->username);
             if($auth){
+                $meetingParticipants = $meeting->getParticipants($meeting_id);
                 $meeting->delete($meeting_id,'meeting_id');
+                $notificationModel = new Notification();
+                foreach ($meetingParticipants as $participant) {
+                    $notificationModel->insert([
+                        'reciptient' => $participant->username,
+                        'notification_message' => "The meeting with ID - $meeting_id has been deleted",
+                        'notification_type' => 'deleted',
+                        'Ref_ID' => $meeting_id,
+                        'link'=>"dashboard"]);
+                } 
                 echo json_encode(["success" => "Meeting with ID - $meeting_id Deleted Successfully"]);
             }
             else{
@@ -116,6 +126,16 @@ public function rescheduleMeeting() {
                 return;
             }
             $meeting->update($meeting_id,['date'=>$date,'start_time'=>$startTime,'end_time'=>$endTime],'meeting_id');
+            $notificationModel = new Notification();
+            $meetingParticipants = $meeting->getParticipants($meeting_id);
+            foreach ($meetingParticipants as $participant) {
+                $notificationModel->insert([
+                    'reciptient' => $participant->username,
+                    'notification_message' => "The meeting with ID - $meeting_id has been rescheduled to $date",
+                    'notification_type' => 'rescheduled',
+                    'Ref_ID' => "$meeting_id",
+                    'link'=>"events?date=$date"]);
+            } 
             echo json_encode(["success" => "Meeting with ID - $meeting_id Rescheduled Successfully"]);
         } else {
             echo json_encode(["error" => "Meeting ID is missing"]);
@@ -172,6 +192,7 @@ public function addMeeting() {
         $memos=new memo;
         $memofwd=new Memo_forwards;
         $memotofwd=$memos->getMemosByMeetingType($meetingType);
+
         if(isset($memotofwd) && $memotofwd!=null){
              foreach ($memotofwd as $memo) {
                 $memoID=$memo->memo_id;
@@ -181,10 +202,16 @@ public function addMeeting() {
            }
                 
         }
-
-
-
-                
+        $notificationModel = new Notification();
+        $meetingParticipants = $meeting->getParticipants($meetingid);
+        foreach ($meetingParticipants as $participant) {
+            $notificationModel->insert([
+                'reciptient' => $participant->username,
+                'notification_message' => "New meeting added with ID - $meetingid",
+                'notification_type' => 'meeting',
+                'Ref_ID' => $meetingid,
+                'link'=>"events?date=$date"]);
+        } 
             echo json_encode(["success" => "Meeting Added Successfully with ID - ".$meetingid]);
         }
         else{

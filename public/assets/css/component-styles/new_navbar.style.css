@@ -115,6 +115,8 @@
 
 .notification-dropdown.active {
     display: flex;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .notification-dropdown .notification-item {

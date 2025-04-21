@@ -160,7 +160,24 @@ class Lecturer extends BaseController {
                 'meeting_id' => $meetingId,
             ];
             $memo = new Memo();
+            $meeting= new Meeting();
             $memo->insert($memoData);
+            $memoId = $memo->getLastInsertID();
+            $sec=$meeting->getSecForMeeting($meetingId);
+            $secusername=$sec[0]->username;
+            $user=$_SESSION['userDetails']->full_name;
+
+            $notification = new Notification();
+            if($secusername!=$user){
+                $notification->insert([
+                    'reciptient' => $secusername,
+                    'notification_message' => "New memo submitted by $user,Review Now",
+                    'notification_type' => 'memo',
+                    'Ref_ID' => $memoId,
+                    'link'=>"acceptmemo/?memo_id=$memoId"]);
+            }
+  
+
              $this->view("showsuccessmemo",["user"=>"lecturer"]);
         }
         else{
