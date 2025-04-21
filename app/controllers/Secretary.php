@@ -300,7 +300,7 @@ public function selectminute() { //this is the page where the secretary selects 
             $memos = $memo->getAllAcceptedMemos();
 
             $userModel = new User();
-            $submittedMembers = $userModel->query("SELECT DISTINCT username FROM user");
+            $submittedMembers = $userModel->query("SELECT DISTINCT full_name FROM user");
 
             $this->view("secretary/viewmemos", ['memos'=> $memos, 'submittedMembers'=>$submittedMembers]);
         }

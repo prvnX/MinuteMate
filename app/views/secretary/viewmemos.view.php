@@ -90,8 +90,8 @@
                         <select id="member-select" class="date-input">
                             <option value="">-- Select Member --</option>
                             <?php foreach ($submittedMembers as $member): ?>
-                                <option value="<?= htmlspecialchars(strtolower($member->username)) ?>">
-                                    <?= htmlspecialchars($member->username) ?>
+                                <option value="<?= htmlspecialchars(strtolower($member->full_name)) ?>">
+                                    <?= htmlspecialchars($member->full_name) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
