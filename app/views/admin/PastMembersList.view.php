@@ -33,9 +33,6 @@
           <a class="view-btn" href="<?=ROOT?>/admin/PastMemberProfile?id=<?= htmlspecialchars($member->username) ?>">
             View
           </a>
-          <a class="delete-btn" href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($member->username) ?>">
-            Delete
-          </a>
         </li>
       <?php endforeach; ?>
     </ul>
