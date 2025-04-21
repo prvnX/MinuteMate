@@ -1,13 +1,11 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
-    margin-left: -40px;
-    padding-top: 100px;
   }
   /* General styling */
 .members-list-container {
   padding: 20px;
-  margin-left: 250px; /* Adjust based on sidebar width */
+  margin-left: 30px; /* Adjust based on sidebar width */
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;

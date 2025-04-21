@@ -96,7 +96,7 @@ class User {
         $contacts = $contactModel->getContactByUsername($userId);
 
         // Ensure contact number and role are present (handle nulls gracefully)
-        $userData->contact_no = $contacts[0];
+        $userData->contact_no = $contacts[0] ?? null;
         $userData->additional_tp_no = $contacts[1] ?? null;
 
         $userData->role = array_unique(array_map(fn($row) => $row->role, $result));

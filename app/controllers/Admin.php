@@ -326,9 +326,35 @@ public function viewMemberProfile() {
         }
     }
     
-    public function pastMemberProfile(): void{
-        $this->view(name: "admin/pastMemberProfile");
+    public function pastMemberProfile(){
+    $userModel = new User();
+    $deletedUserModel = new DeletedUsers();
+
+    // Get the user ID (username) from the query parameter
+    $userId = $_GET['id'] ?? null;
+
+    if (!$userId) {
+        echo "Invalid user ID.";
+        return;
     }
+
+    // Fetch user details (from 'user', 'user_roles', 'user_contact_nums', 'user_meeting_types')
+    $userData = $userModel->getUserById($userId);
+
+    // Fetch deletion details from 'deleted_users'
+    $deletedData = $deletedUserModel->getDeletedInfo($userId);
+
+    // Combine both datasets
+    $data = [
+        'userData' => $userData,
+        'deletedData' => $deletedData,
+        'memberId' => $userId
+    ];
+
+    // Load the view
+    $this->view('admin/pastMemberProfile', $data);
+    }
+
 
     public function addPastMember(): void{
         $this->view(name: "admin/addPastMember");
