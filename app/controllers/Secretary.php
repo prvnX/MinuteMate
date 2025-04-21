@@ -159,7 +159,28 @@ class Secretary extends BaseController {
 
     $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
     }
+
     
+    public function viewminutereports() {
+        if (!isset($_GET['minute'])) {
+            header("Location: " . ROOT . "/secretary/selectminute");
+            exit;
+        }
+
+        $minuteId = $_GET['minute'];
+        $minute = new Minute();
+        $minuteDetails = $minute->getMinuteDetails($minuteId);
+
+        if (!$minuteDetails) {
+            $_SESSION['flash_error'] = "Minute not found.";
+            redirect("secretary/selectminute");
+            return;
+        }
+
+        $this->view("secretary/viewminutereports", ['minuteDetails' => $minuteDetails]);
+    }
+
+
     public function notifications() {
         //these are just placeholders
         $user = "secretary";
@@ -185,6 +206,12 @@ class Secretary extends BaseController {
     
         $this->view("secretary/selectmemo", ['memos' => $memos]);
      
+}
+public function selectminute() { //this is the page where the secretary selects the minute to view details
+    $minute = new Minute();
+    $minutes = $minute->getMinutes($_SESSION['userDetails']->username, date("Y-m-d"));
+    
+    $this->view("secretary/selectminute", ['minutes' => $minutes]);
 }
     public function viewminutes() {
         $user = $_SESSION['userDetails']->username;
@@ -318,23 +345,7 @@ class Secretary extends BaseController {
     }
 
  
-    public function viewminutereports() {
-        if(!isset($_GET['minute'])) {
-            header("Location: ".ROOT."/secretary/selectminute");
-        }
-        $memoid = $_GET['minute'];
-        $data = [
-            'date' => '2024-11-16',
-            'time' => '10:00 AM',
-            'meeting_type' => 'Team Meeting',
-            'meeting_minute' => 'Discussed project updates and next steps.',
-            'linked_minutes' => 'Minute #14, Minute #15',
-            'linked_memos' => 'Memo #12',
-            'recording' => 'https://example.com/recording.mp4',
-            'attendees' => 'Alice, Bob, Charlie'
-        ];
-        $this->view("secretary/viewminutereports", $data);
-    }
+   
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -562,10 +573,7 @@ class Secretary extends BaseController {
         redirect("home");
             }
  
-    public function selectminute (){
-        $this->view("secretary/selectminute");
-    }
-
+     
     public function requestchange(){
         $responseStatus = "";
     
