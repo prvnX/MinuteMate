@@ -66,7 +66,7 @@
                 </form>
             </div>
 
-            <a href="<?= ROOT ?>/secretary/memocart" class="btn-back">Back to Memo Cart</a>
+            <a href="<?= ROOT ?>/lecturer/reviewstudentmemo" class="btn-back">Back </a>
         <?php else : ?>
             <p class="memo-error">Memo not found.</p>
         <?php endif; ?>
