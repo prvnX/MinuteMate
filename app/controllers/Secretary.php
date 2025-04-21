@@ -209,7 +209,7 @@ class Secretary extends BaseController {
 }
 public function selectminute() { //this is the page where the secretary selects the minute to view details
     $minute = new Minute();
-    $minutes = $minute->getMinutes($_SESSION['userDetails']->username, date("Y-m-d"));
+    $minutes = $minute->getMinutes();
     
     $this->view("secretary/selectminute", ['minutes' => $minutes]);
 }
