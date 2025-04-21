@@ -326,9 +326,35 @@ public function viewMemberProfile() {
         }
     }
     
-    public function pastMemberProfile(): void{
-        $this->view(name: "admin/pastMemberProfile");
+    public function pastMemberProfile(){
+    $userModel = new User();
+    $deletedUserModel = new DeletedUsers();
+
+    // Get the user ID (username) from the query parameter
+    $userId = $_GET['id'] ?? null;
+
+    if (!$userId) {
+        echo "Invalid user ID.";
+        return;
     }
+
+    // Fetch user details (from 'user', 'user_roles', 'user_contact_nums', 'user_meeting_types')
+    $userData = $userModel->getUserById($userId);
+
+    // Fetch deletion details from 'deleted_users'
+    $deletedData = $deletedUserModel->getDeletedInfo($userId);
+
+    // Combine both datasets
+    $data = [
+        'userData' => $userData,
+        'deletedData' => $deletedData,
+        'memberId' => $userId
+    ];
+
+    // Load the view
+    $this->view('admin/pastMemberProfile', $data);
+    }
+
 
     public function addPastMember(): void{
         $this->view(name: "admin/addPastMember");
@@ -497,6 +523,48 @@ exit;
 
     exit;
 }
+
+public function reactivateMember() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+       
+        // Dynamically load models as needed
+        $userModel = $this->model("user");
+        $userRolesModel = $this->model("UserRoles");
+        $meetingTypesModel = $this->model("meeting_types");
+        $userMeetingTypesModel = $this->model("user_meeting_types");
+        $deletedUsersModel = $this->model("DeletedUsers");
+        $usercontactModel = $this->model("UserContactNums");
+
+        $username = $_POST['username'];
+
+        // Use models to update data
+        $userModel->updateUserByUsername($username, [
+            'full_name' => $_POST['full_name'],
+            'email' => $_POST['email'],
+            'nic' => $_POST['nic']
+        ]);
+        
+
+        $usercontactModel->updateContacts(
+            $username,
+            $_POST['contact_no'],
+            $_POST['additional_tp_no'] ?? null
+        );
+        
+        $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meeting_types']);
+        $userRolesModel->updateRoles($username, $_POST['roles']);
+
+        // Reactivate the user
+        $userModel->reactivateStatus($username);
+
+        $deletedUsersModel->deleteByUsername($username);
+        
+        echo "<script>alert('Member reactivated successfully.'); window.location.href='your_url_here';</script>";
+
+    }
+}
+
+
 
 
 
