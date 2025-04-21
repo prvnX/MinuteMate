@@ -202,7 +202,7 @@ public function  getMemoList(){
     $input = json_decode( file_get_contents('php://input'), true);
     $meeting_id = $input['meeting_id'] ?? null;
     if ($meeting_id) {
-        $memosList = $memo->select_all(['meeting_id' => $meeting_id]);
+        $memosList = $memo->select_all(['meeting_id' => $meeting_id,'status'=>'accepted']);
         $forwardedMemos=$memofwd->getmemoList($meeting_id);
         // if($forwardedMemos){
         //     // $newMemoList=array_merge(arrays: $memosList, $forwardedMemos);

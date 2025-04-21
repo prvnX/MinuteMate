@@ -23,8 +23,6 @@
     echo "</div>";
     require_once("../app/views/components/sec_sidebar.php");
 
-    
-
    ?>
 
     <header class="page-header">

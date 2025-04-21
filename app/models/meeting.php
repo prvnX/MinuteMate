@@ -146,4 +146,13 @@ class Meeting{
         return $this->query($query,$data);
     }
 
+    public function getMeetingTypeByID($meetingId)
+    {
+        $data['meetingId'] = $meetingId;
+        $query = "SELECT type_id FROM $this->table
+                WHERE  meeting_id=:meetingId";
+
+        return $this->query($query, $data);
+    }
+
 }

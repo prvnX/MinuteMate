@@ -92,7 +92,7 @@
                         </div>
                         <h2>View Minute Report</h2>
                         <p>Analyze meeting minute Report</p>
-                        <a href="<?=ROOT?>/secretary/viewminutereports">
+                        <a href="<?=ROOT?>/secretary/selectminute">
                         <button>View Report</button>
                         </a>
                     </div>
