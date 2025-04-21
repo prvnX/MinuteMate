@@ -30,10 +30,61 @@ class UserContactNums {
         return array_map(fn($r) => $r->contact_no, $result);
     }
 
-    public function updateContactByUsername($username, $newPhone) {
-        $query = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username";
-        $this->query($query, ['username' => $username, 'contact_no' => $newPhone]);
+    public function updateOrInsertContactNumbers($username, $contactNumbers = []) {
+        $query = "SELECT contact_no FROM $this->table WHERE username = :username";
+        $existing = $this->query($query, ['username' => $username]);
+    
+        $existingNumbers = [];
+    
+        if ($existing && is_array($existing)) {
+            // ✅ Fix: use -> instead of [''] if result is stdClass
+            $existingNumbers = array_map(fn($row) => $row->contact_no, $existing);
+        }
+    
+        // If there are exactly two existing numbers, update both of them
+        if (count($existingNumbers) == 2) {
+            foreach ($contactNumbers as $phone) {
+                if (!in_array($phone, $existingNumbers)) {
+                    // Update the first existing number (or any other existing number if you have a preferred logic)
+                    $updateQuery = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username AND contact_no = :old_contact_no";
+                    $this->query($updateQuery, [
+                        'username' => $username, 
+                        'contact_no' => $phone, 
+                        'old_contact_no' => $existingNumbers[0] // This can be adjusted if you have logic on which one to update
+                    ]);
+                }
+            }
+        } 
+        // If only one existing number, update it and insert the new one if needed
+        elseif (count($existingNumbers) == 1) {
+            // Update the first existing contact number
+            $updateQuery = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username AND contact_no = :old_contact_no";
+            $this->query($updateQuery, [
+                'username' => $username, 
+                'contact_no' => $contactNumbers[0], 
+                'old_contact_no' => $existingNumbers[0]
+            ]);
+            
+            // Insert the second number if it's different and not already existing
+            if (!empty($contactNumbers[1]) && !in_array($contactNumbers[1], $existingNumbers)) {
+                $insertQuery = "INSERT INTO $this->table (username, contact_no) VALUES (:username, :contact_no)";
+                $this->query($insertQuery, ['username' => $username, 'contact_no' => $contactNumbers[1]]);
+            }
+        } 
+        // If no existing numbers, insert both
+        else {
+            foreach ($contactNumbers as $phone) {
+                $insertQuery = "INSERT INTO $this->table (username, contact_no) VALUES (:username, :contact_no)";
+                $this->query($insertQuery, ['username' => $username, 'contact_no' => $phone]);
+            }
+        }
     }
+    
+
+    
+    
+    
+    
 }
 
 

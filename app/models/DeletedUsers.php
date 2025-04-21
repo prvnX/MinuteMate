@@ -25,6 +25,12 @@
             return $result ? $result[0] : null;
         }
 
+        public function deleteByUsername($username) {
+            $query = "DELETE FROM deleted_users WHERE username = :username";
+            $this->query($query, ['username' => $username]);
+        }
+        
+
 
 
 }
