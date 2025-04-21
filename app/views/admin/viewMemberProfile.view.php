@@ -48,7 +48,7 @@ $currentPage = 'viewMembers'; // For navbar highlighting
     <div class="action-buttons">
     <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($userData->username) ?>" class="btn-edit">Edit</a>
     <div class="remove-button-wrapper">
-    <button class="remove-btn" onclick="openRemoveModal()">Remove</button>
+    <button class="remove-btn" onclick="openRemoveModal('<?= $userData->username ?>', '<?= $userData->full_name ?>')">Remove</button>
 </div>
 
 <div id="removeModal" class="modal" style="display:none;">
@@ -56,23 +56,20 @@ $currentPage = 'viewMembers'; // For navbar highlighting
         <span class="close" onclick="closeModal()">&times;</span>
         <h3 id="modalTitle">Remove Member</h3>
         <form action="<?= ROOT ?>/admin/removeMember" method="post">
-            <!-- Editable Inputs for Username and Full Name -->
             <div>
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username" value="<?= htmlspecialchars($userData->username); ?>" required>
+                <label>Username:</label>
+                <input type="text" name="username" id="username" required>
             </div>
             <div>
-                <label for="full_name">Full Name:</label>
-                <input type="text" name="full_name" id="full_name" value="<?= htmlspecialchars($userData->full_name); ?>" required>
+                <label>Full Name:</label>
+                <input type="text" name="full_name" id="full_name"  required>
             </div>
 
-            <!-- Reason for Removal -->
             <div>
                 <label for="reason">Reason for Removal:</label>
                 <input type="text" name="reason" id="reason" required>
             </div>
 
-            <!-- Hidden input for removed_by populated from session -->
             <input type="hidden" name="removed_by" value="<?=  $_SESSION['userdetails']->username ?? ''; ?>" id="removed_by">
 
             <div class="modal-buttons">
@@ -87,9 +84,11 @@ $currentPage = 'viewMembers'; // For navbar highlighting
 
 <script>
 
-function openRemoveModal() {
+function openRemoveModal(username, fullname) {
     document.getElementById("modalTitle").innerText = "Remove Member";
     document.getElementById("removeModal").style.display = "block";
+    document.getElementById("username").value = username;
+    document.getElementById("full_name").value = fullname;
 }
 
 function closeModal() {
