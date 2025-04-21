@@ -72,4 +72,17 @@ class User_Meeting_Types
         $query = "SELECT meeting_type FROM user_meeting_types um INNER JOIN meeting_types mt ON um.meeting_type_id = mt.type_id WHERE accessible_user = :username";
         return $this->query($query, $data);
     }
+
+    public function getInactiveMembersByMeetingType($meetingTypeId)
+    {
+        $query = "SELECT u.username, u.full_name
+              FROM user_meeting_types umt
+              JOIN user u ON umt.accessible_user = u.username
+              WHERE umt.meeting_type_id = :meeting_type_id
+              AND u.status = 'inactive'";
+
+    $data = [':meeting_type_id' => $meetingTypeId];
+    $result = $this->query($query, $data);
+    return $result ? $result : [];
+    }
 }
