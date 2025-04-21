@@ -180,7 +180,7 @@ class Secretary extends BaseController {
     }
     public function selectmemo() { //this is the page where the secretary selects the memo to view details
     $memo = new Memo();
-    $memos = $memo->getMemos($_SESSION['userDetails']->username, date("Y-m-d"));
+    $memos = $memo->getMemos();
 
     
         $this->view("secretary/selectmemo", ['memos' => $memos]);
@@ -410,14 +410,10 @@ class Secretary extends BaseController {
                         //     //send the releavent content as a mail
                             $mail = new Mail();
                             $mailstautus=$mail->forwardMinuteContent($depEmail,$depname,$contentTitle,$contentinD,$minuteID,$meetingDate,$secname,$meetingType,$dheadmail,$dhead);
-                            if($mailstautus){
-                                $status="Mail sent";
+                            if(!$mailstautus){
+                                $mailstautus=false;
                             
                             }
-                            else{
-                                $status="Mail not sent";
-                                $mailstautus=false;
-                        }
                  }   
 
             }
@@ -483,18 +479,35 @@ class Secretary extends BaseController {
 
 
             }
+            $notification = new Notification();
             // $mailstautus=false;
             // $success=false;
             if($success && $dataInsert==1 && $mailstautus==true){
                 $minutemodel=new minute;
                 $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
                 $minuteid=$minuteid[0]->Minute_ID;
+                $message="Minute for the meeting with ID ". $meetingID ."on ". $meetingDate ." has been created. View Now";
+                $recivers=$meeting->getParticipants($meetingID);
+                
+                foreach($recivers as $reciever){
+                    $reciever=$reciever->username;
+                    $notification->insert(['reciptient'=>$reciever,'notification_type'=>'minute','notification_message'=>$message,'Ref_ID'=>$minuteid,'link'=>'viewminute?minuteID='.$minuteid]);
+                
+                }
                 $this->view("showsuccessminute",["user"=>"secretary","minuteid"=>$minuteid]);
             }
             else if($success && $dataInsert==1 && $mailstautus==false){
                 $minutemodel=new minute;
                 $minuteid=$minutemodel->selectandproject('Minute_ID',['MeetingID'=>$meetingID]);
                 $minuteid=$minuteid[0]->Minute_ID;
+                $message="Minute for the meeting with ID ". $meetingID ."on ". $meetingDate ." has been created. View Now";
+                $recivers=$meeting->getParticipants($meetingID);
+                
+                foreach($recivers as $reciever){
+                    $reciever=$reciever->username;
+                    $notification->insert(['reciptient'=>$reciever,'notification_type'=>'minute','notification_message'=>$message,'Ref_ID'=>$minuteid,'link'=>'viewminute?minuteID='.$minuteid]);
+                
+                }
                 $this->view("showwarningminute",["user"=>"secretary","minuteid"=>$minuteid]);
             }
             else{
@@ -722,7 +735,19 @@ class Secretary extends BaseController {
             echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
         }
     }
+    // public function testModels(){
+    //     $notification = new Notification();
+    //     $meeting = new Meeting();
+    //     $meetingID=1;
+    //     $recivers=$meeting->getParticipants($meetingID);
+    //     $message="Minute for the meeting with ID ". $meetingID ."on   has been created. View Now";
+    //     $minuteid=1;
+    //     show($recivers);
+  
+    // }
                 
 
     
 }
+
+
