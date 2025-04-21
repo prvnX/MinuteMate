@@ -85,7 +85,7 @@
 
                 <div class="calendar-section">
                 <?php
-                      $showAddEvents=true;
+                      $showAddEvents=false;
               require_once("../app/views/components/Calender/calandar-view.php"); //call the calander component
             ?>
             <div class="message-box">
