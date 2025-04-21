@@ -533,6 +533,7 @@ public function reactivateMember() {
         $meetingTypesModel = $this->model("meeting_types");
         $userMeetingTypesModel = $this->model("user_meeting_types");
         $deletedUsersModel = $this->model("DeletedUsers");
+        $usercontactModel = $this->model("UserContactNums");
 
         $username = $_POST['username'];
 
@@ -544,7 +545,12 @@ public function reactivateMember() {
         ]);
         
 
-        $userModel->updateContactInfo($username, $_POST['contact_no']);
+        $usercontactModel->updateContacts(
+            $username,
+            $_POST['contact_no'],
+            $_POST['additional_tp_no'] ?? null
+        );
+        
         $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meeting_types']);
         $userRolesModel->updateRoles($username, $_POST['roles']);
 
