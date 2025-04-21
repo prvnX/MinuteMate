@@ -40,18 +40,55 @@ class Studentrep extends BaseController {
     public function entermemo() {
         $user=$_SESSION['userDetails']->username;
         $date = date("Y-m-d");
+        $meeting = new Meeting();
+        $users = new User();
         if($this->isValidRequest()){
             $meetings = ($this->findMeetingsToEnterMemos($date));
-
             
-
-            $this->view("studentrep/entermemo", ['meetings' => $meetings]);
+            if (isset($_POST['meeting_id'])) {
+                $meetingId = $_POST['meeting_id'];
+                // Get the meeting type from the selected meeting ID (or assume you have it in your $meetings array)
+                $meetingType = $meeting->getMeetingTypeById($meetingId);
+                
+                // Fetch the users for the selected meeting type
+                $users = $users->getUsersForMeetingType($meetingType->id);
+    
+                // Pass the meeting users to the view
+                $this->view("studentrep/entermemo", [
+                    'meetings' => $meetings,
+                    'selectedMeetingUsers' => $users
+                ]);
+            } else {
+                // If no meeting is selected, just show the form with the meetings
+                $this->view("studentrep/entermemo", ['meetings' => $meetings]);
+            }
         }
         else{
             redirect("login");
         }
        
     }
+
+    public function fetchUsersByMeeting()
+{
+    if ($this->isValidRequest() && isset($_POST['meeting_id'])) {
+        $meeting = new Meeting();
+        $user = new User();
+
+        $meetingId = $_POST['meeting_id'];
+        $meetingType = $meeting->getMeetingTypeById($meetingId);
+
+        if (!empty($meetingType)) {
+            $users = $user->getUsersForMeetingType($meetingType[0]->type_id);
+            echo json_encode($users);
+        } else {
+            echo json_encode([]);
+        }
+    } else {
+        echo json_encode([]);
+    }
+}
+
 
     
     public function findMeetingsToEnterMemos($date){

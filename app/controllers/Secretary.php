@@ -273,7 +273,7 @@ class Secretary extends BaseController {
             $memos = $memo->getAllAcceptedMemos();
 
             $userModel = new User();
-            $submittedMembers = $userModel->query("SELECT DISTINCT username FROM user");
+            $submittedMembers = $userModel->query("SELECT DISTINCT full_name FROM user");
 
             $this->view("secretary/viewmemos", ['memos'=> $memos, 'submittedMembers'=>$submittedMembers]);
         }
