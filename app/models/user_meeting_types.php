@@ -18,17 +18,26 @@ class User_Meeting_Types
      * @param string $username - The username of the accepted user
      * @param array $meetingTypeIds - An array of selected meeting type IDs
      */
-    public function insertMeetingTypes($username, $meetingTypeIds) {
-        foreach ($meetingTypeIds as $typeId) {
-            $query = "INSERT INTO user_meeting_types (accessible_user, meeting_type_id) 
-                      VALUES (:accessible_user, :meeting_type_id)";
-            $this->query($query, [
-                'accessible_user' => $username,
-                'meeting_type_id' => $typeId
-            ]);
+    public function insertMeetingTypes($username, $meetingTypes) {
+        foreach ($meetingTypes as $type) {
+            $queryx = "SELECT type_id FROM meeting_types WHERE meeting_type = :type";
+            $result = $this->query($queryx, ['type' => $type]);
+    
+            if (!empty($result)) {
+                $typeID = $result[0]->type_id;
+    
+                $query = "INSERT INTO user_meeting_types (accessible_user, meeting_type_id) 
+                          VALUES (:accessible_user, :meeting_type_id)";
+                $this->query($query, [
+                    'accessible_user' => $username,
+                    'meeting_type_id' => $typeID
+                ]);
+            } else {
+                error_log("Meeting type '$type' not found in meeting_types table.");
+            }
         }
-        return ['success' => true, 'message' => 'Meeting types successfully added.'];
     }
+    
     
 
     /**

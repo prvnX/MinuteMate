@@ -57,11 +57,11 @@ class User {
     public function getMeetingTypeIdByRole($role) {
         // Here, map roles to meeting type ids
         switch ($role) {
-            case 'admin':
+            case 'secretary':
                 return 1; // RHD
-            case 'user':
+            case 'lecturer':
                 return 2; // IOD
-            case 'manager':
+            case 'other':
                 return 3; // SYN
             default:
                 return null;
@@ -126,7 +126,7 @@ class User {
 
     public function updateMeetingTypes($username, $meetingTypeIds) {
         require 'user_meeting_types.php';
-        // Instantiate the User_Meeting_Types model
+        // Instantiate the User_Meeting_Types modelz
         $userMeetingTypesModel = new User_Meeting_Types();
         
         // Call the updateMeetingTypes method from User_Meeting_Types model
@@ -161,4 +161,5 @@ public function getUsersForMeetingType($meetingTypeId)
             return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
 
     }
+}
     
