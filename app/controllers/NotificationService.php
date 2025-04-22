@@ -20,4 +20,12 @@ class NotificationService extends Controller{
         $notificationModel->update($notification_id, ['is_read' => 1], 'notification_id');
         echo json_encode(["success" => "Notification updated successfully"]);
     }
+
+    public function getNotificationCount(){
+        $username=$_SESSION['userDetails']->username;
+        $notificationModel = new Notification();
+        $count=$notificationModel->selectandproject('Count(notification_id) AS Count',['reciptient'=>$username,'is_read'=>0])[0]->Count;
+        echo json_encode(['success'=>true,'count'=>$count]);
+    }
+
 }

@@ -54,10 +54,13 @@
             list-style-type: none;
             padding: 0;
             margin-top: 60px;
+            
         }
 
         .custom-sidebar ul li {
             padding: 10px 20px;
+            
+            
         }
 
         .custom-sidebar ul li a {
