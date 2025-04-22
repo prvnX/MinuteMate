@@ -160,8 +160,7 @@ public function reactivateStatus($username) {
 
             return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
 
-        }
-    
- }
+    }
 
+}
     
