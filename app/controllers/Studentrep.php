@@ -111,12 +111,12 @@ class Studentrep extends BaseController {
     public function submitmemo() {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
+       
             $memoTitle = htmlspecialchars($_POST['memo-subject']);
             $memoContent = htmlspecialchars($_POST['memo-content']);
-            $meetingId = htmlspecialchars($_POST['meeting']);
+            $toBeReviewedBy = htmlspecialchars($_POST['Reviewedby']);
             $submittedBy=$_SESSION['userDetails']->username;
-
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
+            if(empty($memoTitle)|| empty($memoContent))
             {
                 // $_SESSION['flash_error'] = "All fields are required.";
                 // redirect("studentrep/entermemo");
@@ -127,12 +127,11 @@ class Studentrep extends BaseController {
             $memoData = [
                 'memo_title' => $memoTitle,
                 'memo_content' => $memoContent,
-                'status' => 'pending', // Set default status
                 'submitted_by' => $submittedBy,
-                'meeting_id' => $meetingId,
+               'reviewed_by' => $toBeReviewedBy
             ];
-            $memo = new Memo();
-            $memo->insert($memoData);
+            $reviewMemo = new ReviewMemo();
+            $reviewMemo->insertx($memoData);
             $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
         else{

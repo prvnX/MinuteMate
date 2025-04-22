@@ -153,7 +153,7 @@ public function reactivateStatus($username) {
 
 public function getUsersForMeetingType($meetingTypeId)
         {
-            $query = "SELECT DISTINCT full_name
+            $query = "SELECT DISTINCT full_name , username
                     FROM $this->table 
                     INNER JOIN user_meeting_types umt ON $this->table.username = umt.accessible_user
                     WHERE umt.meeting_type_id = :meetingTypeId";

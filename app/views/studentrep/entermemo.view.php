@@ -52,15 +52,7 @@
         <div class="field">
             <label for="Reviewedby" class="input-label">To be Reviewed by : </label>
             <select name="Reviewedby" id="Reviewedby" class="select-meeting" required>
-                <option value="" disabled selected>Select Board Member</option>
-
-                <?php if (isset($selectedMeetingUsers)): ?>
-                    <?php foreach ($selectedMeetingUsers as $user): ?>
-                        <option value="<?= htmlspecialchars($user->full_name) ?>">
-                            <?= htmlspecialchars($user->full_name) ?>
-                        </option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+              
             </select>
 
 
@@ -162,8 +154,9 @@
         .then(data => {
             reviewedBySelect.innerHTML = '<option value="" disabled selected>Select Board Member</option>';
             data.forEach(user => {
+                console.log(user);
                 const option = document.createElement("option");
-                option.value = user.full_name;
+                option.value = user.username;
                 option.textContent = user.full_name;
                 reviewedBySelect.appendChild(option);
             });
