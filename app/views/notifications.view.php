@@ -182,6 +182,7 @@ $readnotifications = [
         'Created_At' => "2024-11-05 09:30:00"
     ],
     [
+
         'Notification_ID' => 19,
         'User_ID' => 110,
         'Message' => "Memo Approved: 'Q1 Sales Projections'",
@@ -208,7 +209,7 @@ $readnotifications = [
 
         </div>
         <div class="notifications-content">
-                    <?php
+                    <?phpsss
                     function showDuration($notificationDateObj) {
                         $currentDate = new DateTime("now",new DateTimeZone('Asia/Colombo'));  //get current time
                         $interval = $currentDate->diff($notificationDateObj);
