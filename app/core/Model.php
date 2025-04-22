@@ -85,6 +85,7 @@ Trait Model {
             }    
         $keys=array_keys($data);
         $query="insert into $this->table (".implode(",",$keys).") values (:".implode(",:",$keys).")";
+       
         $this->query($query, $data);
         return false;
         

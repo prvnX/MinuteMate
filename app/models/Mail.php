@@ -19,7 +19,7 @@ require __DIR__ . '/../../vendor/autoload.php';
             $this->mail->Host = 'smtp.gmail.com'; // SMTP server
             $this->mail->SMTPAuth = true;
             $this->mail->Username = 'minutemate111@gmail.com'; 
-            $this->mail->Password = 'veth gdnp cucu ftha'; // app password
+            $this->mail->Password = 'yyfh xqol ibyq rhue'; // app password
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mail->Port = 587;
         }
@@ -103,12 +103,17 @@ require __DIR__ . '/../../vendor/autoload.php';
                         </body>
                         </html>';
                 $this->mail->AltBody = 'Forwarded Minute Content';
+               
                 $this->mail->send();
+                
                 return true;
         }
         catch (Exception $e) {
         return "Email could not be sent. Error: {$this->mail->ErrorInfo}";
     }
+}
+public function sendMail(){
+
 }
 
 }

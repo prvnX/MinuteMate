@@ -57,11 +57,11 @@ class User {
     public function getMeetingTypeIdByRole($role) {
         // Here, map roles to meeting type ids
         switch ($role) {
-            case 'admin':
+            case 'secretary':
                 return 1; // RHD
-            case 'user':
+            case 'lecturer':
                 return 2; // IOD
-            case 'manager':
+            case 'other':
                 return 3; // SYN
             default:
                 return null;
@@ -96,7 +96,7 @@ class User {
         $contacts = $contactModel->getContactByUsername($userId);
 
         // Ensure contact number and role are present (handle nulls gracefully)
-        $userData->contact_no = $contacts[0];
+        $userData->contact_no = $contacts[0] ?? null;
         $userData->additional_tp_no = $contacts[1] ?? null;
 
         $userData->role = array_unique(array_map(fn($row) => $row->role, $result));
@@ -104,16 +104,21 @@ class User {
         return $userData;
     }
 
-    public function updateContactInfo($username, $newPhone) {
-        
-        require 'UserContactNums.php';
-        $contactNums = new UserContactNums();
-        $contactNums->updateContactByUsername($username, $newPhone);
+    public function updateContactInfo($username, $contact_no) {
+        require_once __DIR__ . '/UserContactNums.php'; 
+        $contactModel = new UserContactNums();
+    
+        // Handle single or multiple numbers
+        $numbers = is_array($contact_no) ? $contact_no : [$contact_no];
+    
+        $contactModel->updateOrInsertContactNumbers($username, $numbers);
     }
+    
+    
 
     public function updateUserByUsername($username, $data) {
         $query = "UPDATE user 
-                  SET full_name = :full_name, email = :email, nic = :nic,
+                  SET full_name = :full_name, email = :email, nic = :nic
                   WHERE username = :username";
         $data['username'] = $username;
         return $this->query($query, $data);
@@ -121,7 +126,7 @@ class User {
 
     public function updateMeetingTypes($username, $meetingTypeIds) {
         require 'user_meeting_types.php';
-        // Instantiate the User_Meeting_Types model
+        // Instantiate the User_Meeting_Types modelz
         $userMeetingTypesModel = new User_Meeting_Types();
         
         // Call the updateMeetingTypes method from User_Meeting_Types model
@@ -135,5 +140,27 @@ class User {
         return $this->query($query);
     }
 
+    public function deactivateUser($username){
+    return $this->update($username, ['status' => 'inactive'], 'username');
+}
+  
+public function reactivateStatus($username) {
+    $query = "UPDATE user SET status = 'active' WHERE username = :username";
+    return $this->query($query, ['username' => $username]);
+}
+
+
+
+    public function getUsersForMeetingType($meetingTypeId)
+        {
+            $query = "SELECT DISTINCT full_name , username
+                    FROM $this->table 
+                    INNER JOIN user_meeting_types umt ON $this->table.username = umt.accessible_user
+                    WHERE umt.meeting_type_id = :meetingTypeId";
+
+            return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
+
+    }
 
 }
+    

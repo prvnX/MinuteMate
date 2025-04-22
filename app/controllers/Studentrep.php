@@ -40,18 +40,55 @@ class Studentrep extends BaseController {
     public function entermemo() {
         $user=$_SESSION['userDetails']->username;
         $date = date("Y-m-d");
+        $meeting = new Meeting();
+        $users = new User();
         if($this->isValidRequest()){
             $meetings = ($this->findMeetingsToEnterMemos($date));
-
             
-
-            $this->view("studentrep/entermemo", ['meetings' => $meetings]);
+            if (isset($_POST['meeting_id'])) {
+                $meetingId = $_POST['meeting_id'];
+                // Get the meeting type from the selected meeting ID (or assume you have it in your $meetings array)
+                $meetingType = $meeting->getMeetingTypeById($meetingId);
+                
+                // Fetch the users for the selected meeting type
+                $users = $users->getUsersForMeetingType($meetingType->id);
+    
+                // Pass the meeting users to the view
+                $this->view("studentrep/entermemo", [
+                    'meetings' => $meetings,
+                    'selectedMeetingUsers' => $users
+                ]);
+            } else {
+                // If no meeting is selected, just show the form with the meetings
+                $this->view("studentrep/entermemo", ['meetings' => $meetings]);
+            }
         }
         else{
             redirect("login");
         }
        
     }
+
+    public function fetchUsersByMeeting()
+{
+    if ($this->isValidRequest() && isset($_POST['meeting_id'])) {
+        $meeting = new Meeting();
+        $user = new User();
+
+        $meetingId = $_POST['meeting_id'];
+        $meetingType = $meeting->getMeetingTypeById($meetingId);
+
+        if (!empty($meetingType)) {
+            $users = $user->getUsersForMeetingType($meetingType[0]->type_id);
+            echo json_encode($users);
+        } else {
+            echo json_encode([]);
+        }
+    } else {
+        echo json_encode([]);
+    }
+}
+
 
     
     public function findMeetingsToEnterMemos($date){
@@ -74,12 +111,13 @@ class Studentrep extends BaseController {
     public function submitmemo() {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
+       
             $memoTitle = htmlspecialchars($_POST['memo-subject']);
             $memoContent = htmlspecialchars($_POST['memo-content']);
-            $meetingId = htmlspecialchars($_POST['meeting']);
+            $toBeReviewedBy = htmlspecialchars($_POST['Reviewedby']);
             $submittedBy=$_SESSION['userDetails']->username;
-
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
+            $meetingId = htmlspecialchars($_POST['meeting']);
+            if(empty($memoTitle)|| empty($memoContent))
             {
                 // $_SESSION['flash_error'] = "All fields are required.";
                 // redirect("studentrep/entermemo");
@@ -90,12 +128,13 @@ class Studentrep extends BaseController {
             $memoData = [
                 'memo_title' => $memoTitle,
                 'memo_content' => $memoContent,
-                'status' => 'pending', // Set default status
                 'submitted_by' => $submittedBy,
-                'meeting_id' => $meetingId,
+               'reviewed_by' => $toBeReviewedBy,
+               'meeting_id' => $meetingId
             ];
-            $memo = new Memo();
-            $memo->insert($memoData);
+            print_r($memoData);
+            $reviewMemo = new ReviewMemo();
+            $reviewMemo->insertx($memoData);
             $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
         else{

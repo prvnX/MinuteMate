@@ -28,24 +28,22 @@ p {
 }
 
 /* Button Styles */
-.btn-edit, .btn-remove {
+.btn-edit, .remove-btn {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
-    margin-right: 10px;
-    background-color: #6164CE;
+    background-color: #2563eb;
     color: white;
     text-decoration: none;  /* Remove the underline */
 }
 
-.btn-edit {
-     /* Green background for edit */
-     margin-left: 1000px;
+.action-buttons {
+    display: flex;
+    gap: 10px; /* space between the buttons */
+    margin-top: 20px;
 }
-
-
 
 /* Meeting Options Styles */
 .meeting-options {
@@ -105,3 +103,77 @@ p {
 .meeting-option label {
     cursor: pointer;
 }
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    overflow: auto;
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #1e293b;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    background-color: #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-remove-confirm,
+.btn-cancel {
+    padding: 10px 20px;
+    margin: 5px;
+}
+
+.btn-remove-confirm {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+

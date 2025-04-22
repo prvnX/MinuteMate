@@ -1,21 +1,15 @@
 <?php
+
+$user="admin";
+$notification="notification"; //use notification-dot if there's a notification
+$menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+require_once("../app/views/components/new_navbar.php"); 
 include '../app/views/components/admin_sidebar.php';
 
-// Dummy data for past members
-$dummyMembers = [
-    1 => ['name' => 'Rasha Doe', 'email' => 'rashadoe@example.com', 'lecturer_id' => 'L10001', 'nic' => '987654321V', 'role' => 'Lecturer', 'phone' => '0772345678', 'meetingTypes' => ['RHD'], 'status' => 'removed'],
-    2 => ['name' => 'Sanda Brown', 'email' => 'sandabrown@example.com', 'lecturer_id' => 'L10002', 'nic' => '123654789V', 'role' => 'Lecturer', 'phone' => '0773456789', 'meetingTypes' => ['RHD'], 'status' => 'removed'],
-    3 => ['name' => 'AC Smith', 'email' => 'acsmith@example.com', 'lecturer_id' => 'L10003', 'nic' => '135792468V', 'role' => 'Lecturer', 'phone' => '0774567890', 'meetingTypes' => ['IOD'], 'status' => 'active'],
-    4 => ['name' => 'Olof Prince', 'email' => 'sandabrown@example.com', 'lecturer_id' => 'L10004', 'nic' => '123654789V', 'role' => 'Lecturer', 'phone' => '0773456789', 'meetingTypes' => ['IOD'], 'status' => 'removed'],
-    // Add other members as necessary
-];
-
-// Retrieve member ID from the URL
-$memberId = $_GET['id'] ?? null;
-
-// Fetch the member's details
-$member = $dummyMembers[$memberId] ?? null;
+$userData = $data['userData'] ?? null;
+$deletedData = $data['deletedData'] ?? null;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,36 +21,119 @@ $member = $dummyMembers[$memberId] ?? null;
 <body>
 
 <div class="profile-container">
-  <?php if ($member): ?>
-    <h2 class="profile-title">Profile Details</h2>
+  <?php if ($userData && $deletedData): ?>
     <div class="profile-details">
       <div class="content">
         <div class="profile-header">
             <img src="<?= ROOT ?>/assets/images/user.png" alt="Profile Image" class="profile-img">
             <div class="profile-info">
-              <h3><?php echo htmlspecialchars($member['name']); ?></h3>
-              <p><strong>Name:</strong> <?= htmlspecialchars($member['name']) ?></p>
-              <p><strong>Email:</strong> <?= htmlspecialchars($member['email']) ?></p>
-              <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($member['lecturer_id']) ?></p>
-              <p><strong>NIC:</strong> <?= htmlspecialchars($member['nic']) ?></p>
-              <p><strong>Role:</strong> <?= htmlspecialchars($member['role']) ?></p>
-              <p><strong>Phone:</strong> <?= htmlspecialchars($member['phone']) ?></p>
-              <p><strong>Meeting Types:</strong> <?= htmlspecialchars(implode(', ', $member['meetingTypes'])) ?></p>
-              <p><strong>Status:</strong> <?= htmlspecialchars($member['status']) ?></p>
+              <h3><?php echo htmlspecialchars($userData->full_name); ?></h3>
+              <p><strong>Name:</strong> <?= htmlspecialchars($userData->full_name) ?></p>
+              <p><strong>Email:</strong> <?= htmlspecialchars($userData->email) ?></p>
+              <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($userData->username) ?></p>
+              <p><strong>NIC:</strong> <?= htmlspecialchars($userData->nic) ?></p>
+              <p><strong>Role:</strong> <?= htmlspecialchars(implode(', ', $userData->role )) ?></p>
+              <p><strong>Contact No.:</strong> <?= htmlspecialchars($userData->contact_no) ?></p>
+              <p><strong>Additional Contact No.:</strong> <?= htmlspecialchars($userData->additional_tp_no) ?></p>
+              <p><strong>Removed By:</strong> <?= htmlspecialchars($deletedData->removed_by) ?></p>
+              <p><strong>Status:</strong> <?= htmlspecialchars($userData->status) ?></p>
+              <p><strong>Reason:</strong> <?= htmlspecialchars($deletedData->reason) ?></p>
+
+              <label>Select Meeting Type(s):</label>
+              <div class="meeting-options">
+                <?php
+                $userData->meetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
+                $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+
+                foreach ($meetingTypes as $type) {
+                  $checked = in_array($type, $userData->meetingTypes) ? 'checked' : '';
+                  $class = strtolower($type) . '-option';
+
+                  echo "<div class='meeting-option $class'>
+                        <input type='checkbox' id='meeting$type' name='meetingType[]' value='$type' $checked>
+                        <label for='meeting$type'>$type</label>
+                  </div>";
+                }
+                ?>
+              </div>
+
+
             </div>
         </div>
       </div>
-      <div class="action-buttons">
-        <a href="<?=ROOT?>/admin/addPastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-add">Add</a>
-        <!-- <a href="<?=ROOT?>/admin/deletePastMember?id=<?= htmlspecialchars($memberId) ?>" class="btn-delete">Delete</a> -->
+      <div class="add-button-wrapper">
+      <button class="add-btn" onclick="editModal()">Add</button>
       </div>
+
+      <div id="editModal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="closeModal">&times;</span>
+          <h2>Edit Member Details</h2>
+          <form action="<?= ROOT ?>/admin/reactivateMember" method="POST">
+            <input type="text" name="username" value="<?= htmlspecialchars($userData->username) ?>">
+
+            <label>Full Name:</label>
+            <input type="text" name="full_name" value="<?= htmlspecialchars($userData->full_name) ?>" required>
+
+            <label>Email:</label>
+            <input type="text" name="email" value="<?= htmlspecialchars($userData->email) ?>" required>
+          
+            <label>NIC:</label>
+            <input type="text" name="nic" value="<?= htmlspecialchars($userData->nic) ?>" required>
+
+            <label>Contact No.:</label>
+            <input type="text" name="contact_no" value="<?= htmlspecialchars($userData->contact_no) ?>">
+      
+            <label>Additional Contact No.:</label>
+            <input type="text" name="additional_tp_no" value="<?= htmlspecialchars($userData->additional_tp_no) ?>"> 
+            
+            <label>Select Role(s):</label>
+            <div class="role-option">
+              <?php
+              $allRoles = ['secratary', 'lecturer', 'student Representative'];
+              $existingRoles = $userData->role;
+
+              foreach($allRoles as $role){
+                $checked = in_array($role, $existingRoles) ? 'checked' : '';
+                echo "<label><input type='checkbox' name='roles[]' value='$role' $checked> " . ucfirst($role) . "</label>";
+              }
+              ?>
+            </div>
+
+              <label>Select Meeting Type(s):</label>
+            <div class="meeting-options">
+                <?php
+                
+                foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type) {
+                  $checked = in_array($type, $userData->meetingTypes) ? 'checked' : '';
+                  echo "<label><input type='checkbox' name='meeting_types[]' value='$type' $checked> $type</label>";
+              }
+              ?>
+            </div>
+
+              <input type="hidden" name="reactivate" value="1">
+              <button type="submit" class="btn-add">Confirm</button>
+          </form>
+
     </div>
   <?php else: ?>
     <p>Member not found.</p>
   <?php endif; ?>
 </div>
-
-
-
 </body>
 </html>
+
+<script>
+  const modal = document.getElementById("editModal");
+  const closeBtn = document.getElementById("closeModal");
+
+  function editModal() {
+    modal.style.display = "block";
+  }
+
+  closeBtn.onclick = () => modal.style.display = "none";
+
+  window.onclick = (e) => {
+    if (e.target == modal) modal.style.display = "none";
+  };
+</script>
