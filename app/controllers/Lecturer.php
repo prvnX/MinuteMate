@@ -35,8 +35,8 @@ class Lecturer extends BaseController {
             $this->view("search",["searchtxt"=>$searchtxt,"minuteResults"=>$minuteResults,"memoResults"=>$memoResults,'memosSubmitters'=>$memosSubmitters]);
         }  
     }
-    public function reviewstudentmemo(){
-        $this->view("lecturer/reviewstudentmemo");
+    public function reviewmemos(){
+        $this->view("lecturer/reviewmemos");
     }
     public function entermemo() {
         $user=$_SESSION['userDetails']->username;
@@ -59,8 +59,11 @@ class Lecturer extends BaseController {
         return $meetinglist ?: [];
     }
 
-    public function reviewmemos() {
-        $this->view("lecturer/reviewmemos");
+    public function reviewstudentmemo() {
+        $user = $_SESSION['userDetails']->username;
+        $reviewMemos = new ReviewMemo();
+        $reviewMemoList = $reviewMemos->getReviewMemosForUser($user) ?? [];
+        $this->view("lecturer/reviewstudentmemo", ['memos'=>$reviewMemoList]);
     }
     public function viewminutes() {
         $user = $_SESSION['userDetails']->username;
@@ -259,8 +262,88 @@ class Lecturer extends BaseController {
     }
     public function acceptmemo()
 {
-    $this->view("lecturer/acceptmemo");
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // Handle GET request to display memo details
+        $memo_id = $_GET['memo_id'] ?? null;
 
+        if (!$memo_id) {
+            $_SESSION['flash_error'] = "Memo ID not provided.";
+            redirect("lecturer/reviewstudentmemo");
+            return;
+        }
+
+        $memo = new ReviewMemo();
+        $memos = $memo->getMemoById($memo_id);
+
+        if ($memos) {
+            $this->view("lecturer/acceptmemo", ['memo' => $memos]);
+        } else {
+            $_SESSION['flash_error'] = "Memo not found.";
+            redirect("lecturer/memocareviewstudentmemort");
+        }
+
+    } elseif($_SERVER['REQUEST_METHOD']==='POST'){
+        $memo_id = $_POST['memo_id'] ?? null;
+        $action = $_POST['action'] ?? null;
+
+            if(!$memo_id || !$action)
+            {
+                $_SESSION['flash_error'] = 'Invalid Request';
+                redirect("lecturer/reviewstudentmemo");
+                return;
+            }
+
+        $reviewmemo = new ReviewMemo();
+        $notification = new Notification();
+        $memo = $reviewmemo -> getMemoById($memo_id);
+        $submitter = $memo->submitted_by;
+
+            if(!$submitter){
+                $_SESSION['flash_error'] = 'Submitter Not Found';
+                redirect("lecturer/reviewstudentmemos");
+                return;
+            }
+
+        if($action === 'accept')
+        {
+            $deleted = $reviewmemo->deleteMemo($memo_id);
+
+            $mainmemo = new Memo();
+            $mainmemo -> insert([
+                'memo_title' =>$memo->memo_title,
+                'memo_content' => $memo->memo_content,
+                'status' => 'pending',
+                'submitted_by'=> $submitter,
+                'meeting_id' => $memo->meeting_id
+            ]);
+           
+            //$memo_id=$mainmemo->getLastInsertID();
+            $notification->insert([
+                'reciptient'=> $submitter,
+                'notification_type ' => 'approved',
+                'notification_message' => 'Your memo has been forwarded to be reviewed',
+                'Ref_ID' => $memo_id,
+                'link' => "viewmemodetails/?memo_id=$memo_id"
+
+            ]);
+        }elseif($action === 'decline'){
+            $deleted = $reviewmemo->deleteMemo($memo_id);
+
+            $notification->insert([
+                'reciptient' => $submitter,
+                'notification_message' => "Your memo has been declined by the reviewer.",
+                'notification_type' => 'declined',
+                'Ref_ID' => $memo_id,
+                'link' => "viewmemodetails/?memo_id=$memo_id"
+            ]);
+        }else {
+            $_SESSION['flash_error'] = 'Invalid action.';
+            redirect("lecturer/reviewstudentmemo");
+            return;
+    }
+    $_SESSION['flash_message'] = "Memo successfully {$action}ed.";
+    redirect("lecturer/reviewstudentmemo");
+}
 }
 private function isRestrict($username,$contentID){
     $restrictions=new Content_restrictions();

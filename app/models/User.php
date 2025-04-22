@@ -151,7 +151,7 @@ public function reactivateStatus($username) {
 
 
 
-public function getUsersForMeetingType($meetingTypeId)
+    public function getUsersForMeetingType($meetingTypeId)
         {
             $query = "SELECT DISTINCT full_name , username
                     FROM $this->table 
@@ -161,5 +161,6 @@ public function getUsersForMeetingType($meetingTypeId)
             return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
 
     }
+
 }
     
