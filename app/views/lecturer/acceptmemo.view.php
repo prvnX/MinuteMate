@@ -14,17 +14,14 @@
 <body>
 
 <?php
-    $user="secretary";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    
-    echo "<div class='memo-list-navbar'>";
-    require_once("../app/views/components/new_navbar.php");
-    echo "</div>";
-    require_once("../app/views/components/sec_sidebar.php");
-  
-   ?>
+            $user= 'lecturer';
+             $notification="notification"; //use notification-dot if there's a notification
+             $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+             require_once("../app/views/components/new_navbar.php"); //call the navbar component
+             require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
+             
+            
+        ?>
 
     <header class="page-header">
          <h1>Memo Details </h1>
@@ -35,7 +32,6 @@
          
             <p class="memo-detail"><strong>ID:</strong> <span class="memo-id"><?= htmlspecialchars($memo->memo_id) ?></span></p>
             <p class="memo-detail"><strong>Title:</strong> <span class="memo-title"><?= htmlspecialchars($memo->memo_title) ?></span></p>
-            <p class="memo-detail"><strong>Status:</strong> <span class="memo-status"><?= htmlspecialchars($memo->status) ?></span></p>
             <p class="memo-detail"><strong>Submitted By:</strong> <span class="memo-submitted-by"><?= htmlspecialchars($memo->submitted_by) ?></span></p>
       
 
@@ -52,14 +48,14 @@
             <!-- Buttons for Accept and Decline -->
             <div class="action-buttons">
     <!-- Accept Button -->
-                <form method="POST" action="<?= ROOT ?>/secretary/acceptmemo" style="display:inline;">
+                <form method="POST" action="<?= ROOT ?>/lecturer/acceptmemo" style="display:inline;">
                     <input type="hidden" name="memo_id" value="<?= $memo->memo_id ?>">
                     <input type="hidden" name="action" value="accept">
                     <button type="submit" class="btn-accept">Accept</button>
                 </form>
 
                 <!-- Decline Button -->
-                <form method="POST" action="<?= ROOT ?>/secretary/acceptmemo" style="display:inline;">
+                <form method="POST" action="<?= ROOT ?>/lecturer/acceptmemo" style="display:inline;">
                     <input type="hidden" name="memo_id" value="<?= $memo->memo_id ?>">
                     <input type="hidden" name="action" value="decline">
                     <button type="submit" class="btn-decline">Decline</button>

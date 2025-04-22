@@ -161,4 +161,6 @@ public function getUsersForMeetingType($meetingTypeId)
             return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
 
     }
+
+}
     

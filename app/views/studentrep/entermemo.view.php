@@ -52,7 +52,7 @@
         <div class="field">
             <label for="Reviewedby" class="input-label">To be Reviewed by : </label>
             <select name="Reviewedby" id="Reviewedby" class="select-meeting" required>
-              
+                    //donr by the js below...
             </select>
 
 

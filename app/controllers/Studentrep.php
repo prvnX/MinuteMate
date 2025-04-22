@@ -116,6 +116,7 @@ class Studentrep extends BaseController {
             $memoContent = htmlspecialchars($_POST['memo-content']);
             $toBeReviewedBy = htmlspecialchars($_POST['Reviewedby']);
             $submittedBy=$_SESSION['userDetails']->username;
+            $meetingId = htmlspecialchars($_POST['meeting']);
             if(empty($memoTitle)|| empty($memoContent))
             {
                 // $_SESSION['flash_error'] = "All fields are required.";
@@ -128,8 +129,10 @@ class Studentrep extends BaseController {
                 'memo_title' => $memoTitle,
                 'memo_content' => $memoContent,
                 'submitted_by' => $submittedBy,
-               'reviewed_by' => $toBeReviewedBy
+               'reviewed_by' => $toBeReviewedBy,
+               'meeting_id' => $meetingId
             ];
+            print_r($memoData);
             $reviewMemo = new ReviewMemo();
             $reviewMemo->insertx($memoData);
             $this->view("showsuccessmemo",["user"=>"studentrep"]);
