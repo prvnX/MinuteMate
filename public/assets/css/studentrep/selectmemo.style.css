@@ -1,68 +1,288 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
 :root {
-    --primary-color: #1e40af;
-    --secondary-color: #3b82f6;
-    --background-color: #f0f9ff;
-    --text-color: #1e293b;
-    --card-bg-color: #ffffff;
-    --navbar-bg-color: #e0f2fe;
+    --primary: #3b82f6;;
+    --primary-light: #eef1fd;
+    --primary-dark: #1e40af;
+    --secondary: #f0f9ff;
+    --text-dark: #333;
+    --text-light: #666;
+    --border: #e0e0e0;
+    --white: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --radius: 8px;
 }
 
-body{
-    padding: 0;
+* {
     margin: 0;
-    background-color: var(--background-color);
+    padding: 0;
+    box-sizing: border-box;
+    font-family: arial;
 }
-.select-memo-container{
-    margin: auto;
-    width: 60%;
-    margin-top: 60px;
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 0.5px solid #bcbcbc;
-    border-radius: 10px;
-    font-family: "EB Garamond", serif;
-    font-size : 1.2rem;
-    box-shadow: 0 0 10px #0a0a0a3c;
-    text-align: center;
-    background-color: #ffffff84;
+
+body {
+    background-color: var(--secondary);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+    
+}
+
+
+.container {
+    max-width: 1200px;
+    margin: 5% auto;
+    padding: 0 20px;
+    animation: fade-in 0.25s ease-in;
 
 }
-.select-memo-container h1{
-    font-family: "Ubuntu", serif;
-    font-size: 2rem;
-    font-weight:500;
-    color: var(--primary-color);
+
+.card {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
 }
-.select-memo-container select{
-    width: 60%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--secondary-color);
-    font-family: "EB Garamond", serif;
-    font-size : 1.1rem;
-    color: var(--secondary-color);
+
+.card-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-.select-memo-container button{
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #b1b1b1;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size : 1.2rem;
-    background-color: var(--secondary-color);
-    color: white;
-    display: block;
-    width: 20%;
-    margin: 10px auto;
+
+.card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #1e40af;
+}
+
+.card-body {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.memo-selection {
+    display: grid;
+    grid-template-columns: 1.75fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .memo-selection {
+        grid-template-columns: 1fr;
+    }
+}
+
+.memo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+}
+
+.memo-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.memo-list-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color:black;
+}
+
+.memo-filter {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    background-color: var(--white);
+    color: var(--text-light);
     cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
 }
-#cancelButton{
-    background-color: #ffffff;
-    color: var(--secondary-color);
-    border: 1px solid var(--secondary-color);
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.memo-item {
+    padding: 15px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 5px;
+}
+
+.memo-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(74, 107, 223, 0.1);
+}
+
+.memo-item.selected {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+}
+
+.memo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--white);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.memo-icon.bom {
+    background-color: #4a6bdf;
+}
+
+.memo-icon.iud {
+    background-color: #fab43c;
+}
+
+.memo-icon.syn {
+    background-color: #10b981;
+}
+.memo-icon.rhd{
+    background-color: #ef4444;
+}
+
+.memo-details {
+    flex: 1;
+}
+
+.memo-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.memo-date {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.calendar-container {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background-color: #f5f5f5;
+}
+
+.memo-search {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.memo-search input {
+    width: 100%;
+    padding: 10px 15px;
+    padding-left: 40px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    outline: none;
+    font-size: 14px;
+}
+
+
+.no-memos {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+}
+.no-memos-detail{
+    font-size: 12px;
+    margin-top: 8px;
+    text-align: center;
+    color:#ababab;
+} 
+
+.memo-list-container {
+    max-height: 300px;
+    min-height: 300px;
+    overflow-y: auto;
+    padding: 5px;
+    padding-right: 10px;
+    border: 1px solid #f6f6f6;
+    border-radius: var(--radius);
+}
+.calender{
+    width: 100%;
+    height: 100%;
+    padding-top: 55px;
+    box-shadow: none;
 
 }
- .calender{
-    padding-top: 40px
+.calender .calendar-container{
+
+    box-shadow: none;
+    background-color: white;
 }
