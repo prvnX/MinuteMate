@@ -10,7 +10,7 @@
 <body>
 
 <?php
-     
+    
     $user="lecturer";
     $minutecart="minutecart";   //use minutecart-dot if there is a minute in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
@@ -33,12 +33,25 @@
     </div>
     <div class="form-group">
         <label>Meeting Type:</label>
-        <span><?= htmlspecialchars($data['minuteDetails']->meeting_type) ?></span>
+        <span><?= htmlspecialchars($data['minuteDetails']->meeting_type) ?> Meeting</span>
     </div>
     <div class="form-group">
-        <label>Minute ID:</label>
+        <label>Meeting ID:</label>
         <span><?= htmlspecialchars($data['minuteDetails']->MeetingID) ?></span>
     </div>
+    
+    <div class="form-group">
+        <label>Minute ID:</label>
+        <span><?= htmlspecialchars($data['minuteDetails']->Minute_ID) ?></span>
+    
+    </div>
+    <div class="form-group">
+        <label>Searching Keywords:</label>
+        <span><?= htmlspecialchars($data['minuteDetails']->keywords) ?></span>        
+    </div>
+
+
+
     <div class="form-group">
         <label>Date:</label>
         <span><?= htmlspecialchars($data['minuteDetails']->created_date) ?></span>
@@ -49,9 +62,9 @@
     </div>
     <div class="form-group">
         <label>Author:</label>
-        <span><?= htmlspecialchars($data['minuteDetails']->created_by) ?></span>
+        <span><?= htmlspecialchars($data['minuteDetails']->user) ?></span>
     </div>
-
+<!-- 
     <div class="header">
         <h3>Flow of the Minute through Different Meetings</h3>
 
@@ -66,7 +79,7 @@
             </div>
         <?php endforeach; ?>
         </div>
-    </div>
+    </div> -->
 
     <!-- Footer -->
     <div class="footer">

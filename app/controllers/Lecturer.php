@@ -229,7 +229,7 @@ class Lecturer extends BaseController {
             $this->view("minutereportnotfound");
             return;
         }
-
+       
         $this->view("lecturer/viewminutereports", [
             'minuteDetails' => $minuteDetails,
             'user' => $_SESSION['userDetails']->username

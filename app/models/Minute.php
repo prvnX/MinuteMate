@@ -49,6 +49,7 @@ class Minute{
    public function getMinuteReportDetails($id)
     {
         $query = "SELECT 
+    u.full_name AS user,
     m.Minute_ID, 
     m.MeetingID, 
     m.title, 
@@ -58,9 +59,11 @@ class Minute{
     GROUP_CONCAT(DISTINCT ml.minutes_linked ORDER BY ml.id SEPARATOR ',') AS linked_minutes,
     GROUP_CONCAT(DISTINCT mk.Keyword ORDER BY mk.Keyword SEPARATOR ',') AS keywords
 FROM 
-      $this->table  AS m
+    minute AS m
 INNER JOIN 
     meeting ON m.MeetingID = meeting.Meeting_id
+INNER JOIN 
+    user u ON m.created_by = u.username
 LEFT JOIN 
     minutes_linked ml ON m.Minute_ID = ml.minute_id
 LEFT JOIN 
@@ -69,7 +72,8 @@ WHERE
     m.Minute_ID = :Minute_ID
     AND meeting.meeting_type IS NOT NULL
 GROUP BY 
-    m.Minute_ID, m.MeetingID, m.title, m.created_date, m.created_by, meeting.meeting_type;
+    m.Minute_ID, m.MeetingID, m.title, m.created_date, m.created_by, meeting.meeting_type, u.full_name;
+
  ";
          
         return $this->query($query, ['Minute_ID' => $id])[0] ?? null;
