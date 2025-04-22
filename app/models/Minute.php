@@ -17,13 +17,13 @@ class Minute{
         return $this->query($query);
     }
 
-    public function getMinuteDetails($minuteID){
-        $data['minute_id'] = $minuteID;
+     public function getMinuteDetails($minuteID){
+         $data['minute_id'] = $minuteID;
         $query = "SELECT minute.Minute_id, minute.created_date , user.full_name AS created_by,meeting.meeting_id,meeting.date,meeting.start_time,meeting.end_time,meeting.meeting_type,meeting.location
                     FROM $this->table
-                    INNER JOIN meeting ON minute.Meetingid = meeting.meeting_id
-                    INNER JOIN user ON meeting.created_by = user.username
-                    WHERE minute.Minute_id= :minute_id";
+                     INNER JOIN meeting ON minute.Meetingid = meeting.meeting_id
+                     INNER JOIN user ON meeting.created_by = user.username
+                     WHERE minute.Minute_id= :minute_id";
         return $this->query($query, $data);
     }
     public function MinuteListByUser($username){
@@ -45,6 +45,38 @@ class Minute{
                       INNER JOIN meeting ON minute.Meetingid = meeting.Meeting_id";
             return $this->query(query: $query);
         
+    }
+   public function getMinuteReportDetails($id)
+    {
+        $query = "SELECT 
+    u.full_name AS user,
+    m.Minute_ID, 
+    m.MeetingID, 
+    m.title, 
+    m.created_date, 
+    m.created_by,
+    meeting.meeting_type,
+    GROUP_CONCAT(DISTINCT ml.minutes_linked ORDER BY ml.id SEPARATOR ',') AS linked_minutes,
+    GROUP_CONCAT(DISTINCT mk.Keyword ORDER BY mk.Keyword SEPARATOR ',') AS keywords
+FROM 
+    minute AS m
+INNER JOIN 
+    meeting ON m.MeetingID = meeting.Meeting_id
+INNER JOIN 
+    user u ON m.created_by = u.username
+LEFT JOIN 
+    minutes_linked ml ON m.Minute_ID = ml.minute_id
+LEFT JOIN 
+    minute_Keywords mk ON m.Minute_ID = mk.Minute_ID
+WHERE 
+    m.Minute_ID = :Minute_ID
+    AND meeting.meeting_type IS NOT NULL
+GROUP BY 
+    m.Minute_ID, m.MeetingID, m.title, m.created_date, m.created_by, meeting.meeting_type, u.full_name;
+
+ ";
+         
+        return $this->query($query, ['Minute_ID' => $id])[0] ?? null;
     }
     
     
