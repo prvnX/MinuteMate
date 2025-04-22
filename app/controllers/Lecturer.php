@@ -188,8 +188,11 @@ class Lecturer extends BaseController {
             $this->view("lecturer/selectmemo", ['memos' => $memos]);
          
     }
-    public function selectminute (){
-        $this->view("lecturer/selectminute");
+    public function selectminute() { //this is the page where the lecturer selects the minute to view details
+        $minute = new Minute();
+        $minutes = $minute->getMinutes($_SESSION['userDetails']->username, date("Y-m-d"));
+        
+        $this->view("lecturer/selectminute", ['minutes' => $minutes]);
     }
     public function viewmemoreport() {
         if (!isset($_GET['memo'])) {
@@ -212,25 +215,28 @@ class Lecturer extends BaseController {
             'user' => $_SESSION['userDetails']->username
         ]);
     }
-     
     public function viewminutereports() {
         if (!isset($_GET['minute'])) {
             header("Location: " . ROOT . "/lecturer/selectminute");
             exit;
         }
 
-        $minuteId = $_GET['minute'];
+        $id = $_GET['minute'];
         $minute = new Minute();
-        $minuteDetails = $minute->getMinuteDetails($minuteId);
+        $minuteDetails = $minute->getMinuteReportDetails($id);
 
         if (!$minuteDetails) {
-            $_SESSION['flash_error'] = "Minute not found.";
-            redirect("lecturer/selectminute");
+            $this->view("minutereportnotfound");
             return;
         }
 
-        $this->view("lecturer/viewminutereports", ['minuteDetails' => $minuteDetails]);
+        $this->view("lecturer/viewminutereports", [
+            'minuteDetails' => $minuteDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
+     
+    
     public function requestchange(){
         $responseStatus = "";
     

@@ -1,0 +1,226 @@
+/* General Reset */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #f7f7f7;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    min-height: 700px;
+    margin: 50px auto;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Header Section */
+.header {
+    font-family: ubuntu;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1e40af;
+    margin: 0;
+}
+
+
+.header h2 {
+    padding: 40px;
+    font-weight: bold;
+    color: #16171a;
+    margin: 0;
+}
+.header h3 {
+    text-align: center;
+    color: #333;
+} 
+.timeline {
+    display: flex;
+    flex-direction: row; /* Arrange items horizontally */
+    flex-direction: row; /* Arrange items horizontally */
+    justify-content: flex-start; /* Align items to the left horizontally */
+    align-items: center; /* Center items vertically */
+     
+    position: relative;
+    margin-top: 40px;
+    padding: 0 15px;
+    max-width: 600px; /* Reduce the width of the timeline */
+    margin-left: auto;
+    margin-right: auto;
+}
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    margin-top: 40px;
+    padding: 0 15px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #ccc;
+    z-index: 1;
+}
+
+.timeline-step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-step .dot {
+    width: 20px;
+    height: 20px;
+    background-color: #007bff;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+}
+
+.timeline-step .label {
+    font-weight: bold;
+    color: #333;
+}
+
+.timeline-step .date {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Tooltip container */
+.dot-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tooltip styling */
+.dot-wrapper .dot::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 130%;
+    background-color: #333;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 14px;
+    white-space: nowrap;
+    border-radius: 6px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tooltip arrow */
+.dot-wrapper .dot::before {
+    content: "";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Show tooltip on hover */
+.dot-wrapper:hover .dot::after,
+.dot-wrapper:hover .dot::before {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Form Group */
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+    font-weight: bold;
+    
+}
+
+.form-group span {
+    font-size: 14px;
+    color: #666;
+    font-weight: bold;
+}
+
+/* Links */
+.form-group span a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-group span a:hover {
+    text-decoration: underline;
+}
+
+/* Footer Section */
+.footer {
+    margin-top: 20px;
+    text-align: right;
+    padding-top: 15px;
+     
+}
+
+.footer img {
+    width: 100px;
+    height: 100px;
+    opacity: 0.8;
+    background-color: #C4D2F7;
+    border-radius: 50%;
+    
+    
+}
+
+.footer img:hover {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-group label {
+        margin-bottom: 5px;
+    }
+}

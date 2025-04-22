@@ -1,5 +1,5 @@
 <head>
-    <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/selectminute.style.css">
+    <link rel="stylesheet" href="<?=ROOT?>/assets/css/lecturer/selectminute.style.css">
     <title>Please Select a minute</title>
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 
@@ -7,10 +7,10 @@
 </head>
 <body>
 <?php
-    $user="secretary";
+    $user="lecturer";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/lecturer",$memocart => ROOT."/lecturer/memocart", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
   
     ?>
@@ -164,7 +164,7 @@
     // Initialize buttons
     viewMinuteReportBtn.addEventListener('click', () => {
         if (selectedMinuteId) {
-            window.location.href = `<?=ROOT?>/secretary/viewminutereports?minute=${selectedMinuteId}`;
+            window.location.href = `<?=ROOT?>/lecturer/viewminutereports?minute=${selectedMinuteId}`;
         }
     });
 
