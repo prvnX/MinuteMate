@@ -54,9 +54,9 @@
 </div>
 <div class="form-group">
     <label>Author:</label>
-    <span><?= htmlspecialchars($data['memoDetails']->author) ?></span>
+    <span><?= htmlspecialchars($data['memoDetails']->user) ?></span>
 </div>
-    <div class="header">
+    <!-- <div class="header">
     <h3>Flow of the Memo through Different Meetings</h3>
 
     <div class="timeline">
@@ -71,7 +71,7 @@
     <?php endforeach; ?>
 </div>
 
-    </div>
+    </div> -->
 
     <!-- Footer -->
     <div class="footer">

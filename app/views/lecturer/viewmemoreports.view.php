@@ -11,7 +11,7 @@
 
  
 <?php
-    
+   
     $user="lecturer";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
@@ -54,7 +54,7 @@
 </div>
 <div class="form-group">
     <label>Author:</label>
-    <span><?= htmlspecialchars($data['memoDetails']->author) ?></span>
+    <span><?= htmlspecialchars($data['memoDetails']->user) ?></span>
 </div>
     <!-- <div class="header">
     <h3>Flow of the Memo through Different Meetings</h3>
