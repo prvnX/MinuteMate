@@ -39,10 +39,13 @@
         <label>Meeting ID:</label>
         <span><?= htmlspecialchars($data['minuteDetails']->MeetingID) ?></span>
     </div>
-    
+   
     <div class="form-group">
         <label>Minute ID:</label>
-        <span><?= htmlspecialchars($data['minuteDetails']->Minute_ID) ?></span>
+        <span><?= htmlspecialchars($data['minuteDetails']->Minute_ID) ?>
+        <a href="<?=ROOT."/".$_SESSION['userDetails']->role."/viewminute?minuteID=".$data['minuteDetails']->Minute_ID?>"
+        > (click here to view the minute) </a></span>
+        
     
     </div>
     <div class="form-group">
@@ -58,7 +61,23 @@
     </div>
     <div class="form-group">
         <label>Linked Minutes</label>
-        <span><?= htmlspecialchars($data['minuteDetails']->linked_minutes) ?></span>
+        <span><?= $linkedMinutes=$data['minuteDetails']->linked_minutes;
+                    if($linkedMinutes==null){
+                        echo "No linked minutes";
+                    }else{
+                        $linkedMinutes = explode(",", $linkedMinutes);
+                    foreach($linkedMinutes as $linkedMinute){
+                        echo htmlspecialchars($linkedMinute).", ";
+                        echo '<a href="' . ROOT . '/' . $_SESSION['userDetails']->role . '/viewminute?minuteID=' . $data['minuteDetails']->linked_minutes . '">View Minute</a>';}
+
+                }
+        
+        
+        ?>
+        <a href="<?=ROOT."/".$_SESSION['userDetails']->role."/viewminute?minuteID=".$data['minuteDetails']->linked_minutes?>"
+        > (click here to view the linked minute) </a></span>
+    </div>
+    </span>
     </div>
     <div class="form-group">
         <label>Author:</label>

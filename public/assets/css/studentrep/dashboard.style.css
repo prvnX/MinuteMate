@@ -19,7 +19,7 @@ body {
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 10px;
+  padding: 30px;
 }
 
 .welcome-section {
@@ -41,17 +41,20 @@ body {
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap:10px;
+  gap:20px;
   flex: 2;
-  margin-top: 120px;
-  margin-bottom: 100px;
+  margin-top: 8px;
+  margin-bottom: 10px;
 }
 
 .calendar-section {
   flex: 1;
+  
+  margin-top: 5px;
   background: white;
   border-radius: 10px;
   padding: 20px;
+  height: 600px;;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -60,7 +63,7 @@ body {
   border-radius: 10px;
   padding: 15px;
   width: 400px;
-  height: 200px;
+  height: 278px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -68,8 +71,8 @@ body {
 .icon-bg {
   background-color: #e6f2ff;
   color: var(--secondary-color);
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -81,20 +84,20 @@ body {
 .card h2 {
   color: var(--primary-color);
   margin-bottom: 8px;
-  font-size: 1.2em;
+  font-size: 1.5em;
 }
 
 .card p {
   color: #64748b;
   margin-bottom: 15px;
-  font-size: 0.9em;
+  font-size: 1.2em;
 }
 
 .card button {
   background-color: var(--secondary-color);
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 18px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -150,7 +153,7 @@ body {
   padding: 10px;
   background: #f8f9ff;
   border-radius: 10px;
-  height: 10rem;
+  height: 6rem;
   width: 85%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
