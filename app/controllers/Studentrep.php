@@ -225,19 +225,22 @@ class Studentrep extends BaseController {
             header("Location: " . ROOT . "/studentrep/selectmemo");
             exit;
         }
-    
+
         $memoId = $_GET['memo'];
         $memo = new Memo();
-        $memoDetails = $memo->getMemoById($memoId);
-    
+        $memoDetails = $memo->getMemoDetails($memoId);
+      
+
         if (!$memoDetails) {
-            $_SESSION['flash_error'] = "Memo not found.";
-            redirect("studentrep/selectmemo");
+            $this->view("memoreportnotfound");
             return;
         }
-    
-        $this->view("studentrep/viewmemoreports", ['memoDetails' => $memoDetails]);
-        }
+
+        $this->view("studentrep/viewmemoreports", [
+            'memoDetails' => $memoDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
+    }
     
 
 
