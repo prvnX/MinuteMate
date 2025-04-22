@@ -93,7 +93,7 @@ class Lecturer extends BaseController {
        if(!$memo_id)
        {
         $_SESSION['flash_error'] = "Memo ID not provided.";
-        redirect("secretary/viewsubmittedmemos");
+        redirect("lecturer/viewsubmittedmemos");
         return;
        }
 
@@ -104,12 +104,12 @@ class Lecturer extends BaseController {
 
         if($memo)
         {
-            $this->view("secretary/viewmemodetails", ['memo'=>$memo]);
+            $this->view("lecturer/viewmemodetails", ['memo'=>$memo]);
         }
         else
         {
             $_SESSION['flash_error'] = "Memo not found.";
-            redirect("secretary/viewmemos");
+            redirect("lecturer/viewmemos");
         }
     }
     else
@@ -212,25 +212,25 @@ class Lecturer extends BaseController {
             'user' => $_SESSION['userDetails']->username
         ]);
     }
-    
+     
     public function viewminutereports() {
-        if(!isset($_GET['minute'])) {
-            header("Location: ".ROOT."/lecturer/selectminute");
+        if (!isset($_GET['minute'])) {
+            header("Location: " . ROOT . "/lecturer/selectminute");
+            exit;
         }
-        $memoid = $_GET['minute'];
-        $data = [
-            'date' => '2024-11-16',
-            'time' => '10:00 AM',
-            'meeting_type' => 'Team Meeting',
-            'meeting_minute' => 'Discussed project updates and next steps.',
-            'linked_minutes' => 'Minute #14, Minute #15',
-            'linked_memos' => 'Memo #12',
-            'recording' => 'https://example.com/recording.mp4',
-            'attendees' => 'Alice, Bob, Charlie'
-        ];
-        $this->view("secretary/viewminutereports", $data);
-    }
 
+        $minuteId = $_GET['minute'];
+        $minute = new Minute();
+        $minuteDetails = $minute->getMinuteDetails($minuteId);
+
+        if (!$minuteDetails) {
+            $_SESSION['flash_error'] = "Minute not found.";
+            redirect("lecturer/selectminute");
+            return;
+        }
+
+        $this->view("lecturer/viewminutereports", ['minuteDetails' => $minuteDetails]);
+    }
     public function requestchange(){
         $responseStatus = "";
     
