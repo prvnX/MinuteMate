@@ -1,11 +1,11 @@
 <?php 
-// Include sidebar and other layout components
 include '../app/views/components/admin_sidebar.php'; 
 
-// Retrieve the user details passed from the controller
-$userDetails = $data['userDetails']; // The fetched user details
+$userDetails = $data['userDetails']; 
 $userId = $_GET['id'];
 
+$isLecturer = strpos($userDetails->role, 'lecturer') !== false;
+$isSecretary = strpos($userDetails->role, 'secretary') !== false;
 ?>
 
 <div class="content">
@@ -20,28 +20,66 @@ $userId = $_GET['id'];
     <p>Contact No.: <?php echo htmlspecialchars($userDetails->tp_no); ?></p>
     <p>Additional Contact No. if any : <?php echo htmlspecialchars($userDetails->additional_tp_no); ?></p>
 
+    <!-- Meeting Type Selection -->
+    <?php if ($isSecretary && $isLecturer): ?>
+        <!-- Secretary Meeting Type -->
+        <label>Select Secretary Meeting Type:</label>
+        <div class="meeting-options">
+            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <input type="checkbox" id="secretary<?= $type ?>" name="secretaryMeetingType[]" value="<?= $type ?>">
+                    <label for="secretary<?= $type ?>"><?= $type ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
-   <!-- Meeting Type Selection (allow multiple) -->
-<label>Select Meeting Type(s):</label>
-<div class="meeting-options">
-    <div class="meeting-option rhd-option">
-        <input type="checkbox" id="meetingRHD" name="meetingType[]" value="1"> <!-- RHD -->
-        <label for="meetingRHD">RHD</label>
-    </div>
-    <div class="meeting-option iod-option">
-        <input type="checkbox" id="meetingIOD" name="meetingType[]" value="2"> <!-- IOD -->
-        <label for="meetingIOD">IOD</label>
-    </div>
-    <div class="meeting-option syn-option">
-        <input type="checkbox" id="meetingSYN" name="meetingType[]" value="3"> <!-- SYN -->
-        <label for="meetingSYN">SYN</label>
-    </div>
-    <div class="meeting-option bom-option">
-        <input type="checkbox" id="meetingBOM" name="meetingType[]" value="4"> <!-- BOM -->
-        <label for="meetingBOM">BOM</label>
-    </div>
-</div>
+        <!-- Lecturer Meeting Type -->
+        <label>Select Lecturer Meeting Type:</label>
+        <div class="meeting-options">
+            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <input type="checkbox" id="lecturer<?= $type ?>" name="lecturerMeetingType[]" value="<?= $type ?>">
+                    <label for="lecturer<?= $type ?>"><?= $type ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
+    <?php elseif ($isSecretary): ?>
+        <!-- Only Secretary -->
+        <label>Select Secretary Meeting Type:</label>
+        <div class="meeting-options">
+            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <input type="checkbox" id="secretary<?= $type ?>" name="secretaryMeetingType[]" value="<?= $type ?>">
+                    <label for="secretary<?= $type ?>"><?= $type ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+    <?php elseif ($isLecturer): ?>
+        <!-- Only Lecturer -->
+        <label>Select Lecturer Meeting Type:</label>
+        <div class="meeting-options">
+            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <input type="checkbox" id="lecturer<?= $type ?>" name="lecturerMeetingType[]" value="<?= $type ?>">
+                    <label for="lecturer<?= $type ?>"><?= $type ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+    <?php else: ?>
+        <!-- Other Roles -->
+        <label>Select Meeting Type(s):</label>
+        <div class="meeting-options">
+            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <input type="checkbox" id="meeting<?= $type ?>" name="meetingType[]" value="<?= $type ?>">
+                    <label for="meeting<?= $type ?>"><?= $type ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 
     <!-- Accept and Decline Buttons -->
     <div class="action-buttons">
@@ -50,37 +88,37 @@ $userId = $_GET['id'];
     </div>
 </div>
 
-<!-- Include CSS for this page -->
 <link rel="stylesheet" href="<?= ROOT ?>/assets/css/admin/viewRequestDetails.style.css">
 
 <script>
     function handleRequest(action) {
-    const selectedMeetingTypes = Array.from(
-        document.querySelectorAll('input[name="meetingType[]"]:checked')
-    ).map(input => input.value);
+        const generalTypes = Array.from(document.querySelectorAll('input[name="meetingType[]"]:checked')).map(input => input.value);
+        const lecturerTypes = Array.from(document.querySelectorAll('input[name="lecturerMeetingType[]"]:checked')).map(input => input.value);
+        const secretaryTypes = Array.from(document.querySelectorAll('input[name="secretaryMeetingType[]"]:checked')).map(input => input.value);
 
-    const userId = "<?= $userId ?>";
+        const userId = "<?= $userId ?>";
 
-    fetch("<?= ROOT ?>/admin/handleRequest", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            action: action,
-            id: userId,
-            meetingTypes: selectedMeetingTypes,
-        }),
-    })
+        fetch("<?= ROOT ?>/admin/handleRequest", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: action,
+                id: userId,
+                meetingTypes: generalTypes, // For roles other than lecturer/secretary
+                lecturerMeetingType: lecturerTypes,
+                secretaryMeetingType: secretaryTypes
+            }),
+        })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert(action === 'accept' ? 'Request accepted and user added!' : 'Request declined.');
                 window.location.href = '<?= ROOT ?>/admin/viewpendingRequests';
             } else {
-                alert('An error occurred. Please try again.');
+                alert('An error occurred: ' + data.message);
             }
         });
-}
-
+    }
 </script>
