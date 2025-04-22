@@ -16,13 +16,19 @@ class Admin extends BaseController {
             "pendingRequests" => $pendingRequests
         ]);
     }
+
+
     
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
             $requestData = json_decode(file_get_contents("php://input"), true);
             $requestId = $requestData['id'] ?? null;
             $action = $requestData['action'] ?? null;
-            $meetingTypes = $requestData['meetingTypes'] ?? [];
+    
+            $generalMeetingTypes = $requestData['meetingTypes'] ?? [];
+            $secretaryMeetingTypes = $requestData['secretaryMeetingType'] ?? [];
+            $lecturerMeetingTypes = $requestData['lecturerMeetingType'] ?? [];
     
             $userRequestsModel = $this->model("user_requests");
     
@@ -30,6 +36,7 @@ class Admin extends BaseController {
                 $userModel = $this->model("User");
                 $userRolesModel = $this->model("UserRoles");
                 $userMeetingTypesModel = $this->model("user_meeting_types");
+                $secretaryMeetingModel = $this->model("secretary_meeting_type");
                 $userContactNumsModel = $this->model("UserContactNums");
     
                 $userDetails = $userRequestsModel->getRequestById($requestId);
@@ -40,7 +47,7 @@ class Admin extends BaseController {
     
                     try {
                         // Start transaction
-                        $userModel->beginTransaction();
+                        //$userModel->beginTransaction();
     
                         // Insert into user table
                         $userInsertResult = $userModel->insert([
@@ -51,21 +58,23 @@ class Admin extends BaseController {
                             'email' => $userDetails->email,
                             'status' => 'active'
                         ]);
+                        
     
                         if (!$userInsertResult['success']) {
                             throw new Exception("Username already exists.");
                         }
     
-                        // Insert into user_roles
-                        foreach (explode(',', $userDetails->role) as $role) {
+                        // Insert roles
+                        $roles = array_map('trim', explode(',', $userDetails->role));
+                        
+                        foreach ($roles as $role) {
                             $userRolesModel->insert([
                                 'username' => $username,
-                                'role' => trim($role) // trim in case there are spaces
+                                'role' => $role
                             ]);
                         }
-
     
-                        // Insert contact number(s)
+                        // Insert contact numbers
                         $userContactNumsModel->insert([
                             'username' => $username,
                             'contact_no' => $userDetails->tp_no
@@ -78,21 +87,31 @@ class Admin extends BaseController {
                             ]);
                         }
     
-                        // Insert meeting types
-                        if (!empty($meetingTypes)) {
-                            foreach ($meetingTypes as $meetingTypeId) {
-                                $userMeetingTypesModel->insert([
-                                    'accessible_user' => $username,
-                                    'meeting_type_id' => $meetingTypeId
-                                ]);
+                        // Insert general meeting types
+                        if (!empty($generalMeetingTypes)) {
+                            $userMeetingTypesModel->insertMeetingTypes($username, $generalMeetingTypes);
+                        }
+    
+                        // Insert lecturer meeting types
+                        if (!empty($lecturerMeetingTypes)) {
+                            $userMeetingTypesModel->insertMeetingTypes($username, $lecturerMeetingTypes);
+                        }
+    
+                        // If user is a secretary, insert secretary meeting types into both tables
+                        if (in_array('secretary', array_map('strtolower', $roles))) {
+                            if (!empty($secretaryMeetingTypes)) {
+                                // Insert into secretary_meeting_type table
+                                $secretaryMeetingModel->insertSecretaryMeetingTypes($username, $secretaryMeetingTypes);
+                                // Also insert into user_meeting_types table
+                                $userMeetingTypesModel->insertMeetingTypes($username, $secretaryMeetingTypes);
                             }
                         }
     
-                        // Remove the original request
+                        // Remove original request
                         $userRequestsModel->deleteRequestById($requestId);
     
                         // Commit transaction
-                        $userModel->commit();
+                        //$userModel->commit();
     
                         echo json_encode(['success' => true, 'message' => 'Request accepted and user added!']);
                         return;
@@ -105,11 +124,11 @@ class Admin extends BaseController {
                 }
             }
     
-            // ... rest of your decline/remove logic remains the same ...
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
         }
-    
-        echo json_encode(['success' => false, 'message' => 'Invalid request']);
     }
+    
+    
     
     public function viewRequestDetails() {
         // Retrieve the request ID from the URL
