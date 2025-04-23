@@ -539,8 +539,6 @@ public function removeMember() {
     window.location.href = '" . ROOT . "/admin/viewMembers';
 </script>";
 exit;
-
-    exit;
 }
 
 public function reactivateMember() {
