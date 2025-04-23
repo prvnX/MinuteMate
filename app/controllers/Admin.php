@@ -122,10 +122,19 @@ class Admin extends BaseController {
                         return;
                     }
                 }
+            }elseif ($requestId && $action === 'decline') {
+                // Update the request status to 'declined'
+                $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
+            
+                if ($result) {
+                    echo json_encode(['success' => true, 'message' => 'Request declined.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
+                }
             }
-    
-            echo json_encode(['success' => false, 'message' => 'Invalid request']);
-        }
+            
+        echo json_encode(['success' => false, 'message' => 'Invalid request']);
+                }
     }
     
     
