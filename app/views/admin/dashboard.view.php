@@ -68,7 +68,7 @@
 
             <div class="card" id="departments">
               <div class="icon-bg">
-                <i class="fas fa-list"></i>
+                <i class="fas fa-building"></i>
               </div>
               <h2>departments</h2>
               <p>Add Departments here </p>

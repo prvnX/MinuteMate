@@ -23,7 +23,7 @@
     require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
     ?>
     
-    <h1>Request Change</h1>
+    <h1>Request Profile Change</h1>
     <div class="container">
          
         <form action="<?= ROOT ?>/studentrep/requestchange" method="post">
