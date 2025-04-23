@@ -27,8 +27,10 @@ $currentPage = 'viewMembers'; // For navbar highlighting
     <p>Contact No.: <?= htmlspecialchars($userData->contact_no ?? 'N/A'); ?></p>
     <p>Additional Contact No.: <?= htmlspecialchars($userData->additional_tp_no ?? 'N/A'); ?></p>
 
-    <label>Select Meeting Type(s):</label>
+    
     <div class="meeting-options">
+    <div class="user-meeting-section">
+    <p><strong>User Meeting Type(s):</strong></p>
         <?php
         $userData->meetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
         $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
@@ -43,6 +45,38 @@ $currentPage = 'viewMembers'; // For navbar highlighting
                   </div>";
         }
         ?>
+        
+    </div>
+    <div class="secretary-meeting-section">
+    <?php
+    // Show Secretary Meeting Types only if user has "Secretary" role
+if (isset($userData->role) && in_array('secretary', $userData->role)) {
+    echo "<p><strong>Secretary Meeting Types:</strong></p>";
+
+    $secMeetingsRaw = $userData->secMeetings ?? [];
+    if (is_object($secMeetingsRaw)) {
+        $secMeetingsRaw = [$secMeetingsRaw]; // handle single object case
+    }
+
+    $secMeetings = is_array($secMeetingsRaw)
+        ? array_map(fn($row) => strtoupper($row->meeting_type), $secMeetingsRaw)
+        : [];
+
+    $allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+
+    foreach ($allMeetingTypes as $type) {
+        $checked = in_array($type, $secMeetings) ? 'checked' : '';
+        $class = strtolower($type) . '-option';
+        echo "<div class='meeting-option $class'>
+            <label for='sec_meeting$type'>
+                <input type='checkbox' id='sec_meeting$type' name='secMeetingType[]' value='$type' $checked disabled>
+                $type
+              </label>
+              </div>";
+    }
+}
+?>
+</div>
     </div>
 
     <div class="action-buttons">

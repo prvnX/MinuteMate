@@ -63,24 +63,32 @@ $deletedData = $data['deletedData'] ?? null;
                 }
               ?>
 
-<p><strong>Secretary Meeting Types:</strong></p>
 <?php
-// Extract meeting type strings from objects
-$secMeetings = isset($userData->secMeetings) 
-    ? array_map(fn($row) => strtoupper($row->meeting_type), $userData->secMeetings) 
-    : [];
+// Show Secretary Meeting Types only if user has "Secretary" role
+if (isset($userData->role) && in_array('secretary', $userData->role)) {
+    echo "<p><strong>Secretary Meeting Types:</strong></p>";
 
-$allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM']; // All available types for display
+    $secMeetingsRaw = $userData->secMeetings ?? [];
+    if (is_object($secMeetingsRaw)) {
+        $secMeetingsRaw = [$secMeetingsRaw]; // handle single object case
+    }
 
-foreach ($allMeetingTypes as $type) {
-    $checked = in_array($type, $secMeetings) ? 'checked' : '';
-    $class = strtolower($type) . '-option';
-    echo "<div class='meeting-option $class'>
-        <label for='sec_meeting$type'>
-            <input type='checkbox' id='sec_meeting$type' name='secMeetingType[]' value='$type' $checked disabled>
-            $type
-          </label>
-          </div>";
+    $secMeetings = is_array($secMeetingsRaw)
+        ? array_map(fn($row) => strtoupper($row->meeting_type), $secMeetingsRaw)
+        : [];
+
+    $allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+
+    foreach ($allMeetingTypes as $type) {
+        $checked = in_array($type, $secMeetings) ? 'checked' : '';
+        $class = strtolower($type) . '-option';
+        echo "<div class='meeting-option $class'>
+            <label for='sec_meeting$type'>
+                <input type='checkbox' id='sec_meeting$type' name='secMeetingType[]' value='$type' $checked disabled>
+                $type
+              </label>
+              </div>";
+    }
 }
 ?>
            </div>
