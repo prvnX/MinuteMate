@@ -104,15 +104,15 @@ class User {
         return $userData;
     }
 
-    public function updateContactInfo($username, $contact_no) {
-        require_once __DIR__ . '/UserContactNums.php'; 
-        $contactModel = new UserContactNums();
+    // public function updateContactInfo($username, $contact_no) {
+    //     require_once __DIR__ . '/UserContactNums.php'; 
+    //     $contactModel = new UserContactNums();
     
-        // Handle single or multiple numbers
-        $numbers = is_array($contact_no) ? $contact_no : [$contact_no];
+    //     // Handle single or multiple numbers
+    //     $numbers = is_array($contact_no) ? $contact_no : [$contact_no];
     
-        $contactModel->updateOrInsertContactNumbers($username, $numbers);
-    }
+    //     $contactModel->updateOrInsertContactNumbers($username, $numbers);
+    // }
     
     
 

@@ -51,7 +51,7 @@ class Studentrep extends BaseController {
                 $meetingType = $meeting->getMeetingTypeById($meetingId);
                 
                 // Fetch the users for the selected meeting type
-                $users = $users->getUsersForMeetingType($meetingType->id);
+                $users = $users->getUsersForMeetingType($meetingType[0]->id);
     
                 // Pass the meeting users to the view
                 $this->view("studentrep/entermemo", [
@@ -132,7 +132,7 @@ class Studentrep extends BaseController {
                'reviewed_by' => $toBeReviewedBy,
                'meeting_id' => $meetingId
             ];
-            print_r($memoData);
+            // print_r($memoData);
             $reviewMemo = new ReviewMemo();
             $reviewMemo->insertx($memoData);
             $this->view("showsuccessmemo",["user"=>"studentrep"]);
