@@ -9,29 +9,14 @@
 </head>
 
 <body>
-    <div class="navbar">
-        <?php
-        $user = "admin";
-        $notification = "notification"; // use notification-dot if there's a notification
-        $menuItems = [
-            "home" => ROOT . "/admin",
-            $notification => ROOT . "/admin/notifications",
-            "profile" => ROOT . "/admin/viewprofile"
-        ]; // pass the menu items here (key is the name of the page, value is the URL)
-        require_once("../app/views/components/navbar.php"); // call the navbar component
-        ?>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-    <ul>
-
-            <li><a href="<?= ROOT.'/admin/viewpendingRequests' ?>"><img src="<?= ROOT ?>/assets/images/note.png" alt="note"> View Pending Member   Request</a></li>
-            <li><a href="<?= ROOT.'/admin/viewMembers' ?>"><img src="<?= ROOT ?>/assets/images/writing.png" alt="writing"> View Members</a></li>
-            <li><a href="<?= ROOT.'/admin/PastMembers' ?>"><img src="<?= ROOT ?>/assets/images/interface.png" alt="interface"> Past Members</a></li>
-            <li class="active"><a href="<?= ROOT.'/admin/vieweditrequests' ?>"><img src="<?= ROOT ?>/assets/images/sticky.png" alt="sticky"> View Edit Requests</a></li>
-        </ul>
-    </div>
+<?php
+    $user="admin";
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/admin_sidebar.php"); //call the sidebar component
+    ?>
+ 
 
     <!-- Main Content -->
     <div class="main-content">
