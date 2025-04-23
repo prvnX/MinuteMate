@@ -167,6 +167,8 @@ td:hover {
     max-width: 700px;
     border-radius: 10px;
     text-align: left;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 .modal-content textarea {
     width: 100%;
@@ -268,3 +270,44 @@ input[type="date"],input[type='time'], input[type="text"], select {
     font-family: "Ubuntu", sans-serif;
     text-align: center;
 }
+
+.agendaContainer .addmorebtn{
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-family: Poppins, sans-serif;
+}
+.addmorebtn {
+    background-color: transparent;
+    color: #3b82f6;
+    border: solid 1px #3b82f6;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-family: Poppins, sans-serif;
+    
+}
+.closeBtn{
+    background-color: transparent;
+    color: rgb(255, 0, 0);
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: background-color 0.3s;
+    font-family: Poppins, sans-serif;
+}
+.input-container{
+    display: flex  ;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;}

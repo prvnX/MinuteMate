@@ -14,8 +14,6 @@
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
     require_once("../app/views/components/sec_sidebar.php"); //call the sidebar component
     $minuteDetails=$data['minuteDetails'][0];
-    $attendees=$data['minuteDetails'][0]->attendence;
-    $AgendaItems=$data['minuteDetails'][0]->agendaItems;
     
     
     ?>
@@ -65,31 +63,7 @@
         </div>
         </div>
 
-        <div class="minute-details ">
-        <h1 class="sub-title">Participants</h1> 
-        <div class="attendees">
-            <?php
-            foreach($attendees as $attendee){
-                echo "<p>".$attendee->attendee."</p>";
-            }
-            ?>
-        </div>
-        </div>
 
-        <div class="minute-details">
-        <h1 class="sub-title">Agenda Items</h1>
-        <div class="detail-item">
-        <?php
-            foreach($AgendaItems as $agenda){
-                echo "<p>".$agenda->agenda_item."</p>";
-            }
-            ?>
-
-        </div>
-
-
-
-        </div>
 
         <div class="minute-details">
         <h1 class="sub-title">Contents</h1>

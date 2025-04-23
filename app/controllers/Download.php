@@ -26,7 +26,7 @@ public function index(){
         $location=$minuteDetails[0]->location;
         $startTime=substr($minuteDetails[0]->start_time,0,-3);
         $endTime=substr($minuteDetails[0]->end_time,0,-3);
-        $attendees=$minuteDetails[0]->attendence;
+ 
         $contents=$minuteDetails[0]->contents;
 
         
@@ -177,33 +177,8 @@ public function index(){
             <p> <span>Location:</span> $location </p>
         </div>
         </div>
-        <div class="minute-details ">
-        <h1 class="sub-title">Participants</h1> 
-        <div class="attendees">
-
-        HTML;
-            
-        // Optional: Footer only on last page
-        foreach ($attendees as $attendee) {
-            $html .= "<p>" .$attendee->attendee . "</p>";
-        }
-        $html .= <<<HTML
-        </div>
-        </div>
-
+  
         <div class="minute-details">
-        <h1 class="sub-title">Agenda Items</h1>
-        <div class="detail-item">
-        <ul>
-        HTML;
-        $AgendaItems=$minuteDetails[0]->agendaItems;
-        foreach($AgendaItems as $agenda){
-            $html.="<li><p>".$agenda->agenda_item."</p></li>";
-            
-        }
-        $html .= "</ul></div></div>";
-        $html .= <<<HTML
-                <div class="minute-details">
         <h1 class="sub-title">Contents</h1>
         HTML;
         // $contents=$data['contents'];
