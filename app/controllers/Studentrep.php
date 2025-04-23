@@ -51,7 +51,7 @@ class Studentrep extends BaseController {
                 $meetingType = $meeting->getMeetingTypeById($meetingId);
                 
                 // Fetch the users for the selected meeting type
-                $users = $users->getUsersForMeetingType($meetingType->id);
+                $users = $users->getUsersForMeetingType($meetingType[0]->id);
     
                 // Pass the meeting users to the view
                 $this->view("studentrep/entermemo", [
