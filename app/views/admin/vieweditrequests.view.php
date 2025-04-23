@@ -20,29 +20,29 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <h1 class="heading">Edit Requests</h1>
-        <div class="memolist reqlist-container">
-            <?php if (!empty($requests)): ?>
-                <?php foreach ($requests as $request): ?>
-                    <div class="memoitem">
-                        <div class="memocontent">
-                            <h1 class="req-heading">Edit request by <span><?= htmlspecialchars($request->full_name) ?></span></h1>
-                            <p class="req-date"><?= htmlspecialchars($request->created_at) ?></p>
-                        </div>
-                        <a href="<?= ROOT ?>/admin/viewsinglerequest/?id=<?= $request->id ?>">
-                        <button type="button" id="viewbutton" class="viewbtn">View</button>
-                        </a>
+    <h1 class="heading">Edit Requests</h1>
+    <div class="memolist reqlist-container">
+        <?php if (!empty($requests)): ?>
+            <?php foreach ($requests as $request): ?>
+                <div class="memoitem">
+                    <div class="memocontent">
+                        <h1 class="req-heading">Edit request by <span><?= htmlspecialchars($request->full_name) ?></span></h1>
+                        <p class="req-date"><?= htmlspecialchars($request->created_at) ?></p>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="no-reqs">No edit requests available.</p>
-            <?php endif; ?>
-        </div>
-
-        <div class="form-buttons">
-            <button type="button" id="continueButton" class="continue-button">Continue</button>
-        </div>
+                    <a href="<?= ROOT ?>/admin/viewsinglerequest/?id=<?= $request->id ?>">
+                        <button type="button" id="viewbutton" class="viewbtn">View</button>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="no-reqs">No edit requests available.</p>
+        <?php endif; ?>
     </div>
+
+    <div class="form-buttons">
+        <button type="button" id="continueButton" class="continue-button">Continue</button>
+    </div>
+</div>
 
     <script>
         document.getElementById("continueButton").addEventListener("click", () => {
