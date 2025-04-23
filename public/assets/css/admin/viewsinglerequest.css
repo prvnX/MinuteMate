@@ -42,7 +42,8 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 50px;
-    background-color: var(--form-bg-color);
+       
+    background-color: #eef1f6;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -50,16 +51,25 @@
 .request-table th, .request-table td {
     margin-top: 20px;
 }
-
+.request-table td {
+    font-size: 22px;
+    background-color: transparent;
+    padding: 20px;
+    border: 1px solid #ccc; /* Add border to each cell */
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
 .request-table th {
      
-    color: rgb(15, 15, 15);
+    background-color: var(--form-bg-color);
     font-size: 25px;
     padding: 20px;
     text-align: left;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    
     border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc
+     
 }
 .request-table th:first-child, .request-table td:first-child {
     width: 40%;
@@ -101,8 +111,21 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    
 }
+.accept-btn {
+    background-color: var(--button-bg);
+    left: 1200px;
 
+    margin-top: 20px;
+}
+.decline-btn {
+    background-color: #dc5652;
+    left: 1050px;
+     
+    margin-top: 20px;
+}
 .accept-btn:hover {
     background-color: var(--button-hover);
     transform: translateY(-2px);
