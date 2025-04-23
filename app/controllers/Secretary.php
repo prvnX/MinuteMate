@@ -182,17 +182,19 @@ class Secretary extends BaseController {
 
 
     public function notifications() {
+        $notificationModel=new Notification;
+        $Readnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>1]);
+        $Unreadnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>0]);
+
         //these are just placeholders
         $user = "secretary";
-        $memocart = "memocart-dot";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
         $notification = "notification-dot"; //use notification-dot if there's a notification
         $menuItems = [
             "home" => ROOT."/secretary",
-            $memocart => ROOT."/secretary/memocart",
             $notification => ROOT."/secretary/notifications",
             "profile" => ROOT."/secretary/viewprofile"
         ];
-        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"memocart" => $memocart, "notification" => $notification]);
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems, "notification" => $notification,'Readnotifications'=>$Readnotifications,'Unreadnotifications'=>$Unreadnotifications]);
     }
     public function selectmeeting() { //this is the page where the secretary selects the meeting to create a minute 
         $meeting = new Meeting;
