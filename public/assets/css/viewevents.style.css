@@ -608,6 +608,13 @@ body{
     border-radius: 10px;
     min-height: 37rem;
     width: 85%;
+    height:50vh;
     overflow-y: auto;
     border: 1px solid #ccc;
+}
+
+.agendatitle{
+    font-size: 0.9rem;
+    color:var(--secondary-color);
+    font-weight: 500;
 }
