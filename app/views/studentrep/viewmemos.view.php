@@ -6,60 +6,56 @@
     <meta charset= "UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>View memo</title>
-     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/viewmemo.style.css">
+     <link rel="stylesheet" href="<?=ROOT?>/assets/css/studentrep/viewmemo.style.css">
      <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 
 </head>
 
 <body>
+    <div class="navbar">        
+                <?php
+            $user="studentrep";
+            $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
+            $notification="notification"; //use notification-dot if there's a notification
+            $menuItems = [ "home" => ROOT."/studentrep" , $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
+            require_once("../app/views/components/new_navbar.php"); //call the navbar component
+            require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
+            $memoList=$data['memos'];  
+            ?>
 
-<?php
-    $user="secretary";
-    $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    
-    echo "<div class='memo-list-navbar'>";
-    require_once("../app/views/components/new_navbar.php");
-    echo "</div>";
-    require_once("../app/views/components/sec_sidebar.php");
-    $memoList=$data['memos'];
-    
+    </div>
 
-   ?>
     <header class="page-header">
-         <h1>Memo List </h1>
-         <p class="subtitle">View all memos</p>
+        <h1>Submitted memos </h1>
+        <p class="subtitle">View submitted  memos</p>
     </header>
 
-   
-
-<div class="main-container">
-    <div class="content-area">
-        <div class="memolist" id="memolist">
-            <?php foreach ($memoList as $memoitem): ?>
-                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?> data-submitted-by="<?= htmlspecialchars(strtolower($memoitem->submitted_by)) ?>">
-                    <div class="memocontent">
-                    <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
-                    <div class="memo-meta">
-                            <span class="memo-id"><?=htmlspecialchars($memoitem->meeting_id)?></span>
-                            <span class="department-badge <?= htmlspecialchars($memoitem->meeting_type)?>"><?=htmlspecialchars(strtoupper($memoitem->meeting_type))?></span>
+    <div class="main-container">
+        <div class="content-area">
+            <div class="memolist" id="memolist">
+                <?php foreach ($memoList as $memoitem): ?>
+                    <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?>">
+                        <div class="memocontent">
+                            <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
+                            <div class="memo-meta">
+                                    <span class="memo-id"><?=htmlspecialchars($memoitem->meeting_id)?></span>
+                                    <span class="department-badge <?= htmlspecialchars($memoitem->meeting_type)?>"><?=htmlspecialchars(strtoupper($memoitem->meeting_type))?></span>
+                            </div>
+                            <p>Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?></p>
                         </div>
-                    <p>Memo ID: <?= htmlspecialchars($memoitem->memo_id) ?></p>
-                </div>
-            <a href="<?=ROOT?>/secretary/viewmemodetails/?memo_id=<?= $memoitem->memo_id ?>">
-                <button class="viewbtn">View</button>
-            </a>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                            <a href="<?=ROOT?>/studentrep/viewmemodetails/?memo_id=<?= $memoitem->memo_id ?>">
+                                <button class="viewbtn">View</button>
+                            </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
-        <div id="empty-state" class="empty-state" style="display: none;">
-                <div class="empty-icon"></div>
-                <h3>No minutes found</h3>
-                <p>Try adjusting the filters</p>
-        </div>
-     </div>
+            <div id="empty-state" class="empty-state" style="display: none;">
+                    <div class="empty-icon"></div>
+                        <h3>No minutes found</h3>
+                        <p>Try adjusting the filters</p>
+                    </div>
+             </div>
 
     <div class="sidebar">
                 <div class="filter-sidebar">
@@ -85,19 +81,6 @@
                         </div>
                     </div>
 
-                    <div class="filter-section">
-                        <h3 class="filter-section-title">Filter By Submitted Member</h3>
-                        <select id="member-select" class="date-input">
-                            <option value="">-- Select Member --</option>
-                            <?php foreach ($submittedMembers as $member): ?>
-                                <option value="<?= htmlspecialchars(strtolower($member->full_name)) ?>">
-                                    <?= htmlspecialchars($member->full_name) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-
 
                     <div class="filter-btns">
                         <button id="apply-filters" class="filter-button apply-button">Apply Filters</button>
@@ -115,8 +98,6 @@
             const rhdCheckbox = document.getElementById('rhd-checkbox');
             const bomCheckbox = document.getElementById('bom-checkbox');
             const syndicateCheckbox = document.getElementById('syndicate-checkbox');
-            const memberSelect = document.getElementById('member-select');
-
 
             const applyButton = document.getElementById('apply-filters');
             const clearButton = document.getElementById('clear-filters');
@@ -132,7 +113,6 @@
 
                 const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
                 const toDate = dateTo.value ? new Date(dateTo.value) : null;
-                const selectedMember = memberSelect.value;
   
 
                 const cards = memoList.querySelectorAll('.memoitem');
@@ -148,8 +128,6 @@
                     if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
                     if (fromDate && date < fromDate) isVisible = false;
                     if (toDate && date > toDate) isVisible = false;
-                    if (selectedMember && submitter !== selectedMember) isVisible = false;
-
                     if(!isVisible){
                         card.classList.add('hidden');
                     }
@@ -169,7 +147,6 @@
                 rhdCheckbox.checked = false;
                 bomCheckbox.checked = false;
                 syndicateCheckbox.checked = false;
-                memberSelect.value = '';
 
                 document.querySelectorAll('.memoitem').forEach(card => {
                     card.classList.remove('hidden');

@@ -1,83 +1,81 @@
 /* General Layout Styles */
 .profile-container {
     padding: 30px;
-    margin: 30px auto;
-    width: 60%;
-    max-width: 600px;
+    margin: -10px auto;
+    width: 80%;
+    max-width: 1200px;
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: left; /* Align text to the left */
+    border-radius: 20px;  /* Rounded corners for container */
     height: auto;  /* Height adjusts based on content */
-   
 }
 
-.profile-title {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #6473d6;
-    padding-bottom: 10px;
-}
-
+/* Profile Header (Image + Info) */
 .profile-header {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 0px; /* Space between image and profile details */
-    margin-bottom: 20px;
+    gap: 20px; /* Increased space between image and profile details */
+    margin-bottom: 30px;
     border: 3px solid #2c3f5a;
     border-radius: 15px;
+    padding: 20px;
+    background-color: #f4f9ff;  /* Light background for header */
 }
 
 .profile-img {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    margin-top: -50px;
-    margin-left: 80px; /* Move image slightly to the right */
+    border: 4px solid #6473d6;  /* Border around image */
+    box-sizing: border-box;
 }
 
 .profile-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 50px;
-    border-radius: 25px;  /* Increased border radius for rounder corners */
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #ffffff;  /* White background for the info part */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .profile-info h3 {
-    font-size: 1.5em;
+    font-size: 1.6em;
     margin-bottom: 10px;
+    color: #0c45c0;
 }
 
 .profile-details p {
     font-size: 18px;
-    margin: 5px 0;
-    color: #555;
+    margin: 10px 0;
+    color: #060606;
 }
 
 .profile-details strong {
-    color: #333;
+    color: #2563eb;
 }
 
-/* Button Styles */
+/* Action Buttons */
 .action-buttons {
-    margin-top: 20px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
     gap: 20px;
 }
 
-.action-buttons .btn-add, .action-buttons .btn-delete {
-    padding: 10px 20px;
+.action-buttons .btn-add {
+    padding: 12px 25px;
     text-decoration: none;
     border-radius: 5px;
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: bold;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: inline-block;
 }
 
 .btn-add {
@@ -88,13 +86,6 @@
     background-color: #8f69e7;
 }
 
-.btn-delete {
-    background-color: #6473d6;
-}
-
-.btn-delete:hover {
-    background-color: #8f69e7;
-}
 
 /* Responsive Styles */
 @media (max-width: 768px) {
@@ -105,6 +96,7 @@
 
     .profile-title {
         font-size: 1.5em;
+        text-align: center;  /* Center title on small screens */
     }
 
     .profile-details p {
@@ -114,10 +106,12 @@
     .profile-header {
         flex-direction: column;
         align-items: center;
+        gap: 15px;
     }
 
     .profile-info {
         text-align: center;
+        padding: 15px;
     }
 
     .action-buttons {
@@ -125,8 +119,54 @@
         align-items: center;
     }
 
-    .btn-add, .btn-delete {
+    .btn-add{
         width: 100%;
         text-align: center;
+        padding: 12px;
     }
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow-y: auto;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 60%;
+    max-width: 700px;
+    position: relative;
+    overflow-y: auto; 
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px; right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .modal-content input[type="text"],
+  .modal-content input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .role-options label,
+.meeting-options label {
+  display: block;
+  margin: 5px 0;
+}
+
+  

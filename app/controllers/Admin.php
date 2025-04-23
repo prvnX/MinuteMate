@@ -16,13 +16,19 @@ class Admin extends BaseController {
             "pendingRequests" => $pendingRequests
         ]);
     }
+
+
     
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
             $requestData = json_decode(file_get_contents("php://input"), true);
             $requestId = $requestData['id'] ?? null;
             $action = $requestData['action'] ?? null;
-            $meetingTypes = $requestData['meetingTypes'] ?? [];
+    
+            $generalMeetingTypes = $requestData['meetingTypes'] ?? [];
+            $secretaryMeetingTypes = $requestData['secretaryMeetingType'] ?? [];
+            $lecturerMeetingTypes = $requestData['lecturerMeetingType'] ?? [];
     
             $userRequestsModel = $this->model("user_requests");
     
@@ -30,6 +36,7 @@ class Admin extends BaseController {
                 $userModel = $this->model("User");
                 $userRolesModel = $this->model("UserRoles");
                 $userMeetingTypesModel = $this->model("user_meeting_types");
+                $secretaryMeetingModel = $this->model("secretary_meeting_type");
                 $userContactNumsModel = $this->model("UserContactNums");
     
                 $userDetails = $userRequestsModel->getRequestById($requestId);
@@ -40,7 +47,7 @@ class Admin extends BaseController {
     
                     try {
                         // Start transaction
-                        $userModel->beginTransaction();
+                        //$userModel->beginTransaction();
     
                         // Insert into user table
                         $userInsertResult = $userModel->insert([
@@ -51,21 +58,23 @@ class Admin extends BaseController {
                             'email' => $userDetails->email,
                             'status' => 'active'
                         ]);
+                        
     
                         if (!$userInsertResult['success']) {
                             throw new Exception("Username already exists.");
                         }
     
-                        // Insert into user_roles
-                        foreach (explode(',', $userDetails->role) as $role) {
+                        // Insert roles
+                        $roles = array_map('trim', explode(',', $userDetails->role));
+                        
+                        foreach ($roles as $role) {
                             $userRolesModel->insert([
                                 'username' => $username,
-                                'role' => trim($role) // trim in case there are spaces
+                                'role' => $role
                             ]);
                         }
-
     
-                        // Insert contact number(s)
+                        // Insert contact numbers
                         $userContactNumsModel->insert([
                             'username' => $username,
                             'contact_no' => $userDetails->tp_no
@@ -78,21 +87,31 @@ class Admin extends BaseController {
                             ]);
                         }
     
-                        // Insert meeting types
-                        if (!empty($meetingTypes)) {
-                            foreach ($meetingTypes as $meetingTypeId) {
-                                $userMeetingTypesModel->insert([
-                                    'accessible_user' => $username,
-                                    'meeting_type_id' => $meetingTypeId
-                                ]);
+                        // Insert general meeting types
+                        if (!empty($generalMeetingTypes)) {
+                            $userMeetingTypesModel->insertMeetingTypes($username, $generalMeetingTypes);
+                        }
+    
+                        // Insert lecturer meeting types
+                        if (!empty($lecturerMeetingTypes)) {
+                            $userMeetingTypesModel->insertMeetingTypes($username, $lecturerMeetingTypes);
+                        }
+    
+                        // If user is a secretary, insert secretary meeting types into both tables
+                        if (in_array('secretary', array_map('strtolower', $roles))) {
+                            if (!empty($secretaryMeetingTypes)) {
+                                // Insert into secretary_meeting_type table
+                                $secretaryMeetingModel->insertSecretaryMeetingTypes($username, $secretaryMeetingTypes);
+                                // Also insert into user_meeting_types table
+                                $userMeetingTypesModel->insertMeetingTypes($username, $secretaryMeetingTypes);
                             }
                         }
     
-                        // Remove the original request
+                        // Remove original request
                         $userRequestsModel->deleteRequestById($requestId);
     
                         // Commit transaction
-                        $userModel->commit();
+                        //$userModel->commit();
     
                         echo json_encode(['success' => true, 'message' => 'Request accepted and user added!']);
                         return;
@@ -105,11 +124,11 @@ class Admin extends BaseController {
                 }
             }
     
-            // ... rest of your decline/remove logic remains the same ...
+            echo json_encode(['success' => false, 'message' => 'Invalid request']);
         }
-    
-        echo json_encode(['success' => false, 'message' => 'Invalid request']);
     }
+    
+    
     
     public function viewRequestDetails() {
         // Retrieve the request ID from the URL
@@ -302,23 +321,59 @@ public function viewMemberProfile() {
         $this->view(name: "admin/PastMembers");
     }
 
-    public function PastMembersList(): void{
-        $this->view(name: "admin/PastMembersList");
+    public function viewPastMembersByType() {
+        $meetingType = $_GET['meetingType'] ?? null;
+    
+        if ($meetingType) {
+            // Load the required models
+            $meetingTypesModel = $this->model("meeting_types");
+            $userMeetingTypesModel = $this->model("user_meeting_types");
+    
+            // Retrieve the type_id for the given meeting type
+            $meetingTypeId = $meetingTypesModel->getTypeIdByMeetingType($meetingType);
+    
+            if ($meetingTypeId) {
+                // Fetch the usernames of users who have been removed for this meeting type
+                $removedMembers = $userMeetingTypesModel->getInactiveMembersByMeetingType($meetingTypeId);
+    
+                // Pass the data to the view
+                $this->view("admin/PastMembersList", [
+                    "meetingType" => $meetingType,
+                    "removedMembers" => $removedMembers
+                ]);
+            }
+        }
+    }
+    
+    public function pastMemberProfile(){
+    $userModel = new User();
+    $deletedUserModel = new DeletedUsers();
+
+    // Get the user ID (username) from the query parameter
+    $userId = $_GET['id'] ?? null;
+
+    if (!$userId) {
+        echo "Invalid user ID.";
+        return;
     }
 
-    public function viewPastMembersByType() {
-        // Retrieve the meeting type from the URL
-        $meetingType = $_GET['meetingType'] ?? 'Unknown Meeting Type';
-    
-        // Pass the meeting type to the view
-        $this->view("admin/PastMembersList", [
-            "meetingType" => $meetingType
-        ]);
+    // Fetch user details (from 'user', 'user_roles', 'user_contact_nums', 'user_meeting_types')
+    $userData = $userModel->getUserById($userId);
+
+    // Fetch deletion details from 'deleted_users'
+    $deletedData = $deletedUserModel->getDeletedInfo($userId);
+
+    // Combine both datasets
+    $data = [
+        'userData' => $userData,
+        'deletedData' => $deletedData,
+        'memberId' => $userId
+    ];
+
+    // Load the view
+    $this->view('admin/pastMemberProfile', $data);
     }
-    
-    public function pastMemberProfile(): void{
-        $this->view(name: "admin/pastMemberProfile");
-    }
+
 
     public function addPastMember(): void{
         $this->view(name: "admin/addPastMember");
@@ -446,4 +501,94 @@ function saveDepartment(){
     }
 }
 
+public function removeMember() {
+    // Ensure the session is started
+    $removedBy = $_SESSION['userDetails']->username;  // Using session username
+
+    // Check if admin is logged in
+    if (!isset($removedBy)) {
+        echo json_encode(['error' => 'Admin not logged in.']);
+        exit;
+    }
+
+    // Admin is logged in, proceed with removal
+    $username = $_POST['username'] ?? '';
+    $fullName = $_POST['full_name'] ?? '';
+    $reason = $_POST['reason'] ?? '';
+
+
+
+    // Other logic for removing member
+    $userModel = new User();
+    if (!$userModel->getUserById($removedBy)) {
+        echo json_encode(['error' => 'Invalid admin username.']);
+        exit;
+    }
+
+    $deletedModel = new DeletedUsers();
+    $deletedModel->insert([
+        'username' => $username,
+        'full_name' => $fullName,
+        'reason' => $reason,
+        'removed_by' => $removedBy
+    ]);
+
+    $userModel->update($username, ['status' => 'inactive'], 'username');
+    echo "<script>
+    alert('Member successfully removed.');
+    window.location.href = '" . ROOT . "/admin/viewMembers';
+</script>";
+exit;
+
+    exit;
 }
+
+public function reactivateMember() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+       
+        // Dynamically load models as needed
+        $userModel = $this->model("user");
+        $userRolesModel = $this->model("UserRoles");
+        $meetingTypesModel = $this->model("meeting_types");
+        $userMeetingTypesModel = $this->model("user_meeting_types");
+        $deletedUsersModel = $this->model("DeletedUsers");
+        $usercontactModel = $this->model("UserContactNums");
+
+        $username = $_POST['username'];
+
+        // Use models to update data
+        $userModel->updateUserByUsername($username, [
+            'full_name' => $_POST['full_name'],
+            'email' => $_POST['email'],
+            'nic' => $_POST['nic']
+        ]);
+        
+
+        $usercontactModel->updateContacts(
+            $username,
+            $_POST['contact_no'],
+            $_POST['additional_tp_no'] ?? null
+        );
+        
+        $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meeting_types']);
+        $userRolesModel->updateRoles($username, $_POST['roles']);
+
+        // Reactivate the user
+        $userModel->reactivateStatus($username);
+
+        $deletedUsersModel->deleteByUsername($username);
+        
+        echo "<script>alert('Member reactivated successfully.'); window.location.href='your_url_here';</script>";
+
+    }
+}
+
+
+
+
+
+
+
+}
+
+
