@@ -11,13 +11,13 @@
 <body>
     <div class="navbar">
     <?php
-        $user="admin";
-        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
-        $notification="notification"; //use notification-dot if there's a notification
-        $menuItems = [ "home" => ROOT."/admin", $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-        require_once("../app/views/components/navbar.php"); //call the navbar component
-        $showAddEvents = false;
-        ?>
+    $user="admin";
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/admin_sidebar.php"); //call the sidebar component
+    ?>
+ 
     </div>
     <h1>Request Change</h1>
     <div class="container">
