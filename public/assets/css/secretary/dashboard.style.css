@@ -165,9 +165,11 @@
       padding: 8px 0;
       border-bottom: 1px solid #cccccc72;
       cursor: pointer;
+    
   }
   .message-box li:hover {
     transform: scale(1.04);
+    transition: all 0.3s ease-in-out;
   }
   
   .message-box li:last-child {

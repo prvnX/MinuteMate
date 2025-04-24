@@ -109,37 +109,9 @@
                     </div>
                 </div>
 
-                <div class="sub-container attendence-section">
-                    <h1 class="form-sub-title">Meeting Attendence</h1>
-                    <div class="attendence-mark-section">
-                    <?php foreach($meetingMembers as $member){
-                       echo "<div class='attendence-item'>
-                            <input type='checkbox' name='attendence[]' value='$member->username' id='$member->username'>
-                            <label for='$member->username' class='member'>$member->name</label>
-                        </div>";
-                    }?>
-                </div>
-                </div>
+                <!-- to be removed -->
                 
-                <div class="sub-container agenda-details">
-                    <h1 class="form-sub-title">Agenda Details</h1>
-
-                    <div id="agendaContainer" class="agendaContainer">
-                        <div class="input-container">
-                            <?php
-                            if(count($AgendaItems)>0){
-                            foreach($data['agendaItems'] as $AgendaItem){
-                                echo '<input type="text" name="AlreadyAgenda[]" value="'.$AgendaItem->agenda_item.'" readonly/>';
-                            }
-                            }
-                        
-                            ?>
-                            <input type="text" name="Agenda[]" placeholder="Enter the Agenda Item here" />
-                        </div>
-                    </div>
-                    <button type="button" id="addMoreBtn">Add Another Item</button>
-                    
-                </div>
+                <!-- to be removed end -->
             </div>
             
             <!-- Page 2 -->
@@ -241,7 +213,6 @@
         const username = "<?=$_SESSION['userDetails']->username?>";
         const options = <?php echo json_encode($departments); ?>;
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
-        const users = <?php echo json_encode($data['participants']); ?>;
         const form=document.getElementById("minuteForm");
         function addAnotherKeyword(){
             const keywordInput = document.getElementsByClassName("keyword-section")[0];
@@ -292,8 +263,6 @@
             const memoCount= <?=$memoCount ?>;
 
 
-            const attendenceList=[] ; //meeting attendence list
-            const agendaList=[]; //agenda list
             const DiscussedMemos=[]; //discussed memos
             const underDiscussionMemos=[]; //under discussion memos
             const parkedMemos=[]; //parked memos
@@ -302,54 +271,9 @@
             let sectionsData = []; // content sections
 
 
-            const attendence = document.querySelectorAll('input[name="attendence[]"]:checked');
-            attendence.forEach(attendee=>{
-                attendenceList.push(attendee.value);
-            });
-            if(attendenceList.length==0){
-                Swal.fire({
-                    text: "Select the attendence",
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#3b82f6",
-                    customClass: {
-                        popup: "warning-font"
-                    }
-                    });
-                
-                document.getElementsByClassName("attendence-section")[0].style.border="1px solid red";
-                return;
-            }
-            else{
-                document.getElementsByClassName("attendence-section")[0].style.border="0.5px solid #bcbcbc";
-            }
+            
             //agenda details
-            const agendaItems = document.querySelectorAll('input[name="Agenda[]"]');
-            const agendaItemcount=agendaItems.length;
-            agendaItems.forEach(agenda=>{
-                if(agenda.value==""){
-                    Swal.fire({
-                    text: "Fill all the agenda items",
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#3b82f6",
-                    customClass: {
-                        popup: "warning-font"
-                    }
-                    });   
-                    document.getElementsByClassName("agenda-details")[0].style.border="1px solid red";
-                    return;
-                }
-                agendaList.push(agenda.value);
-            });
-
-            if(agendaList.length==0 || agendaList.length!=agendaItemcount){
-                document.getElementsByClassName("agenda-details")[0].style.border="1px solid red";
-                return;
-            }
-            else{
-                document.getElementsByClassName("agenda-details")[0].style.border="0.5px solid #bcbcbc";
-            }
+            
 
             //minute contents
             let Contenterror=false;
@@ -446,6 +370,7 @@
                 mediaArr.push(file);
 
             }
+
             const sectionHiddenInput= document.createElement('input');
             sectionHiddenInput.type = 'hidden';
             sectionHiddenInput.name = 'sections'; 

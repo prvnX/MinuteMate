@@ -116,6 +116,161 @@ public function sendMail(){
 
 }
 
+public function sendAcceptanceEmail($recipientEmail, $fullName) {
+    try {
+        $this->configureSMTP();
+        $this->mail->setFrom('minutemate111@gmail.com', 'MinuteMate');
+        $this->mail->addAddress($recipientEmail, $fullName);
+        $this->mail->Subject = 'Account Request Accepted';
+
+        $this->mail->Body = '
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    color: #333;
+                }
+                .email-container {
+                    background-color: #ffffff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    max-width: 600px;
+                    margin: auto;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                }
+                .logo img {
+                    max-width: 150px;
+                    margin-bottom: 20px;
+                }
+                h1 {
+                    color: #28a745;
+                    font-size: 22px;
+                }
+                p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                }
+                .footer {
+                    font-size: 14px;
+                    color: #777;
+                    margin-top: 20px;
+                    border-top: 1px solid #ddd;
+                    padding-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="logo">
+                    <img src="https://res.cloudinary.com/dbleqzcp4/image/upload/v1740161700/img_pjejlg.png" alt="MinuteMate Logo">
+                </div>
+                <h1>Welcome to MinuteMate!</h1>
+                <p>Hi ' . $fullName . ',</p>
+                <p>Your request to join <strong>MinuteMate</strong> has been accepted! You can now log in using your Lecturer/Student ID as your username and your NIC as your password.</p>
+                <p>We’re excited to have you on board.</p>
+                <p>Best regards,<br>The MinuteMate Team</p>
+                <p class="footer">This is an automated email. Please do not reply.</p>
+            </div>
+        </body>
+        </html>';
+
+        $this->mail->AltBody = "Hi $fullName,\n\nYour request to join MinuteMate has been accepted. You can now log in using your Lecturer/Student ID as your username and your NIC as your password.\n\nBest regards,\nMinuteMate Team";
+
+        $this->mail->send();
+    } catch (Exception $e) {
+        // log error if needed
+    }
+}
+
+
+public function sendDeclineEmail($recipientEmail, $fullName, $reason) {
+    try {
+        $this->configureSMTP();
+        $this->mail->setFrom('minutemate111@gmail.com', 'MinuteMate');
+        $this->mail->addAddress($recipientEmail, $fullName);
+        $this->mail->Subject = 'Account Request Declined';
+
+        $this->mail->Body = '
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    color: #333;
+                }
+                .email-container {
+                    background-color: #ffffff;
+                    padding: 20px;
+                    border-radius: 8px;
+                    max-width: 600px;
+                    margin: auto;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                }
+                .logo img {
+                    max-width: 150px;
+                    margin-bottom: 20px;
+                }
+                h1 {
+                    color: #dc3545;
+                    font-size: 22px;
+                }
+                p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                }
+                .reason {
+                    background: #f8d7da;
+                    border-left: 4px solid #dc3545;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin: 15px 0;
+                }
+                .footer {
+                    font-size: 14px;
+                    color: #777;
+                    margin-top: 20px;
+                    border-top: 1px solid #ddd;
+                    padding-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="logo">
+                    <img src="https://res.cloudinary.com/dbleqzcp4/image/upload/v1740161700/img_pjejlg.png" alt="MinuteMate Logo">
+                </div>
+                <h1>Request Declined</h1>
+                <p>Hi ' . $fullName . ',</p>
+                <p>We regret to inform you that your request to join <strong>MinuteMate</strong> has been declined.</p>
+                <div class="reason">
+                    <strong>Reason:</strong> ' . $reason . '
+                </div>
+                <p>If you believe this was a mistake, feel free to contact the administrator for clarification.</p>
+                <p>Best regards,<br>The MinuteMate Team</p>
+                <p class="footer">This is an automated email. Please do not reply.</p>
+            </div>
+        </body>
+        </html>';
+
+        $this->mail->AltBody = "Hi $fullName,\n\nYour request to join MinuteMate was declined.\nReason: $reason\n\nPlease contact the admin if you believe this was a mistake.";
+
+        $this->mail->send();
+    } catch (Exception $e) {
+        // log error if needed
+    }
+}
+
+
+
 }
     
         

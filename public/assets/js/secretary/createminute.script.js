@@ -124,34 +124,6 @@ document.querySelectorAll(".tab").forEach(tab => {
 });
 
 
-document.getElementById("addMoreBtn").addEventListener("click", function() {
-    
-    const newInputContainer = document.createElement("div");
-    newInputContainer.classList.add("input-container");
-
-    const newInput = document.createElement("input");
-    newInput.type = "text";
-    newInput.name = "Agenda[]";
-    newInput.placeholder = "Enter the Next Agenda Item here";
-
-    closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.innerHTML = "X";
-    closeBtn.classList.add("closeBtn");
-    closeBtn.addEventListener("click", function() {
-        if(confirm('Are you sure you want to delete this content?')){
-        this.parentElement.remove();
-        }
-        else{
-            return;
-        }
-    });
-    newInputContainer.appendChild(newInput);
-    newInputContainer.appendChild(closeBtn)
-    newInputContainer.style.display = "block";
-    document.getElementById("agendaContainer").appendChild(newInputContainer);
-});
-
 let sectionRestrictions = {}; // To store restrictions for each section
 
 function addContentSection(title = '', content = '') {
@@ -347,9 +319,7 @@ window.onload = function() {
         document.getElementById('loadDraftPopup').style.display='flex';
     }
         // Function to show alert
-        function showAlert() {
-            alert("Keyboard or mouse input detected!");
-          }
+
           document.querySelectorAll('.sub-container').forEach(container => {
             container.addEventListener("click", startAutoSave);
           });
@@ -434,8 +404,6 @@ function updateRestrictionDisplay(sectionId) {
 
 //saving draft
 function saveDraft() {
-    let attendees = [];
-    let agendaItems=[];
     let Sections = [];
     let discussedMemos = [];
     let parkedMemos = [];
@@ -445,16 +413,7 @@ function saveDraft() {
 
 
     console.log("Saving as draft...");
-    // Get meeting attendees
-    const attendenceSec=document.getElementsByClassName("attendence-section")[0]
-    attendenceSec.querySelectorAll("input[name='attendence[]']:checked").forEach((checkbox) => {
-        attendees.push(checkbox.value);
-    }
-    );
-    //get agenda items
-    document.querySelectorAll("input[name='Agenda[]']").forEach((Input)=>{
-        agendaItems.push(Input.value);
-    });
+
     // Get content sections
     const contentSections = document.querySelectorAll('.content-section');
     contentSections.forEach((section, index) =>{
@@ -505,7 +464,7 @@ function saveDraft() {
     }
     );
 
-    const data={attendees,agendaItems,Sections,discussedMemos,parkedMemos,underDiscussionMemos,linkedMinutes,keywords}; 
+    const data={Sections,discussedMemos,parkedMemos,underDiscussionMemos,linkedMinutes,keywords}; 
     // console.log("Data to be saved as draft:", data);
     // console.log(meetingId);
     // console.log(username);
@@ -577,29 +536,6 @@ function loadDraft(){
 
 function loadDraftToPage(draftData){
     // load attendence
-    const attendenceDraft=draftData.attendees;
-    attendenceDraft.forEach((draftAttendee) => {
-    if(attendenceDraft.length>0){
-        document.querySelectorAll("input[name='attendence[]']").forEach((checkbox) => {
-            if(checkbox.value===draftAttendee){
-                checkbox.checked=true;
-            }
-        })
-    }
-    });
-
-    //load agenda Details
-    const agendaDraft=draftData.agendaItems;
-    const agendaInputs=agendaDraft.length;
-    const addAgendaBtn=document.getElementById('addMoreBtn');
-    if(agendaInputs>1){
-        for (let i = 0; i < agendaInputs-1; i++) {
-            addAgendaBtn.click();
-        }
-    }
-    document.querySelectorAll("input[name='Agenda[]']").forEach((Input,index)=>{
-        Input.value=agendaDraft[index];
-    })
 
     //load  sections
     //loading content title and content

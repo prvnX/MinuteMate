@@ -107,7 +107,7 @@
     <ul>
         <li><i class="fas fa-tasks"></i> <?=$data['MinutesCnt']?> Unfinished Minutes</li>
         <li><i class="fas fa-file-alt"></i> <?=$data['memoCount']?> Pending Memos </li>
-        <li><i class="fas fa-bell"></i> 2 New Notifications</li>
+        <li ><i class="fas fa-bell"></i> <span id="notification_cnt"></span> &nbsp; New Notifications</li>
         <li><i class="fas fa-calendar-alt"></i> <?php $Message=$data['meetingsinweek']==1 ? $data['meetingsinweek']." Upcoming Meeting" : $data['meetingsinweek']." Upcoming Meetings"; echo $Message;  ?> this week</li>
     </ul>
 </div>
@@ -116,5 +116,28 @@
    
     </main>
 
+    <script>
+        window.onload = function() {
+            fetch('<?=ROOT?>/NotificationService/getNotificationCount')
+            .then(response => response.json())
+            .then(data=>{
+                if(data.success){
+                    const notificationCount = data.count;
+                    const notificationElement = document.getElementById('notification_cnt');
+                    notificationElement.innerText = data.count;
+
+                    console.log(notificationCount);
+                }
+                else{
+                    console.log(data.error);
+                }
+                    
+            })
+            .catch(error=>{
+                console.error('Error:', error);
+            })
+        }
+
+    </script>
     
 </body>

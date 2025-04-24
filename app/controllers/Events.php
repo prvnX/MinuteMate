@@ -157,6 +157,7 @@ public function addMeeting() {
         $location = $input['location'];
         $additionalNote = $input['additional_note']." ";
         $createdBy = $_SESSION['userDetails']->username;
+        $agendas=$input['agenda'];
         if($meetingType=="rhd"){
             $type_id=1;
         }
@@ -173,8 +174,12 @@ public function addMeeting() {
             $additionalNote="No additional note";
         }
         if($input){
+            $meetingAgenda=new Agenda;
             $meeting->insert(['date'=>$date,'meeting_type'=>$meetingType,'start_time'=>$startTime,'end_time'=>$endTime,'location'=>$location,'additional_note'=>$additionalNote,'created_by'=>$createdBy,'type_id'=>$type_id]);
             $meetingid=$meeting->getLastInsertID();
+            foreach ($agendas as $agenda) {
+                $meetingAgenda->insert(['meeting_id'=>$meetingid,'agenda_item'=>$agenda]);
+            }
             $cfm=new Content_forward_meeting;
             $meeting_fwd_trans=new Meeting_forward_Transaction;
             $cfdata=$cfm->getforwardedListByType($meetingType);
@@ -259,7 +264,9 @@ public function  getMemoList(){
         $agenda= new Agenda;
         if($meeting_id){
             $agendaList=$agenda->getAgendaItems($meeting_id);
-            echo json_encode(["success" => true, "agendas" => $agendaList]);
+            $meetingAgenda=$agenda->selectandproject('agenda_item,id',['meeting_id'=>$meeting_id]);
+            
+            echo json_encode(["success" => true, "agendas" => $agendaList,'meetingAgenda'=>$meetingAgenda]);
         }
     }
 

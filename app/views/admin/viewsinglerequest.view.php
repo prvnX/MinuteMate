@@ -9,34 +9,21 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <?php
-        $user = "admin";
-        $notification = "notification"; // Add "notification-dot" if there's a notification
-        $menuItems = [
-            "home" => ROOT . "/admin",
-            $notification => ROOT . "/admin/notifications",
-            "profile" => ROOT . "/admin/viewprofile"
-        ];
-        require_once("../app/views/components/navbar.php");
-        $showAddEvents = false;
-        ?>
-    </div>
+     
+    <?php
+    $user="admin";
+    $notification="notification"; //use notification-dot if there's a notification
+    $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" ]; //pass the menu items here (key is the name of the page, value is the url)
+    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/admin_sidebar.php"); //call the sidebar component
+    ?>
+ 
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <ul>
 
-            <li><a href="<?= ROOT.'/admin/viewpendingRequests' ?>"><img src="<?= ROOT ?>/assets/images/note.png" alt="note"> View Pending Member   Request</a></li>
-            <li><a href="<?= ROOT.'/admin/viewMembers' ?>"><img src="<?= ROOT ?>/assets/images/writing.png" alt="writing"> View Members</a></li>
-            <li><a href="<?= ROOT.'/admin/PastMembers' ?>"><img src="<?= ROOT ?>/assets/images/interface.png" alt="interface"> Past Members</a></li>
-            <li class="active"><a href="<?= ROOT.'/admin/vieweditrequests' ?>"><img src="<?= ROOT ?>/assets/images/sticky.png" alt="sticky"> View Edit Requests</a></li>
-        </ul>
-    </div>
 
     <!-- Main Content -->
     <div class="main-content">
+    <div class="shadow-card">
         <h1 class="heading">Edit request by <span><?= htmlspecialchars($data[0]->full_name) ?></span></h1>
 
         <table class="request-table">
@@ -61,7 +48,7 @@
                 <tr>
                     <td>Email</td>
                     <td><?= htmlspecialchars($data[0]->email) ?></td>
-                    <td><?= htmlspecialchars($data[0]->new_email ?? "No change Requested" ) ?></td>
+                    <td><?= htmlspecialchars($data[0]->new_email ?? "No change Requested") ?></td>
                 </tr>
                 <tr>
                     <td>Telephone Number</td>
@@ -80,6 +67,8 @@
             <button class="accept-btn" id="accept-req-btn">Accept Request</button>
         </div>
     </div>
+</div>
+
 
     <script>
         // Decline request function
