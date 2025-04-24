@@ -132,7 +132,7 @@ class Studentrep extends BaseController {
                'reviewed_by' => $toBeReviewedBy,
                'meeting_id' => $meetingId
             ];
-            print_r($memoData);
+            // print_r($memoData);
             $reviewMemo = new ReviewMemo();
             $reviewMemo->insertx($memoData);
             $this->view("showsuccessmemo",["user"=>"studentrep"]);
@@ -212,6 +212,18 @@ class Studentrep extends BaseController {
 
     }
     public function viewprofile(){
+        $user_meeting_types = new user_meeting_types();
+        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
+      
+
+
+        $MeetingTypeArray = [];
+        foreach ($meeting_types as $MeetingType) {
+                $MeetingTypeArray[] = $MeetingType->meeting_type;
+            }
+            $_SESSION['meeting_type'] = $MeetingTypeArray;
+
+
         $this->view("studentrep/viewprofile");
     }
     public function confirmlogout() {

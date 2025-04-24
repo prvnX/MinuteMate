@@ -188,6 +188,9 @@
       <ul class="item-list" id="agenda-list">
         <!-- List of agenda items will be displayed here -->
       </ul>
+      <ul class="item-list" id="meeting-item-list">
+        <!-- List of agenda items will be displayed here -->
+      </ul>
     </div>
 
     <!-- Memos Section -->
@@ -397,6 +400,7 @@ function viewAgendaAndMemos(meetingID){
 
     //get agenda List
     const agendaUrl='<?=ROOT?>/Events/getAgendaList';
+    const forwardAgendaIds=[];
     fetch(agendaUrl,{
         method: 'POST',
         headers :{
@@ -411,20 +415,63 @@ function viewAgendaAndMemos(meetingID){
         return response.json();
     }).then(data =>{
         if(data.success){
-            console.log(data);
+            
             const agenda=data.agendas;
+            const meetingAgenda=data.meetingAgenda;
             const agendaList = document.getElementById('agenda-list');
-            agendaList.innerHTML = '';
+            agendaList.innerHTML = '<p class="agendatitle">Agenda From Previous Meetings</p>';
             if(agenda.length > 0){
+
                 agenda.forEach(item => {
+                    
                     const li = document.createElement('li');
-                    li.innerHTML = `<span id="agenda-item" onclick="showquickview('${item.type}', '${item.title}', '${item.content}')">${item.title} (From ${item.type.toUpperCase()} Meeting On: ${item.date})</span>`;                    
+                    const innertext=`${item.title} (From ${item.type.toUpperCase()} Meeting On : ${item.date})`;
+                    forwardAgendaIds.push(innertext);
+                    li.innerHTML = `<span id="agenda-item" onclick="showquickview('${item.type}', '${item.title}', '${item.content}')">${innertext}</span>`;                    
                     agendaList.appendChild(li);
                 });
             } else {
                 const li = document.createElement('li');
                 li.textContent = 'No agenda items found.';
                 agendaList.appendChild(li);
+            }
+
+            if(meetingAgenda){
+                
+
+                const agendaList = document.getElementById('meeting-item-list');
+                agendaList.innerHTML = '<p class="agendatitle">Agenda For This Meeting</p>';
+                console.log(forwardAgendaIds);
+                let skippeditems=0;
+                meetingAgenda.forEach((item,index) => {
+                    if(forwardAgendaIds.length>=index+1){
+                        if(forwardAgendaIds[index]==item.agenda_item){
+                            skippeditems++;
+                            return;
+                            }
+                            else{
+                                const li = document.createElement('li');
+                    li.innerHTML = `<span id="agenda-item">${item.agenda_item}</span>`;                    
+                    agendaList.appendChild(li);
+                            }
+                        }
+                        else{
+                            const li = document.createElement('li');
+                    li.innerHTML = `<span id="agenda-item">${item.agenda_item}</span>`;                    
+                    agendaList.appendChild(li);
+                        }
+
+
+                });
+
+                if(skippeditems==meetingAgenda.length){
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span id="agenda-item">No agenda items found.</span>`;                    
+                        agendaList.appendChild(li);
+                    }
+
+                
+                
             }
         }
     }).catch(error => {

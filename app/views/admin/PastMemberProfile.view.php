@@ -2,12 +2,18 @@
 
 $user="admin";
 $notification="notification"; //use notification-dot if there's a notification
-$menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+$menuItems = [ 
+  "home" => ROOT."/admin", 
+  $notification => ROOT."/admin/notifications", 
+  "profile" => ROOT."/admin/viewprofile", 
+  "logout" => ROOT."/admin/confirmlogout"
+];
 require_once("../app/views/components/new_navbar.php"); 
 include '../app/views/components/admin_sidebar.php';
 
 $userData = $data['userData'] ?? null;
 $deletedData = $data['deletedData'] ?? null;
+
 ?>
 
 <!DOCTYPE html>
@@ -25,101 +31,192 @@ $deletedData = $data['deletedData'] ?? null;
     <div class="profile-details">
       <div class="content">
         <div class="profile-header">
-            <img src="<?= ROOT ?>/assets/images/user.png" alt="Profile Image" class="profile-img">
-            <div class="profile-info">
-              <h3><?php echo htmlspecialchars($userData->full_name); ?></h3>
-              <p><strong>Name:</strong> <?= htmlspecialchars($userData->full_name) ?></p>
-              <p><strong>Email:</strong> <?= htmlspecialchars($userData->email) ?></p>
-              <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($userData->username) ?></p>
-              <p><strong>NIC:</strong> <?= htmlspecialchars($userData->nic) ?></p>
-              <p><strong>Role:</strong> <?= htmlspecialchars(implode(', ', $userData->role )) ?></p>
-              <p><strong>Contact No.:</strong> <?= htmlspecialchars($userData->contact_no) ?></p>
-              <p><strong>Additional Contact No.:</strong> <?= htmlspecialchars($userData->additional_tp_no) ?></p>
-              <p><strong>Removed By:</strong> <?= htmlspecialchars($deletedData->removed_by) ?></p>
-              <p><strong>Status:</strong> <?= htmlspecialchars($userData->status) ?></p>
-              <p><strong>Reason:</strong> <?= htmlspecialchars($deletedData->reason) ?></p>
+          <img src="<?= ROOT ?>/assets/images/user.png" alt="Profile Image" class="profile-img">
+          <div class="profile-info">
+            <h3><?= htmlspecialchars($userData->full_name) ?></h3>
+            <p><strong>Name:</strong> <?= htmlspecialchars($userData->full_name) ?></p>
+            <p><strong>Email:</strong> <?= htmlspecialchars($userData->email) ?></p>
+            <p><strong>Lecturer ID:</strong> <?= htmlspecialchars($userData->username) ?></p>
+            <p><strong>NIC:</strong> <?= htmlspecialchars($userData->nic) ?></p>
+            <p><strong>Role:</strong> <?= htmlspecialchars(implode(', ', $userData->role)) ?></p>
+            <p><strong>Contact No.:</strong> <?= htmlspecialchars($userData->contact_no) ?></p>
+            <p><strong>Additional Contact No.:</strong> <?= htmlspecialchars($userData->additional_tp_no) ?></p>
+            <p><strong>Removed By:</strong> <?= htmlspecialchars($deletedData->removed_by) ?></p>
+            <p><strong>Status:</strong> <?= htmlspecialchars($userData->status) ?></p>
+            <p><strong>Reason:</strong> <?= htmlspecialchars($deletedData->reason) ?></p>
 
-              <label>Select Meeting Type(s):</label>
-              <div class="meeting-options">
-                <?php
-                $userData->meetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
-                $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+            <div class="meeting-options">
+              <p><strong>User Meeting Types</p>
+              <?php
+              $userMeetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
+              $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
 
-                foreach ($meetingTypes as $type) {
-                  $checked = in_array($type, $userData->meetingTypes) ? 'checked' : '';
+              foreach ($meetingTypes as $type) {
+                $checked = in_array($type, $userMeetingTypes) ? 'checked' : '';
                   $class = strtolower($type) . '-option';
-
                   echo "<div class='meeting-option $class'>
-                        <input type='checkbox' id='meeting$type' name='meetingType[]' value='$type' $checked>
-                        <label for='meeting$type'>$type</label>
-                  </div>";
+                    <label for='meeting$type'>
+                        <input type='checkbox' id='meeting$type' name='meetingType[]' value='$type' $checked disabled>
+                        $type
+                        </label>
+                      </div>";
                 }
-                ?>
-              </div>
+              ?>
 
+<?php
+// Show Secretary Meeting Types only if user has "Secretary" role
+if (isset($userData->role) && in_array('secretary', $userData->role)) {
+    echo "<p><strong>Secretary Meeting Types:</strong></p>";
 
-            </div>
-        </div>
-      </div>
+    $secMeetingsRaw = $userData->secMeetings ?? [];
+    if (is_object($secMeetingsRaw)) {
+        $secMeetingsRaw = [$secMeetingsRaw]; // handle single object case
+    }
+
+    $secMeetings = is_array($secMeetingsRaw)
+        ? array_map(fn($row) => strtoupper($row->meeting_type), $secMeetingsRaw)
+        : [];
+
+    $allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+
+    foreach ($allMeetingTypes as $type) {
+        $checked = in_array($type, $secMeetings) ? 'checked' : '';
+        $class = strtolower($type) . '-option';
+        echo "<div class='meeting-option $class'>
+            <label for='sec_meeting$type'>
+                <input type='checkbox' id='sec_meeting$type' name='secMeetingType[]' value='$type' $checked disabled>
+                $type
+              </label>
+              </div>";
+    }
+}
+?>
+           </div>
+          </div> <!-- .profile-info -->
+        </div> <!-- .profile-header -->
+      </div> <!-- .content -->
+
       <div class="add-button-wrapper">
-      <button class="add-btn" onclick="editModal()">Add</button>
+        <button class="add-btn" onclick="editModal()">Add</button>
       </div>
 
       <div id="editModal" class="modal">
         <div class="modal-content">
           <span class="close" id="closeModal">&times;</span>
-          <h2>Edit Member Details</h2>
-          <form action="<?= ROOT ?>/admin/reactivateMember" method="POST">
-            <input type="text" name="username" value="<?= htmlspecialchars($userData->username) ?>">
 
-            <label>Full Name:</label>
-            <input type="text" name="full_name" value="<?= htmlspecialchars($userData->full_name) ?>" required>
+          <?php if($userData): ?>
+            <h2>Edit Member Details</h2>
+            <form action="<?= ROOT ?>/admin/reactivateMember" method="POST">
+              <input type="hidden" name="username" value="<?= htmlspecialchars($userData->username) ?>">
 
-            <label>Email:</label>
-            <input type="text" name="email" value="<?= htmlspecialchars($userData->email) ?>" required>
-          
-            <label>NIC:</label>
-            <input type="text" name="nic" value="<?= htmlspecialchars($userData->nic) ?>" required>
+              <label>Full Name:</label>
+              <input type="text" name="full_name" value="<?= htmlspecialchars($userData->full_name) ?>" required>
 
-            <label>Contact No.:</label>
-            <input type="text" name="contact_no" value="<?= htmlspecialchars($userData->contact_no) ?>">
-      
-            <label>Additional Contact No.:</label>
-            <input type="text" name="additional_tp_no" value="<?= htmlspecialchars($userData->additional_tp_no) ?>"> 
-            
-            <label>Select Role(s):</label>
-            <div class="role-option">
-              <?php
-              $allRoles = ['secratary', 'lecturer', 'student Representative'];
-              $existingRoles = $userData->role;
+              <label>Email:</label>
+              <input type="email" name="email" value="<?= htmlspecialchars($userData->email) ?>" required>
 
-              foreach($allRoles as $role){
-                $checked = in_array($role, $existingRoles) ? 'checked' : '';
-                echo "<label><input type='checkbox' name='roles[]' value='$role' $checked> " . ucfirst($role) . "</label>";
-              }
-              ?>
-            </div>
+              <label>NIC:</label>
+              <input type="text" name="nic" value="<?= htmlspecialchars($userData->nic) ?>" required>
 
-              <label>Select Meeting Type(s):</label>
-            <div class="meeting-options">
+              <label>Contact No.:</label>
+              <input type="text" name="contact_no" value="<?= htmlspecialchars($userData->contact_no) ?>">
+
+              <label>Additional Contact No.:</label>
+              <input type="text" name="additional_tp_no" value="<?= htmlspecialchars($userData->additional_tp_no) ?>"> 
+
+              <label>Select Role(s):</label>
+              <div class="role-option">
                 <?php
-                
-                foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type) {
-                  $checked = in_array($type, $userData->meetingTypes) ? 'checked' : '';
-                  echo "<label><input type='checkbox' name='meeting_types[]' value='$type' $checked> $type</label>";
-              }
-              ?>
-            </div>
+                $allRoles = ['secretary', 'lecturer', 'student'];
+                $existingRoles = $userData->role;
+
+                foreach($allRoles as $role){
+                  $checked = in_array($role, $existingRoles) ? 'checked' : '';
+                  $roleId = strtolower(str_replace(' ', '-', $role));
+                  echo "<label><input type='checkbox' id='$roleId' class='role-checkbox' name='roles[]' value='$role' $checked  onchange='handleRoleSections()'> " . ucfirst($role) . "</label>";
+                }
+                ?>
+              </div>
+
+              <!-- Secretary Meeting Types -->
+              <div id="secretaryMeetingTypesContainer" style="display: none;">
+                <label><strong>Select Secretary Meeting Type:</strong></label>
+                <div class="meeting-options">
+                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                    <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <label for="secretary<?= $type ?>">
+                      <input type="checkbox"
+                            id="secretary<?= $type ?>"
+                            name="secretaryMeetingType[]"
+                            value="<?= $type ?>"
+                            <?= in_array($type, $secMeetings ?? []) ? 'checked' : '' ?>>
+                      <?= $type ?>
+                    </label>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+
+              <!-- Lecturer Meeting Types -->
+              <div id="lecturerMeetingTypesContainer" style="display: none;">
+                <label><strong>Select Lecturer Meeting Type:</strong></label>
+                <div class="meeting-options">
+                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                    <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <label for="lecturer<?= $type ?>">
+                      <input type="checkbox"
+                            id="lecturer<?= $type ?>"
+                            name="lecturerMeetingType[]"
+                            value="<?= $type ?>"
+                            <?= in_array($type, $userData->meetingTypes ?? []) ? 'checked' : '' ?>>
+                      <?= $type ?>
+                    </label>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+
+              <!-- General Meeting Types (if needed) -->
+              <div id="meetingTypeContainer" style="display: none;">
+                <label><strong>Select Meeting Type(s):</strong></label>
+                <div class="meeting-options">
+                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                    <div class="meeting-option <?= strtolower($type) ?>-option">
+                    <label for="meeting<?= $type ?>">
+                      <input type="checkbox"
+                            id="student<?= $type ?>"
+                            name="meetingType[]"
+                            value="<?= $type ?>"
+                            <?= in_array($type, $userData->meetingTypes ?? []) ? 'checked' : '' ?>>
+                      <?= $type ?>
+                    </label>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+
+              <label for="status"><strong>Status:</strong></label>
+              <select id="status" name="status" required>
+                <option value="active" <?= $userData->status === 'active' ? 'selected' : '' ?>>Active</option>
+                <option value="removed" <?= $userData->status === 'removed' ? 'selected' : '' ?>>Removed</option>
+              </select>
 
               <input type="hidden" name="reactivate" value="1">
-              <button type="submit" class="btn-add">Confirm</button>
-          </form>
-
-    </div>
+              <div class="action-buttons">
+                <button type="submit" class="btn-submit">Save Changes</button>
+              </div>
+            </form>
+          <?php else: ?>
+            <p>Member not found.</p>
+          <?php endif; ?>
+        </div> <!-- .modal-content -->
+      </div> <!-- #editModal -->
+    </div> <!-- .profile-details -->
   <?php else: ?>
     <p>Member not found.</p>
   <?php endif; ?>
-</div>
+</div> <!-- .profile-container -->
+
 </body>
 </html>
 
@@ -129,11 +226,56 @@ $deletedData = $data['deletedData'] ?? null;
 
   function editModal() {
     modal.style.display = "block";
+    handleRoleSections();
   }
 
   closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
-  window.onclick = (e) => {
-    if (e.target == modal) modal.style.display = "none";
+  function handleRoleSections() {
+    const checkboxes = document.querySelectorAll('.role-checkbox');
+    const selectedRoles = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
+
+    // Role containers
+    const secretaryContainer = document.getElementById("secretaryMeetingTypesContainer");
+    const lecturerContainer = document.getElementById("lecturerMeetingTypesContainer");
+    const studentContainer = document.getElementById("meetingTypeContainer");
+
+    secretaryContainer.style.display = selectedRoles.includes('secretary') ? 'block' : 'none';
+    lecturerContainer.style.display = selectedRoles.includes('lecturer') ? 'block' : 'none';
+    studentContainer.style.display = selectedRoles.includes('student') ? 'block' : 'none';
+
+    // Disable other roles if student representative is selected
+    const isStudentRep = selectedRoles.includes('student');
+    document.getElementById("lecturer").disabled = isStudentRep;
+    document.getElementById("secretary").disabled = isStudentRep;
+
+    const studentCheckbox = document.getElementById("student");
+  if (selectedRoles.includes("secretary") || selectedRoles.includes("lecturer")) {
+    studentCheckbox.disabled = true;
+    studentCheckbox.checked = false; // uncheck if previously selected
+  } else {
+    studentCheckbox.disabled = false;
+  }
+  }
+
+  window.onload = () => {
+    if (document.getElementById("editModal").style.display === "block") {
+      handleRoleSections();
+    }
   };
+
+  document.querySelectorAll('.role-checkbox').forEach(cb => {
+    cb.addEventListener('change', handleRoleSections);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const roles = <?= json_encode($userData->role ?? []) ?>;
+    if (roles.includes("secretary")) {
+      document.getElementById("secretaryMeetingTypesContainer").style.display = "block";
+    }
+  });
+
+
+  document.addEventListener("DOMContentLoaded", handleRoleSections);
 </script>

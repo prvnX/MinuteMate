@@ -122,10 +122,22 @@ class Admin extends BaseController {
                         return;
                     }
                 }
+            }else{
+                // Update the request status to 'declined'
+                $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
+if ($result !== false) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'message' => 'Request declined.']);
+    return;
+} else {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
+    return;
+}
             }
-    
-            echo json_encode(['success' => false, 'message' => 'Invalid request']);
-        }
+            
+        echo json_encode(['success' => false, 'message' => 'Invalid request']);
+                }
     }
     
     
@@ -543,8 +555,6 @@ public function removeMember() {
     window.location.href = '" . ROOT . "/admin/viewMembers';
 </script>";
 exit;
-
-    exit;
 }
 
 public function reactivateMember() {
@@ -557,6 +567,7 @@ public function reactivateMember() {
         $userMeetingTypesModel = $this->model("user_meeting_types");
         $deletedUsersModel = $this->model("DeletedUsers");
         $usercontactModel = $this->model("UserContactNums");
+        $secretaryMeetingTypesModel = $this->model("secretary_meeting_type");
 
         $username = $_POST['username'];
 
@@ -574,9 +585,24 @@ public function reactivateMember() {
             $_POST['additional_tp_no'] ?? null
         );
         
-        $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meeting_types']);
-        $userRolesModel->updateRoles($username, $_POST['roles']);
+        // Update roles
+        $roles = $_POST['roles'] ?? [];
+        $userRolesModel->updateRoles($username, $roles);
 
+        // Update meeting types for lecturer/student rep
+        if (in_array('lecturer', $roles) && isset($_POST['lecturerMeetingType'])) {
+            $userMeetingTypesModel->updateMeetingTypes($username, $_POST['lecturerMeetingType']);
+        } elseif (in_array('student', $roles) && isset($_POST['meetingType'])) {
+            $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meetingType']);
+        }
+
+        // Update meeting types for secretary
+        if (in_array('secretary', $roles) && isset($_POST['secretaryMeetingType'])) {
+            $secretaryMeetingTypesModel->updateMeetingTypes($username, $_POST['secretaryMeetingType']);
+        }else{
+            $secretaryMeetingTypesModel->deleteMeetingTypesByUsername($username);
+        }
+        
         // Reactivate the user
         $userModel->reactivateStatus($username);
 

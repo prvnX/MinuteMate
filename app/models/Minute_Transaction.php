@@ -7,13 +7,7 @@ class Minute_Transaction{
 
     //protected $MeetingTable = 'meeting';
 
-    //attendence table
-    protected $attendenceTable = 'meeting_attendence';
-    protected $attendenceColumns = ['meeting_id','attendee'];
-
-    //agenda table
-    protected $agendaTable = 'meeting_agenda';
-    protected $agendaColumns = ['meeting_id','agenda_item'];
+ 
 
     // content table
     protected $contentTable = 'content';
@@ -76,32 +70,6 @@ class Minute_Transaction{
         $LastInsertedMinuteID = $this->getLastInsertID(); //get the inserted minute id
         $this->MinuteID = $LastInsertedMinuteID;
 
-        /*Insert Attendence Details*/
-        $attendees = $data['attendence'];
-        foreach($attendees as $attendee){
-            $attendenceData=[
-                'meeting_id'=>$data['MeetingID'],
-                'attendee'=>$attendee
-            ];
-            $isdataInserted = $this->insertToTable($this->attendenceTable,$this->attendenceColumns,$attendenceData); //insert row by row
-            if(!$isdataInserted){ 
-                throw new Exception("Failed to insert Attendence Details.");
-            }
-        }
-
-        /*Insert Agenda Details*/
-
-        $agendas = $data['agenda'];
-        foreach($agendas as $agenda){
-            $agendaData=[
-                'meeting_id'=>$data['MeetingID'],
-                'agenda_item'=>$agenda
-            ];
-            $isdataInserted = $this->insertToTable($this->agendaTable,$this->agendaColumns,$agendaData);
-            if(!$isdataInserted){
-                throw new Exception("Failed to insert Agenda Details.");
-            }
-        }
 
         /*Insert Minute Content*/
         $sections=$data['sections'];
