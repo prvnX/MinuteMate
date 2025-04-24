@@ -125,14 +125,15 @@ class Admin extends BaseController {
             }else{
                 // Update the request status to 'declined'
                 $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
-            
-                if ($result) {
-                    echo json_encode(['success' => true, 'message' => 'Request declined.']);
-                    return;
-                } else {
-                    echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
-                    return;
-                }
+if ($result !== false) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'message' => 'Request declined.']);
+    return;
+} else {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
+    return;
+}
             }
             
         echo json_encode(['success' => false, 'message' => 'Invalid request']);
@@ -589,7 +590,7 @@ public function reactivateMember() {
         // Update meeting types for lecturer/student rep
         if (in_array('lecturer', $roles) && isset($_POST['lecturerMeetingType'])) {
             $userMeetingTypesModel->updateMeetingTypes($username, $_POST['lecturerMeetingType']);
-        } elseif (in_array('student Representative', $roles) && isset($_POST['meetingType'])) {
+        } elseif (in_array('student', $roles) && isset($_POST['meetingType'])) {
             $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meetingType']);
         }
 

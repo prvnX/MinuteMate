@@ -127,12 +127,13 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <label>Select Role(s):</label>
               <div class="role-option">
                 <?php
-                $allRoles = ['secretary', 'lecturer', 'student Representative'];
+                $allRoles = ['secretary', 'lecturer', 'student'];
                 $existingRoles = $userData->role;
 
                 foreach($allRoles as $role){
                   $checked = in_array($role, $existingRoles) ? 'checked' : '';
-                  echo "<label><input type='checkbox' class='role-checkbox' name='roles[]' value='$role' $checked> " . ucfirst($role) . "</label>";
+                  $roleId = strtolower(str_replace(' ', '-', $role));
+                  echo "<label><input type='checkbox' id='$roleId' class='role-checkbox' name='roles[]' value='$role' $checked  onchange='handleRoleSections()'> " . ucfirst($role) . "</label>";
                 }
                 ?>
               </div>
@@ -183,7 +184,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="meeting<?= $type ?>">
                       <input type="checkbox"
-                            id="meeting<?= $type ?>"
+                            id="student<?= $type ?>"
                             name="meetingType[]"
                             value="<?= $type ?>"
                             <?= in_array($type, $userData->meetingTypes ?? []) ? 'checked' : '' ?>>
@@ -232,12 +233,37 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
   window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
   function handleRoleSections() {
-    const roles = Array.from(document.querySelectorAll('.role-checkbox:checked')).map(cb => cb.value.toLowerCase());
+    const checkboxes = document.querySelectorAll('.role-checkbox');
+    const selectedRoles = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
 
-    document.getElementById("secretaryMeetingTypesContainer").style.display = roles.includes('secretary') ? 'block' : 'none';
-    document.getElementById("lecturerMeetingTypesContainer").style.display = roles.includes('lecturer') ? 'block' : 'none';
-    document.getElementById("meetingTypeContainer").style.display = roles.includes('student representative') ? 'block' : 'none';
+    // Role containers
+    const secretaryContainer = document.getElementById("secretaryMeetingTypesContainer");
+    const lecturerContainer = document.getElementById("lecturerMeetingTypesContainer");
+    const studentContainer = document.getElementById("meetingTypeContainer");
+
+    secretaryContainer.style.display = selectedRoles.includes('secretary') ? 'block' : 'none';
+    lecturerContainer.style.display = selectedRoles.includes('lecturer') ? 'block' : 'none';
+    studentContainer.style.display = selectedRoles.includes('student') ? 'block' : 'none';
+
+    // Disable other roles if student representative is selected
+    const isStudentRep = selectedRoles.includes('student');
+    document.getElementById("lecturer").disabled = isStudentRep;
+    document.getElementById("secretary").disabled = isStudentRep;
+
+    const studentCheckbox = document.getElementById("student");
+  if (selectedRoles.includes("secretary") || selectedRoles.includes("lecturer")) {
+    studentCheckbox.disabled = true;
+    studentCheckbox.checked = false; // uncheck if previously selected
+  } else {
+    studentCheckbox.disabled = false;
   }
+  }
+
+  window.onload = () => {
+    if (document.getElementById("editModal").style.display === "block") {
+      handleRoleSections();
+    }
+  };
 
   document.querySelectorAll('.role-checkbox').forEach(cb => {
     cb.addEventListener('change', handleRoleSections);
