@@ -577,6 +577,16 @@ public function selectminute() { //this is the page where the secretary selects 
     }
 
     public function viewprofile() {
+        $user_meeting_types = new user_meeting_types();
+        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
+      
+
+
+        $MeetingTypeArray = [];
+        foreach ($meeting_types as $MeetingType) {
+                $MeetingTypeArray[] = $MeetingType->meeting_type;
+            }
+            $_SESSION['meeting_type'] = $MeetingTypeArray;
         $this->view("secretary/viewprofile");
     }
     public function logout() {
