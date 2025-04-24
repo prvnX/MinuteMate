@@ -167,7 +167,58 @@ document.addEventListener("DOMContentLoaded", () => {
     requestBtn.addEventListener("click", () => {
         window.location.href = "<?= ROOT ?>/lecturer/requestchange";
     });
+
+    const passwordForm = document.getElementById("passwordForm");
+
+    passwordForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        console.log(formData);
+
+        fetch("<?= ROOT ?>/lecturer/viewprofile", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("✅ Password updated successfully.");
+                passwordForm.reset();
+                document.getElementById("passwordModal").style.display = "none";
+            } else {
+                alert("❌ " + data.errors.join("\n"));
+            }
+        })
+        .catch(err => {
+            alert("❌ Something went wrong.");
+            console.error(err);
+        });
+    });
+
+    // Password strength message
+    const passwordInput = document.querySelector('input[name="new_password"]');
+    if(passwordInput){
+        console.log(passwordInput);
+    }
+    else{
+        console.log("Ane mukuth naane");
+    }
+
+const strengthText = document.querySelector('.password-strength');
+    
+
+    passwordInput.addEventListener("input", () => {
+        const value = passwordInput.value;
+        if (/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(value)) {
+            strengthText.textContent = "✅ Strong password";
+            strengthText.style.color = "green";
+        } else {
+            strengthText.textContent = "❌ Weak password";
+            strengthText.style.color = "red";
+        }
+    });
 });
+
 </script>
 </body>
 </html>

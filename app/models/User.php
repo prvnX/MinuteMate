@@ -169,5 +169,24 @@ public function reactivateStatus($username) {
 
     }
 
+    public function getHashedpassword($username)
+    {
+        $query = "SELECT password
+                  FROM user 
+                  WHERE username=:username 
+                  LIMIT 1";
+
+        return $this->query($query, ['username'=> $username]) ?? null;
+    }
+
+    public function updatePassword($username, $newPassword)
+    {
+        $query = "UPDATE user 
+                  SET password= :password 
+                  WHERE username=:username ";
+
+        return $this->query($query, ['password'=>$newPassword, 'username'=>$username]);
+    }
+
 }
     
