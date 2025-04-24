@@ -298,7 +298,21 @@ class Lecturer extends BaseController {
             header("Location: " . ROOT . "/lecturer/selectminute");
             exit;
         }
+
+
+        $id = $_GET['minute'];
+        $minute = new Minute();
+        $minuteDetails = $minute->getMinuteReportDetails($id);
+
+        if (!$minuteDetails) {
+            $this->view("minutereportnotfound");
+            return;
+        }
        
+        $this->view("lecturer/viewminutereports", [
+            'minuteDetails' => $minuteDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
      
     
