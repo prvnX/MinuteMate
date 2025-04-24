@@ -26,10 +26,10 @@
     $profileDetails = [
         "name" => $_SESSION['userDetails']->full_name,
         "Email" => $_SESSION['userDetails']->email,
-        "LectureID" => "102837273",
+       
         "NIC" => $_SESSION['userDetails']->nic,
         "Role"=>$_SESSION['userDetails']->role,
-        "Contact_No:" => "077 283 3685"
+        
     ];
 ?>
 

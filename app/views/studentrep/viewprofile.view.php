@@ -11,9 +11,9 @@
 <body>
   
     <?php
-        $user="lecturer";
+        $user="studentrep";
         $notification="notification"; //use notification-dot if there's a notification
-        $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+        $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
         
         echo "<div class='memo-list-navbar'>";
         require_once("../app/views/components/new_navbar.php");
