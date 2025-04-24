@@ -72,12 +72,15 @@ class User {
         $query = "SELECT u.username, u.full_name, u.email, u.nic, u.status,
                          ur.role,
                          c.contact_no, 
-                         m.meeting_type_id, mt.meeting_type 
+                         m.meeting_type_id, mt.meeting_type,
+                         s.meeting_type_id 
                   FROM user u
                   LEFT JOIN user_roles ur ON u.username = ur.username
                   LEFT JOIN user_contact_nums c ON u.username = c.username
                   LEFT JOIN user_meeting_types m ON u.username = m.accessible_user
                   LEFT JOIN meeting_types mt ON m.meeting_type_id = mt.type_id
+                  LEFT JOIN secretary_meeting_type s ON u.username = s.username
+                   LEFT JOIN meeting_types mt2 ON s.meeting_type_id = mt2.type_id
                   WHERE u.username = :username";
     
         $result = $this->query($query, ['username' => $userId]);
@@ -91,7 +94,11 @@ class User {
     
         // Extract meeting types into an array
         $userData->meetingTypes = array_map(fn($row) => $row->meeting_type, $result);
-        
+
+        // Fetch secretary meeting types if exists
+        $secretaryMeetingModel = new secretary_meeting_type();
+        $userData-> secMeetings = $secretaryMeetingModel->getsecMeetingTypes($userId);
+
         $contactModel = new UserContactNums();
         $contacts = $contactModel->getContactByUsername($userId);
 
@@ -113,6 +120,7 @@ class User {
     
     //     $contactModel->updateOrInsertContactNumbers($username, $numbers);
     // }
+
      
     public function updateContactNumber($username, $newContact) {
         $query = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username";
@@ -122,6 +130,7 @@ class User {
         ];
         return $this->query($query, $data);
     }
+
     
     
 
@@ -181,6 +190,25 @@ public function reactivateStatus($username) {
                 
 
                 
+    }
+
+    public function getHashedpassword($username)
+    {
+        $query = "SELECT password
+                  FROM user 
+                  WHERE username=:username 
+                  LIMIT 1";
+
+        return $this->query($query, ['username'=> $username]) ?? null;
+    }
+
+    public function updatePassword($username, $newPassword)
+    {
+        $query = "UPDATE user 
+                  SET password= :password 
+                  WHERE username=:username ";
+
+        return $this->query($query, ['password'=>$newPassword, 'username'=>$username]);
     }
 
 }

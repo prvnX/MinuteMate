@@ -14,15 +14,15 @@
 
   
     <?php
-        $user="secretary";
-        $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
+        $user="lecturer";
         $notification="notification"; //use notification-dot if there's a notification
-        $menuItems = [ "home" => ROOT."/secretary",$memocart => ROOT."/secretary/memocart", $notification => ROOT."/secretary/notifications", "profile" => ROOT."/secretary/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+        $menuItems = [ "home" => ROOT."/secretary", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
         
         echo "<div class='memo-list-navbar'>";
         require_once("../app/views/components/new_navbar.php");
         echo "</div>";
         require_once("../app/views/components/sec_sidebar.php");
+        
 
     ?>
 

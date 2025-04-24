@@ -5,94 +5,81 @@ class Register extends Controller {
 
     public function index($param1 = "", $param2 = "", $param3 = "") {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $errors = [];
+            $old = $_POST;
 
             $user = new User();
 
-            // Collect and sanitize form data
             $fullName = htmlspecialchars(trim($_POST['username']));
-            $roles = isset($_POST['userType']) ? $_POST['userType'] : []; // array
+            $roles = $_POST['userType'] ?? [];
             $roleString = implode(',', $roles);
             $nic = htmlspecialchars(trim($_POST['nic']));
-            $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL); // Sanitizing email
+            $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
             $tpno = htmlspecialchars(trim($_POST['tpno']));
-
             $studentId = $_POST['stdrep-id'] ?? null;
             $lecturerId = $_POST['lec-id'] ?? null;
             $lecStuId = $studentId ?? $lecturerId ?? null;
-
-            if (!$lecStuId) {
-                echo "<script>alert('Please enter a valid Student ID or Lecturer ID.');window.history.back();</script>";
-                return;
-            }
-
-            
-            if ($user->usernameExists($lecStuId)) {
-                echo "<script>alert('This ID is already registered.try again with correct ID'); window.history.back();</script>";
-                return;
-            }
-
-            // Handle optional fields with default values
             $additionalTpno = !empty($_POST['additional_tp_no']) ? htmlspecialchars(trim($_POST['additional_tp_no'])) : "Not Provided";
 
-            // Validate email format
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "<script>alert('Invalid email format.');window.history.back();</script>";
-                return;
+            if ($studentId && !preg_match('/^stdrep\d+$/', $studentId)) {
+                $errors['stdrep-id'] = 'Student Representative ID must start with "stdrep" followed by digits.';
+            }
+            
+            if ($lecturerId && !preg_match('/^lec\d+$/', $lecturerId)) {
+                $errors['lec-id'] = 'Lecturer ID must start with "lec" followed by digits.';
+            }
+            
+
+            if (!$lecStuId) {
+                $errors['lecStuId'] = 'Please enter a valid Student ID or Lecturer ID.';
             }
 
-            // Validate tpno and additional_tpno
+            if ($user->usernameExists($lecStuId)) {
+                $errors['lecStuId'] = 'This ID is already registered. Try again with a correct ID.';
+            }
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Invalid email format.';
+            }
+
             if (!preg_match('/^\d{10}$/', $tpno)) {
-                echo "<script>alert('Primary contact number must be exactly 10 digits.');window.history.back();</script>";
-                return;
+                $errors['tpno'] = 'Primary contact number must be exactly 10 digits.';
             }
 
             if ($additionalTpno !== "Not Provided" && !preg_match('/^\d{10}$/', $additionalTpno)) {
-                echo "<script>alert('Additional contact number must be exactly 10 digits if provided.');window.history.back();</script>";
-                return;
+                $errors['additional_tp_no'] = 'Additional contact number must be exactly 10 digits if provided.';
             }
 
-
-            // Database connection using PDO
-            $db = $this->connect();
-
-            try {
-                // Prepare the SQL statement to insert data
-                $stmt = $db->prepare("INSERT INTO user_requests (full_name, role, lec_stu_id, nic, email, tp_no, additional_tp_no, status) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $status = 'pending';
-
-                // Bind parameters
-                $stmt->bindParam(1, $fullName, PDO::PARAM_STR);
-                $stmt->bindParam(2, $roleString, PDO::PARAM_STR);
-                $stmt->bindParam(3, $lecStuId, PDO::PARAM_STR);
-                $stmt->bindParam(4, $nic, PDO::PARAM_STR);
-                $stmt->bindParam(5, $email, PDO::PARAM_STR);
-                $stmt->bindParam(6, $tpno, PDO::PARAM_STR);
-                $stmt->bindParam(7, $additionalTpno, PDO::PARAM_STR);
-                $stmt->bindParam(8, $status, PDO::PARAM_STR);
-
-                if ($stmt->execute()) {
-                    // Success: Inject JavaScript for alert
-                    echo "<script>
-                        alert('Your request has been successfully sent to the admin!');
-                        window.location.href = '" . ROOT . "/register';
-                    </script>";
-                    exit();
-                } else {
-                    // Handle errors
-                    echo "<script>
-                        alert('An error occurred while processing your request. Please try again.');
-                    </script>";
-                }
-                
-
-            } catch (PDOException $e) {
-                echo "Database error: " . $e->getMessage();
+            if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
+                $errors['nic'] = 'Invalid NIC. Please enter either 12 digits or 10 digits followed by V.';
             }
-        } else {
-            $this->view("register");
+
+            if (!empty($errors)) {
+                return $this->view("register", [
+                    'errors' => $errors,
+                    'old' => $old
+                ]);
+            }
+
+            $userRequest = new user_requests();
+            $status = 'pending';
+
+            // Insert the request and check for success
+            $result = $userRequest->insertRequest($fullName, $roleString, $lecStuId, $nic, $email, $tpno, $additionalTpno, $status);
+
+            if ($result) {
+                echo "<script>
+                    alert('Your request has been successfully sent to the admin!');
+                    window.location.href = '" . ROOT . "/register';
+                </script>";
+                exit();
+            } else {
+                echo "<script>alert('There was an error with your request. Please try again.');</script>";
+            }
         }
+
+        $this->view("register", ['errors' => [], 'old' => []]);
     }
 }
-?>
 
+?>

@@ -2,188 +2,215 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-    <link rel="icon" href="<?=ROOT?>/img.png" type="image">
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/viewprofile.style.css">
-    <style>
-        /* Modal styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1000; /* On top of other content */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5); /* Black with transparency */
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto; /* 10% from top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%; /* Adjust as needed */
-            border-radius: 8px;
-            position: relative;
-        }
-        .close {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover, .close:focus {
-            color: black;
-            text-decoration: none;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+   
 </head>
 <body>
-     
+  
     <?php
-    $user=$_SESSION['userDetails']->role;
-    $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
-    $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,"Email"=>$_SESSION['userDetails'] -> email,"LectureID"=>"932837273","NIC"=>$_SESSION['userDetails'] ->nic,"Role"=>" Student Rep","Contact_No:"=>"071 283 3684, 077 647 2983","Meeting_types"=>"IUD, RHD, Syndicate"]
-   ?>
+        $user="studentrep";
+        $notification="notification"; //use notification-dot if there's a notification
+        $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
+        
+        echo "<div class='memo-list-navbar'>";
+        require_once("../app/views/components/new_navbar.php");
+        echo "</div>";
+        require_once("../app/views/components/sec_sidebar.php");
 
- 
+        
+        $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,
+                        "Email"=>$_SESSION['userDetails'] -> email,
+                        "LectureID"=>"102837273",
+                        "NIC"=>$_SESSION['userDetails'] ->nic,
+                        "Role"=>$_SESSION['userDetails']->role,
+                        "Contact_No:"=>"077 283 3685",
+                        "Meeting_types"=>"IUD, RHD, Syndicate"];
 
+   
+    ?>
 
-
-
-
-
-    
-    <div class="title">
+<div class="container">
     <h1>Your Profile</h1>
-    </div>
-    <div class="profile-container">
-        <main class="profile-content">
-            <div class="footer">
-                <img src="<?=ROOT?>/assets/images/profile.png" alt="profile">
-            </div>
-            <div class="profile-right">
-                <p><strong>Name:</strong> <?= $profileDetails['name'] ?></p><br>
-                <p><strong>Email:</strong><?= $profileDetails['Email'] ?></p><br>
-                <p><strong>Student ID:</strong><?= $profileDetails['LectureID'] ?></p><br>
-                <p><strong>NIC:</strong> <?= $profileDetails['NIC'] ?></p><br>
-                <p><strong>Role:</strong><?= $profileDetails['Role'] ?></p><br>
-                <p><strong>Contact No:</strong><?= $profileDetails['Contact_No:'] ?></p><br>
-                <p><strong>Meeting types can attend:</strong><?= $profileDetails['Meeting_types'] ?></p><br>
-                <div class="profile-password">
-                 <a href="#" id="changePasswordBtn" class="change-password">Change My Password</a>
-                 
-                 </div>
-            
-            </div>
-                  
-            
-        </main>
-        <div class="form-buttons-container">
-            
-            <div class="form-buttons">
-                
-                <button type="button" class="request-change" onclick="" id="requestchangebtn">Request Change </button>
-               
-            </div> 
-            <div class="form-buttons">
-                 
-            <button type="button" id="continueButton" class="continue-button">Continue</button>
+    <p class="subtitle">View and manage your personal information</p>
 
-            </div>    
+    <div class="profile-section">
+        <div class="left-panel">
+            <div class="profile-photo">
+                <img src="<?= ROOT ?>/assets/img/profilee.png" alt="Profile Photo">
+                <button class="change-photo-btn">Change Photo</button>
+            </div>
+
+            <div class="stats-box">
+                <div><strong>12</strong><br>Meetings Attended</div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="card">
+                <div class="card-header">
+                    <span>Personal Information</span>
+                    <span class="verified-badge">Verified</span>
+                </div>
+                <div class="info-row"><strong>Name:</strong> <?= $profileDetails['name']?></div>
+                <div class="info-row"><strong>Email:</strong> <?= $profileDetails['Email']?></div>
+                <div class="info-row"><strong>NIC:</strong> <?= $profileDetails['NIC']?></div>
+                <div class="info-row"><strong>Role:</strong> <?= $profileDetails['Role']?></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Meeting Access</div>
+                <p>You can attend the following meeting types:</p>
+                <div class="badge-group">
+                    <?php
+                        if (!empty($_SESSION['meeting_type']) && is_array($_SESSION['meeting_type'])) {
+                            $colors = [
+                                'IOD' => 'background-color: #FBBF24; color: white;',
+                                'RHD' => 'background-color: #F87171; color: white;',
+                                'SYN' => 'background-color: #4ADE80; color: black;',
+                                'BOM' => 'background-color: #60A5FA; color: white;',
+                            ];
+                            foreach ($_SESSION['meeting_type'] as $type) {
+                                $style = isset($colors[$type]) ? $colors[$type] : 'background-color: gray; color: white;';
+                                echo "<span class='badge' style='$style'>" . htmlspecialchars($type) . "</span>";
+                            }
+                        } else {
+                            echo "<p style='color: gray;'>No meeting types available</p>";
+                        }
+                    ?>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Account Security
+                    <div class="password">
+                        <a href="#" id="changePasswordBtn" class="change-password">Change My Password</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button type="button" class="primary-btn" id="requestchangebtn">Request Change</button>
+                <a href="<?= ROOT ?>/studentrep/dashboard" class="secondary-btn">Back to Dashboard</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal -->
-    <div id="passwordModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <h2>Change Password</h2>
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="currentPassword">Current Password</label>
-                    <input type="password" id="currentPassword" name="currentPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="newPassword">New Password</label>
-                    <input type="password" id="newPassword" name="newPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
-                <div class="subbtn">
-                <button type="submit" class="btn">Reset Password</button>
-                </div>
-            </form>
+<!-- 🔒 Change Password Modal -->
+<div class="modal" id="passwordModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-lock"></i> Change Password</h2>
+            <span class="close-btn" id="modalCloseBtn">&times;</span>
         </div>
+
+        <form action="#" id="passwordForm">
+            <label>Current Password</label>
+            <input type="password" name="current_password" required>
+
+            <label>New Password</label>
+            <input type="password" name="new_password" required>
+
+            <label>Confirm Password</label>
+            <input type="password" name="confirm_password" required>
+
+            <div class="password-strength">Password Strength</div>
+            <div class="password-requirements">
+                <strong>Password must contain:</strong>
+                <ul>
+                    <li>At least 8 characters</li>
+                    <li>At least one uppercase letter</li>
+                    <li>At least one number</li>
+                    <li>At least one special character</li>
+                </ul>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                <button type="submit" class="submit-btn">Update Password</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <script>
-        document.getElementById("continueButton").addEventListener("click", () => {
-    window.location.href = "<?= ROOT ?>/studentrep"; // Redirect to the dashboard
-});
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("passwordModal");
+    const openModalBtn = document.getElementById("changePasswordBtn");
+    const closeModalBtn = document.getElementById("modalCloseBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const requestBtn = document.getElementById("requestchangebtn");
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const modal = document.getElementById("passwordModal");
-            const openModalBtn = document.getElementById("changePasswordBtn");
-            const closeModalBtn = document.getElementById("closeModal");
-            const requestbtn = document.getElementById("requestchangebtn");
+    openModalBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        modal.style.display = "block";
+    });
 
-            // Open modal when the "Change My Password" link is clicked
-            openModalBtn.addEventListener("click", (event) => {
-                event.preventDefault();
-                modal.style.display = "block";
-            });
+    closeModalBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
 
-            // Close modal when the close button is clicked
-            closeModalBtn.addEventListener("click", () => {
-                modal.style.display = "none";
-            });
+    cancelBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
 
-            // Close modal when clicking outside the modal content
-            window.addEventListener("click", (event) => {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            });
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
 
-            requestbtn.addEventListener("click", ()=>{
-                window.location.href= "<?= ROOT ?>/studentrep/requestchange";
-            })
+    requestBtn.addEventListener("click", () => {
+        window.location.href = "<?= ROOT ?>/studentrep/requestchange";
+    });
+
+    const passwordForm = document.getElementById("passwordForm");
+
+    passwordForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        console.log(formData);
+
+        fetch("<?= ROOT ?>/studentrep/viewprofile", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("✅ Password updated successfully.");
+                passwordForm.reset();
+                document.getElementById("passwordModal").style.display = "none";
+            } else {
+                alert("❌ " + data.errors.join("\n"));
+            }
+        })
+        .catch(err => {
+            alert("❌ Something went wrong.");
+            console.error(err);
         });
-    </script>
+    });
+
+    // Password strength message
+    const passwordInput = document.querySelector('input[name="new_password"]');
+
+const strengthText = document.querySelector('.password-strength');
+    
+
+    passwordInput.addEventListener("input", () => {
+        const value = passwordInput.value;
+        if (/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(value)) {
+            strengthText.textContent = "✅ Strong password";
+            strengthText.style.color = "green";
+        } else {
+            strengthText.textContent = "❌ Weak password";
+            strengthText.style.color = "red";
+        }
+    });
+});
+</script>
 </body>
 </html>
