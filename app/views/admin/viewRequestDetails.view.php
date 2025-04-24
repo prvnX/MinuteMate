@@ -1,5 +1,13 @@
 <?php 
-include '../app/views/components/admin_sidebar.php'; 
+  $user = "admin";
+  $notification = "notification"; //use notification-dot if there's a notification
+  $menuItems = [
+      "home" => ROOT."/admin",
+      $notification => ROOT."/admin/notifications",
+      "profile" => ROOT."/admin/viewprofile"
+  ];
+  require_once("../app/views/components/new_navbar.php");
+  include '../app/views/components/admin_sidebar.php'; 
 
 $userDetails = $data['userDetails']; 
 $userId = $_GET['id'];

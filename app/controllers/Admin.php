@@ -1,4 +1,6 @@
 <?php
+
+
 class Admin extends BaseController {
     public function index() {
         $this->view("admin/dashboard");
@@ -258,80 +260,80 @@ public function viewMemberProfile() {
         redirect("home");
     }
    
-    public function editMemberProfile() {
-        // Get the user ID from the URL
-        $userId = $_GET['id'] ?? null;
+    // public function editMemberProfile() {
+    //     // Get the user ID from the URL
+    //     $userId = $_GET['id'] ?? null;
     
-        if (!$userId) {
-            die("User ID is required.");
-        }
+    //     if (!$userId) {
+    //         die("User ID is required.");
+    //     }
     
-        // Fetch user details from the database
-        $userModel = $this->model("User");
-        $userData = $userModel->getUserById($userId);
+    //     // Fetch user details from the database
+    //     $userModel = $this->model("User");
+    //     $userData = $userModel->getUserById($userId);
     
-        if (!$userData) {
-            die("User not found.");
-        }
+    //     if (!$userData) {
+    //         die("User not found.");
+    //     }
     
-        // Pass the data to the view
-        $this->view("admin/editMemberProfile", ['userData' => $userData]);
-    }
+    //     // Pass the data to the view
+    //     $this->view("admin/editMemberProfile", ['userData' => $userData]);
+    // }
     
-    public function updateMember() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $userModel = $this->model("User");
+    // public function updateMember() {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $userModel = $this->model("User");
             
     
-             // Sanitize and validate input
-            $username = trim($_POST['username'] ?? '');
-            $full_name = trim($_POST['full_name'] ?? '');
-            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
-            $nic = trim($_POST['nic'] ?? '');
-            $role = trim($_POST['role'] ?? '');
-            $phone = trim($_POST['phone'] ?? '');
-            $meetingTypeIds = $_POST['meeting_types'] ?? [];
+    //          // Sanitize and validate input
+    //         $username = trim($_POST['username'] ?? '');
+    //         $full_name = trim($_POST['full_name'] ?? '');
+    //         $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+    //         $nic = trim($_POST['nic'] ?? '');
+    //         $role = trim($_POST['role'] ?? '');
+    //         $phone = trim($_POST['phone'] ?? '');
+    //         $meetingTypeIds = $_POST['meeting_types'] ?? [];
 
-        if (empty($username) || empty($full_name) || !$email || empty($nic) || empty($role)) {
-            echo "Invalid input. Please fill all fields correctly.";
-            exit;
-        }
+    //     if (empty($username) || empty($full_name) || !$email || empty($nic) || empty($role)) {
+    //         echo "Invalid input. Please fill all fields correctly.";
+    //         exit;
+    //     }
             
-        $meetingTypeMap = [
-            'RHD' => 1,
-            'IOD' => 2,
-            'SYN' => 3,
-            'BOM' => 4,
-        ];
+    //     $meetingTypeMap = [
+    //         'RHD' => 1,
+    //         'IOD' => 2,
+    //         'SYN' => 3,
+    //         'BOM' => 4,
+    //     ];
         
-        $meetingTypeIds = array_map(fn($type) => $meetingTypeMap[$type], $meetingTypeIds);
+    //     $meetingTypeIds = array_map(fn($type) => $meetingTypeMap[$type], $meetingTypeIds);
         
     
-            // Update user details
-            $userData = [
-                'username' => $username,
-                'full_name' => $full_name,
-                'email' => $email,
-                'nic' => $nic,
-                'role' => $role
-            ];
+    //         // Update user details
+    //         $userData = [
+    //             'username' => $username,
+    //             'full_name' => $full_name,
+    //             'email' => $email,
+    //             'nic' => $nic,
+    //             'role' => $role
+    //         ];
 
-            $userModel->updateUserByUsername($username, $userData);
+    //         $userModel->updateUserByUsername($username, $userData);
             
-            if (!empty($phone)) {
-                $userModel->updateContactInfo($username, $phone);
-            }
+    //         if (!empty($phone)) {
+    //             $userModel->updateContactInfo($username, $phone);
+    //         }
 
-            if (!empty($meetingTypeIds)) {
-                $userModel->updateMeetingTypes($username, $meetingTypeIds);
-            }
+    //         if (!empty($meetingTypeIds)) {
+    //             $userModel->updateMeetingTypes($username, $meetingTypeIds);
+    //         }
 
-            $redirectUrl = ROOT . "/admin/viewMemberProfile?id=" . urlencode($username) . "&status=success&message=" . urlencode("Member updated successfully.");
-            header("Location: " . $redirectUrl);
-        exit;
-        }
+    //         $redirectUrl = ROOT . "/admin/viewMemberProfile?id=" . urlencode($username) . "&status=success&message=" . urlencode("Member updated successfully.");
+    //         header("Location: " . $redirectUrl);
+    //     exit;
+    //     }
 
-    }
+    // }
     
 
     public function PastMembers(): void{
@@ -398,6 +400,31 @@ public function viewMemberProfile() {
     public function viewprofile() {
         $this->view("admin/viewprofile");
     }
+
+    public function updateprofile() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'full_name' => $_POST['full_name'],
+                'email' => $_POST['email'],
+                'nic' => $_POST['nic'],
+            ];
+            
+            $userModel = $this->model("user");
+
+            $username = $_SESSION['userDetails']->username;
+    
+            $userModel->updateUserByUsername($username, $data);
+    
+            // Optional: Update session to reflect new values
+            $_SESSION['userDetails']->full_name = $data['full_name'];
+            $_SESSION['userDetails']->email = $data['email'];
+            $_SESSION['userDetails']->nic = $data['nic'];
+    
+            header("Location: " . ROOT . "/admin/viewprofile");
+            exit;
+        }
+    }
+    
     
     public function requestchange(){
         $responseStatus = "";
@@ -497,9 +524,8 @@ function department(){
     $this->view('admin/department', $data);
 }
 
-function saveDepartment(){
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+function saveDepartment() {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $department = new Department();
 
         $data = [
@@ -508,6 +534,17 @@ function saveDepartment(){
             'dep_email' => $_POST['dep_email']
         ];
 
+        // Instantiate the User model to check if the department head exists
+        $userModel = $this->model("user");
+
+        // Validate department head existence
+        if (!$userModel->usernameExists($_POST['department_head'])) {
+            echo "<script>alert('Error: Department head \"{$_POST['department_head']}\" does not exist!'); window.history.back();</script>";
+        exit;
+        }
+
+
+        // Insert or update
         if (!empty($_POST['id'])) {
             $department->update($_POST['id'], $data);
         } else {
@@ -517,6 +554,7 @@ function saveDepartment(){
         redirect('admin/department');
     }
 }
+
 
 public function removeMember() {
     // Ensure the session is started
