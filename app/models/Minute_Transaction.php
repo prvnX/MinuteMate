@@ -3,7 +3,7 @@ class Minute_Transaction{
     use Model;
     //minute table
     protected $minuteTable = 'minute';
-    protected $minuteColumns = ['MeetingID','title','created_date','created_by'];
+    protected $minuteColumns = ['Minute_ID','MeetingID','title','created_date','created_by','is_approved'];
 
     //protected $MeetingTable = 'meeting';
 
@@ -51,6 +51,7 @@ class Minute_Transaction{
     public $MinuteID;
 
 
+
     public function insertMinute($data){
         try{
         $this->beginTransaction(); //begin transaction
@@ -69,6 +70,26 @@ class Minute_Transaction{
         }
         $LastInsertedMinuteID = $this->getLastInsertID(); //get the inserted minute id
         $this->MinuteID = $LastInsertedMinuteID;
+
+
+        /*Accept prev minute*/
+        
+
+        $prevMinuteID=$data['prevMinute'];
+        $prevMinuteData=[
+            'is_approved'=>1
+        ];
+        if($prevMinuteID!=null){
+            $isdataUpdated = $this->updateTheTable($this->minuteTable,$prevMinuteID,$this->minuteColumns,$prevMinuteData,'Minute_ID');
+            if(!$isdataUpdated){
+                throw new Exception("Failed to update Minute Status.");
+            }
+        }
+
+
+       
+       
+
 
 
         /*Insert Minute Content*/

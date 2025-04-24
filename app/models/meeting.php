@@ -13,7 +13,7 @@ class Meeting{
         'created_by',
         'is_minute',
         'type_id',
-        'additional_note'
+        'additional_note',
     ]; //editable columns
     public function showMeeting(){ //for calendar
         $query="select meeting_id,date,meeting_type from $this->table";
@@ -163,6 +163,17 @@ class Meeting{
                 WHERE  meeting_id=:meetingId";
 
         return $this->query($query, $data);
+    }
+
+    public function getMostRecentMinutePending($type,$date){
+        $data['type']=strtolower($type);
+        $data['date']=$date;
+        $query="SELECT *
+                FROM meeting m
+                INNER JOIN minute mi ON m.meeting_id = mi.MeetingID
+                WHERE m.meeting_type=:type AND date <=:date AND is_minute=1 AND is_approved=0 AND is_recorrect=0 ORDER BY date DESC LIMIT 1;";
+        return $this->query($query,$data);
+
     }
 
 
