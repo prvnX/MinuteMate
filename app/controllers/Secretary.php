@@ -140,7 +140,28 @@ class Secretary extends BaseController {
         else{
             redirect("secretary/selectmeeting");
         }
+    } 
+
+
+    public function viewprofile(){
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
+    
+        
+
+       $this->view("studentrep/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
     }
+
+
+
+
     public function viewmemoreport() {
     if (!isset($_GET['memo'])) {
         header("Location: " . ROOT . "/secretary/selectmemo");
@@ -576,19 +597,7 @@ public function selectminute() { //this is the page where the secretary selects 
         $this->view("confirmlogout",[ "user" =>"Secretary"]);
     }
 
-    public function viewprofile() {
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-
-
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
-        $this->view("secretary/viewprofile");
-    }
+   
     public function logout() {
         session_start();
         // Destroy all session data
