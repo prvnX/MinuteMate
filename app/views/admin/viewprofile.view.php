@@ -17,7 +17,7 @@
     echo "<div class='memo-list-navbar'>";
     require_once("../app/views/components/new_navbar.php");
     echo "</div>";
-    require_once("../app/views/components/sec_sidebar.php");
+    require_once("../app/views/components/admin_sidebar.php");
 
     $profileDetails = [
         "name" => $_SESSION['userDetails']->full_name,
@@ -103,6 +103,33 @@
     </div>
 </div>
 
+<!-- ✏️ Edit Profile Modal -->
+<div class="modal" id="editProfileModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Profile</h2>
+            <span class="close-btn" id="editCloseBtn">&times;</span>
+        </div>
+
+        <form action="<?= ROOT ?>/admin/updateprofile" method="POST">
+            <label for="editFullName">Full Name:</label>
+            <input type="text" id="editFullName" name="full_name" value="<?= $profileDetails['name'] ?>" required>
+
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" value="<?= $profileDetails['Email'] ?>" required>
+
+            <label for="editNIC">NIC:</label>
+            <input type="text" id="editNIC" name="nic" value="<?= $profileDetails['NIC'] ?>" required>
+
+            <div class="modal-actions">
+                <button type="button" class="cancel-btn" id="editCancelBtn">Cancel</button>
+                <button type="submit" class="submit-btn">Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("passwordModal");
@@ -110,6 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeModalBtn = document.getElementById("modalCloseBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const requestBtn = document.getElementById("requestchangebtn");
+    const editModal = document.getElementById("editProfileModal");
+
+    const openEditBtn = document.getElementById("requestchangebtn");
+    const closeEditBtn = document.getElementById("editCloseBtn");
+    const cancelEditBtn = document.getElementById("editCancelBtn");
 
     openModalBtn.addEventListener("click", (event) => {
         event.preventDefault();
@@ -124,15 +156,30 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "none";
     });
 
+     // Open edit profile modal
+     openEditBtn.addEventListener("click", () => {
+        editProfileModal.style.display = "block";
+    });
+
+    // Close edit profile modal
+    closeEditBtn.addEventListener("click", () => {
+        editProfileModal.style.display = "none";
+    });
+    cancelEditBtn.addEventListener("click", () => {
+        editProfileModal.style.display = "none";
+    });
+
     window.addEventListener("click", (event) => {
         if (event.target === modal) {
             modal.style.display = "none";
+        }else if (event.target === editProfileModal) {
+            editProfileModal.style.display = "none";
         }
     });
 
-    requestBtn.addEventListener("click", () => {
-        window.location.href = "<?= ROOT ?>/lecturer/requestchange";
-    });
+    // requestBtn.addEventListener("click", () => {
+    //     window.location.href = "<?= ROOT ?>/lecturer/requestchange";
+    // });
 });
 </script>
 </body>

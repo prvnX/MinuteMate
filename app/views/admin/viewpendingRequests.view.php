@@ -1,4 +1,16 @@
-<?php include '../app/views/components/admin_sidebar.php'; ?>
+<?php
+
+$user="admin";
+$notification="notification"; //use notification-dot if there's a notification
+$menuItems = [ 
+  "home" => ROOT."/admin", 
+  $notification => ROOT."/admin/notifications", 
+  "profile" => ROOT."/admin/viewprofile", 
+  "logout" => ROOT."/admin/confirmlogout"
+];
+require_once("../app/views/components/new_navbar.php");
+include '../app/views/components/admin_sidebar.php'; 
+?>
 
 
 <div class="content">
