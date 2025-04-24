@@ -29,6 +29,15 @@ class UserContactNums {
 
         return array_map(fn($r) => $r->contact_no, $result);
     }
+    public function updateContactNumbers($username, $newContact) {
+        $query = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username";
+        $data = [
+            'contact_no' => $newContact,
+            'username' => $username
+        ];
+        return $this->query($query, $data);
+    }
+    
 
     public function updateContacts($username, $primary, $additional = null) {
         // Fetch existing contact numbers

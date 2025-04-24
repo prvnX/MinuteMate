@@ -11,11 +11,13 @@
 <body>
      
     <?php
+    
     $user="admin";
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" ]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
     require_once("../app/views/components/admin_sidebar.php"); //call the sidebar component
+    $ContactDetails = $data['contact_no'];
     ?>
  
 
@@ -38,7 +40,7 @@
                 <tr>
                     <td>Full Name</td>
                     <td><?= htmlspecialchars($data[0]->full_name) ?></td>
-                    <td><?= htmlspecialchars($data[0]->new_fullname) ?></td>
+                    <td><?= htmlspecialchars($data[0]->new_fullname ?? "No change Requested") ?></td>
                 </tr>
                 <tr>
                     <td>NIC</td>
@@ -52,7 +54,20 @@
                 </tr>
                 <tr>
                     <td>Telephone Number</td>
-                    <td><?= htmlspecialchars($data[0]->tp_no ?? "No current value") ?></td>
+                    <td>
+    <?php 
+    if (is_array($ContactDetails)) {
+        foreach ($ContactDetails as $contact) {
+            echo htmlspecialchars($contact) . " ";
+        }
+    } else {
+        echo htmlspecialchars($ContactDetails ?? "Not available");
+    }
+    ?>
+</td>
+
+
+                 
                     <td><?= htmlspecialchars($data[0]->new_tp_no ?? "No change Requested") ?></td>
                 </tr>
                 <tr>

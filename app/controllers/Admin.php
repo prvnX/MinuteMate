@@ -465,6 +465,8 @@ public function viewMemberProfile() {
         $id=$_GET['id'];
         $requestChangeModel=new User_edit_requests;
         $data=$requestChangeModel->find_request_by_id($id);
+        $contact_no = new UserContactNums();
+        $data['contact_no'] = $contact_no->getContactByUsername($data[0]->username);
         $this->view("admin/viewsinglerequest", $data);
     }
 
@@ -495,27 +497,29 @@ public function viewMemberProfile() {
     
         // Prepare the updated data
         $updatedData = [];
-    
-        if (!empty($new_fullname)) {
-            $updatedData['full_name'] = $new_fullname;
-        }
-    
-        if (!empty($new_nic)) {
-            $updatedData['nic'] = $new_nic;
-        }
-    
-        if (!empty($new_email)) {
-            $updatedData['email'] = $new_email;
-        }
-    
-        // Update the user data
-        $userUpdate = new User();
-        $updateSuccess = $userUpdate->update($username, $updatedData, 'username');
-        $updateAndDelete = new User_edit_requests();
-        $updateAndDelete->deleteRequestById($id);
-    
+
+    if (!empty($new_fullname)) $updatedData['full_name'] = $new_fullname;
+    if (!empty($new_nic)) $updatedData['nic'] = $new_nic;
+    if (!empty($new_email)) $updatedData['email'] = $new_email;
+
+    // Update user main table
+    $userUpdate = new User();
+    $userUpdate->update($username, $updatedData, 'username');
+
+    // Update contact number in related table
+    if (!empty($new_tp_no)) {
+        $contactModel = new UserContactNums();
+        $contactModel->updateContactNumbers($username, $new_tp_no);  // You'll need to implement this
+    }
+      
+     
+    // Remove the edit request
+    $updateAndDelete = new User_edit_requests();
+    $updateAndDelete->deleteRequestById($id);
+
     
 }
+
 function department(){
 
     $department = new Department();
