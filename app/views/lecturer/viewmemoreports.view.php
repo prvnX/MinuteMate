@@ -9,54 +9,69 @@
 </head>
 <body>
 
+ 
 <?php
+   
     $user="lecturer";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" , "logout" => ROOT."/lecturer/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
+    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
+    
+    
     ?>
 
-
-
+ 
 
 
 <div class="container">
     <!-- Header -->
     <div class="header">
         <h1>Memo Report</h1>
+        <h2>Memo Details</h2>
     </div>
 
-    <!-- Date and Time -->
-    <div class="form-group">
-        <label>memo Id:</label>
-        <span><?= htmlspecialchars($data['id']) ?></span>
-    </div>
+<div class="form-group">
+    <label>Title:</label>
+    <span><?= htmlspecialchars($data['memoDetails']->title) ?></span>
+</div>
+<div class="form-group">
+    <label>Meeting Type:</label>
+    <span><?= htmlspecialchars($data['memoDetails']->meeting_type)  ?></span>
+</div>
+<div class="form-group">
+    <label>Memo ID:</label>
+    <span><?= htmlspecialchars($data['memoDetails']->id) ?></span>
+</div>
+<div class="form-group">
+    <label>Date:</label>
+    <span><?= htmlspecialchars($data['memoDetails']->date) ?></span>
+</div>
+<div class="form-group">
+    <label>Status:</label>
+    <span><?= htmlspecialchars($data['memoDetails']->status) ?></span>
+</div>
+<div class="form-group">
+    <label>Author:</label>
+    <span><?= htmlspecialchars($data['memoDetails']->user) ?></span>
+</div>
+    <!-- <div class="header">
+    <h3>Flow of the Memo through Different Meetings</h3>
 
-    <div class="form-group">
-        <label>Date:</label>
-        <span><?= htmlspecialchars($data['date']) ?></span>
-    </div>
+    <div class="timeline">
+    <?php foreach ($data['timeline'] as $step): ?>
+        <div class="timeline-step">
+            <div class="dot-wrapper">
+                <div class="dot" data-tooltip="<?= htmlspecialchars($step['label'] . ': ' . $step['date']) ?>"></div>
+            </div>
+            <div class="label"><?= htmlspecialchars($step['label']) ?></div>
+            <div class="date"><?= htmlspecialchars($step['date']) ?></div>
+        </div>
+    <?php endforeach; ?>
+</div>
 
-    <div class="form-group">
-        <label>Time:</label>
-        <span><?= htmlspecialchars($data['time']) ?></span>
-    </div>
-
-    <!-- Memo Details -->
-    <div class="form-group">
-        <label>Status:</label>
-        <span><?= htmlspecialchars($data['status']) ?></span>
-    </div>
-    <div class="form-group">
-        <label>Linked Memos:</label>
-        <span><?= htmlspecialchars($data['linked_memos']) ?></span>
-    </div>
-    <div class="form-group">
-        <label>Author:</label>
-        <span><?= htmlspecialchars($data['author']) ?></span>
-    </div>
+    </div> -->
 
     <!-- Footer -->
     <div class="footer">

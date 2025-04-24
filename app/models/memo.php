@@ -10,7 +10,8 @@
             'status',
             'submitted_by',
             'meeting_id',
-            'is_forwarded'
+            'is_forwarded',
+            'submitted_date'
         ];
         public function insert($data)
         {
@@ -137,9 +138,32 @@
                           INNER JOIN meeting ON memo.meeting_id = meeting.meeting_id";
                 return $this->query(query: $query);
             }
-            
 
-
+        public function getMemoDetails($memo_id)
+        {
+            $query = "SELECT 
+                        u.full_name AS user,
+                        memo.memo_id AS id, 
+                        memo.memo_title AS title, 
+                        memo.status, 
+                        memo.submitted_date AS date, 
+                        memo.submitted_by AS author, 
+                        meeting.meeting_type,
+                        memo.closed_at AS closed_at,
+                        memo.is_forwarded AS is_forwarded
+                      FROM 
+                        $this->table AS memo
+                      INNER JOIN 
+                        meeting ON memo.meeting_id = meeting.meeting_id
+                        INNER JOIN
+                        user u ON memo.submitted_by = u.username
+                        
+                      WHERE 
+                        memo.memo_id = :memo_id
+                      LIMIT 1";
+             
+            return $this->query($query, ['memo_id' => $memo_id])[0] ?? null;
+        }
     }
 
 ?>

@@ -20,9 +20,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     }
 
-studentCheck.addEventListener('change',updateDynamicFields)
-secretaryCheck.addEventListener('change',updateDynamicFields)
-lecturerCheck.addEventListener('change',updateDynamicFields)
+    function updateCheckboxStates() {
+        if (studentCheck.checked) {
+            lecturerCheck.disabled = true;
+            secretaryCheck.disabled = true;
+        } else if (lecturerCheck.checked || secretaryCheck.checked) {
+            studentCheck.disabled = true;
+        } else {
+            // Enable all if none are selected
+            studentCheck.disabled = false;
+            lecturerCheck.disabled = false;
+            secretaryCheck.disabled = false;
+        }
+    }
 
-updateDynamicFields();
+    function handleCheckboxChange() {
+        updateDynamicFields();
+        updateCheckboxStates();
+    }
+
+studentCheck.addEventListener('change',handleCheckboxChange)
+secretaryCheck.addEventListener('change',handleCheckboxChange)
+lecturerCheck.addEventListener('change',handleCheckboxChange)
+
+handleCheckboxChange();
 });
