@@ -44,6 +44,10 @@ class user_requests {
             'status' => $status,
             'id' => $requestId,
         ];
+
+        // Debug the query
+        //echo("Generated Query: <pre>$query</pre>");
+         //echo(print_r($params, true));
         return $this->query($query, $data);
     }
     
