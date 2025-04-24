@@ -51,6 +51,11 @@ class Register extends Controller {
                 return;
             }
 
+            if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
+                echo "<script>alert('Invalid NIC. Please enter either 12 digits or 10 digits followed by V.');window.history.back();</script>";
+                return;
+            }
+
 
             // Database connection using PDO
             $db = $this->connect();
