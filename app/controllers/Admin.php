@@ -29,8 +29,11 @@ class Admin extends BaseController {
             $generalMeetingTypes = $requestData['meetingTypes'] ?? [];
             $secretaryMeetingTypes = $requestData['secretaryMeetingType'] ?? [];
             $lecturerMeetingTypes = $requestData['lecturerMeetingType'] ?? [];
+            $declineReason = $requestData['declineReason'] ?? '';
     
             $userRequestsModel = $this->model("user_requests");
+
+            $userDetails = $userRequestsModel->getRequestById($requestId);
     
             if ($requestId && $action === 'accept') {
                 $userModel = $this->model("User");
@@ -110,8 +113,8 @@ class Admin extends BaseController {
                         // Remove original request
                         $userRequestsModel->deleteRequestById($requestId);
     
-                        // Commit transaction
-                        //$userModel->commit();
+                        $mail = new Mail();
+                        $mail->sendAcceptanceEmail($userDetails->email, $userDetails->full_name);
     
                         echo json_encode(['success' => true, 'message' => 'Request accepted and user added!']);
                         return;
@@ -125,15 +128,17 @@ class Admin extends BaseController {
             }else{
                 // Update the request status to 'declined'
                 $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
-if ($result !== false) {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'message' => 'Request declined.']);
-    return;
-} else {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
-    return;
-}
+                if ($result !== false) {
+                    header('Content-Type: application/json');
+                    $mail = new Mail();
+                    $mail->sendDeclineEmail($userDetails->email, $userDetails->full_name, $declineReason);
+                    echo json_encode(['success' => true, 'message' => 'Request declined.']);
+                 return;
+                } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
+                 return;
+                }
             }
             
         echo json_encode(['success' => false, 'message' => 'Invalid request']);

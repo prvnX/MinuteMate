@@ -98,6 +98,15 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
 
         const userId = "<?= $userId ?>";
 
+        let declineReason = '';
+    if (action === 'decline') {
+        declineReason = prompt("Please enter the reason for declining this request:");
+        if (!declineReason) {
+            alert("Decline reason is required.");
+            return;
+        }
+    }
+
         fetch("<?= ROOT ?>/admin/handleRequest", {
             method: 'POST',
             headers: {
@@ -108,7 +117,8 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
                 id: userId,
                 meetingTypes: generalTypes, // For roles other than lecturer/secretary
                 lecturerMeetingType: lecturerTypes,
-                secretaryMeetingType: secretaryTypes
+                secretaryMeetingType: secretaryTypes,
+                declineReason: declineReason
             }),
         })
         .then(response => response.json())
