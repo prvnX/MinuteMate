@@ -120,6 +120,17 @@ class User {
     
     //     $contactModel->updateOrInsertContactNumbers($username, $numbers);
     // }
+
+     
+    public function updateContactNumber($username, $newContact) {
+        $query = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username";
+        $data = [
+            'contact_no' => $newContact,
+            'username' => $username
+        ];
+        return $this->query($query, $data);
+    }
+
     
     
 
@@ -167,6 +178,18 @@ public function reactivateStatus($username) {
 
             return $this->query($query, ['meetingTypeId'=> $meetingTypeId]);
 
+    }
+    public function getUserDetails($username) {
+        $query = "SELECT username, nic, full_name, email
+              FROM  
+                $this->table user
+                INNER JOIN user_roles ur ON user.username = ur.username
+                INNER JOIN user_contact_nums uc ON user.username = uc.username
+                WHERE u.username = :username";
+        return $this->query($query, ['username' => $username]);
+                
+
+                
     }
 
     public function getHashedpassword($username)
