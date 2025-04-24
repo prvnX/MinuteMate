@@ -7,7 +7,7 @@
       "profile" => ROOT."/admin/viewprofile"
   ];
   require_once("../app/views/components/new_navbar.php");
-  require_once("../app/views/components/sec_sidebar.php");
+  include '../app/views/components/admin_sidebar.php'; 
 
 
 ?>
