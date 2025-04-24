@@ -21,5 +21,12 @@ class Content_forward_meeting{
                 WHERE cfm.meeting_type = :meeting_type && cfm.forwarded_meeting IS NULL";
         return  $this->query($query,$data);
     }
+    public function getLinkMinuteIds($meeting_id){
+        $data['meeting_id']=$meeting_id;
+        $query="SELECT DISTINCT c.Minute_ID FROM $this->table cfm
+                INNER JOIN content c ON c.content_id=cfm.content_id
+                WHERE cfm.forwarded_meeting = :meeting_id";
+       return  $this->query($query,$data);
+    }
 
 }

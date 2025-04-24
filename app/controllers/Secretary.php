@@ -109,8 +109,8 @@ class Secretary extends BaseController {
             }       
         
     }
-    public function createminute() {
-        if(!isset($_GET['meeting'])) {
+    public function recorrectminute(){
+        if(!isset($_GET['meeting']) ) {
             header("Location: ".ROOT."/secretary/selectmeeting");
         }
         $meetingId = $_GET['meeting'];
@@ -132,10 +132,55 @@ class Secretary extends BaseController {
         $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $draftStatus=$drafts->isDraftExist($user,$meetingId);
+        $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+        
+        show($recentMinute);
+
         
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus]);
+            $this->view("secretary/recreateminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus,'recentMinute'=>$recentMinute]);
+        }
+        else{
+            redirect("secretary/selectmeeting");
+        }
+
+    }
+
+
+    public function createminute() {
+        if(!isset($_GET['meeting'])) {
+            header("Location: ".ROOT."/secretary/selectmeeting");
+        }
+        $meetingId = $_GET['meeting'];
+        //check the user has the authority to create the minute for the meeting
+        $user=$_SESSION['userDetails']->username;
+        $drafts= new Minute_Draft();
+        $meeting = new Meeting();
+        $department = new Department(); 
+        $memo = new Memo();
+        $minute=new Minute();
+        $agenda=new Agenda();
+        $memofwd=new Memo_forwards;
+        $content_forward_meeting=new Content_forward_meeting;
+        $linkedMinutes=$content_forward_meeting->getLinkMinuteIds($meetingId);
+        $fwdmemos=$memofwd->getmemoList($meetingId);
+        $agendaItems=$agenda->select_all(['meeting_id'=>$meetingId]);
+        $meetingType = $meeting->selectandproject("meeting_type",['meeting_id'=>$meetingId])[0]->meeting_type;
+        $deparments = $department->find_all();
+        $Participants = $meeting->getParticipants($meetingId);
+        $auth=$meeting->authUserforMinute($meetingId,$_SESSION['userDetails']->username);
+        $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
+        $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
+        $draftStatus=$drafts->isDraftExist($user,$meetingId);
+        $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+        
+        // show($recentMinute);
+
+        
+        $minutes = $minute->getMinuteList();
+        if($auth[0]->auth){
+            $this->view("secretary/createminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus,'recentMinute'=>$recentMinute,'linkedMinutes'=>$linkedMinutes]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -377,6 +422,9 @@ public function selectminute() { //this is the page where the secretary selects 
             $sections= json_decode($_POST['sections'], true);
             $minuteTitle = $_POST['minuteTitle'];
             $keywords = $_POST['keywordlist'] ?? [];
+            $prevMinuteState=$_POST['previousMinuteStatus'];
+            $prevMinute=$_POST['previousMinute'] ?? null;
+
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
             $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
@@ -403,9 +451,20 @@ public function selectminute() { //this is the page where the secretary selects 
 
             if($success){
                 $Minute_Transaction=new Minute_Transaction();
+                // show($_POST);
                 //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
-    
-                $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList]);
+                $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+
+                if($dataInsert==1 || $dataInsert==true){
+                    $approveMinute= new Approved_minutes();
+                    if($prevMinute!= null){
+                        $approveMinute->insert(['Minute_ID'=>$prevMinute,'Approved_Meeting_ID'=>$meetingID]);
+                    }
+                }
+                // $dataInsert=false;
+            }
+            else{
+                $dataInsert=false;
             }
 
 
@@ -684,7 +743,14 @@ public function selectminute() { //this is the page where the secretary selects 
         $memo_discussed= new Memo_discussed_meetings();
         $linkedMinutes=new Minutes_linked();
         $linkedMedia=new Linked_Media();
+        $approved_minutes=new Approved_minutes();
+        $recorrect_minute=new Recorrect_Minutes();
+        $cfm=new Content_forward_meeting();
+
+
         $minuteDetails = $minute->getMinuteDetails($minuteID);
+        
+
         $contentrestrict=false;
         
         if(!$minuteDetails) {
@@ -707,14 +773,24 @@ public function selectminute() { //this is the page where the secretary selects 
             return;
         }
         else{
-        // show($_SESSION);
+        $approved_recorrect_Meeting=[];
         $user_accessible_content=[];
         $linked_minutes=[];
+        $linked_content_minutes=[];
         $isContentRestricted=false;
         $contentDetails=$content->select_all(['minute_id'=>$minuteID]);
         $discussed_memos=$memo_discussed->getMemos($minuteDetails[0]->meeting_id);
         $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
         $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
+        $approveStatus=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$minuteID]);
+
+        if($approveStatus[0]->is_approved==1 && $approveStatus[0]->is_recorrect==0){
+            $approved_recorrect_Meeting=$approved_minutes->getApprovedMinute($minuteID);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==0){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('recorrected_version',['Minute_ID'=>$minuteID]);
+        }
+        $linked_content_minutes=$cfm->getLinkMinuteIds($minuteDetails[0]->meeting_id);
 
         if($linkedMinutes!= null){
             if(count($linkedMinutes)>0){
@@ -749,7 +825,7 @@ public function selectminute() { //this is the page where the secretary selects 
         $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
         // show($minuteDetails[0]);
         //  show($minuteDetails);
-        $this->view("secretary/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted]);
+        $this->view("secretary/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes]);
         }
     }
 
