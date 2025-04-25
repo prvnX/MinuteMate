@@ -618,3 +618,19 @@ body{
     color:var(--secondary-color);
     font-weight: 500;
 }
+.mark-btn{
+    background-color: white;
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    border:solid 1px var(--secondary-color);
+}
+.mark-btn:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
