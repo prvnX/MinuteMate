@@ -138,18 +138,23 @@ class Lecturer extends BaseController {
         ];
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
     }
-    public function viewprofile() {
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
- 
+    public function viewprofile(){
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
+    
+        
 
-        $this->view("lecturer/viewprofile");
+       $this->view("lecturer/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+         
+
+        
     }
 
     public function submitmemo() {
