@@ -121,6 +121,7 @@
             <label for="editNIC">NIC:</label>
             <input type="text" id="editNIC" name="nic" value="<?= $profileDetails['NIC'] ?>" required>
 
+
             <div class="modal-actions">
                 <button type="button" class="cancel-btn" id="editCancelBtn">Cancel</button>
                 <button type="submit" class="submit-btn">Update Profile</button>
@@ -180,6 +181,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // requestBtn.addEventListener("click", () => {
     //     window.location.href = "<?= ROOT ?>/lecturer/requestchange";
     // });
+
+    <?php if (isset($_SESSION['error'])): ?>
+        window.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("editProfileModal").style.display = "block";
+         });
+    <?php endif; ?>
+
 });
 </script>
 </body>
