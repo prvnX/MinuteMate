@@ -20,6 +20,15 @@
                 $this->query("INSERT INTO user_roles (username, role) VALUES (:username, :role)", ['username' => $username, 'role' => $role]);
             }
         }
+
+        public function getAdminUsername() {
+            $query = "SELECT username FROM user_roles WHERE role = 'admin' LIMIT 1";
+            $result = $this->get_row($query);
+        
+            return $result ? $result->username : null;
+        }
+        
+        
         
 
 }

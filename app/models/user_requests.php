@@ -35,6 +35,7 @@ class user_requests {
         
         // Execute the query
         return $this->queryExec($query, $data);
+        return $this->getLastInsertID();
     }
     
 
