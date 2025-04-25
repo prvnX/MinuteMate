@@ -408,6 +408,16 @@ public function viewMemberProfile() {
                 'email' => $_POST['email'],
                 'nic' => $_POST['nic'],
             ];
+
+            // Validate NIC
+        $nic = $data['nic'];
+        if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
+            echo "<script>
+                alert('❌ Invalid NIC. NIC should be either 12 digits or 10 digits followed by V/v.');
+                window.history.back();
+            </script>";
+            exit;
+        }
             
             $userModel = $this->model("user");
 
@@ -420,7 +430,7 @@ public function viewMemberProfile() {
             $_SESSION['userDetails']->email = $data['email'];
             $_SESSION['userDetails']->nic = $data['nic'];
     
-            header("Location: " . ROOT . "/admin/viewprofile");
+            echo "<script>alert('Profile updated successfully!'); window.location.href='" . ROOT . "/admin/viewprofile';</script>";
             exit;
         }
     }
