@@ -126,10 +126,11 @@ class Secretary extends BaseController {
         
     }
     public function recorrectminute(){
-        if(!isset($_GET['meeting']) ) {
+        if(!isset($_GET['meeting']) && !isset($_GET['prevMin'])) {
             header("Location: ".ROOT."/secretary/selectmeeting");
         }
         $meetingId = $_GET['meeting'];
+        $prevMinID= $_GET['prevMin'];
         //check the user has the authority to create the minute for the meeting
         $user=$_SESSION['userDetails']->username;
         $drafts= new Minute_Draft();
@@ -148,14 +149,20 @@ class Secretary extends BaseController {
         $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $draftStatus=$drafts->isDraftExist($user,$meetingId);
-        $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+        $recentMinute=$minute->getPreviousMinute($meetingDetails[0]->end_time,$meetingDetails[0]->date,$meetingType);
+        $content_forward_meeting=new Content_forward_meeting;
+        $linkedMinutes=$content_forward_meeting->getLinkMinuteIds($meetingId);
+        $recentMinuteState=[];
+        if($recentMinute!=null){
+            $recentMinuteState=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$recentMinute->Minute_ID]);
+        }
+       
         
-        show($recentMinute);
 
         
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/recreateminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus,'recentMinute'=>$recentMinute]);
+            $this->view("secretary/recreateminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus,'recentMinute'=>$recentMinute,'recentMinuteState'=>$recentMinuteState,'linkedMinutes'=>$linkedMinutes,'prevMin'=>$prevMinID]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -647,6 +654,76 @@ public function selectminute() { //this is the page where the secretary selects 
     //     $this->view("showunsuccessminute",["user"=>"secretary"]);
     // }
     }
+
+    public function submitrecorrectminute(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $success=true;
+            $mailstautus=true;
+            $secretary=$_SESSION['userDetails']->username;
+            $meetingID = $_POST['meetingID'];
+            $discussedMemos = $_POST['discussed'] ?? [];
+            $underDiscussionMemos = $_POST['underdiscussion'] ?? [];
+            $parkedMemos= $_POST['parked'] ?? [];
+            $LinkedMinutes = json_decode($_POST['Linkedminutes']) ?? [];
+            $sections= json_decode($_POST['sections'], true);
+            $minuteTitle = $_POST['minuteTitle'];
+            $keywords = $_POST['keywordlist'] ?? [];
+            $prevMinuteID=$_POST['prevMinuteID'];
+
+            $meeting = new Meeting();
+            $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
+            $keywordList=[];
+            $mediaArr=[];
+            if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
+                $cloudinaryUpload = new CloudinaryUpload();
+                $mediaArr = $cloudinaryUpload->uploadFiles($_FILES['media']);
+                //show($mediaArr);
+                if($mediaArr==null){
+                    $success=false;
+                }
+            }
+            if(isset($keywords) && $keywords[0]!=null){
+                foreach($keywords as $keyword){
+                    if($keyword!=""){
+                        $keywordList[]=$keyword;
+                    }
+                
+                }
+            }
+            if($success){
+                $RecorrectTrans=new minute_Recorrect_Transaction();
+                $Draft= new Minute_Draft();
+                $newminuteID=$RecorrectTrans->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteID'=>$prevMinuteID]);
+                if($newminuteID && $newminuteID!=0){
+                    $recorrectMinute= new Recorrect_Minutes();
+                    $recorrectMinute->insert(['Minute_ID'=>$prevMinuteID,'recorrected_version'=>$newminuteID]);
+                    $Draft->delete($meetingID,'meeting_id');
+                    $this->view("successrecreate",['minuteid'=>$newminuteID]);
+                }
+            }
+            else{
+                $this->view("showunsuccessminute");
+
+            }
+            }
+            else{
+                echo "Invalid request";
+            }
+        
+
+
+            
+            //show($_POST);
+            
+            // show($mediaArr);
+            // foreach($LinkedMinutes as $Minute){
+            //     show($Minute);
+            // }
+            //show($sections);  
+    }
+
+
+
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"Secretary"]);
     }
@@ -798,12 +875,18 @@ public function selectminute() { //this is the page where the secretary selects 
         $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
         $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
         $approveStatus=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$minuteID]);
+        $previousMinute=$minute->getPreviousMinute($minuteDetails[0]->end_time,$minuteDetails[0]->date,$minuteDetails[0]->meeting_type);
+
+
 
         if($approveStatus[0]->is_approved==1 && $approveStatus[0]->is_recorrect==0){
             $approved_recorrect_Meeting=$approved_minutes->getApprovedMinute($minuteID);
         }
         else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==0){
             $approved_recorrect_Meeting=$recorrect_minute->selectandproject('recorrected_version',['Minute_ID'=>$minuteID]);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==1){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('minute_id',['recorrected_version'=>$minuteID]);
         }
         $linked_content_minutes=$cfm->getLinkMinuteIds($minuteDetails[0]->meeting_id);
 
@@ -840,7 +923,9 @@ public function selectminute() { //this is the page where the secretary selects 
         $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
         // show($minuteDetails[0]);
         //  show($minuteDetails);
-        $this->view("secretary/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes]);
+
+        // show($previousMinute);
+        $this->view("secretary/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes,'previousMinute'=>$previousMinute]);
         }
     }
 
