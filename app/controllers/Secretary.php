@@ -184,25 +184,27 @@ class Secretary extends BaseController {
         ]);
     }
 
-    
     public function viewminutereports() {
         if (!isset($_GET['minute'])) {
             header("Location: " . ROOT . "/secretary/selectminute");
             exit;
         }
 
-        $minuteId = $_GET['minute'];
+        $id = $_GET['minute'];
         $minute = new Minute();
-        $minuteDetails = $minute->getMinuteDetails($minuteId);
+        $minuteDetails = $minute->getMinuteReportDetails($id);
 
         if (!$minuteDetails) {
-            $_SESSION['flash_error'] = "Minute not found.";
-            redirect("secretary/selectminute");
+            $this->view("minutereportnotfound");
             return;
         }
-
-        $this->view("secretary/viewminutereports", ['minuteDetails' => $minuteDetails]);
+       
+        $this->view("secretary/viewminutereports", [
+            'minuteDetails' => $minuteDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
+     
 
 
     public function notifications() {
