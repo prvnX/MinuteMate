@@ -8,7 +8,7 @@ $menuItems = [
   "profile" => ROOT."/admin/viewprofile", 
   "logout" => ROOT."/admin/confirmlogout"
 ];
-require_once("../app/views/components/new_navbar.php");
+require_once("../app/views/components/admin_navbar.php");
 require_once("../app/views/components/admin_sidebar.php"); 
 ?>
 

@@ -1,41 +1,108 @@
 /* ViewpendingRequests.style.css */
+
+/* General Layout */
 .content {
-    margin-top: 100px; /* Moves the content down */
-    margin-left: 50px; /* Moves the content to the right */
+    margin-left: 50px;
+    padding: 20px;
+    background-color: #f7f9fc; /* Light background to contrast the blue tones */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
+    width: 80%; /* Limits content width */
+    max-width: 1000px; /* Keeps it centered */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Position the pending request list relative to the sidebar */
+/* Header Style */
+.content h2 {
+    color: var(--primary-blue);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase; /* Gives a more polished look */
+    border-bottom: 3px solid var(--primary-blue);
+    padding-bottom: 10px;
+    text-align: center; /* Centers the title */
+}
+
+/* Pending Requests Container */
+.pending-request-container {
+    background-color: var(--light-blue);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* List of Pending Requests */
 .pending-request-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    position: relative; /* Keep it inside the sidebar */
+    border-radius: 10px;
+    overflow: hidden;
 }
 
+/* List Items Styling */
 .pending-request-list li {
-    margin: 20px 0;
-    border-bottom: 1px solid #131111; /* Adds a line between names */
-    padding-bottom: 15px; /* Pushes the line down */
+    margin: 10px 0;
+    padding: 15px 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.pending-request-list a {
-    color: rgb(0, 0, 0);          /* Makes the text black */
-    font-size: 20px;       /* Increases the font size */
-    
+.pending-request-list li:hover {
+    background-color: var(--hover-blue); /* Hover effect with a darker blue */
+    transform: translateX(5px); /* Subtle slide effect */
+}
+
+/* Styling Links Inside List */
+.request-link {
+    color: var(--primary-blue);
+    font-size: 1.1rem;
     text-decoration: none;
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
 }
 
-.pending-request-list a:hover {
-    text-decoration: underline;
+.request-link .request-name {
+    font-weight: bold;
 }
 
-/* Optional: if you want the list to appear on top of the sidebar */
-.pending-request-list-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+.request-link .view-details {
+    font-size: 0.9rem;
+    color: var(--primary-blue);
+    background-color: #e6f0ff;
+    border-radius: 8px;
+    padding: 5px 10px;
+    margin-left: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.request-link:hover .view-details {
+    opacity: 1;
+}
+
+/* Empty State */
+.no-request-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--primary-blue);
     padding: 20px;
-    background-color: #ffffff; /* Optional, depends on design */
-    z-index: 10;
+    font-weight: 500;
+}
+
+/* Custom Variables for Blue Shades */
+:root {
+    --primary-blue: #1e3a8a;   /* Deep blue */
+    --light-blue: #ebf4ff;     /* Light blue for list background */
+    --hover-blue: #3b82f6;     /* Blue hover effect */
+    --white: #ffffff;          /* White color */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Light shadow */
 }

@@ -6,7 +6,7 @@
       $notification => ROOT."/admin/notifications",
       "profile" => ROOT."/admin/viewprofile"
   ];
-  require_once("../app/views/components/new_navbar.php");
+  require_once("../app/views/components/admin_navbar.php");
   include '../app/views/components/admin_sidebar.php'; 
 
 // Fetch the user data passed from the controller

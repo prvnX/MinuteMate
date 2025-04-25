@@ -3,7 +3,7 @@
 $user="admin";
 $notification="notification"; //use notification-dot if there's a notification
 $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
-require_once("../app/views/components/new_navbar.php"); //call the navbar component
+require_once("../app/views/components/admin_navbar.php"); //call the navbar component
 include '../app/views/components/admin_sidebar.php'; ?>
 
 <!DOCTYPE html>

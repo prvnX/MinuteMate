@@ -15,7 +15,7 @@
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/admin",$notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     echo "<div class='memo-list-navbar'>";
-    require_once("../app/views/components/new_navbar.php");
+    require_once("../app/views/components/admin_navbar.php");
     echo "</div>";
     require_once("../app/views/components/admin_sidebar.php");
 
