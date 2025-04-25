@@ -101,7 +101,7 @@ class Secretary extends BaseController {
 
             $memo = new Memo();
             $memo->insert($memoData);
-            $this->view("showsuccessmemo",["user"=>"lecturer"]);
+            $this->view("showsuccessmemo",["user"=>"secretary"]);
         }
             else
             {
@@ -163,22 +163,25 @@ class Secretary extends BaseController {
 
 
     public function viewmemoreport() {
-    if (!isset($_GET['memo'])) {
-        header("Location: " . ROOT . "/secretary/selectmemo");
-        exit;
-    }
+        if (!isset($_GET['memo'])) {
+            header("Location: " . ROOT . "/secretary/selectmemo");
+            exit;
+        }
 
-    $memoId = $_GET['memo'];
-    $memo = new Memo();
-    $memoDetails = $memo->getMemoById($memoId);
+        $memoId = $_GET['memo'];
+        $memo = new Memo();
+        $memoDetails = $memo->getMemoDetails($memoId);
+      
 
-    if (!$memoDetails) {
-        $_SESSION['flash_error'] = "Memo not found.";
-        redirect("secretary/selectmemo");
-        return;
-    }
+        if (!$memoDetails) {
+            $this->view("memoreportnotfound");
+            return;
+        }
 
-    $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
+        $this->view("secretary/viewmemoreports", [
+            'memoDetails' => $memoDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
 
     
