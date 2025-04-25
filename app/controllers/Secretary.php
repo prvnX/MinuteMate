@@ -142,7 +142,6 @@ class Secretary extends BaseController {
         }
     } 
 
-
     public function viewprofile(){
         $userModel = new User();
         $username = $_SESSION['userDetails']->username;
@@ -156,10 +155,11 @@ class Secretary extends BaseController {
     
         
 
-       $this->view("studentrep/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+       $this->view("secretary/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+         
+
+        
     }
-
-
 
 
     public function viewmemoreport() {
@@ -608,26 +608,26 @@ public function selectminute() { //this is the page where the secretary selects 
             }
  
      
-    public function requestchange(){
-        $responseStatus = "";
-    
-        // Handle POST request
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $field = $_POST['field'] ?? [];
-            $newValue = $_POST['newValue'] ?? [];
-            $message = $_POST['message'] ?? "Message not provided";
-            $requestchange = new User_edit_requests();
-            $requestchange->addUserRequest($field, $newValue, $message);
-            $responseStatus = "success";
+            public function requestchange(){
+                $responseStatus = "";
             
-        }
-    
-        // Pass responseStatus to the view
-        $this->view("secretary/requestchange", [
-            "user" => "secretary",
-            "responseStatus" => $responseStatus
-        ]);
-    }
+                // Handle POST request
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    $field = $_POST['field'] ?? [];
+                    $newValue = $_POST['newValue'] ?? [];
+                    $message = $_POST['message'] ?? "Message not provided";
+                    $requestchange = new User_edit_requests();
+                    $requestchange->addUserRequest($field, $newValue, $message);
+                    $responseStatus = "success";
+                    
+                }
+            
+                // Pass responseStatus to the view
+                $this->view("secretary/requestchange", [
+                    "user" => "secretary",
+                    "responseStatus" => $responseStatus
+                ]);
+            }
     private function isRestrict($username,$contentID){
         $restrictions=new Content_restrictions();
         $res_status=$restrictions->checkRestrictions($username,$contentID);

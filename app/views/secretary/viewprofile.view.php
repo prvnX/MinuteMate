@@ -39,7 +39,8 @@
     <div class="profile-section">
         <div class="left-panel">
             <div class="profile-photo">
-                <img src="<?=ROOT?>/assets/images/profile.png" alt="profile">
+            <img src="<?=ROOT?>/assets/images/profile.png" alt="profile">
+
 
                 <!-- <button class="change-photo-btn">Change Photo</button> -->
             </div>
@@ -61,13 +62,17 @@
                 <p><strong>NIC:</strong> <?= $profileDetails->nic ?></p><br>
                 <p><strong>Role:</strong> <?= $roleDetails->role ?></p><br>
                  
- 
+                <?php $beforenum = 0; ?>
                 <p><strong>Contact No: </strong><?php foreach($ContactDetails as $key=>$contact){
+                    if($beforenum!=$contact->contact_no){
+                        
                     if($key==0){
+                        $beforenum = $contact->contact_no;
                         echo $contact->contact_no;
                     }else{
                         echo ", ".$contact->contact_no;
                     }
+                }
                 }?></p>
                 
 
