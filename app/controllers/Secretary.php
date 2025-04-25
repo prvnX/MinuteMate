@@ -101,7 +101,23 @@ class Secretary extends BaseController {
 
             $memo = new Memo();
             $memo->insert($memoData);
-            $this->view("showsuccessmemo",["user"=>"lecturer"]);
+            $memoId = $memo->getLastInsertID();
+            $meeting= new Meeting();
+            $sec=$meeting->getSecForMeeting($meetingId);
+            $secusername=$sec[0]->username;
+            $user=$_SESSION['userDetails']->full_name;
+            $username=$_SESSION['userDetails']->username;
+
+            $notification = new Notification();
+            if($secusername!=$username){
+                $notification->insert([
+                    'reciptient' => $secusername,
+                    'notification_message' => "New memo submitted by $user,Review Now",
+                    'notification_type' => 'memo',
+                    'Ref_ID' => $memoId,
+                    'link'=>"acceptmemo/?memo_id=$memoId"]);
+            }
+            $this->view("showsuccessmemo",["user"=>"lecturer",'memoid'=>$memoId]);
         }
             else
             {
@@ -636,16 +652,15 @@ public function selectminute() { //this is the page where the secretary selects 
     }
 
     public function viewprofile() {
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-
-
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
 
             $errors = [];
             $success = false;
@@ -690,8 +705,8 @@ public function selectminute() { //this is the page where the secretary selects 
                     exit;
                 }
                 
-        $this->view("secretary/viewprofile");
-    }
+                $this->view("secretary/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+            }
     public function logout() {
         session_start();
         // Destroy all session data
