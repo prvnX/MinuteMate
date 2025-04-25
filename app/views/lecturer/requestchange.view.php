@@ -1,28 +1,53 @@
+  
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
 
 <head>
-<meta charset= "UTF-8">
+    
+    <meta charset= "UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
      <title>Request Change</title>
      <link rel="stylesheet" href="<?=ROOT?>/assets/css/requestchange.style.css">
 </head>
+<style>
+  .meeting-options {
+    margin-left: 20px;
+    margin-bottom: 15px;
+  }
+
+  .meeting-option {
+    margin-bottom: 5px;
+  }
+
+  .form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .form input[type="checkbox"] {
+    margin-right: 5px;
+  }
+</style>
 
 <body>
+ 
+  
 <?php
     $user="lecturer";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
-    $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile" , "logout" => ROOT."/lecturer/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
+    $menuItems = [ "home" => ROOT."/lecturer" , $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"  ]; //pass the menu items here (key is the name of the page, value is the url)
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
-    require_once("../app/views/components/lec_sidebar.php"); //call the sidebar component
+    require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
     ?>
+    
     <h1>Request Change</h1>
     <div class="container">
-       
+         
         <form action="<?= ROOT ?>/lecturer/requestchange" method="post">
-        <div id="fieldsContainer">
+            <div id="fieldsContainer">
                 <div class="field-group">
                     <div class="form">
                         <label for="field">Field to change:</label>
@@ -31,20 +56,121 @@
                             <option value="new_fullname">Full Name</option>
                             <option value="new_email">Email</option>
                             <option value="new_nic">Nic</option>
-                            <option value="new_department">Department</option>
-                            <option value="new_tp_no">Telephone Number</option>
+                    
+                            <option value="new_tp_no">Contact Number</option>
+                            
                         </select>
                     </div>
                     <div class="form">
                         <label for="newValue">New Value:</label>
                         <input type="text" name="newValue[]" placeholder="Enter the new value" required>
                     </div>
+                    
+
+   
                 </div>
             </div>
 
             <div>
                 <button type="button" id="addfieldsbtn" class="addfieldbtn">Change one more field</button>
-            </div>
+             
+             </div>
+
+             <div class="form">
+  
+  <div class="role-option">
+    
+  </div>
+</div>
+
+<!-- Meeting Types -->
+<div class="form form-input-checkbox">
+  <div id="secretaryMeetingTypesContainer" style="display: none;">
+    <label><strong>Select Secretary Meeting Type:</strong></label>
+    <div class="meeting-options">
+      <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+        <div class="meeting-option">
+          <label>
+            <input type="checkbox" name="secretaryMeetingType[]" value="<?= $type ?>">
+            <?= $type ?>
+          </label>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
+  <div id="lecturerMeetingTypesContainer" style="display: none;">
+    <label><strong>Select Lecturer Meeting Type:</strong></label>
+    <div class="meeting-options">
+      <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+        <div class="meeting-option">
+          <label>
+            <input type="checkbox" name="lecturerMeetingType[]" value="<?= $type ?>">
+            <?= $type ?>
+          </label>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
+  <div id="meetingTypeContainer" style="display: none;">
+    <label><strong>Select Meeting Type(s):</strong></label>
+    <div class="meeting-options">
+      <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+        <div class="meeting-option">
+          <label>
+            <input type="checkbox" name="meetingType[]" value="<?= $type ?>">
+            <?= $type ?>
+          </label>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleRoleSections() {
+    const secretary = document.getElementById('secretary');
+    const lecturer = document.getElementById('lecturer');
+    const student = document.getElementById('student');
+
+    const secretaryContainer = document.getElementById('secretaryMeetingTypesContainer');
+    const lecturerContainer = document.getElementById('lecturerMeetingTypesContainer');
+    const studentContainer = document.getElementById('meetingTypeContainer');
+
+    // Reset visibility
+    secretaryContainer.style.display = 'none';
+    lecturerContainer.style.display = 'none';
+    studentContainer.style.display = 'none';
+
+    // Role logic
+    if (student.checked) {
+      secretary.disabled = true;
+      lecturer.disabled = true;
+      studentContainer.style.display = 'block';
+    } else {
+      secretary.disabled = false;
+      lecturer.disabled = false;
+    }
+
+    if (secretary.checked || lecturer.checked) {
+      student.disabled = true;
+    } else {
+      student.disabled = false;
+    }
+
+    if (secretary.checked) {
+      secretaryContainer.style.display = 'block';
+    }
+
+    if (lecturer.checked) {
+      lecturerContainer.style.display = 'block';
+    }
+  }
+
+  // Initialize state on page load
+  document.addEventListener('DOMContentLoaded', handleRoleSections);
+</script>
 
             <div class="form">
                 <label for="message">Message</label>
@@ -129,8 +255,8 @@ function handleCancel() {
     }
 
     addFieldsButton.addEventListener("click", () => {
-        if (fieldClicks >= 5) {
-            showAlert("You can only change up to 5 fields at a time.");
+        if (fieldClicks >= 4) {
+            showAlert("You can only change up to 4 fields at a time.");
             return;
         }
 

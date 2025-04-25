@@ -274,7 +274,6 @@ class Lecturer extends BaseController {
         ]);
     }
      
-    
     public function requestchange(){
         $responseStatus = "";
     
