@@ -61,19 +61,26 @@ require_once("../app/views/components/admin_sidebar.php");
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h3 id="modalTitle">Add Department</h3>
+
+        <?php if (isset($errorMessage)): ?>
+    <div class="error-message">
+        <?= htmlspecialchars($errorMessage) ?>
+    </div>
+<?php endif; ?>
+
         <form action="<?= ROOT ?>/admin/saveDepartment" method="post">
-                <input type="hidden" name="id" id="dept_id">
+                <input type="hidden" name="id" id="dept_id" value="<?= $formData['id'] ?? '' ?>">
                 <div>
                     <label>Department Name;</label>
-                    <input type="text" name="dep_name" id="dep_name" required>
+                    <input type="text" name="dep_name" id="dep_name" required value="<?= $formData['dep_name'] ?? '' ?>">
                 </div>
                 <div>
                     <label>Department Head:</label>
-                    <input type="text" name="department_head" id="department_head" required>
+                    <input type="text" name="department_head" id="department_head" required value="<?= $formData['department_head'] ?? '' ?>">
                 </div>
                 <div>
                     <label>Email:</label>
-                    <input type="email" name="dep_email" id="dep_email" required>
+                    <input type="email" name="dep_email" id="dep_email" required value="<?= $formData['dep_email'] ?? '' ?>">
                 </div>
                 <div>
                     <button type="submit" class="save-btn">Save</button>
@@ -113,3 +120,12 @@ require_once("../app/views/components/admin_sidebar.php");
     }
 
 </script>
+
+<?php if (isset($errorMessage)): ?>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("departmentModal").style.display = "block";
+        document.getElementById("modalTitle").innerText = "<?= isset($formData['id']) && $formData['id'] ? 'Edit Department' : 'Add Department' ?>";
+    });
+</script>
+<?php endif; ?>

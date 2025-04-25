@@ -18,8 +18,7 @@ class Admin extends BaseController {
             "pendingRequests" => $pendingRequests
         ]);
     }
-
-
+    
     
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -398,6 +397,48 @@ public function viewMemberProfile() {
         $this->view(name: "admin/addPastMember");
     }
     public function viewprofile() {
+        $errors = [];
+            $success = false;
+                if($_SERVER['REQUEST_METHOD'] === 'POST')
+                {
+                    
+                    $users = new User();
+                    $username = $_SESSION['userDetails']->username;
+                    $currentPassword = $_POST['current_password'];
+                    $newPassword = $_POST['new_password'];
+                    $confirmPassword = $_POST['confirm_password'];
+        
+                    $storedPasswordData = $users->getHashedPassword($username);
+                    $storedPassword = $storedPasswordData[0] ->password ?? null;
+        
+                  
+                    if(!password_verify($currentPassword,$storedPassword))
+                    {
+                        $errors[] = 'Current Password is not correct';
+                    }
+        
+                    if($newPassword !== $confirmPassword)
+                    {
+                        $errors[] = 'New password and confirmation do not match';
+                    }
+        
+                    //checking if the password has the required strength
+                    if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                        $errors[] = "New password does not meet the required strength.";
+                    }
+                    if(empty($errors))
+                    {
+                        $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                        $users->updatePassword($username, $newHashed);
+                        $success = true;
+                    }
+                    echo json_encode([
+                        'success' => $success,
+                        'errors' => $errors,
+                        'state'=> password_verify($currentPassword,$storedPassword)
+                    ]);
+                    exit;
+                }
         $this->view("admin/viewprofile");
     }
 
@@ -560,10 +601,15 @@ function saveDepartment() {
 
         // Validate department head existence
         if (!$userModel->usernameExists($_POST['department_head'])) {
-            echo "<script>alert('Error: Department head \"{$_POST['department_head']}\" does not exist!'); window.history.back();</script>";
-        exit;
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Department head \"{$_POST['department_head']}\" does not exist!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
         }
-
+        
 
         // Insert or update
         if (!empty($_POST['id'])) {

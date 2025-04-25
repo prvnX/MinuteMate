@@ -209,13 +209,6 @@ class Lecturer extends BaseController {
             $meetingId = htmlspecialchars($_POST['meeting']);
             $submittedBy=$_SESSION['userDetails']->username;
 
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
-            {
-                // $_SESSION['flash_error'] = "All fields are required.";
-                // redirect("lecturer/entermemo");
-                echo "All fields are required";
-                return;
-            }
 
             $memoData = [
                 'memo_title' => $memoTitle,
@@ -243,7 +236,7 @@ class Lecturer extends BaseController {
             }
   
 
-             $this->view("showsuccessmemo",["user"=>"lecturer"]);
+             $this->view("showsuccessmemo",["user"=>"lecturer",'memoid'=>$memoId]);
         }
         else{
             $this->view("showunsuccessmememo", ["user"=> "lecturer"]);
