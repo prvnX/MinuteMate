@@ -13,7 +13,7 @@ class Meeting{
         'created_by',
         'is_minute',
         'type_id',
-        'additional_note',
+        'additional_note'
     ]; //editable columns
     public function showMeeting(){ //for calendar
         $query="select meeting_id,date,meeting_type from $this->table";
@@ -174,6 +174,21 @@ class Meeting{
                 WHERE m.meeting_type=:type AND date <=:date AND is_minute=1 AND is_approved=0 AND is_recorrect=0 ORDER BY date DESC LIMIT 1;";
         return $this->query($query,$data);
 
+    }
+
+    public function isFinishedMeeting($user,$date,$time){
+        $data['username']=$user;
+        $data['date']=$date;
+        $data['time']=$time;
+        $query="SELECT EXISTS(
+                    SELECT 1 FROM $this->table
+                    WHERE 
+                        date<=:date
+                        AND end_time<=:time
+                        AND created_by=:username
+                    ) AS auth";
+        return $this->query($query,$data);
+        
     }
 
 
