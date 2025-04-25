@@ -80,7 +80,6 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
     </div>
 
     <div class="action-buttons">
-    <a href="<?= ROOT ?>/admin/editMemberProfile?id=<?= urlencode($userData->username) ?>" class="btn-edit">Edit</a>
     <div class="remove-button-wrapper">
     <button class="remove-btn" onclick="openRemoveModal('<?= $userData->username ?>', '<?= $userData->full_name ?>')">Remove</button>
 </div>
