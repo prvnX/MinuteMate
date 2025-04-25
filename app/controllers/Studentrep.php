@@ -135,6 +135,7 @@ class Studentrep extends BaseController {
             // print_r($memoData);
             $reviewMemo = new ReviewMemo();
             $reviewMemo->insertx($memoData);
+
             $this->view("showsuccessmemo",["user"=>"studentrep"]);
         }
         else{

@@ -87,6 +87,15 @@
     // Sync CKEditor data to the hidden textarea when submitting the form
     function submitForm(event) {
         // Update the hidden textarea with the CKEditor content
+        if (!meeting || !subject || !content) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'All Fields Required!',
+                text: 'Please fill in the meeting, subject, and memo content before submitting.',
+                confirmButtonColor: '#3085d6'
+            });
+            return;
+        }
         const editorContent = editor.getData();
         document.getElementById('editor-content').value = editorContent;
 
