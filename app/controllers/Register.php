@@ -68,10 +68,12 @@ class Register extends Controller {
             $result = $userRequest->insertRequest($fullName, $roleString, $lecStuId, $nic, $email, $tpno, $additionalTpno, $status);
 
             if ($result) {
-                echo "<script>
-                    alert('Your request has been successfully sent to the admin!');
-                    window.location.href = '" . ROOT . "/register';
-                </script>";
+
+                $this->view("showsuccessregistration"); 
+                // echo "<script>
+                //     alert('Your request has been successfully sent to the admin!');
+                //     window.location.href = '" . ROOT . "/register';
+                // </script>";
                 exit();
             } else {
                 echo "<script>alert('There was an error with your request. Please try again.');</script>";

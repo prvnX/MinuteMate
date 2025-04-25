@@ -18,8 +18,7 @@ class Admin extends BaseController {
             "pendingRequests" => $pendingRequests
         ]);
     }
-
-
+    
     
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -595,10 +594,15 @@ function saveDepartment() {
 
         // Validate department head existence
         if (!$userModel->usernameExists($_POST['department_head'])) {
-            echo "<script>alert('Error: Department head \"{$_POST['department_head']}\" does not exist!'); window.history.back();</script>";
-        exit;
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Department head \"{$_POST['department_head']}\" does not exist!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
         }
-
+        
 
         // Insert or update
         if (!empty($_POST['id'])) {
