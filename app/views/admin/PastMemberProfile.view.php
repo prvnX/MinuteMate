@@ -106,6 +106,16 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
 
           <?php if($userData): ?>
             <h2>Edit Member Details</h2>
+
+            <!-- Error messages -->
+            <?php if (isset($errors)): ?>
+                <div class="error-messages">
+                    <?php foreach ($errors as $field => $error): ?>
+                        <p class="error"><?= htmlspecialchars($error) ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
             <form action="<?= ROOT ?>/admin/reactivateMember" method="POST">
               <input type="hidden" name="username" value="<?= htmlspecialchars($userData->username) ?>">
 
