@@ -73,13 +73,27 @@
                     }
                     date_default_timezone_set('Asia/Colombo');
                     $todayDate = date('Y-m-d');
-                    if($_SESSION['userDetails']->role=="secretary" && $meeting['date'] >= $todayDate && $meetingEditAccess){
+                    if($_SESSION['userDetails']->role=="secretary" && $meeting['date'] > $todayDate && $meetingEditAccess){
                         echo "<div class='meeting-action-btns'>
                         <button class='delete-btn action-btn' onclick='handleMeetingDelete(".$meetingid.")'>Delete The Meeting</button>
                         <button class='resch-btn action-btn' onclick='handleMeetingReschedule(".$meetingid.")'>Reschedule The Meeting </button>
                         </div>";
                     }
+                    else if($meetingEditAccess && $meeting['date'] < $todayDate && $meeting['attendence_mark']==0){
+
+                        echo "<div class='meeting-action-btns'>
+                        <button class='action-btn mark-btn'>Mark Attendance</button>";
+                        echo '</div>';
+
+                    }
+                    else if($meeting['end_time'] <= $currentTime = date("H:i:s") ){
+                        echo "<div class='meeting-action-btns'>
+                        <button class='action-btn mark-btn'>Mark Attendance</button>";
+                        echo '</div>';
+                    }
                     echo "</div>";
+
+                
       
                     
                 }

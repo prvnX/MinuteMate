@@ -6,8 +6,8 @@
       $notification => ROOT."/admin/notifications",
       "profile" => ROOT."/admin/viewprofile"
   ];
-  require_once("../app/views/components/new_navbar.php");
-  require_once("../app/views/components/sec_sidebar.php");
+  require_once("../app/views/components/admin_navbar.php");
+  include '../app/views/components/admin_sidebar.php'; 
 
 
 ?>

@@ -6,8 +6,8 @@
       $notification => ROOT."/admin/notifications",
       "profile" => ROOT."/admin/viewprofile"
   ];
-  require_once("../app/views/components/new_navbar.php");
-  require_once("../app/views/components/sec_sidebar.php");
+  require_once("../app/views/components/admin_navbar.php");
+  include '../app/views/components/admin_sidebar.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,9 +30,6 @@
           </span>
           <a class="view-btn" href="<?=ROOT?>/admin/viewMemberProfile?id=<?= htmlspecialchars($member->username) ?>">
             View
-          </a>
-          <a class="edit-btn" href="<?=ROOT?>/admin/editMemberProfile?id=<?= htmlspecialchars($member->username) ?>">
-            Edit
           </a>
         </li>
       <?php endforeach; ?>

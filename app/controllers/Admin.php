@@ -1,4 +1,6 @@
 <?php
+
+
 class Admin extends BaseController {
     public function index() {
         $this->view("admin/dashboard");
@@ -29,8 +31,11 @@ class Admin extends BaseController {
             $generalMeetingTypes = $requestData['meetingTypes'] ?? [];
             $secretaryMeetingTypes = $requestData['secretaryMeetingType'] ?? [];
             $lecturerMeetingTypes = $requestData['lecturerMeetingType'] ?? [];
+            $declineReason = $requestData['declineReason'] ?? '';
     
             $userRequestsModel = $this->model("user_requests");
+
+            $userDetails = $userRequestsModel->getRequestById($requestId);
     
             if ($requestId && $action === 'accept') {
                 $userModel = $this->model("User");
@@ -110,8 +115,8 @@ class Admin extends BaseController {
                         // Remove original request
                         $userRequestsModel->deleteRequestById($requestId);
     
-                        // Commit transaction
-                        //$userModel->commit();
+                        $mail = new Mail();
+                        $mail->sendAcceptanceEmail($userDetails->email, $userDetails->full_name);
     
                         echo json_encode(['success' => true, 'message' => 'Request accepted and user added!']);
                         return;
@@ -125,15 +130,17 @@ class Admin extends BaseController {
             }else{
                 // Update the request status to 'declined'
                 $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
-if ($result !== false) {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'message' => 'Request declined.']);
-    return;
-} else {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
-    return;
-}
+                if ($result !== false) {
+                    header('Content-Type: application/json');
+                    $mail = new Mail();
+                    $mail->sendDeclineEmail($userDetails->email, $userDetails->full_name, $declineReason);
+                    echo json_encode(['success' => true, 'message' => 'Request declined.']);
+                 return;
+                } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Failed to decline the request.']);
+                 return;
+                }
             }
             
         echo json_encode(['success' => false, 'message' => 'Invalid request']);
@@ -253,80 +260,80 @@ public function viewMemberProfile() {
         redirect("home");
     }
    
-    public function editMemberProfile() {
-        // Get the user ID from the URL
-        $userId = $_GET['id'] ?? null;
+    // public function editMemberProfile() {
+    //     // Get the user ID from the URL
+    //     $userId = $_GET['id'] ?? null;
     
-        if (!$userId) {
-            die("User ID is required.");
-        }
+    //     if (!$userId) {
+    //         die("User ID is required.");
+    //     }
     
-        // Fetch user details from the database
-        $userModel = $this->model("User");
-        $userData = $userModel->getUserById($userId);
+    //     // Fetch user details from the database
+    //     $userModel = $this->model("User");
+    //     $userData = $userModel->getUserById($userId);
     
-        if (!$userData) {
-            die("User not found.");
-        }
+    //     if (!$userData) {
+    //         die("User not found.");
+    //     }
     
-        // Pass the data to the view
-        $this->view("admin/editMemberProfile", ['userData' => $userData]);
-    }
+    //     // Pass the data to the view
+    //     $this->view("admin/editMemberProfile", ['userData' => $userData]);
+    // }
     
-    public function updateMember() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $userModel = $this->model("User");
+    // public function updateMember() {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $userModel = $this->model("User");
             
     
-             // Sanitize and validate input
-            $username = trim($_POST['username'] ?? '');
-            $full_name = trim($_POST['full_name'] ?? '');
-            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
-            $nic = trim($_POST['nic'] ?? '');
-            $role = trim($_POST['role'] ?? '');
-            $phone = trim($_POST['phone'] ?? '');
-            $meetingTypeIds = $_POST['meeting_types'] ?? [];
+    //          // Sanitize and validate input
+    //         $username = trim($_POST['username'] ?? '');
+    //         $full_name = trim($_POST['full_name'] ?? '');
+    //         $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+    //         $nic = trim($_POST['nic'] ?? '');
+    //         $role = trim($_POST['role'] ?? '');
+    //         $phone = trim($_POST['phone'] ?? '');
+    //         $meetingTypeIds = $_POST['meeting_types'] ?? [];
 
-        if (empty($username) || empty($full_name) || !$email || empty($nic) || empty($role)) {
-            echo "Invalid input. Please fill all fields correctly.";
-            exit;
-        }
+    //     if (empty($username) || empty($full_name) || !$email || empty($nic) || empty($role)) {
+    //         echo "Invalid input. Please fill all fields correctly.";
+    //         exit;
+    //     }
             
-        $meetingTypeMap = [
-            'RHD' => 1,
-            'IOD' => 2,
-            'SYN' => 3,
-            'BOM' => 4,
-        ];
+    //     $meetingTypeMap = [
+    //         'RHD' => 1,
+    //         'IOD' => 2,
+    //         'SYN' => 3,
+    //         'BOM' => 4,
+    //     ];
         
-        $meetingTypeIds = array_map(fn($type) => $meetingTypeMap[$type], $meetingTypeIds);
+    //     $meetingTypeIds = array_map(fn($type) => $meetingTypeMap[$type], $meetingTypeIds);
         
     
-            // Update user details
-            $userData = [
-                'username' => $username,
-                'full_name' => $full_name,
-                'email' => $email,
-                'nic' => $nic,
-                'role' => $role
-            ];
+    //         // Update user details
+    //         $userData = [
+    //             'username' => $username,
+    //             'full_name' => $full_name,
+    //             'email' => $email,
+    //             'nic' => $nic,
+    //             'role' => $role
+    //         ];
 
-            $userModel->updateUserByUsername($username, $userData);
+    //         $userModel->updateUserByUsername($username, $userData);
             
-            if (!empty($phone)) {
-                $userModel->updateContactInfo($username, $phone);
-            }
+    //         if (!empty($phone)) {
+    //             $userModel->updateContactInfo($username, $phone);
+    //         }
 
-            if (!empty($meetingTypeIds)) {
-                $userModel->updateMeetingTypes($username, $meetingTypeIds);
-            }
+    //         if (!empty($meetingTypeIds)) {
+    //             $userModel->updateMeetingTypes($username, $meetingTypeIds);
+    //         }
 
-            $redirectUrl = ROOT . "/admin/viewMemberProfile?id=" . urlencode($username) . "&status=success&message=" . urlencode("Member updated successfully.");
-            header("Location: " . $redirectUrl);
-        exit;
-        }
+    //         $redirectUrl = ROOT . "/admin/viewMemberProfile?id=" . urlencode($username) . "&status=success&message=" . urlencode("Member updated successfully.");
+    //         header("Location: " . $redirectUrl);
+    //     exit;
+    //     }
 
-    }
+    // }
     
 
     public function PastMembers(): void{
@@ -393,6 +400,41 @@ public function viewMemberProfile() {
     public function viewprofile() {
         $this->view("admin/viewprofile");
     }
+
+    public function updateprofile() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'full_name' => $_POST['full_name'],
+                'email' => $_POST['email'],
+                'nic' => $_POST['nic'],
+            ];
+
+            // Validate NIC
+        $nic = $data['nic'];
+        if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
+            echo "<script>
+                alert('❌ Invalid NIC. NIC should be either 12 digits or 10 digits followed by V/v.');
+                window.history.back();
+            </script>";
+            exit;
+        }
+            
+            $userModel = $this->model("user");
+
+            $username = $_SESSION['userDetails']->username;
+    
+            $userModel->updateUserByUsername($username, $data);
+    
+            // Optional: Update session to reflect new values
+            $_SESSION['userDetails']->full_name = $data['full_name'];
+            $_SESSION['userDetails']->email = $data['email'];
+            $_SESSION['userDetails']->nic = $data['nic'];
+    
+            echo "<script>alert('Profile updated successfully!'); window.location.href='" . ROOT . "/admin/viewprofile';</script>";
+            exit;
+        }
+    }
+    
     
     public function requestchange(){
         $responseStatus = "";
@@ -503,9 +545,8 @@ function department(){
     $this->view('admin/department', $data);
 }
 
-function saveDepartment(){
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+function saveDepartment() {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $department = new Department();
 
         $data = [
@@ -514,6 +555,17 @@ function saveDepartment(){
             'dep_email' => $_POST['dep_email']
         ];
 
+        // Instantiate the User model to check if the department head exists
+        $userModel = $this->model("user");
+
+        // Validate department head existence
+        if (!$userModel->usernameExists($_POST['department_head'])) {
+            echo "<script>alert('Error: Department head \"{$_POST['department_head']}\" does not exist!'); window.history.back();</script>";
+        exit;
+        }
+
+
+        // Insert or update
         if (!empty($_POST['id'])) {
             $department->update($_POST['id'], $data);
         } else {
@@ -523,6 +575,7 @@ function saveDepartment(){
         redirect('admin/department');
     }
 }
+
 
 public function removeMember() {
     // Ensure the session is started
@@ -566,6 +619,8 @@ exit;
 
 public function reactivateMember() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $errors = [];
        
         // Dynamically load models as needed
         $userModel = $this->model("user");
@@ -577,6 +632,43 @@ public function reactivateMember() {
         $secretaryMeetingTypesModel = $this->model("secretary_meeting_type");
 
         $username = $_POST['username'];
+
+         // Retrieve POST data
+         $email = $_POST['email'];
+         $nic = $_POST['nic'];
+         $contact_no = $_POST['contact_no'];
+         $additional_tp_no = $_POST['additional_tp_no'] ?? null;
+ 
+         // Email Validation (simple format check)
+         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+             echo "Invalid email format!";
+             return; // stop execution if validation fails
+         }
+ 
+         // NIC Validation (12 digits or 10 digits + 'V')
+         if (!preg_match('/^\d{12}$|^\d{10}[Vv]$/', $nic)) {
+             echo "NIC must be 12 digits or 10 digits followed by 'V'.";
+             return;
+         }
+ 
+         // Contact No Validation (must be less than 10 digits)
+         if (strlen($contact_no) != 10) {
+             echo "Contact No. must be less than 10 digits.";
+             return;
+         }
+ 
+         // Additional Contact No Validation (optional, must be less than 10 digits)
+         if ($additional_tp_no && strlen($additional_tp_no) != 10) {
+             echo "Additional Contact No. must be less than 10 digits.";
+             return;
+         }
+
+         if (!empty($errors)) {
+            // Optionally, you could pass the old input data back to the view as well
+            $this->view('admin/pastMemberProfile', ['errors' => $errors, 'userData' => $_POST]);
+            return;
+        }
+        
 
         // Use models to update data
         $userModel->updateUserByUsername($username, [

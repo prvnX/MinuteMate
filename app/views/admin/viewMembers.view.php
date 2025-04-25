@@ -3,7 +3,7 @@
 $user="admin";
 $notification="notification"; //use notification-dot if there's a notification
 $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
-require_once("../app/views/components/new_navbar.php"); //call the navbar component
+require_once("../app/views/components/admin_navbar.php"); //call the navbar component
 include '../app/views/components/admin_sidebar.php'; ?>
 
 <!DOCTYPE html>
@@ -22,28 +22,28 @@ include '../app/views/components/admin_sidebar.php'; ?>
     <div class="card-grid">
       <div class="card">
         <div class="icon-circle red"><i class="fas fa-users"></i></div>
-        <h3 class="card=title">View RHD Members</h3>
+        <h3 class="card=title"> RHD Members</h3>
         <p clas="card-description">View members of the RHD committee</p>
         <a href="<?=ROOT?>/admin/viewMembersByMeetingType?meetingType=RHD" class="card-btn">RHD</a>
       </div>
 
       <div class="card">
         <div class="icon-circle yellow"><i class="fas fa-users"></i></div>
-        <h3 class="card=title">View IOD Members</h3>
+        <h3 class="card=title"> IOD Members</h3>
         <p clas="card-description">View members of the IOD committee</p>
         <a href="<?=ROOT?>/admin/viewMembersByMeetingType?meetingType=IOD" class="card-btn">IOD</a>
       </div>
 
       <div class="card">
         <div class="icon-circle green"><i class="fas fa-users"></i></div>
-        <h3 class="card=title">View SYN Members</h3>
+        <h3 class="card=title"> SYN Members</h3>
         <p clas="card-description">View members of the SYN committee</p>
         <a href="<?=ROOT?>/admin/viewMembersByMeetingType?meetingType=SYN" class="card-btn">SYN</a>
       </div>
 
       <div class="card">
         <div class="icon-circle blue"><i class="fas fa-users"></i></div>
-        <h3 class="card=title">View BOM Members</h3>
+        <h3 class="card=title"> BOM Members</h3>
         <p clas="card-description">View members of the BOM committee</p>
         <a href="<?=ROOT?>/admin/viewMembersByMeetingType?meetingType=BOM" class="card-btn">BOM</a>
       </div>

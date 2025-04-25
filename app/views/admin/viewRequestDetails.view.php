@@ -1,5 +1,13 @@
 <?php 
-include '../app/views/components/admin_sidebar.php'; 
+  $user = "admin";
+  $notification = "notification"; //use notification-dot if there's a notification
+  $menuItems = [
+      "home" => ROOT."/admin",
+      $notification => ROOT."/admin/notifications",
+      "profile" => ROOT."/admin/viewprofile"
+  ];
+  require_once("../app/views/components/admin_navbar.php");
+  include '../app/views/components/admin_sidebar.php'; 
 
 $userDetails = $data['userDetails']; 
 $userId = $_GET['id'];
@@ -98,6 +106,15 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
 
         const userId = "<?= $userId ?>";
 
+        let declineReason = '';
+    if (action === 'decline') {
+        declineReason = prompt("Please enter the reason for declining this request:");
+        if (!declineReason) {
+            alert("Decline reason is required.");
+            return;
+        }
+    }
+
         fetch("<?= ROOT ?>/admin/handleRequest", {
             method: 'POST',
             headers: {
@@ -108,7 +125,8 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
                 id: userId,
                 meetingTypes: generalTypes, // For roles other than lecturer/secretary
                 lecturerMeetingType: lecturerTypes,
-                secretaryMeetingType: secretaryTypes
+                secretaryMeetingType: secretaryTypes,
+                declineReason: declineReason
             }),
         })
         .then(response => response.json())

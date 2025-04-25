@@ -227,7 +227,62 @@ class Studentrep extends BaseController {
        $this->view("studentrep/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
          
 
+<<<<<<< HEAD
         
+=======
+        $MeetingTypeArray = [];
+        foreach ($meeting_types as $MeetingType) {
+                $MeetingTypeArray[] = $MeetingType->meeting_type;
+            }
+            $_SESSION['meeting_type'] = $MeetingTypeArray;
+
+
+            $errors = [];
+        $success = false;
+            if($_SERVER['REQUEST_METHOD'] === 'POST')
+            {
+                
+                $users = new User();
+                $username = $_SESSION['userDetails']->username;
+                $currentPassword = $_POST['current_password'];
+                $newPassword = $_POST['new_password'];
+                $confirmPassword = $_POST['confirm_password'];
+    
+                $storedPasswordData = $users->getHashedPassword($username);
+                $storedPassword = $storedPasswordData[0] ->password ?? null;
+    
+              
+                if(!password_verify($currentPassword,$storedPassword))
+                {
+                    $errors[] = 'Current Password is not correct';
+                }
+    
+                if($newPassword !== $confirmPassword)
+                {
+                    $errors[] = 'New password and confirmation do not match';
+                }
+    
+                //checking if the password has the required strength
+                if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                    $errors[] = "New password does not meet the required strength.";
+                }
+                if(empty($errors))
+                {
+                    $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                    $users->updatePassword($username, $newHashed);
+                    $success = true;
+                }
+                echo json_encode([
+                    'success' => $success,
+                    'errors' => $errors,
+                    'state'=> password_verify($currentPassword,$storedPassword)
+                ]);
+                exit;
+            }
+            
+
+        $this->view("studentrep/viewprofile");
+>>>>>>> cf073a694e3625ad97718c5209facd0fd865cc4e
     }
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);

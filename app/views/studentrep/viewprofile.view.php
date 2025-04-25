@@ -11,7 +11,11 @@
 <body>
   
     <?php
+<<<<<<< HEAD
         
+=======
+        $user="studentrep";
+>>>>>>> cf073a694e3625ad97718c5209facd0fd865cc4e
         $notification="notification"; //use notification-dot if there's a notification
         $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
         
@@ -187,6 +191,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
     requestBtn.addEventListener("click", () => {
         window.location.href = "<?= ROOT ?>/studentrep/requestchange";
+    });
+
+    const passwordForm = document.getElementById("passwordForm");
+
+    passwordForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        console.log(formData);
+
+        fetch("<?= ROOT ?>/studentrep/viewprofile", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("✅ Password updated successfully.");
+                passwordForm.reset();
+                document.getElementById("passwordModal").style.display = "none";
+            } else {
+                alert("❌ " + data.errors.join("\n"));
+            }
+        })
+        .catch(err => {
+            alert("❌ Something went wrong.");
+            console.error(err);
+        });
+    });
+
+    // Password strength message
+    const passwordInput = document.querySelector('input[name="new_password"]');
+
+const strengthText = document.querySelector('.password-strength');
+    
+
+    passwordInput.addEventListener("input", () => {
+        const value = passwordInput.value;
+        if (/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(value)) {
+            strengthText.textContent = "✅ Strong password";
+            strengthText.style.color = "green";
+        } else {
+            strengthText.textContent = "❌ Weak password";
+            strengthText.style.color = "red";
+        }
     });
 });
 </script>

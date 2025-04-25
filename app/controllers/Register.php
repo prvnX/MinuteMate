@@ -21,6 +21,15 @@ class Register extends Controller {
             $lecStuId = $studentId ?? $lecturerId ?? null;
             $additionalTpno = !empty($_POST['additional_tp_no']) ? htmlspecialchars(trim($_POST['additional_tp_no'])) : "Not Provided";
 
+            if ($studentId && !preg_match('/^stdrep\d+$/', $studentId)) {
+                $errors['stdrep-id'] = 'Student Representative ID must start with "stdrep" followed by digits.';
+            }
+            
+            if ($lecturerId && !preg_match('/^lec\d+$/', $lecturerId)) {
+                $errors['lec-id'] = 'Lecturer ID must start with "lec" followed by digits.';
+            }
+            
+
             if (!$lecStuId) {
                 $errors['lecStuId'] = 'Please enter a valid Student ID or Lecturer ID.';
             }
