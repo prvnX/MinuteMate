@@ -85,11 +85,7 @@ class Secretary extends BaseController {
             $meetingId = htmlspecialchars($_POST['meeting']);
             $submittedBy=$_SESSION['userDetails']->username;
 
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
-            {
-                echo "All fields are required";
-                return;
-            }
+          
 
             $memoData = [
                 'memo_title' => $memoTitle,
@@ -101,7 +97,8 @@ class Secretary extends BaseController {
 
             $memo = new Memo();
             $memo->insert($memoData);
-            $this->view("showsuccessmemo",["user"=>"lecturer"]);
+            $memo_id = $memo->getlastmemoid();
+            $this->view("showsuccessmemo",["user"=>"secretary", "memoid"=>$memo_id]);
         }
             else
             {
@@ -227,19 +224,17 @@ class Secretary extends BaseController {
 
 
     public function notifications() {
-        $notificationModel=new Notification;
-        $Readnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>1]);
-        $Unreadnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>0]);
-
         //these are just placeholders
         $user = "secretary";
+        $memocart = "memocart-dot";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
         $notification = "notification-dot"; //use notification-dot if there's a notification
         $menuItems = [
             "home" => ROOT."/secretary",
+            $memocart => ROOT."/secretary/memocart",
             $notification => ROOT."/secretary/notifications",
             "profile" => ROOT."/secretary/viewprofile"
         ];
-        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems, "notification" => $notification,'Readnotifications'=>$Readnotifications,'Unreadnotifications'=>$Unreadnotifications]);
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"memocart" => $memocart, "notification" => $notification]);
     }
     public function selectmeeting() { //this is the page where the secretary selects the meeting to create a minute 
         $meeting = new Meeting;
@@ -415,6 +410,8 @@ public function selectminute() { //this is the page where the secretary selects 
             $mailstautus=true;
             $secretary=$_SESSION['userDetails']->username;
             $meetingID = $_POST['meetingID'];
+            $attendence = $_POST['attendence'];
+            $agendaItems = $_POST['Agenda'];
             $discussedMemos = $_POST['discussed'] ?? [];
             $underDiscussionMemos = $_POST['underdiscussion'] ?? [];
             $parkedMemos= $_POST['parked'] ?? [];
@@ -453,6 +450,7 @@ public function selectminute() { //this is the page where the secretary selects 
                 $Minute_Transaction=new Minute_Transaction();
                 // show($_POST);
                 //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
+
                 $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
 
                 if($dataInsert==1 || $dataInsert==true){
@@ -465,6 +463,7 @@ public function selectminute() { //this is the page where the secretary selects 
             }
             else{
                 $dataInsert=false;
+
             }
 
 
@@ -555,13 +554,6 @@ public function selectminute() { //this is the page where the secretary selects 
                     
             }
         }
-        
-
-
-
-
-
-
 
             }
             $notification = new Notification();
@@ -739,6 +731,8 @@ public function selectminute() { //this is the page where the secretary selects 
 
         // get minute details
         $minute = new Minute();
+        $Meeting_attendence=new Meeting_attendence();
+        $Agenda= new Agenda();
         $content= new Content();
         $memo_discussed= new Memo_discussed_meetings();
         $linkedMinutes=new Minutes_linked();
@@ -778,6 +772,8 @@ public function selectminute() { //this is the page where the secretary selects 
         $linked_minutes=[];
         $linked_content_minutes=[];
         $isContentRestricted=false;
+        $attendence = $Meeting_attendence->getAttendees($minuteDetails[0]->meeting_id);
+        $agendaItems=$Agenda->selectandproject('agenda_item',['meeting_id'=>$minuteDetails[0]->meeting_id]);
         $contentDetails=$content->select_all(['minute_id'=>$minuteID]);
         $discussed_memos=$memo_discussed->getMemos($minuteDetails[0]->meeting_id);
         $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
@@ -819,7 +815,9 @@ public function selectminute() { //this is the page where the secretary selects 
             }
         }
 
-
+        // show($contentDetails);
+        $minuteDetails[0]->attendence = $attendence;
+        $minuteDetails[0]->agendaItems = $agendaItems;
         $minuteDetails[0]->discussed_memos = $discussed_memos;
         $minuteDetails[0]->linked_minutes = $linked_minutes;
         $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
