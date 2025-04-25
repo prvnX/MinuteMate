@@ -181,4 +181,32 @@ input[type="checkbox"] {
       width: 100%;
     }
   }
+
+  .error-messages {
+    color: red;
+    font-size: 14px;
+}
+
+.error {
+    margin-bottom: 5px;
+}
+
+.btn-submit {
+  background-color: #3b82f6;  /* Green background */
+  color: white;               /* White text */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  margin-left: 250px;
+}
+
+.btn-submit:hover {
+  background-color: #2f5898; /* Slightly darker green on hover */
+}
+
+
   

@@ -3,7 +3,7 @@
 $user="admin";
 $notification="notification"; //use notification-dot if there's a notification
 $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
-require_once("../app/views/components/new_navbar.php"); //call the navbar component
+require_once("../app/views/components/admin_navbar.php"); //call the navbar component
 include '../app/views/components/admin_sidebar.php'; ?>
 
 <!DOCTYPE html>
@@ -22,28 +22,28 @@ include '../app/views/components/admin_sidebar.php'; ?>
     <div class="card-grid">
       <div class="card">
         <div class="icon-circle red"><i class="fas fa-users"></i></div>
-        <h3 class="card-title">View Past RHD Members</h3>
+        <h3 class="card-title"> Past RHD Members</h3>
         <p class="card-description">View Past members of the RHD committee</p>
         <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=RHD" class="card-btn">RHD</a>
       </div>
 
       <div class="card">
         <div class="icon-circle yellow"><i class="fas fa-users"></i></div>
-        <h3 class="card-title">View Past IOD Members</h3>
+        <h3 class="card-title"> Past IOD Members</h3>
         <p class="card-description">View Past members of the IOD committee</p>
         <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=IOD" class="card-btn">IOD</a>
       </div>
 
       <div class="card">
         <div class="icon-circle green"><i class="fas fa-users"></i></div>
-        <h3 class="card-title">View Past SYN Members</h3>
+        <h3 class="card-title"> Past SYN Members</h3>
         <p class="card-description">View Past members of the SYN committee</p>
         <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=SYN" class="card-btn">SYN</a>
       </div>
 
       <div class="card">
         <div class="icon-circle green"><i class="fas fa-users"></i></div>
-        <h3 class="card-title">View Past SYN Members</h3>
+        <h3 class="card-title"> Past SYN Members</h3>
         <p class="card-description">View Past members of the SYN committee</p>
         <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=BOM" class="card-btn">BOM</a>
       </div>

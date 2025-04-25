@@ -14,6 +14,7 @@
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
     require_once("../app/views/components/sec_sidebar.php"); //call the sidebar component
     $minuteDetails=$data['minuteDetails'][0];
+    $prevApprovedDetails=$data['approved_recorrect_Meeting'];
     
     
     ?>
@@ -24,7 +25,6 @@
         <button class="download-btn" onclick="trigDownload()"><i class="fas fa-download" ></i><span> Download</span></button>
         <button class="print-btn" onclick="printtrig()"><i class="fas fa-print"></i><span> Print</span></button>
         <button class="report-issue-btn"><i class="fas  fa-file-lines"></i><span>View Report</span></button>
-        <button class="comment-btn"><i class="fas fa-comment"></i><span> Comments</span></button>
     </div>
 </div>
 <div class="minute-container" id="print-area">
@@ -42,6 +42,27 @@
         <div class="detail-item">
         <p><span>Created By:</span> <?=htmlspecialchars($minuteDetails->created_by)?> </p>
         </div>
+        <div class="detail-item">
+        <?php
+          if($data['approvedStatus']->is_approved==1){
+            echo "<p><span> Approval State :</span> Approved at ".$prevApprovedDetails[0]->date." ".strtoupper($prevApprovedDetails[0]->meeting_type)." Meeting. 
+            
+            <a href='".ROOT."/secretary/viewminute?minuteID=".htmlspecialchars($prevApprovedDetails[0]->approval)."' target='_blank'> Minute ID : ".$prevApprovedDetails[0]->approval."</a>
+            </p>";
+           
+          }
+          else if($data['approvedStatus']->is_recorrect==1){
+           echo "<p><span> Approval State :</span><span style='color:red;font-weight:500'> Re-corrected.</span> Please refer to the    
+            
+            <a href='".ROOT."/secretary/viewminute?minuteID=".htmlspecialchars($prevApprovedDetails[0]->recorrected_version)."' target='_blank'> Minute ID : ".$prevApprovedDetails[0]->recorrected_version."</a>
+            minute.</p>";
+          }
+          else{
+            echo "<p><span>Approval Pending :</span> This Minute is Not Approved Yet</p>";
+          }
+          ?>
+        </div>
+
         </div>
     <div class="minute-details">
     <h1 class="sub-title">Meeting Details</h1> 
@@ -107,6 +128,15 @@
         </div>
         <?php 
         $linkedMinutes=$data['minuteDetails'][0]->linked_minutes;
+        $linkedMinutesFromContent=$data['linked_content_minutes'];
+        if($linkedMinutesFromContent!=null){
+            foreach($linkedMinutesFromContent as $minute){
+                if(!in_array($minute->Minute_ID,$linkedMinutes)){
+                    array_push($linkedMinutes,$minute->Minute_ID);
+                }
+            }
+            
+        }
         if($linkedMinutes!=null){
             if(count($linkedMinutes)>0){
                 echo ' <div class="minute-details">
@@ -120,6 +150,7 @@
             }
         }
         $linkedMedia=$data['minuteDetails'][0]->linkedMediaFiles;
+     
         if($linkedMedia!=null){
             if(count($linkedMedia)>0){
                 echo ' <div class="minute-details">

@@ -15,7 +15,7 @@
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/admin",$notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
     echo "<div class='memo-list-navbar'>";
-    require_once("../app/views/components/new_navbar.php");
+    require_once("../app/views/components/admin_navbar.php");
     echo "</div>";
     require_once("../app/views/components/admin_sidebar.php");
 
@@ -121,6 +121,7 @@
             <label for="editNIC">NIC:</label>
             <input type="text" id="editNIC" name="nic" value="<?= $profileDetails['NIC'] ?>" required>
 
+
             <div class="modal-actions">
                 <button type="button" class="cancel-btn" id="editCancelBtn">Cancel</button>
                 <button type="submit" class="submit-btn">Update Profile</button>
@@ -224,6 +225,13 @@ const strengthText = document.querySelector('.password-strength');
     // requestBtn.addEventListener("click", () => {
     //     window.location.href = "<?= ROOT ?>/lecturer/requestchange";
     // });
+
+    <?php if (isset($_SESSION['error'])): ?>
+        window.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("editProfileModal").style.display = "block";
+         });
+    <?php endif; ?>
+
 });
 </script>
 </body>

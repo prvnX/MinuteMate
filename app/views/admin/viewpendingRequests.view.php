@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 $user="admin";
 $notification="notification"; //use notification-dot if there's a notification
 $menuItems = [ 
@@ -8,26 +7,30 @@ $menuItems = [
   "profile" => ROOT."/admin/viewprofile", 
   "logout" => ROOT."/admin/confirmlogout"
 ];
-require_once("../app/views/components/new_navbar.php");
+require_once("../app/views/components/admin_navbar.php");
 include '../app/views/components/admin_sidebar.php'; 
 ?>
 
-
 <div class="content">
     <h2>Pending Requests</h2>
-    <ul class="pending-request-list">
+    <div class="pending-request-container">
         <?php if (!empty($pendingRequests)): ?>
-            <?php foreach ($pendingRequests as $request): ?>
-                <li>
-                    <a href="<?= ROOT ?>/admin/viewRequestDetails?id=<?php echo $request->id; ?>">
-                        <?php echo htmlspecialchars($request->full_name); ?>
-                    </a>
-                </li>
-            <?php endforeach; ?>
+            <ul class="pending-request-list">
+                <?php foreach ($pendingRequests as $request): ?>
+                    <li>
+                        <a href="<?= ROOT ?>/admin/viewRequestDetails?id=<?php echo $request->id; ?>" class="request-link">
+                            <span class="request-name"><?php echo htmlspecialchars($request->full_name); ?></span>
+                            <span class="view-details">View Details</span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         <?php else: ?>
-            <li>No pending requests found.</li>
+            <div class="no-request-message">
+                No pending requests found.
+            </div>
         <?php endif; ?>
-    </ul>
+    </div>
 </div>
 
 <!-- Include the CSS file here -->
