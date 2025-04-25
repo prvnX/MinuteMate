@@ -181,4 +181,14 @@ input[type="checkbox"] {
       width: 100%;
     }
   }
+
+  .error-messages {
+    color: red;
+    font-size: 14px;
+}
+
+.error {
+    margin-bottom: 5px;
+}
+
   
