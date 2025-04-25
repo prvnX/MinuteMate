@@ -8,4 +8,9 @@ class Department{
         'department_head',
         'dep_email'
     ];
+
+    public function findAll() {
+        return $this->query("SELECT * FROM department");
+    }
+    
 }

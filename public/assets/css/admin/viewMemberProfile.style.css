@@ -29,7 +29,7 @@ p {
 }
 
 /* Button Styles */
-.btn-edit, .remove-btn {
+.remove-btn {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;

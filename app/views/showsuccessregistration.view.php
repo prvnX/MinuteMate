@@ -10,10 +10,6 @@
 </head>
 <body>
 
-    <?php
-
-    $memoId = $data['memoid'] ?? null;
-    ?>
     <div class="success-container">
         <div class="success-icon">
             <div class="circle">
@@ -23,41 +19,20 @@
             </div>
         </div>
         <h1 class="success-title">Success!</h1>
-        <p class="success-message">Your Memo has been successfully submitted.</p>
+        <p class="success-message">Your Registration Request has been successfully submitted.</p>
         
         <div class="status-list">
-            <?php if($memoId) : ?>
   
+           
                 <div class="status-item">
                     <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span class="status-text">Memo has created with the ID : <?=$memoId?></span>
+                    <span class="status-text">You will be notified through an eamil  when the Request is processed</span>
                 </div>
 
-            <?php else: ?>
-                <div class="status-item">
-                    <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span class="status-text">You will be notified when the memo is reviewed</span>
-                </div>
-
-        
-            <?php endif; ?>
-        </div>
-        
-        <div class="button-container">
-            <button class="btn btn-secondary" onclick="continueAction()">Continue</button>
         </div>
     </div>
 
-    <script>
-       
-        function continueAction() {
-            window.location.href = 'dashboard.php';
-        }
-
-        </script>
 </body>
 </html>
