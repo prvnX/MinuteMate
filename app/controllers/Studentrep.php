@@ -132,7 +132,7 @@ class Studentrep extends BaseController {
                'reviewed_by' => $toBeReviewedBy,
                'meeting_id' => $meetingId
             ];
-            // print_r($memoData);
+          //  print_r($memoData);
             $reviewMemo = new ReviewMemo();
             $reviewMemo->insertx($memoData);
 
@@ -213,18 +213,16 @@ class Studentrep extends BaseController {
 
     }
     public function viewprofile(){
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-
-
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
-
-
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
+    
             $errors = [];
         $success = false;
             if($_SERVER['REQUEST_METHOD'] === 'POST')
@@ -269,7 +267,9 @@ class Studentrep extends BaseController {
             }
             
 
-        $this->view("studentrep/viewprofile");
+            $this->view("studentrep/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+         
+
     }
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"studentrep"]);
@@ -337,17 +337,16 @@ class Studentrep extends BaseController {
             'user' => $_SESSION['userDetails']->username
         ]);
     }
+
+
+    public function selectmemo() { //this is the page where the studentrep selects the memo to view details
+        $memo = new Memo();
+        $memos = $memo->getMemos($_SESSION['userDetails']->username, date("Y-m-d"));
     
-
-
-        public function selectmemo() { //this is the page where the studentrep selects the memo to view details
-            $memo = new Memo();
-            $memos = $memo->getMemos($_SESSION['userDetails']->username, date("Y-m-d"));
         
-            
-                $this->view("studentrep/selectmemo", ['memos' => $memos]);
-             
-        }
+            $this->view("studentrep/selectmemo", ['memos' => $memos]);
+         
+    }
     private function isRestrict($username,$contentID){
         $restrictions=new Content_restrictions();
         $res_status=$restrictions->checkRestrictions($username,$contentID);

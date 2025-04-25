@@ -138,64 +138,68 @@ class Lecturer extends BaseController {
         ];
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
     }
-    public function viewprofile() {
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
-
-            $errors = [];
-            $success = false;
-
-        if($_SERVER['REQUEST_METHOD'] === 'POST')
-        {
-            
-            $users = new User();
-            $username = $_SESSION['userDetails']->username;
-            $currentPassword = $_POST['current_password'];
-            $newPassword = $_POST['new_password'];
-            $confirmPassword = $_POST['confirm_password'];
-
-            $storedPasswordData = $users->getHashedPassword($username);
-            $storedPassword = $storedPasswordData[0] ->password ?? null;
-
-          
-            if(!password_verify($currentPassword,$storedPassword))
-            {
-                $errors[] = 'Current Password is not correct';
-            }
-
-            if($newPassword !== $confirmPassword)
-            {
-                $errors[] = 'New password and confirmation do not match';
-            }
-
-            //checking if the password has the required strength
-            if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
-                $errors[] = "New password does not meet the required strength.";
-            }
-            if(empty($errors))
-            {
-                $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
-                $users->updatePassword($username, $newHashed);
-                $success = true;
-            }
-            echo json_encode([
-                'success' => $success,
-                'errors' => $errors,
-                'state'=> password_verify($currentPassword,$storedPassword)
-            ]);
-            exit;
-        }
-        
-        $this->view("lecturer/viewprofile");
-        //echo($errors);
+    public function viewprofile(){
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
     
-    }
+        
+    
+                $errors = [];
+                $success = false;
+    
+            if($_SERVER['REQUEST_METHOD'] === 'POST')
+            {
+                
+                $users = new User();
+                $username = $_SESSION['userDetails']->username;
+                $currentPassword = $_POST['current_password'];
+                $newPassword = $_POST['new_password'];
+                $confirmPassword = $_POST['confirm_password'];
+    
+                $storedPasswordData = $users->getHashedPassword($username);
+                $storedPassword = $storedPasswordData[0] ->password ?? null;
+    
+              
+                if(!password_verify($currentPassword,$storedPassword))
+                {
+                    $errors[] = 'Current Password is not correct';
+                }
+    
+                if($newPassword !== $confirmPassword)
+                {
+                    $errors[] = 'New password and confirmation do not match';
+                }
+    
+                //checking if the password has the required strength
+                if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                    $errors[] = "New password does not meet the required strength.";
+                }
+                if(empty($errors))
+                {
+                    $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                    $users->updatePassword($username, $newHashed);
+                    $success = true;
+                }
+                echo json_encode([
+                    'success' => $success,
+                    'errors' => $errors,
+                    'state'=> password_verify($currentPassword,$storedPassword)
+                ]);
+                exit;
+            }
+            
+            $this->view("lecturer/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+            //echo($errors);
+        
+        }
+
 
     public function submitmemo() {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -308,7 +312,6 @@ class Lecturer extends BaseController {
         ]);
     }
      
-    
     public function requestchange(){
         $responseStatus = "";
     
@@ -512,6 +515,7 @@ public function viewminute(){
 
 }
 
+
     // public function changePassword()
     // {
     //     $errors = [];
@@ -556,4 +560,5 @@ public function viewminute(){
 
     //     echo($errors);
     // }
+
 }
