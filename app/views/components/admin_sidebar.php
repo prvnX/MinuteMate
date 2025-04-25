@@ -119,11 +119,11 @@
         <img src="<?=ROOT?>/img.png" alt="Logo" style="width: 150px; margin: 10px auto; display: block;">
         <ul>
             <li><a href="<?=ROOT?>/admin" data-section="home"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="<?=ROOT?>/admin/viewpendingRequest" data-section="pending-member-requests">  <i class="fas fa-file-alt"></i>view pending requests</a></li>
+            <li><a href="<?=ROOT?>/admin/viewpendingRequest" data-section="pending-member-requests">  <i class="fas fa-file-alt"></i>Pending Requests</a></li>
             <li><a href="<?=ROOT?>/admin/viewMembers" data-section="members"><i class="fa-solid fa-magnifying-glass"></i> View members</a></li>
             <li><a href="<?=ROOT?>/admin/PastMembers" data-section="remove-members"><i class="fas fa-list"></i> Past Members</a></li>
             <li><a href="<?=ROOT?>/admin/department" data-section="department"><i class="fas fa-building"></i> Departments</a></li>
-            <li><a href="<?=ROOT?>/admin/vieweditrequests" data-section="view-edit-requests"><i class="fas fa-sticky-note"></i> View edit requests</a></li>
+            <li><a href="<?=ROOT?>/admin/vieweditrequests" data-section="view-edit-requests"><i class="fas fa-sticky-note"></i> View Edit Requests</a></li>
             <li><a href="<?=ROOT?>/admin/viewprofile" data-section="settings"><i class="fa-solid fa-user"></i> View Profile </a></li>
         </ul>
         </div>
