@@ -599,6 +599,17 @@ function saveDepartment() {
         // Instantiate the User model to check if the department head exists
         $userModel = $this->model("user");
 
+        // Validate email format
+        if (!filter_var($_POST['dep_email'], FILTER_VALIDATE_EMAIL)) {
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Invalid email format for department email!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
+        }
+
         // Validate department head existence
         if (!$userModel->usernameExists($_POST['department_head'])) {
             $this->view("admin/department", [

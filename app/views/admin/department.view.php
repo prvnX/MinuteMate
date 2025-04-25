@@ -15,7 +15,11 @@ require_once("../app/views/components/admin_sidebar.php");
 <link rel="stylesheet" href="<?= ROOT ?>/assets/css/admin/department.style.css">
 
 <div class="main-content">
-     <h2 class="page-title">Departments</h2>
+
+<div class="header-wrapper">
+        <h2 class="page-title">Departments</h2>
+        <button class="add-btn" onclick="openAddModel()">+ Add New Department</button>
+    </div>
 
      <div class="card-container">
         <table class="styled-table">
@@ -53,9 +57,6 @@ require_once("../app/views/components/admin_sidebar.php");
     </table>
   </div>
 
-  <div class="add-button-wrapper">
-      <button class="add-btn" onclick="openAddModel()">+ Add New Department</button>
-  </div>
 
   <div id="departmentModal" class="modal" style="display:none;">
     <div class="modal-content">
