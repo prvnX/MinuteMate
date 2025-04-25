@@ -283,7 +283,7 @@
         const previousMeetingId=<?=$previousMeetingId?>;
         
         if(isPrev===1){
-            
+        const prevMinuteID=<?=$prevMin->Minute_ID?>;
         const rejectRadioBtn = document.getElementById('rejectRadioBtn');
         rejectRadioBtn.addEventListener('click', function() {
              
@@ -302,7 +302,7 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.open("<?=ROOT.'/'?>secretary/recorrectminute?meeting="+previousMeetingId, "_blank");
+                        window.open("<?=ROOT.'/'?>secretary/recorrectminute?meeting="+previousMeetingId+"&prevMin="+prevMinuteID, "_blank");
                 }
                 });
             }

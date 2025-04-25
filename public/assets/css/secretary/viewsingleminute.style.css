@@ -173,6 +173,20 @@
     font-style: italic;
   }
 
+  .recorrect-note{
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: gray;
+    font-style: italic;
+    margin-top: 1rem;
+}
+.recorrect-note a{
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+
 @media screen and (max-width: 768px) {
     .tool-bar {
       flex-direction: column;
