@@ -11,11 +11,8 @@
 <body>
   
     <?php
-<<<<<<< HEAD
-        
-=======
+
         $user="studentrep";
->>>>>>> cf073a694e3625ad97718c5209facd0fd865cc4e
         $notification="notification"; //use notification-dot if there's a notification
         $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
         

@@ -24,25 +24,10 @@
         $ContactDetails = $data['contactNumbers'];
         $roleDetails = $data['userRole'][0];
         $meetingTypes = $data['userMeetingTypes'];
-       
+     ?>  
 
 
-        
 
-<<<<<<< HEAD
-   
-    ?>
-=======
-    $profileDetails = [
-        "name" => $_SESSION['userDetails']->full_name,
-        "Email" => $_SESSION['userDetails']->email,
-       
-        "NIC" => $_SESSION['userDetails']->nic,
-        "Role"=>$_SESSION['userDetails']->role,
-        
-    ];
-?>
->>>>>>> cf073a694e3625ad97718c5209facd0fd865cc4e
 
 <div class="container">
     <h1>Your Profile</h1>
