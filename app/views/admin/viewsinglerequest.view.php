@@ -57,7 +57,8 @@
                     <td>
     <?php 
     if (is_array($ContactDetails)) {
-        foreach ($ContactDetails as $contact) {
+
+        foreach (array_unique($ContactDetails) as $contact) {
             echo htmlspecialchars($contact) . " ";
         }
     } else {
