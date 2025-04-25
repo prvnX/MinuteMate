@@ -1,66 +1,38 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/minutesuccess.style.css">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 
-    <style>
-        body {
-            font-family: 'Ubuntu', sans-serif;
-        }
-    </style>
-    <title>Success</title>
-    <style>
-        .state-container {
-            display: flex;
-            margin-top: 50px;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .state-container img {
-            width: 500px;
-            height: 500px;
-            margin: 0;
-        }
-
-        .state-container h1 {
-            font-size: 4rem;
-            margin: 1rem;
-            color:#65558F;
-        }
-        .state-container p {
-            font-size: 1.5rem;
-            font-weight: 100;
-            margin: 1rem;
-        }
-        .state-container button {
-            width: 200px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            margin: 5px;
-            border: none;
-            background-color: white;
-            border:solid 1px #65558F;
-            color: #65558F;
-            cursor: pointer;
-            border-radius: 15px;
-        }
-        .state-container button:hover {
-            background-color: #65558F;
-            color: white;
-            transition: 0.5s ease;
-
-
-        }
-
-
-    </style>
 </head>
 <body>
-    <div class="state-container">     
-        <img src="<?=ROOT?>/assets/images/success.png" alt="Success" class="success-image">
-        <h1>Success</h1>
-        <p>Your registration request is submitted successfully.</p>
 
+    <div class="success-container">
+        <div class="success-icon">
+            <div class="circle">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <path fill="none" stroke="white" stroke-width="6" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+        </div>
+        <h1 class="success-title">Success!</h1>
+        <p class="success-message">Your Registration Request has been successfully submitted.</p>
+        
+        <div class="status-list">
+  
+           
+                <div class="status-item">
+                    <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="status-text">You will be notified through an eamil  when the Request is processed</span>
+                </div>
+
+        </div>
     </div>
+
 </body>
+</html>
