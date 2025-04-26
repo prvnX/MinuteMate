@@ -272,25 +272,29 @@ class Secretary extends BaseController {
 
     }
 
-
     public function viewmemoreport() {
-    if (!isset($_GET['memo'])) {
-        header("Location: " . ROOT . "/secretary/selectmemo");
-        exit;
+        if (!isset($_GET['memo'])) {
+            header("Location: " . ROOT . "/studentrep/selectmemo");
+            exit;
+        }
+
+        $memoId = $_GET['memo'];
+        $memo = new Memo();
+        $memoDetails = $memo->getMemoDetails($memoId);
+      
+
+        if (!$memoDetails) {
+            $this->view("memoreportnotfound");
+            return;
+        }
+
+        $this->view("studentrep/viewmemoreports", [
+            'memoDetails' => $memoDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
 
-    $memoId = $_GET['memo'];
-    $memo = new Memo();
-    $memoDetails = $memo->getMemoById($memoId);
 
-    if (!$memoDetails) {
-        $_SESSION['flash_error'] = "Memo not found.";
-        redirect("secretary/selectmemo");
-        return;
-    }
-
-    $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
-    }
 
     
     public function viewminutereports() {
