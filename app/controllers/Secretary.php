@@ -197,6 +197,7 @@ class Secretary extends BaseController {
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $draftStatus=$drafts->isDraftExist($user,$meetingId);
         $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+       
         
         // show($recentMinute);
 

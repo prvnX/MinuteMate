@@ -184,16 +184,16 @@ function addContentSection(title = '', content = '') {
     let radioLabels = [];
     switch (meetingType) {
         case 'iud':
-            radioLabels = ["IUD","RHD","BOM", "SYN"];
+            radioLabels = ["IUD", "SYN"];
             break;
         case 'rhd':
-            radioLabels = ["RHD","BOM", "SYN"];
+            radioLabels = ["RHD", "SYN"];
             break;
         case 'bom':
-            radioLabels = ["BOM", "SYN"];
+            radioLabels = ["BOM"];
             break;
         case 'syn':
-            radioLabels = ["SYN"];
+            radioLabels = ["SYN","BOM"];
             break;
         default:
             radioLabels = ["IUD","RHD","BOM", "SYN"];
@@ -311,6 +311,8 @@ function addContentSection(title = '', content = '') {
 }
 
 window.onload = function() {
+    
+
     addContentSection(
         'You can type content title here',
         '<p>This is <strong>sample</strong> content with <em>italic</em> text with formatting.</p><br><br><br><br><p>Click add more to add another content.</p>'
