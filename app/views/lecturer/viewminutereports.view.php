@@ -53,7 +53,10 @@
         <span><?= htmlspecialchars($data['minuteDetails']->keywords) ?></span>        
     </div>
 
-
+    <div class="form-group">
+        <label>Author:</label>
+        <span><?= htmlspecialchars($data['minuteDetails']->user) ?></span>
+    </div>
 
     <div class="form-group">
         <label>Date:</label>
@@ -79,10 +82,7 @@
     </div>
     </span>
     </div>
-    <div class="form-group">
-        <label>Author:</label>
-        <span><?= htmlspecialchars($data['minuteDetails']->user) ?></span>
-    </div>
+   
 <!-- 
     <div class="header">
         <h3>Flow of the Minute through Different Meetings</h3>

@@ -120,8 +120,6 @@ class User {
     
     //     $contactModel->updateOrInsertContactNumbers($username, $numbers);
     // }
-
-     
     public function updateContactNumber($username, $newContact) {
         $query = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username";
         $data = [

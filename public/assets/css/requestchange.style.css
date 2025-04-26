@@ -5,7 +5,7 @@
     --text-color: #1e293b;
     --card-bg-color: #ffffff;
     --navbar-bg-color: #e0f2fe;
-    --form-bg-color:  #e0f2fe; /* Updated to a soft indigo tone */
+    --form-bg-color:  #e0e9fe; /* Updated to a soft indigo tone */
     --button-bg: #6366f1;
     --button-hover: #4f46e5;
     --modal-bg: #1f2937;
@@ -126,7 +126,19 @@
     border-radius: 12px;
     text-align: center;
   }
-  
+   /* Label and Checkbox Layout */
+   .meeting-options label,
+   .role-options label {
+     display: flex;
+     align-items: center;
+     font-size: 16px;
+     margin: 6px 0;
+     color: #222;
+     gap: 8px;
+   }
+   .role-option {
+    margin-bottom: 20px; /* Adjust spacing as needed */
+  }
   .modal-body p {
     font-size: 1rem;
     margin-bottom: 20px;
@@ -142,6 +154,16 @@
     font-size: 1rem;
     font-weight: 400;
     text-align: left;
+  }
+
+  .form-input-checkbox,.role-option{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background-color: #f8f8fb;
+    border-radius: 10px;
+    margin-bottom: 20px;
+
   }
   
  

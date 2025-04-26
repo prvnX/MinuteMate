@@ -18,8 +18,7 @@ class Admin extends BaseController {
             "pendingRequests" => $pendingRequests
         ]);
     }
-
-
+    
     
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -529,6 +528,7 @@ public function viewMemberProfile() {
         if ($id) {
             $userEditRequests = new User_edit_requests();
             $userEditRequests->deleteRequestById($id);
+            
             echo json_encode(['success' => "Request with ID - $id is Declined"]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Invalid request ID']);
@@ -556,13 +556,19 @@ public function viewMemberProfile() {
 
     // Update user main table
     $userUpdate = new User();
-    $userUpdate->update($username, $updatedData, 'username');
+    if(!($new_nic==null && $new_email==null && $new_fullname==null)){
+        $userUpdate->update($username, $updatedData, 'username');
+        
+    }
+       
+   
 
     // Update contact number in related table
     if (!empty($new_tp_no)) {
         $contactModel = new UserContactNums();
         $contactModel->updateContactNumbers($username, $new_tp_no);  // You'll need to implement this
     }
+
       
      
     // Remove the edit request
@@ -593,12 +599,28 @@ function saveDepartment() {
         // Instantiate the User model to check if the department head exists
         $userModel = $this->model("user");
 
-        // Validate department head existence
-        if (!$userModel->usernameExists($_POST['department_head'])) {
-            echo "<script>alert('Error: Department head \"{$_POST['department_head']}\" does not exist!'); window.history.back();</script>";
-        exit;
+        // Validate email format
+        if (!filter_var($_POST['dep_email'], FILTER_VALIDATE_EMAIL)) {
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Invalid email format for department email!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
         }
 
+        // Validate department head existence
+        if (!$userModel->usernameExists($_POST['department_head'])) {
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Department head \"{$_POST['department_head']}\" does not exist!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
+        }
+        
 
         // Insert or update
         if (!empty($_POST['id'])) {

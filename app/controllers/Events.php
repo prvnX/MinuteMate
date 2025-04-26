@@ -269,6 +269,40 @@ public function  getMemoList(){
             echo json_encode(["success" => true, "agendas" => $agendaList,'meetingAgenda'=>$meetingAgenda]);
         }
     }
+    public function getAttendanceList(){
+        $input = json_decode( file_get_contents('php://input'), true);
+        $meeting_id = $input['meeting_id'] ?? null;
+        if($meeting_id){
+            $meeting = new Meeting();
+            $attendanceList = $meeting->getParticipants($meeting_id);
+            echo json_encode(["success" => true, "attendances" => $attendanceList]);
+            
+        }
+    }
+    public function markAttendence(){
+        $meetingAttendence= new Meeting_attendence;
+        $meeting=new Meeting;
+        if(isset($_POST['attendence'])){
+        $attendenceList = $_POST['attendence'];
+        $meetingID=$_POST['meetingID'];
+
+        if($meetingID && $attendenceList!=null){
+            foreach($attendenceList as $attendee){
+                $meetingAttendence->insert(['meeting_id'=>$meetingID,'attendee'=>$attendee]);
+            }
+            $meeting->update($meetingID,['attendence_mark'=>1],'meeting_id');
+
+            $this->view("success");
+            
+        }
+        }
+        else{
+            $this->view("notsuccess");
+        }
+        
+    // }
+    }
+
 
 }
 

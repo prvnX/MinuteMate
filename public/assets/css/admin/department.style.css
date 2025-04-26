@@ -2,7 +2,16 @@
     padding: 40px;
     background-color: #f7faff;
     min-height: 100vh;
+    margin-top: -40px;
   }
+
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* Align items to the left */
+    gap: 20px;   /* Ensures there's space between the button and title */
+    margin-bottom: 20px;  /* Space below the header */
+}
   
   .page-title {
     font-size: 28px;
@@ -16,6 +25,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     overflow-x: auto;
+    margin-top: -40px;
   }
   
   .styled-table {
@@ -45,7 +55,6 @@
   }
   
   .add-button-wrapper {
-    margin-top: 25px;
     text-align: right;
   }
   
@@ -57,6 +66,8 @@
     border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
+    width: 250px;
+    margin-left: 1000px;
   }
 
 /* Modal Background */
@@ -135,6 +146,16 @@ input, textarea, button {
   padding: 10px;
   margin: 10px 0;
   box-sizing: border-box;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
   

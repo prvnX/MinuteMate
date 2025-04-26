@@ -53,7 +53,7 @@
                     }
                 }
 
-
+                
                     $meeting['meeting_type'] = $meeting['meeting_type'] == 'syn' ? 'syndicate' : $meeting['meeting_type'];
                     echo "<h1 class='meetingtitle'>" . ucfirst(htmlspecialchars($meeting['meeting_type']))." Meeting </h1><hr>";
                     echo "<table>";
@@ -79,16 +79,16 @@
                         <button class='resch-btn action-btn' onclick='handleMeetingReschedule(".$meetingid.")'>Reschedule The Meeting </button>
                         </div>";
                     }
-                    else if($meetingEditAccess && $meeting['date'] < $todayDate && $meeting['attendence_mark']==0){
+                    else if($_SESSION['userDetails']->role=="secretary" && $meetingEditAccess && $meeting['date'] < $todayDate && $meeting['attendence_mark']==0){
 
                         echo "<div class='meeting-action-btns'>
-                        <button class='action-btn mark-btn'>Mark Attendance</button>";
+                        <button class='action-btn mark-btn' onclick='loadAtd(".$meetingid.")'>Mark Attendance</button>";
                         echo '</div>';
 
                     }
-                    else if($meeting['end_time'] <= $currentTime = date("H:i:s") ){
+                    else if($_SESSION['userDetails']->role=="secretary" && $meetingEditAccess && $meeting['end_time'] <= date("H:i:s") && $meeting['attendence_mark']==0 ){
                         echo "<div class='meeting-action-btns'>
-                        <button class='action-btn mark-btn'>Mark Attendance</button>";
+                        <button class='action-btn mark-btn' onclick='loadAtd(".$meetingid.")'>Mark Attendance</button>";
                         echo '</div>';
                     }
                     echo "</div>";
@@ -174,6 +174,22 @@
             </div>
             <div class="modal-actions">
                 <button type="button" id="rescheduleYes" class="btn btn-yes">Reschedule</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="markAtd" class="modal">
+    <div class="modal-content">
+    <span class="close-btn" onclick="closeAtdModal()">&times;</span>
+        <h2 class="modal-header">Mark Attendance</h2>
+        <form action="<?=ROOT?>/events/markAttendence" method="POST">
+          <div class="modal-body">
+            <!-- attendence will be loaded here -->
+          </div>
+            <div class="modal-actions">
+                <button type="submit" id="markatd-btn" class="mark-atd-btn">Confirm</button>
             </div>
         </form>
     </div>
@@ -511,6 +527,93 @@ function closequickview(){
     const quickview=document.getElementById('quick-view-popup');
     quickview.style.display='none';
 }
+
+function loadAtd(meetingID){
+    const url = '<?=ROOT?>/Events/getAttendanceList';
+    const modal = document.getElementById('markAtd');
+    modal.style.display = 'block';
+    fetch(url,{
+        method : 'POST',
+        headers :{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({meeting_id: meetingID})
+
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "meetingID";
+            hiddenInput.value = meetingID; 
+            const atdList = document.getElementById('markAtd').getElementsByClassName('modal-body')[0];
+            atdList.innerHTML = '';
+            atdList.innerHTML = '<ul>'
+            data.attendances.forEach(item => {
+                
+                const li = document.createElement('div');
+                li.innerHTML = `
+                    <div class="atd-item">
+                        <span class="agenda-name">${item.name}</span>
+                        <input type="checkbox" class="atd-checkbox" value="${item.username}" name=attendence[]>
+                    </div>
+                `;
+                atdList.appendChild(li);
+                atdList.appendChild(hiddenInput);
+            });
+            atdList.innerHTML += '</div>';
+        }
+        else{
+            console.error('Failed to get meeting details:', data.error || 'Unknown error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    
+}
+
+// function submitatd(meetingID){
+//     const modal = document.getElementById('markAtd');
+//     const checkboxes = modal.querySelectorAll('input[name="attendence[]"]:checked');
+   
+//     const selectedIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+    
+//     if(selectedIds.length > 0){
+//         fetch(url,{
+//             method:'POST',
+//             headers:{'Content-Type':'application/json',
+//             body : JSON.stringify({'attendance':selectedIds,'meeting_ID':submitMeetingID})
+//             }
+//         })
+//         .then(data=>data.json())
+//         .then(data =>{
+//             if(data.success){
+//             modal.style.display = 'none';
+//             showAlert("Attendence added for this meeting.");
+//             }
+//             else{
+//                 console.log('error')
+//             }
+//         } 
+//         )
+//         .catch(error=>{
+//             console.error('Error:', error);
+//         })
+//     }
+//     else{
+//         modal.style.display = 'none';
+//         showAlert("Please select at least one student.");
+//         return;
+//     }
+// }
+
+function closeAtdModal(){
+    const modal = document.getElementById('markAtd');
+    modal.style.display = 'none';
+}
+
 
 // Close the popup when clicking outside the content box
 window.addEventListener('click', (event) => {

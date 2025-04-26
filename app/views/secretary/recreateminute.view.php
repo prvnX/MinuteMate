@@ -2,18 +2,8 @@
     <link rel="stylesheet" href="<?=ROOT?>/assets/css/secretary/createminute.style.css">
     <link href="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/theme.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <title>Create a Minute</title>
+    <title>Recorrect Previous Minute</title>
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
-
-    <style>
-        input[type="checkbox"]input[type="radio"] {
-  pointer-events: none;
-}
-       
-input[type="radio"] {
-  pointer-events: none;
-}
-    </style>
 </head>
 <body>
     <?php
@@ -35,16 +25,6 @@ input[type="radio"] {
         <div class="spinner"></div>
     </div>
 
-    <div class="load-draft-msg" id="loadDraftPopup">
-    <div class="load-draft-content">
-    <i class="fa-solid fa-file-import"></i>
-        <h1>Draft Minute Found</h1>
-        <p>Do you want to load the draft minute?</p>
-        <button id="loadDraftBtn" onclick="handleLoadDraft()">Load Draft</button>
-        <button id="discardDraftBtn" onclick="handleCancelDraft()">Cancel</button>
-    </div>
-</div>
-
     <div class="tab-container">
                 <div class="tab active" data-tab="meeting-details">Meeting Details</div>
                 <div class="tab" data-tab="minute-content">Minute Content</div>
@@ -61,7 +41,7 @@ input[type="radio"] {
 
             </div>
     <div class="minute-form-container">
-        <form action="<?=ROOT?>/secretary/submitminute" method="post" id="minuteForm" enctype="multipart/form-data">
+        <form action="<?=ROOT?>/secretary/submitrecorrectminute" method="post" id="minuteForm" enctype="multipart/form-data">
             <?php
             $memoCount=0;
             $meetingMembers=$data['participants'];
@@ -96,7 +76,7 @@ input[type="radio"] {
                     <h1 class="form-sub-title">Meeting Details</h1>
                     <div class="row-A">
                         <div class="col">
-                            Meeting  <span style="color:var(--primary-color); margin-left:95px" ><?= $meetingId ?> - <?= strtoupper($meetingDetails[0]->meeting_type) ?> Meeting </span>
+                            Meeting  <span style="color:var(--primary-color); margin-left:95px" ><?= $meetingId ?> - <?= strtoupper($meetingDetails[0]->meeting_type) ?> Meeting (Minute Recorrect) </span>
                             
                         </div>
 
@@ -119,39 +99,39 @@ input[type="radio"] {
                     </div>
                 </div>
                 <div class="sub-container meeting-details">
-                    <h1 class="form-sub-title">Approval of Previous Minute</h1>
+                    <h1 class="form-sub-title">Previous Minute</h1>
                     <?php
-                    $prevMin=$data['recentMinute'][0];
+                   
+                        
+                    $prevMin=$data['recentMinute'];
+                    if($prevMin!=null):
+                    $prevMinStates=$data['recentMinuteState'][0];
+                    $prevMinState='';
+                    if($prevMinStates->is_approved==1){
+                        $prevMinState="Accepted";
+                    }
+                    else{
+                        $prevMinState="Recorrected";
+                    }
 
                     ?>
                 <div class="previous-minute-section">
 
                     <div class="minute-content-box" id="previousMinuteContent">
                         <p><strong>Meeting :</strong> <?=$prevMin->title?> </p>
-                        <p><strong>Meeting Date:</strong> <?=$prevMin->date?> </p>
-                        <p><strong>Minute Created Date:</strong> <?=$prevMin->created_date?></p>
-
+                        <p><strong>Minute ID :</strong> <?=$prevMin->Minute_ID?></p>
+                        <p>Previous Minute was <?=$prevMinState?> in this meeting</p>
                     <div class="pdf-link">
                         <a href="<?=ROOT?>/secretary/viewminute?minuteID=<?=$prevMin->Minute_ID?>" target="_blank"> Click here to view the minute</a>
                     </div>
                     </div>
 
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="previousMinuteStatus" id='acceptRadioBtn' value="accept">
-                            Previous Minute was accepted in this Meeting
-                        </label>
-                    </div>
-
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="previousMinuteStatus" id='rejectRadioBtn' value="reject">
-                            Previous Minute is not accepted and it is recorrected
-                        </label>
-                        <button type="button" class="recorrect-button" onclick="recorrectMinute()">Recorrect Minute</button>
-                    </div>
-
                 </div>
+                <?php else:?>
+                    <div class="previous-minute-section">
+                        <p>No previous minute was discussed in this meeting</p>
+                    </div>
+                <?php endif;?>
                     
 
                 </div>
@@ -188,16 +168,16 @@ input[type="radio"] {
                         <?php foreach($memos as $memo){
                             echo "<tr id='row-".$memo->memo_id."'>
                             <td>$memo->memo_id - $memo->memo_title</td>
-                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)'> </td>
-                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>
-                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>";}?>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' style='pointer-events:none'> </td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this )' style='pointer-events:none' ></td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' style='pointer-events:none'></td>";}?>
 
                             <?php foreach($fwdmemos as $memo){
                             echo "<tr id='row-".$memo->memo_id."'>
                             <td>$memo->memo_id - $memo->memo_title</td>
-                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)'> </td>
-                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>
-                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' ></td>";}?>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='discussed[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' style='pointer-events:none'> </td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='underdiscussion[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' style='pointer-events:none' ></td>
+                            <td><input type='checkbox' class='rowID-".$memo->memo_id."'name='parked[]' value='$memo->memo_id' onClick='toggleCheckBox(".$memo->memo_id.",this)' style='pointer-events:none' ></td>";}?>
                      </table>
                      </div>
                 </div>
@@ -205,6 +185,14 @@ input[type="radio"] {
                 <div class="sub-container minute-Linking">
                     <h1 class="form-sub-title">Link Previous Minutes (If applicable)</h1>
                     <div id="LinkedminuteSection">
+                    <?php if($data['linkedMinutes']!=null){
+                            echo "<div class='autolink-div'<p class='autolink'>Following minutes will be automatically linked to this minute</p>";
+                            foreach($data['linkedMinutes'] as $minute){
+                                
+                                echo "<p class='autolink-minute'>"."<a href='".ROOT."/secretary/viewminute?minuteID=".$minute->Minute_ID."' target='_blank'> Minute with ID - ".$minute->Minute_ID." "."</a></p>";
+                            }
+                            echo "</div>";
+                        }?>
                         <select name="LinkedMinutes[]" id="LinkedMinutes">
                             <option value="none">Select Linked Minutes</option>
                             <?php foreach($minuteList as $minute){
@@ -248,6 +236,7 @@ input[type="radio"] {
                 <button type="button" id="nextBtntoP3" style="display: none;">Next</button>
                 <button type="submit" id="submitBtn" style="display: none;">Submit</button>
             </div>
+            <input type="hidden" name="prevMinuteID" value="<?=$data['prevMin']?>">
         </form>
 
     </div>
@@ -262,35 +251,7 @@ input[type="radio"] {
         const form=document.getElementById("minuteForm");
         
 
-        const rejectRadioBtn = document.getElementById('rejectRadioBtn');
-        rejectRadioBtn.addEventListener('click', function() {
-             
-          
-            const selected = document.querySelector('input[name="previousMinuteStatus"]:checked');
-            if (selected && selected.value === 'reject') {
-
-                document.querySelector('.recorrect-button').style.display = 'inline-block';
-                Swal.fire({
-                    text: "You need to recorrect the previous minute before proceeding, Your current content will be saved as a draft, and you'll be redirected to the recreation page.",
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#3b82f6",
-                    customClass: {
-                        popup: "warning-font"
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.open("your-page-url.html", "_blank");
-                }
-                });
-            } 
-            
-   
-        });
-        const acceptradioBtn = document.getElementById('acceptRadioBtn');
-        acceptradioBtn.addEventListener('click', function() {
-            document.querySelector('.recorrect-button').style.display = 'none';
-        });
+       
 
 
         function addAnotherKeyword(){
@@ -464,7 +425,7 @@ input[type="radio"] {
 
             if(!Contenterror){
                 
-                if(confirm("Are you sure you want to submit the minute?")){
+                if(confirm("Are you sure you want to Recorrect this minute?")){
                     document.getElementById('loadingOverlay').style.visibility = 'visible';
                     form.submit();
                 }
@@ -477,5 +438,5 @@ input[type="radio"] {
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <script src="<?=ROOT?>/assets/js/secretary/createminute.script.js"></script>
+    <script src="<?=ROOT?>/assets/js/secretary/recreateminute.script.js"></script>
 </body>
