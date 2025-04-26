@@ -1,18 +1,61 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
-.heading
-{
-    text-align: center;
-    margin-top: 40px;
-    font-size: 40px;
-    font-family: ubuntu;
-    color: #65558F;
+:root {
+    --primary: #3b82f6;
+    --secondary: #1e40af;
+    --primary-light: #EEF2FF;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --background: #F8FAFC;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --rhd: #F87171;
+    --iud: #FBBF24;
+    --bom: #60A5FA;
+    --syn: #4ADE80;
 }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f9ff;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.memo-list-navbar .navbar{
+    height: 55px;
+}
+.memo-list-navbar .navbar form{
+    margin-bottom: 15px;
+}
+.memo-list-navbar .notification-titles{
+    height: 3rem;
+}
+.memo-list-navbar .notification-footer{
+    height: 3rem;
+}
+.page-header {
+    margin-bottom: 2rem;
+    margin-left: 50rem;
+    margin-top:3rem
+}
+
+.page-header h1 {
+    font-size: 2.3rem;
+    font-weight: 900;
+    color:var(--secondary);
+
+}
+
 .memo-details-container {
     max-width: 1000px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #e3f1f8;
+    background-color: white;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -22,7 +65,7 @@
 
 .memo-title {
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
@@ -31,8 +74,8 @@
 }
 
 .memo-detail {
-    font-size: 16px;
-    color: #1a1919;
+    font-size: 20px;
+    color: black;
     margin: 10px 0;
     padding-top: 10px;
 }
@@ -42,10 +85,10 @@
 .memo-status,
 .memo-submitted-by,
 .memo-meeting-id {
-  
-    color: #121314;
-    padding-left: 16px;
-    font-size: 20px;
+     font-weight: bold;
+    color: black;
+    padding-left: 10px;
+    font-size: 16px;
 }
 
 .memo-content-box {
@@ -56,7 +99,8 @@
     border-radius: 4px;
     white-space: pre-wrap;
     line-height: 1.5;
-    color: #444;
+    color: black;
+    font-size: 16px;
 }
 
 .btn-back {
@@ -69,18 +113,19 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #3b82f6;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
     margin-left: 400px;
+    width: 200px;
 }
 
 .btn-back:hover {
     opacity: 0.8;
 }
 .action-buttons{
-    margin-left: 400px;
+    margin-left: 350px;
 }
 .btn-accept
 {
@@ -93,10 +138,11 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #1e40af;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
+    width: 120px;
 }
 .btn-decline
 {
@@ -109,10 +155,11 @@
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #1e40af;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
+    width: 120px;
 }
 .btn-accept:hover{
     opacity: 0.8; 
@@ -127,16 +174,4 @@
     color: #ff0000;
     font-size: 18px;
     font-weight: bold;
-}
-.page-header {
-    margin-bottom: 2rem;
-    margin-left: 60rem;
-    margin-top:3rem
-}
-
-.page-header h1 {
-    font-size: 2.3rem;
-    font-weight: 900;
-    color:var(--secondary);
-
 }

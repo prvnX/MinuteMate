@@ -21,7 +21,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--background);
+    background-color: #f0f9ff;
     color: var(--text-primary);
     line-height: 1.5;
 }
@@ -40,7 +40,7 @@ body {
 }
 .page-header {
     margin-bottom: 2rem;
-    margin-left: 60rem;
+    margin-left: 50rem;
     margin-top:3rem
 }
 
@@ -55,7 +55,7 @@ body {
     max-width: 1000px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: white;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -112,18 +112,19 @@ body {
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #3b82f6;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
     margin-left: 400px;
+    width: 120px;
 }
 
 .btn-back:hover {
     opacity: 0.8;
 }
 .action-buttons{
-    margin-left: 400px;
+    margin-left: 350px;
 }
 .btn-accept
 {
@@ -136,10 +137,11 @@ body {
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #1e40af;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
+    width: 120px;
 }
 .btn-decline
 {
@@ -152,10 +154,11 @@ body {
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
-    background-color: #7578d4;
+    background-color: #1e40af;
     color: white;
     padding: 10px 20px;
     cursor: pointer;
+    width: 120px;
 }
 .btn-accept:hover{
     opacity: 0.8; 
