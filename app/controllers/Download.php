@@ -9,6 +9,7 @@ class Download extends Controller{
     
 public function index(){
     if($this->isValidRequest()){
+        
         $minuteID=$_GET['minuteID'];
         $user=$_SESSION['userDetails']->username;
 
@@ -26,8 +27,14 @@ public function index(){
         $location=$minuteDetails[0]->location;
         $startTime=substr($minuteDetails[0]->start_time,0,-3);
         $endTime=substr($minuteDetails[0]->end_time,0,-3);
+        $linkedcontentMinutes=($minuteDetails[0]->linked_content_minutes)[0];
+        $approvedStatus=($minuteDetails[0]->approve_status)[0];
+        $approvedRecorrectMinute=($minuteDetails[0]->approved_recorrect_Meeting)[0];
+        $previousMinute=$minuteDetails[0]->previousMinute;
+
  
         $contents=$minuteDetails[0]->contents;
+   
 
         
         $dompdf = new Dompdf();
@@ -135,6 +142,11 @@ public function index(){
                 font-family: Helvetica, sans-serif;
                 font-size: 12px;
             }
+            p{
+                font-family: Helvetica, sans-serif;
+                font-size: 12px;
+                
+            }
    
         </style>
         
@@ -142,9 +154,25 @@ public function index(){
         <!-- Footer -->
         <div class="footer">
             <span class="page"></span>
+            
         </div>
 
+
+  
+
         <h1 class="minute-heading">Minute of $minuteType Meeting on $meetngDate </h1>
+        HTML;
+
+        if ($approvedStatus->is_approved == 1 && $approvedStatus->is_recorrect == 1 && $approvedRecorrectMinute != null) {
+            $html .= <<<HTML
+        <p >
+            </i>&nbsp;This minute is a refined version of Miniute $approvedRecorrectMinute->minute_id.
+        </p>
+        HTML;
+        }
+        
+
+        $html .= <<<HTML
         <div class="minute-details">
             <h1 class="sub-title">Minute Details</h1>
             <div class="detail-item">
@@ -157,7 +185,38 @@ public function index(){
         <p><span>Created By:</span> $createdBy </p>
         </div>
         </div>
+        <div class="detail-item">
+        HTML;
 
+            if ($approvedStatus->is_approved == 1 && $approvedStatus->is_recorrect == 0) {
+                if ($approvedRecorrectMinute != null) {
+                    $html .= <<<HTML
+                <p>
+            <span>Approval State :</span> Approved at {$approvedRecorrectMinute->date} 
+            {strtoupper($approvedRecorrectMinute->meeting_type)} Meeting. 
+            
+                Minute ID : {$approvedRecorrectMinute->approval}
+                </p>
+            HTML;
+                }
+            } elseif ($approvedStatus->is_recorrect == 1 && $approvedStatus->is_approved == 0) {
+                if ($approvedRecorrectMinute != null) {
+                    $html .= <<<HTML
+            <p>
+            <span>Approval State :</span>
+            <span style='color:red; font-weight:500'>Re-corrected.</span> Please refer to the 
+                Minute ID : {$approvedRecorrectMinute->recorrected_version} minute.
+            </p>
+        HTML;
+                }
+            } elseif ($approvedStatus->is_approved == 0 && $approvedStatus->is_recorrect == 0) {
+                $html .= <<<HTML
+        <p><span>Approval Pending :</span> This Minute is Not Approved Yet</p>
+        HTML;
+            }
+
+          
+        $html .= <<<HTML
         <div class="minute-details">
             <h1 class="sub-title">Meeting Details</h1> 
             <div class="detail-item">
@@ -177,7 +236,9 @@ public function index(){
             <p> <span>Location:</span> $location </p>
         </div>
         </div>
-  
+        HTML;
+
+        $html .= <<<HTML
         <div class="minute-details">
         <h1 class="sub-title">Contents</h1>
         HTML;
@@ -216,6 +277,18 @@ public function index(){
             $html.= "<div class='hidden-content-note'> <ul><li>No Memos were discussed in this meeting.</li></ul></div>";
         }
         $html.= "</div></div>";
+
+        if ($previousMinute != null) {
+            $html .= <<<HTML
+        <div class='minute-details'>
+            <h1 class='sub-title'>Previous Minute</h1>
+            <div class='detail-item'>
+                <p>Minute ID : {$previousMinute->Minute_ID} ({$previousMinute->title})</p>
+            </div>
+        </div>
+        HTML;
+        }
+        
         $html .= <<<HTML
         <div class="minute-details">
             <h1 class="sub-title">Linked Minutes</h1>
@@ -359,12 +432,15 @@ private function isRestrict($username,$contentID){
 }
 private function getthisMinuteDetails($user,$minuteID){
         $minute = new Minute();
-        $Meeting_attendence=new Meeting_attendence();
-        $Agenda= new Agenda();
+
         $content= new Content();
         $memo_discussed= new Memo_discussed_meetings();
         $linkedMinutes=new Minutes_linked();
         $linkedMedia=new Linked_Media();
+        $approved_minutes=new Approved_minutes();
+        $recorrect_minute=new Recorrect_Minutes();
+        $cfm=new Content_forward_meeting();
+
         $minuteDetails = $minute->getMinuteDetails($minuteID);
         $contentrestrict=false;
         
@@ -391,13 +467,29 @@ private function getthisMinuteDetails($user,$minuteID){
         $user_accessible_content=[];
         $linked_minutes=[];
         $isContentRestricted=false;
-        $attendence = $Meeting_attendence->getAttendees($minuteDetails[0]->meeting_id);
-        $agendaItems=$Agenda->selectandproject('agenda_item',['meeting_id'=>$minuteDetails[0]->meeting_id]);
+        $approved_recorrect_Meeting=[];
+        $linked_content_minutes=[];
+        
         $contentDetails=$content->select_all(['minute_id'=>$minuteID]);
         $discussed_memos=$memo_discussed->getMemos($minuteDetails[0]->meeting_id);
         $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
         $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
+        $approveStatus=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$minuteID]);
+        $previousMinute=$minute->getPreviousMinute($minuteDetails[0]->end_time,$minuteDetails[0]->date,$minuteDetails[0]->meeting_type);
 
+        if($approveStatus[0]->is_approved==1 && $approveStatus[0]->is_recorrect==0){
+            $approved_recorrect_Meeting=$approved_minutes->getApprovedMinute($minuteID);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==0){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('recorrected_version',['Minute_ID'=>$minuteID]);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==1){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('minute_id',['recorrected_version'=>$minuteID]);
+        }
+        $linked_content_minutes=$cfm->getLinkMinuteIds($minuteDetails[0]->meeting_id);
+        
+        
+        
         if($linkedMinutes!= null){
             if(count($linkedMinutes)>0){
                 foreach($linkedMinutes as $linkedMinute){
@@ -425,13 +517,17 @@ private function getthisMinuteDetails($user,$minuteID){
             }
         }
 
-        $minuteDetails[0]->attendence = $attendence;
-        $minuteDetails[0]->agendaItems = $agendaItems;
+     
         $minuteDetails[0]->discussed_memos = $discussed_memos;
         $minuteDetails[0]->linked_minutes = $linked_minutes;
         $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
         $minuteDetails[0]->contents=$user_accessible_content;
         $minuteDetails[0]->isContentRestricted=$isContentRestricted;
+        $minuteDetails[0]->approved_recorrect_Meeting=$approved_recorrect_Meeting;
+        $minuteDetails[0]->linked_content_minutes=$linked_content_minutes;
+        $minuteDetails[0]->approve_status=$approveStatus;
+        $minuteDetails[0]->previousMinute=$previousMinute;
+
 
         return $minuteDetails;
         }

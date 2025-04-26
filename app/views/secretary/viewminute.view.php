@@ -24,7 +24,7 @@
     <div class="btn-container">
         <button class="download-btn" onclick="trigDownload()"><i class="fas fa-download" ></i><span> Download</span></button>
         <button class="print-btn" onclick="printtrig()"><i class="fas fa-print"></i><span> Print</span></button>
-        <button class="report-issue-btn"><i class="fas  fa-file-lines"></i><span>View Report</span></button>
+        <button class="report-issue-btn" onclick="trigReport()"><i class="fas  fa-file-lines"></i><span>View Report</span></button>
     </div>
 </div>
 <div class="minute-container" id="print-area">
@@ -260,6 +260,10 @@ function searchContent() {
 
 function trigDownload() {
     window.location.href = "<?=ROOT?>/download?minuteID=<?=$data['minuteDetails'][0]->Minute_id?>";
+}
+
+function trigReport() {
+    window.location.href = "<?=ROOT?>/secretary/viewminutereports?minute=<?=$data['minuteDetails'][0]->Minute_id?>";
 }
 </script>
 </body>

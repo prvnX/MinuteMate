@@ -13,8 +13,7 @@
     require_once("../app/views/components/new_navbar.php"); //call the navbar component
     require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
     $minuteDetails=$data['minuteDetails'][0];
-    $attendees=$data['minuteDetails'][0]->attendence;
-    $AgendaItems=$data['minuteDetails'][0]->agendaItems;
+    $prevApprovedDetails=$data['approved_recorrect_Meeting'];
     
     
     ?>
@@ -22,15 +21,18 @@
 
     <input type="text" placeholder="Search within this minute..." class="search-within-minute" id="search-box" oninput="searchContent()">
     <div class="btn-container">
-        <button class="download-btn" onclick="trigDownload()"><i class="fas fa-download"></i><span> Download</span></button>
+        <button class="download-btn" onclick="trigDownload()"><i class="fas fa-download" ></i><span> Download</span></button>
         <button class="print-btn" onclick="printtrig()"><i class="fas fa-print"></i><span> Print</span></button>
-        <button class="report-issue-btn"><i class="fas  fa-file-lines"></i><span>View Report</span></button>
-        <button class="comment-btn"><i class="fas fa-comment"></i><span> Comments</span></button>
+        <button class="report-issue-btn" onclick="trigReport()" ><i class="fas  fa-file-lines"></i><span>View Report</span></button>
     </div>
 </div>
 <div class="minute-container" id="print-area">
     
-    <h1 class="minute-heading">Minute of <?=htmlspecialchars(strtoupper($minuteDetails->meeting_type))?> Meeting on <?=htmlspecialchars(strtoupper($minuteDetails->date))?></h1>
+    <h1 class="minute-heading">Minute of <?=htmlspecialchars(strtoupper($minuteDetails->meeting_type))?> Meeting on <?=htmlspecialchars(strtoupper($minuteDetails->date))?> </h1>
+    <?php  if($data['approvedStatus']->is_approved==1 && $data['approvedStatus']->is_recorrect==1 && $prevApprovedDetails!=null){
+        echo "<p class='recorrect-note'> <i class='fas fa-angle-double-right'></i>&nbspThis minute is a refined version of <a href='".ROOT."/studentrep/viewminute?minuteID=".$prevApprovedDetails[0]->minute_id."'> Minute : ".$prevApprovedDetails[0]->minute_id."  </a></p>";
+    }
+    ?>
     <div class="minute-details">
     <h1 class="sub-title">Minute Details</h1>
     <div class="detail-item">
@@ -43,7 +45,35 @@
         <div class="detail-item">
         <p><span>Created By:</span> <?=htmlspecialchars($minuteDetails->created_by)?> </p>
         </div>
+        <div class="detail-item">
+        <?php
+
+          
+           if($data['approvedStatus']->is_approved==1 && $data['approvedStatus']->is_recorrect==0){
+            if($prevApprovedDetails!= null){
+            echo "<p><span> Approval State :</span> Approved at ".$prevApprovedDetails[0]->date." ".strtoupper($prevApprovedDetails[0]->meeting_type)." Meeting. 
+            
+            <a href='".ROOT."/studentrep/viewminute?minuteID=".htmlspecialchars($prevApprovedDetails[0]->approval)."' target='_blank'> Minute ID : ".$prevApprovedDetails[0]->approval."</a>
+            </p>";
+            }
+          }
+          else if($data['approvedStatus']->is_recorrect==1 && $data['approvedStatus']->is_approved==0){
+            if($prevApprovedDetails!= null){
+           echo "<p><span> Approval State :</span><span style='color:red;font-weight:500'> Re-corrected.</span> Please refer to the    
+            
+            <a href='".ROOT."/studentrep/viewminute?minuteID=".htmlspecialchars($prevApprovedDetails[0]->recorrected_version)."' target='_blank'> Minute ID : ".$prevApprovedDetails[0]->recorrected_version."</a>
+            minute.</p>";
+            }
+          }
+          else if($data['approvedStatus']->is_approved==0 && $data['approvedStatus']->is_recorrect==0){
+            echo "<p><span>Approval Pending :</span> This Minute is Not Approved Yet</p>";
+          }
+          ?>
         </div>
+        
+
+        </div>
+
     <div class="minute-details">
     <h1 class="sub-title">Meeting Details</h1> 
     <div class="detail-item">
@@ -64,31 +94,7 @@
         </div>
         </div>
 
-        <div class="minute-details ">
-        <h1 class="sub-title">Participants</h1> 
-        <div class="attendees">
-            <?php
-            foreach($attendees as $attendee){
-                echo "<p>".$attendee->attendee."</p>";
-            }
-            ?>
-        </div>
-        </div>
 
-        <div class="minute-details">
-        <h1 class="sub-title">Agenda Items</h1>
-        <div class="detail-item">
-        <?php
-            foreach($AgendaItems as $agenda){
-                echo "<p>".$agenda->agenda_item."</p>";
-            }
-            ?>
-
-        </div>
-
-
-
-        </div>
 
         <div class="minute-details">
         <h1 class="sub-title">Contents</h1>
@@ -131,8 +137,28 @@
         </div>
         </div>
         <?php 
+        $previousMinute=$data['previousMinute'];
         $linkedMinutes=$data['minuteDetails'][0]->linked_minutes;
-        if($linkedMinutes!=null){
+        $linkedMinutesFromContent=$data['linked_content_minutes'];
+        if($previousMinute!=null){
+            echo "<div class='minute-details'>
+            <h1 class='sub-title'>Previous Minute</h1>
+            <div class='detail-item'>";
+            echo "<a href='".ROOT."/studentrep/viewminute?minuteID=".htmlspecialchars($previousMinute->Minute_ID)."' target='_blank'><p> Minute ID : ".$previousMinute->Minute_ID." ( ".$previousMinute->title." ) "."</p></a>";
+            echo "</div>
+            </div>";
+        }
+
+
+        if($linkedMinutesFromContent!=null){
+            foreach($linkedMinutesFromContent as $minute){
+                if(!in_array($minute->Minute_ID,$linkedMinutes)){
+                    array_push($linkedMinutes,$minute->Minute_ID);
+                }
+            }
+            
+        }
+        if($linkedMinutes!=null){ 
             if(count($linkedMinutes)>0){
                 echo ' <div class="minute-details">
                          <h1 class="sub-title">Linked Minutes</h1>
@@ -145,6 +171,7 @@
             }
         }
         $linkedMedia=$data['minuteDetails'][0]->linkedMediaFiles;
+     
         if($linkedMedia!=null){
             if(count($linkedMedia)>0){
                 echo ' <div class="minute-details">
@@ -168,6 +195,21 @@
 <button class="back-btn" onclick="window.history.back();"><span> Back</span></button>
 <button class="go-top" onclick="  window.scrollTo({ top: 0, behavior: 'smooth' });">Scroll to Top</button>
 </div>
+
+<!-- <div class="chatbot">
+    <div class="chatbot-icon">
+        <i class="fas fa-comments"></i>
+    </div>
+    <div class="chatbot-window">
+        <div class="chatbot-header">
+            <h2>Chatbot</h2>
+            <button class="close-chatbot"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chatbot-messages">
+        </div>
+        <input type="text" placeholder="Type your message..." class="chatbot-input">
+    </div>
+</div> -->
 
 
 
@@ -215,8 +257,12 @@ function searchContent() {
             }
         }
         }
-    function trigDownload() {
+
+function trigDownload() {
     window.location.href = "<?=ROOT?>/download?minuteID=<?=$data['minuteDetails'][0]->Minute_id?>";
-    } 
+}
+function trigReport() {
+    window.location.href = "<?=ROOT?>/studentrep/viewminutereports?minute=<?=$data['minuteDetails'][0]->Minute_id?>";
+}
 </script>
 </body>
