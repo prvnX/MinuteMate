@@ -11,7 +11,7 @@
     $user="admin";
     $notification="notification"; //use notification-dot if there's a notification
     $menuItems = [ "home" => ROOT."/admin" , $notification => ROOT."/admin/notifications", "profile" => ROOT."/admin/viewprofile" , "logout" => ROOT."/admin/confirmlogout"]; //pass the menu items here (key is the name of the page, value is the url)
-    require_once("../app/views/components/new_navbar.php"); //call the navbar component
+    require_once("../app/views/components/admin_navbar.php"); //call the navbar component
     require_once("../app/views/components/admin_sidebar.php"); //call the sidebar component
     ?>
     <main class="main-content">
@@ -49,8 +49,8 @@
               
               <i class="fa-solid fa-magnifying-glass"></i>
               </div>
-              <h2>View Members</h2>
-              <p>IOD, RHD, BOM, </p>
+              <h2> Members</h2>
+              <p>View Members here:IUD, RHD, BOM, SYN </p>
               <a href="<?=ROOT?>/admin/viewMembers">
               <button>Members</button>
               </a>
@@ -70,7 +70,7 @@
               <div class="icon-bg">
                 <i class="fas fa-building"></i>
               </div>
-              <h2>departments</h2>
+              <h2>Departments</h2>
               <p>Add Departments here </p>
               <a href="<?=ROOT?>/admin/department">
               <button>view</button>
@@ -81,7 +81,7 @@
               <div class="icon-bg">
                 <i class="fas fa-sticky-note"></i>
               </div>
-              <h2>View edit requests</h2>
+              <h2>View Edit Requests</h2>
               <p>view edit requests of the user profiles here</p>
               <a href="<?=ROOT?>/admin/vieweditrequests">
               <button>View</button>

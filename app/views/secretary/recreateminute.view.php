@@ -4,6 +4,16 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <title>Create a Minute</title>
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
+
+    <style>
+        input[type="checkbox"]input[type="radio"] {
+  pointer-events: none;
+}
+       
+input[type="radio"] {
+  pointer-events: none;
+}
+    </style>
 </head>
 <body>
     <?php
@@ -19,8 +29,6 @@
     require_once("../app/views/components/new_navbar.php");
     require_once("../app/views/components/sec_sidebar.php");
     $draftStatus=$data['minuteDraft'][0]->is_present;
-    $isPrev=0 ;
-    $previousMeetingId=0;
     ?>
     <!-- Loading Overlay -->
       <div id="loadingOverlay">
@@ -112,20 +120,11 @@
                 </div>
                 <div class="sub-container meeting-details">
                     <h1 class="form-sub-title">Approval of Previous Minute</h1>
-                    
                     <?php
-                    if(isset($data['recentMinute']) && is_array($data['recentMinute']) && count($data['recentMinute']) > 0): ?>
-                        
+                    $prevMin=$data['recentMinute'][0];
 
-                   <?php $prevMin=$data['recentMinute'][0];
-                    $isPrev=1 ;
-                    $previousMeetingId=$prevMin->meeting_id;
-                    
                     ?>
-
-                    
-            
-                    <div class="previous-minute-section">
+                <div class="previous-minute-section">
 
                     <div class="minute-content-box" id="previousMinuteContent">
                         <p><strong>Meeting :</strong> <?=$prevMin->title?> </p>
@@ -136,8 +135,6 @@
                         <a href="<?=ROOT?>/secretary/viewminute?minuteID=<?=$prevMin->Minute_ID?>" target="_blank"> Click here to view the minute</a>
                     </div>
                     </div>
-
-                    <input type="hidden" name="previousMinute" id="previousMinuteID" value="<?=$prevMin->Minute_ID?>">
 
                     <div class="radio-group">
                         <label>
@@ -155,13 +152,6 @@
                     </div>
 
                 </div>
-                <?php else: ?>
-                    <?php $previousMeetingId=0; ?>
-                    <div class="previous-minute-section">
-                        <p>No previous minute found for this meeting.</p>
-                    </div>
-
-                <?php endIf; ?>
                     
 
                 </div>
@@ -215,14 +205,6 @@
                 <div class="sub-container minute-Linking">
                     <h1 class="form-sub-title">Link Previous Minutes (If applicable)</h1>
                     <div id="LinkedminuteSection">
-                        <?php if($data['linkedMinutes']!=null){
-                            echo "<div class='autolink-div'<p class='autolink'>Following minutes will be automatically linked to this minute</p>";
-                            foreach($data['linkedMinutes'] as $minute){
-                                
-                                echo "<p class='autolink-minute'>"."<a href='".ROOT."/secretary/viewminute?minuteID=".$minute->Minute_ID."' target='_blank'> Minute with ID - ".$minute->Minute_ID." "."</a></p>";
-                            }
-                            echo "</div>";
-                        }?>
                         <select name="LinkedMinutes[]" id="LinkedMinutes">
                             <option value="none">Select Linked Minutes</option>
                             <?php foreach($minuteList as $minute){
@@ -278,12 +260,8 @@
         const options = <?php echo json_encode($departments); ?>;
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
         const form=document.getElementById("minuteForm");
-        const users=<?php echo json_encode($meetingMembers); ?>;
-        const isPrev=<?=$isPrev?>;
-        const previousMeetingId=<?=$previousMeetingId?>;
         
-        if(isPrev===1){
-            
+
         const rejectRadioBtn = document.getElementById('rejectRadioBtn');
         rejectRadioBtn.addEventListener('click', function() {
              
@@ -293,7 +271,7 @@
 
                 document.querySelector('.recorrect-button').style.display = 'inline-block';
                 Swal.fire({
-                    text: "You have to recorrect the previous minute before proceeding, Your current content will be saved as a draft, and you'll be redirected to the recreation page.",
+                    text: "You need to recorrect the previous minute before proceeding, Your current content will be saved as a draft, and you'll be redirected to the recreation page.",
                     icon: "warning",
                     confirmButtonText: "OK",
                     confirmButtonColor: "#3b82f6",
@@ -302,11 +280,10 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.open("<?=ROOT.'/'?>secretary/recorrectminute?meeting="+previousMeetingId, "_blank");
+                        window.open("your-page-url.html", "_blank");
                 }
                 });
-            }
-
+            } 
             
    
         });
@@ -314,7 +291,6 @@
         acceptradioBtn.addEventListener('click', function() {
             document.querySelector('.recorrect-button').style.display = 'none';
         });
-    }
 
 
         function addAnotherKeyword(){
@@ -348,6 +324,7 @@
             closeBtn.innerHTML="X";
             closeBtn.classList.add("closeBtn");
             closeBtn.type="button";
+            const users=<?php echo json_encode($meetingMembers); ?>;
             closeBtn.onclick=function(){
                 if(confirm("Are you sure you want to remove this linked minute?")){
                     newSelect.remove();
@@ -376,22 +353,6 @@
 
             
             //agenda details
-            if(isPrev==1){
-                const selectedRadio = document.querySelector('input[name="previousMinuteStatus"]:checked');
-                if(!selectedRadio){
-                    Swal.fire({
-                        text: "Select the status of the previous minute",
-                        icon: "warning",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#3b82f6",
-                        customClass: {
-                            popup: "warning-font"
-                        }
-                    });
-                    return;
-                }
-            }
-            
             
 
             //minute contents
@@ -474,7 +435,6 @@
             else{
                 document.getElementsByClassName("memo-linking")[0].style.border="0.5px solid #bcbcbc";
             }
-
             
             //linked minutes
             const linkedMinutes=document.querySelectorAll('select[name="LinkedMinutes[]"]');

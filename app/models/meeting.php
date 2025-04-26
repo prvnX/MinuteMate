@@ -165,5 +165,31 @@ class Meeting{
         return $this->query($query, $data);
     }
 
+    public function getMostRecentMinutePending($type,$date){
+        $data['type']=strtolower($type);
+        $data['date']=$date;
+        $query="SELECT *
+                FROM meeting m
+                INNER JOIN minute mi ON m.meeting_id = mi.MeetingID
+                WHERE m.meeting_type=:type AND date <=:date AND is_minute=1 AND is_approved=0 AND is_recorrect=0 ORDER BY date DESC LIMIT 1;";
+        return $this->query($query,$data);
+
+    }
+
+    public function isFinishedMeeting($user,$date,$time){
+        $data['username']=$user;
+        $data['date']=$date;
+        $data['time']=$time;
+        $query="SELECT EXISTS(
+                    SELECT 1 FROM $this->table
+                    WHERE 
+                        date<=:date
+                        AND end_time<=:time
+                        AND created_by=:username
+                    ) AS auth";
+        return $this->query($query,$data);
+        
+    }
+
 
 }

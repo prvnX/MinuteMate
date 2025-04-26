@@ -450,6 +450,16 @@ public function viewMemberProfile() {
                 'email' => $_POST['email'],
                 'nic' => $_POST['nic'],
             ];
+
+            // Validate NIC
+        $nic = $data['nic'];
+        if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
+            echo "<script>
+                alert('❌ Invalid NIC. NIC should be either 12 digits or 10 digits followed by V/v.');
+                window.history.back();
+            </script>";
+            exit;
+        }
             
             $userModel = $this->model("user");
 
@@ -462,7 +472,7 @@ public function viewMemberProfile() {
             $_SESSION['userDetails']->email = $data['email'];
             $_SESSION['userDetails']->nic = $data['nic'];
     
-            header("Location: " . ROOT . "/admin/viewprofile");
+            echo "<script>alert('Profile updated successfully!'); window.location.href='" . ROOT . "/admin/viewprofile';</script>";
             exit;
         }
     }
@@ -644,6 +654,8 @@ exit;
 
 public function reactivateMember() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $errors = [];
        
         // Dynamically load models as needed
         $userModel = $this->model("user");
@@ -655,6 +667,43 @@ public function reactivateMember() {
         $secretaryMeetingTypesModel = $this->model("secretary_meeting_type");
 
         $username = $_POST['username'];
+
+         // Retrieve POST data
+         $email = $_POST['email'];
+         $nic = $_POST['nic'];
+         $contact_no = $_POST['contact_no'];
+         $additional_tp_no = $_POST['additional_tp_no'] ?? null;
+ 
+         // Email Validation (simple format check)
+         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+             echo "Invalid email format!";
+             return; // stop execution if validation fails
+         }
+ 
+         // NIC Validation (12 digits or 10 digits + 'V')
+         if (!preg_match('/^\d{12}$|^\d{10}[Vv]$/', $nic)) {
+             echo "NIC must be 12 digits or 10 digits followed by 'V'.";
+             return;
+         }
+ 
+         // Contact No Validation (must be less than 10 digits)
+         if (strlen($contact_no) != 10) {
+             echo "Contact No. must be less than 10 digits.";
+             return;
+         }
+ 
+         // Additional Contact No Validation (optional, must be less than 10 digits)
+         if ($additional_tp_no && strlen($additional_tp_no) != 10) {
+             echo "Additional Contact No. must be less than 10 digits.";
+             return;
+         }
+
+         if (!empty($errors)) {
+            // Optionally, you could pass the old input data back to the view as well
+            $this->view('admin/pastMemberProfile', ['errors' => $errors, 'userData' => $_POST]);
+            return;
+        }
+        
 
         // Use models to update data
         $userModel->updateUserByUsername($username, [
