@@ -1,4 +1,4 @@
-/* ViewpendingRequests.style.css */
+ /* ViewpendingRequests.style.css */
 
 /* General Layout */
 .content {
@@ -55,10 +55,7 @@
     border-bottom: 1px solid #e0e0e0;
 }
 
-.pending-request-list li:hover {
-    background-color: var(--hover-blue); /* Hover effect with a darker blue */
-    transform: translateX(5px); /* Subtle slide effect */
-}
+ 
 
 /* Styling Links Inside List */
 .request-link {
@@ -76,18 +73,17 @@
 
 .request-link .view-details {
     font-size: 0.9rem;
-    color: var(--primary-blue);
-    background-color: #e6f0ff;
+    color: #ffffff;
+    background-color: #3b82f6;
     border-radius: 8px;
     padding: 5px 10px;
     margin-left: 15px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    /* Removed opacity: 0; to make the button always visible */
+    transition: background-color 0.3s ease;
 }
 
-.request-link:hover .view-details {
-    opacity: 1;
-}
+/* Changed hover effect to just change background color instead of opacity */
+ 
 
 /* Empty State */
 .no-request-message {
