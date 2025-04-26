@@ -11,6 +11,7 @@
 <body>
   
     <?php
+    
         
         $notification="notification"; //use notification-dot if there's a notification
         $menuItems = [ "home" => ROOT."/lecturer", $notification => ROOT."/lecturer/notifications", "profile" => ROOT."/lecturer/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
@@ -43,8 +44,7 @@
             </div>
 
             <div class="stats-box">
-                <div><strong>12</strong><br>Meetings Attended</div>
-            </div>
+            <div ><strong class= "atendence"> <?= $attendenceMeetings[0]->attendence_count ?></strong><br>Meetings Attended</div>            </div>
         </div>
 
         <div class="right-panel">
@@ -57,6 +57,7 @@
                 <p><strong>Name:</strong> <?= $profileDetails->full_name ?></p><br>
                 <p><strong>Email:</strong> <?= $profileDetails->email ?></p><br>
                 <p><strong>NIC:</strong> <?= $profileDetails->nic ?></p><br>
+                <p><strong>Username:</strong> <?= $profileDetails->username ?></p><br>
                 <p><strong>Role:</strong> <?= $roleDetails->role ?></p><br>
                  
                 <?php $beforenum = 0; ?>

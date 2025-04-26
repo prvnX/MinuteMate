@@ -222,7 +222,8 @@ class Studentrep extends BaseController {
         $userRole = $role->select_one(['username' => $username]);
         $userMeeting = new user_meeting_types();
         $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
-    
+        $MeetingAtt = new Meeting_attendence();
+        $attendenceMeetings = $MeetingAtt->selectandproject('Count(*) as attendence_count',['attendee'=>$username]);
             $errors = [];
         $success = false;
             if($_SERVER['REQUEST_METHOD'] === 'POST')
@@ -267,7 +268,7 @@ class Studentrep extends BaseController {
             }
             
 
-            $this->view("studentrep/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
+            $this->view("studentrep/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes,'attendenceMeetings'=>$attendenceMeetings]);
          
 
     }
