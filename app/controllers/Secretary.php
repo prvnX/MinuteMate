@@ -197,6 +197,7 @@ class Secretary extends BaseController {
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $draftStatus=$drafts->isDraftExist($user,$meetingId);
         $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+       
         
         // show($recentMinute);
 
@@ -497,6 +498,7 @@ public function selectminute() { //this is the page where the secretary selects 
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $minute = new minute;
             $success=true;
             $mailstautus=true;
             $secretary=$_SESSION['userDetails']->username;
@@ -510,12 +512,15 @@ public function selectminute() { //this is the page where the secretary selects 
             $keywords = $_POST['keywordlist'] ?? [];
             $prevMinuteState=$_POST['previousMinuteStatus'];
             $prevMinute=$_POST['previousMinute'] ?? null;
+            $prevMinuteRecorrect=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$prevMinute])[0]; 
 
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
             $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
             $keywordList=[];
-            if($meetingMinuteStatus==0){ //if the minute is not already created
+        if($meetingMinuteStatus==0){ //if the minute is not already created
+            if($prevMinuteState=='accept' || ($prevMinuteState=='reject' && $prevMinuteRecorrect->is_recorrect==1)){
+                
             $mediaArr=[];
             if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
                 $cloudinaryUpload = new CloudinaryUpload();
@@ -539,7 +544,13 @@ public function selectminute() { //this is the page where the secretary selects 
                 $Minute_Transaction=new Minute_Transaction();
                 // show($_POST);
                 //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
-                $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+                if($prevMinuteState=='accept'){
+                    $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+                }
+                else{
+                    $$prevMinuteState=null;
+                    $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+                }
 
                 if($dataInsert==1 || $dataInsert==true){
                     $approveMinute= new Approved_minutes();
@@ -698,7 +709,10 @@ public function selectminute() { //this is the page where the secretary selects 
         
         
         
-        
+            }
+            else{
+                $this->view("minutenotrecorrect",["user"=>"secretary"]);
+            }
         }
             else{
                 $this->view("minutecreatedmsg",["user"=>"secretary"]);
@@ -761,6 +775,12 @@ public function selectminute() { //this is the page where the secretary selects 
                     $recorrectMinute= new Recorrect_Minutes();
                     $recorrectMinute->insert(['Minute_ID'=>$prevMinuteID,'recorrected_version'=>$newminuteID]);
                     $Draft->delete($meetingID,'meeting_id');
+                    $recivers=$meeting->getParticipants($meetingID);
+                    $notification=new Notification;
+                    foreach($recivers as $reciever){
+                        $reciever=$reciever->username;
+                        $notification->insert(['reciptient'=>$reciever,'notification_type'=>'minute','notification_message'=>"The Minute with ID:".$prevMinuteID." has Recorrected",'Ref_ID'=>$newminuteID,'link'=>'viewminute?minuteID='.$newminuteID]); 
+                    }
                     $this->view("successrecreate",['minuteid'=>$newminuteID]);
                 }
             }

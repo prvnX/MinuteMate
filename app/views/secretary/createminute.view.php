@@ -21,6 +21,8 @@
     $draftStatus=$data['minuteDraft'][0]->is_present;
     $isPrev=0 ;
     $previousMeetingId=0;
+
+     
     ?>
     <!-- Loading Overlay -->
       <div id="loadingOverlay">
@@ -267,6 +269,7 @@
                 <button type="submit" id="submitBtn" style="display: none;">Submit</button>
             </div>
         </form>
+    <? $isPrev=0;?>
 
     </div>
     <script >
@@ -279,9 +282,8 @@
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
         const form=document.getElementById("minuteForm");
         const users=<?php echo json_encode($meetingMembers); ?>;
-        const isPrev=<?=$isPrev?>;
+        let isPrev=<?=$isPrev?>;
         const previousMeetingId=<?=$previousMeetingId?>;
-        
         if(isPrev===1){
         const prevMinuteID=<?=$prevMin->Minute_ID?>;
         const rejectRadioBtn = document.getElementById('rejectRadioBtn');
@@ -364,6 +366,7 @@
             //meeting details
             const meetingID= <?= $meetingId ?>;
             const memoCount= <?=$memoCount ?>;
+    
 
 
             const DiscussedMemos=[]; //discussed memos

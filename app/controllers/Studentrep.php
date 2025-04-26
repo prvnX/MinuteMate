@@ -363,19 +363,25 @@ class Studentrep extends BaseController {
         }
     }
     
+    
     public function viewminute(){
         $user=$_SESSION['userDetails']->username;
         $minuteID=$_GET['minuteID'];
 
         // get minute details
         $minute = new Minute();
-        $Meeting_attendence=new Meeting_attendence();
-        $Agenda= new Agenda();
         $content= new Content();
         $memo_discussed= new Memo_discussed_meetings();
         $linkedMinutes=new Minutes_linked();
         $linkedMedia=new Linked_Media();
+        $approved_minutes=new Approved_minutes();
+        $recorrect_minute=new Recorrect_Minutes();
+        $cfm=new Content_forward_meeting();
+
+
         $minuteDetails = $minute->getMinuteDetails($minuteID);
+        
+
         $contentrestrict=false;
         
         if(!$minuteDetails) {
@@ -398,16 +404,30 @@ class Studentrep extends BaseController {
             return;
         }
         else{
-        // show($_SESSION);
+        $approved_recorrect_Meeting=[];
         $user_accessible_content=[];
         $linked_minutes=[];
+        $linked_content_minutes=[];
         $isContentRestricted=false;
-        $attendence = $Meeting_attendence->getAttendees($minuteDetails[0]->meeting_id);
-        $agendaItems=$Agenda->selectandproject('agenda_item',['meeting_id'=>$minuteDetails[0]->meeting_id]);
         $contentDetails=$content->select_all(['minute_id'=>$minuteID]);
         $discussed_memos=$memo_discussed->getMemos($minuteDetails[0]->meeting_id);
         $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
         $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
+        $approveStatus=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$minuteID]);
+        $previousMinute=$minute->getPreviousMinute($minuteDetails[0]->end_time,$minuteDetails[0]->date,$minuteDetails[0]->meeting_type);
+
+
+
+        if($approveStatus[0]->is_approved==1 && $approveStatus[0]->is_recorrect==0){
+            $approved_recorrect_Meeting=$approved_minutes->getApprovedMinute($minuteID);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==0){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('recorrected_version',['Minute_ID'=>$minuteID]);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==1){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('minute_id',['recorrected_version'=>$minuteID]);
+        }
+        $linked_content_minutes=$cfm->getLinkMinuteIds($minuteDetails[0]->meeting_id);
 
         if($linkedMinutes!= null){
             if(count($linkedMinutes)>0){
@@ -436,22 +456,18 @@ class Studentrep extends BaseController {
             }
         }
 
-        // show($contentDetails);
-        $minuteDetails[0]->attendence = $attendence;
-        $minuteDetails[0]->agendaItems = $agendaItems;
+
         $minuteDetails[0]->discussed_memos = $discussed_memos;
         $minuteDetails[0]->linked_minutes = $linked_minutes;
         $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
         // show($minuteDetails[0]);
         //  show($minuteDetails);
-        $this->view("studentrep/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted]);
+
+        // show($previousMinute);
+        $this->view("studentrep/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes,'previousMinute'=>$previousMinute]);
         }
     }
 
-
-
-
-
-    }
+}
 
 }
