@@ -62,12 +62,26 @@ class Register extends Controller {
             }
 
             $userRequest = new user_requests();
+            
+            $notification = new Notification();
+            $userRoles = new UserRoles();
+            $adminUsername = $userRoles->getAdminUsername();
             $status = 'pending';
 
             // Insert the request and check for success
             $result = $userRequest->insertRequest($fullName, $roleString, $lecStuId, $nic, $email, $tpno, $additionalTpno, $status);
 
             if ($result) {
+                $id = $userRequest->getLastInsertID(); 
+                $requestDetails = $userRequest->getRequestById($id);
+                $lec_stu_id = $requestDetails->lec_stu_id;
+
+                $notification->insert([
+                    'reciptient' => $adminUsername,
+                    'notification_message' => "New request submitted by $lec_stu_id,Review Now",
+                    'notification_type' => 'notifications',
+                    'Ref_ID' => $id,
+                    'link'=>"viewRequestDetails?id=$id"]);
 
                 $this->view("showsuccessregistration"); 
                 // echo "<script>

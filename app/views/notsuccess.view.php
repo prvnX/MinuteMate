@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unsuccessful</title>
+    <title>Uncsuccess</title>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/minuteunsuccess.style.css">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 
@@ -18,31 +18,34 @@
                 </svg>
             </div>
         </div>
-        <h1 class="unsuccessful-title">Unsuccessful</h1>
-        <p class="unsuccessful-message">We encountered an issue while processing the Memo.</p>
+        <h1 class="unsuccessful-title">Ops!</h1>
+        <p class="unsuccessful-message">Attendance Mark was unsuccessful.</p>
         
         <div class="status-list">
-         
             <div class="status-item">
                 <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="status-text">Your memo could not be created at this time</span>
+                <span class="status-text">Please ensure that at least one attendee has been marked.</span>
             </div>
+            
         </div>
         
         <div class="button-container">
-            <button class="btn btn-primary" onclick="tryAgain()">Try Again</button>
-            <button class="btn btn-secondary" onclick="gotodashboard()">Go to the Dashboard</button>
+            <button class="btn btn-primary" onclick="goBack()">Back</button>
         </div>
     </div>
 
     <script>
-        function tryAgain() {
+        function goBack() {
            
             window.history.back();
         }
 
+        function contactSupport() {
+            window.location.href = 'mailto:minutemate111@gmail.com?subject=Request for Access to Meeting Minute&body=Describe your issue here...(Add some screenshots if possible)';
+
+        }
         function gotodashboard(){
             window.location.href='dashboard';
         }

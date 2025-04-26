@@ -127,6 +127,9 @@ class Lecturer extends BaseController {
     
 
     public function notifications() {
+        $notificationModel=new Notification;
+        $Readnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>1]);
+        $Unreadnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>0]);
         //these are just placeholders
         $user = "lecturer";
         $memocart = "memocart";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
@@ -136,7 +139,7 @@ class Lecturer extends BaseController {
             $notification => ROOT."/lecturer/notifications",
             "profile" => ROOT."/lecturer/viewprofile"
         ];
-        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification, 'Readnotifications'=>$Readnotifications, "Unreadnotifications"=>$Unreadnotifications]);
     }
     public function viewprofile(){
         $userModel = new User();
@@ -511,5 +514,51 @@ public function viewminute(){
 }
 
 }
- 
+
+
+    // public function changePassword()
+    // {
+    //     $errors = [];
+    //     $success = false;
+
+    //     if($_SERVER['REQUEST_METHOD'] === 'POST')
+    //     {
+    //         $users = new User();
+    //         $username = $_SESSION['userDetails']->username;
+    //         $currentPassword = $_POST['current_password'];
+    //         $newPassword = $_POST['new_password'];
+    //         $confirmPassword = $_POST['confirm_password'];
+
+
+    //         $storedPassword = getHashedPassword($username);
+
+    //         if(!storedPassword || !password_verify($currentPassword,$storedPassword))
+    //         {
+    //             $errors[] = 'Current Password is not correct';
+    //         }
+
+    //         if($newPassword !== $confirmPassword)
+    //         {
+    //             $errors[] = 'New password and confirmation do not match';
+    //         }
+
+    //         //checking if the password has the required strength
+    //         if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+    //             $errors[] = "New password does not meet the required strength.";
+    //         }
+    //         if(empty($errors))
+    //         {
+    //             $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+    //             $users->updatePassword($username, $newHashed);
+    //             $success = true;
+    //         }
+    //     }
+    //     echo json_encode([
+    //         'success' => $success,
+    //         'errors' => $errors
+    //     ]);
+
+    //     echo($errors);
+    // }
+
 }

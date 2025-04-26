@@ -18,6 +18,7 @@
     require_once("../app/views/components/sec_sidebar.php");
    
     ?>
+    <h1 class="memo-heading"> Enter a memo </h1>
 <div class="memo-sub-container">
     <form action="<?=ROOT?>/secretary/submitmemo" method="post" id="memoForm">
         <div class="field">
