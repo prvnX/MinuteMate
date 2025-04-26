@@ -24,7 +24,7 @@
         $ContactDetails = $data['contactNumbers'];
         $roleDetails = $data['userRole'][0];
         $meetingTypes = $data['userMeetingTypes'];
-       
+        $attendenceMeetings = $data['attendenceMeetings'];
 
 
         
@@ -46,8 +46,7 @@
             </div>
 
             <div class="stats-box">
-                <div><strong>12</strong><br>Meetings Attended</div>
-            </div>
+            <div ><strong class= "atendence"> <?= $attendenceMeetings[0]->attendence_count ?></strong><br>Meetings Attended</div>            </div>
         </div>
 
         <div class="right-panel">
@@ -60,6 +59,7 @@
                 <p><strong>Name:</strong> <?= $profileDetails->full_name ?></p><br>
                 <p><strong>Email:</strong> <?= $profileDetails->email ?></p><br>
                 <p><strong>NIC:</strong> <?= $profileDetails->nic ?></p><br>
+                <p><strong>Username:</strong> <?= $profileDetails->username ?></p><br>
                 <p><strong>Role:</strong> <?= $roleDetails->role ?></p><br>
                  
                 <?php $beforenum = 0; ?>

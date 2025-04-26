@@ -10,8 +10,8 @@
 </head>
 <body>
   
-    <?php
-
+    <?php 
+     
         $user="studentrep";
         $notification="notification"; //use notification-dot if there's a notification
         $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
@@ -25,11 +25,9 @@
         $ContactDetails = $data['contactNumbers'];
         $roleDetails = $data['userRole'][0];
         $meetingTypes = $data['userMeetingTypes'];
-       
-
-
+        $attendenceMeetings = $data['attendenceMeetings'];
+ 
         
-
    
     ?>
 
@@ -40,14 +38,14 @@
     <div class="profile-section">
         <div class="left-panel">
             <div class="profile-photo">
-            <img src="<?=ROOT?>/assets/images/profile.png" alt="profile">
+            <img id="update_profile_image" src="<?=ROOT?>/assets/images/profile.png" alt="profile">
 
 
                 <!-- <button class="change-photo-btn">Change Photo</button> -->
             </div>
 
             <div class="stats-box">
-                <div><strong>12</strong><br>Meetings Attended</div>
+                <div ><strong class= "atendence"> <?= $attendenceMeetings[0]->attendence_count ?></strong><br>Meetings Attended</div>
             </div>
         </div>
 
@@ -61,6 +59,7 @@
                 <p><strong>Name:</strong> <?= $profileDetails->full_name ?></p><br>
                 <p><strong>Email:</strong> <?= $profileDetails->email ?></p><br>
                 <p><strong>NIC:</strong> <?= $profileDetails->nic ?></p><br>
+                <p><strong>Username:</strong> <?= $profileDetails->username ?></p><br>
                 <p><strong>Role:</strong> <?= $roleDetails->role ?></p><br>
                  
                 <?php $beforenum = 0; ?>

@@ -208,7 +208,70 @@ class Secretary extends BaseController {
         else{
             redirect("secretary/selectmeeting");
         }
+    } 
+
+    public function viewprofile(){
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
+        $MeetingAtt = new Meeting_attendence();
+        $attendenceMeetings = $MeetingAtt->selectandproject('Count(*) as attendence_count',['attendee'=>$username]);
+            $errors = [];
+        $success = false;
+            if($_SERVER['REQUEST_METHOD'] === 'POST')
+            {
+                
+                $users = new User();
+                $username = $_SESSION['userDetails']->username;
+                $currentPassword = $_POST['current_password'];
+                $newPassword = $_POST['new_password'];
+                $confirmPassword = $_POST['confirm_password'];
+    
+                $storedPasswordData = $users->getHashedPassword($username);
+                $storedPassword = $storedPasswordData[0] ->password ?? null;
+    
+              
+                if(!password_verify($currentPassword,$storedPassword))
+                {
+                    $errors[] = 'Current Password is not correct';
+                }
+    
+                if($newPassword !== $confirmPassword)
+                {
+                    $errors[] = 'New password and confirmation do not match';
+                }
+    
+                //checking if the password has the required strength
+                if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                    $errors[] = "New password does not meet the required strength.";
+                }
+                if(empty($errors))
+                {
+                    $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                    $users->updatePassword($username, $newHashed);
+                    $success = true;
+                }
+                echo json_encode([
+                    'success' => $success,
+                    'errors' => $errors,
+                    'state'=> password_verify($currentPassword,$storedPassword)
+                ]);
+                exit;
+            }
+            
+
+            $this->view("secretary/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes,'attendenceMeetings'=>$attendenceMeetings]);
+         
+
     }
+
+
     public function viewmemoreport() {
     if (!isset($_GET['memo'])) {
         header("Location: " . ROOT . "/secretary/selectmemo");
@@ -358,7 +421,7 @@ public function selectminute() { //this is the page where the secretary selects 
         }
 
         if ($updated) {
-            $_SESSION['flash_message'] = "Memo successfully {$action}ed.";
+            $_SESSION['flash_message'] = `Memo successfully {$action}ed.`;
         } else {
             $_SESSION['flash_error'] = "Failed to {$action} memo.";
         }
@@ -727,63 +790,8 @@ public function selectminute() { //this is the page where the secretary selects 
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"Secretary"]);
     }
-
-    public function viewprofile() {
-        $userModel = new User();
-        $username = $_SESSION['userDetails']->username;
-        $userDetails = $userModel-> select_one(['username' => $username]);
-        $contact_no = new UserContactNums();
-        $contactNumbers = $contact_no->select_all(['username' => $username]);
-        $role = new UserRoles();
-        $userRole = $role->select_one(['username' => $username]);
-        $userMeeting = new user_meeting_types();
-        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
-
-            $errors = [];
-            $success = false;
-                if($_SERVER['REQUEST_METHOD'] === 'POST')
-                {
+ 
                     
-                    $users = new User();
-                    $username = $_SESSION['userDetails']->username;
-                    $currentPassword = $_POST['current_password'];
-                    $newPassword = $_POST['new_password'];
-                    $confirmPassword = $_POST['confirm_password'];
-        
-                    $storedPasswordData = $users->getHashedPassword($username);
-                    $storedPassword = $storedPasswordData[0] ->password ?? null;
-        
-                  
-                    if(!password_verify($currentPassword,$storedPassword))
-                    {
-                        $errors[] = 'Current Password is not correct';
-                    }
-        
-                    if($newPassword !== $confirmPassword)
-                    {
-                        $errors[] = 'New password and confirmation do not match';
-                    }
-        
-                    //checking if the password has the required strength
-                    if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
-                        $errors[] = "New password does not meet the required strength.";
-                    }
-                    if(empty($errors))
-                    {
-                        $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
-                        $users->updatePassword($username, $newHashed);
-                        $success = true;
-                    }
-                    echo json_encode([
-                        'success' => $success,
-                        'errors' => $errors,
-                        'state'=> password_verify($currentPassword,$storedPassword)
-                    ]);
-                    exit;
-                }
-                
-                $this->view("secretary/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
-            }
     public function logout() {
         session_start();
         // Destroy all session data
@@ -981,19 +989,7 @@ public function selectminute() { //this is the page where the secretary selects 
         else{
             echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
         }
-    }
-    // public function testModels(){
-    //     $notification = new Notification();
-    //     $meeting = new Meeting();
-    //     $meetingID=1;
-    //     $recivers=$meeting->getParticipants($meetingID);
-    //     $message="Minute for the meeting with ID ". $meetingID ."on   has been created. View Now";
-    //     $minuteid=1;
-    //     show($recivers);
-  
-    // }
-                
-
+    }        
     
 }
 

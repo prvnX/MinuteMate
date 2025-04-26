@@ -151,12 +151,10 @@ class Lecturer extends BaseController {
         $userRole = $role->select_one(['username' => $username]);
         $userMeeting = new user_meeting_types();
         $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
-    
-        
-    
-                $errors = [];
-                $success = false;
-    
+        $MeetingAtt = new Meeting_attendence();
+        $attendenceMeetings = $MeetingAtt->selectandproject('Count(*) as attendence_count',['attendee'=>$username]);
+            $errors = [];
+        $success = false;
             if($_SERVER['REQUEST_METHOD'] === 'POST')
             {
                 
@@ -198,12 +196,11 @@ class Lecturer extends BaseController {
                 exit;
             }
             
-            $this->view("lecturer/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes]);
-            //echo($errors);
-        
-        }
 
+            $this->view("lecturer/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes,'attendenceMeetings'=>$attendenceMeetings]);
+         
 
+    }
     public function submitmemo() {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
