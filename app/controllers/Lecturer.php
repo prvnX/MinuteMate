@@ -127,6 +127,9 @@ class Lecturer extends BaseController {
     
 
     public function notifications() {
+        $notificationModel=new Notification;
+        $Readnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>1]);
+        $Unreadnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>0]);
         //these are just placeholders
         $user = "lecturer";
         $memocart = "memocart";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
@@ -136,7 +139,7 @@ class Lecturer extends BaseController {
             $notification => ROOT."/lecturer/notifications",
             "profile" => ROOT."/lecturer/viewprofile"
         ];
-        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification, 'Readnotifications'=>$Readnotifications, "Unreadnotifications"=>$Unreadnotifications]);
     }
     public function viewprofile(){
         $userModel = new User();

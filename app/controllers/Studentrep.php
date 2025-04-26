@@ -202,6 +202,10 @@ class Studentrep extends BaseController {
     }
     public function notifications() {
         //these are just placeholders
+        $notificationModel = new Notification();
+        $Readnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>1]);
+        $Unreadnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>0]);
+
         $user = "studentrep";
         $notification = "notification"; //use notification-dot if there's a notification
         $menuItems = [
@@ -209,7 +213,7 @@ class Studentrep extends BaseController {
             $notification => ROOT."/studentrep/notifications",
             "profile" => ROOT."/studentrep/viewprofile"
         ];
-        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification, "Readnotifications"=>$Readnotifications, "Unreadnotifications"=>$Unreadnotifications]);
 
     }
     public function viewprofile(){
