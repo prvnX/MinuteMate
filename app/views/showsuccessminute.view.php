@@ -53,7 +53,7 @@
     <script>
         function viewMinute() {
             
-            window.location.href = 'viewminutes/?minuteID=<?= $minuteID ?>';
+            window.location.href = 'viewminute?minuteID=<?= $minuteID ?>';
         }
 
         function continueAction() {

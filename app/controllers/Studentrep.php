@@ -216,6 +216,7 @@ class Studentrep extends BaseController {
         $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification, "Readnotifications"=>$Readnotifications, "Unreadnotifications"=>$Unreadnotifications]);
 
     }
+    // my part
     public function viewprofile(){
         $userModel = new User();
         $username = $_SESSION['userDetails']->username;

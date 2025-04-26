@@ -117,7 +117,7 @@ class Secretary extends BaseController {
                     'Ref_ID' => $memoId,
                     'link'=>"acceptmemo/?memo_id=$memoId"]);
             }
-            $this->view("showsuccessmemo",["user"=>"lecturer",'memoid'=>$memoId]);
+            $this->view("showsuccessmemo",["user"=>"secretary",'memoid'=>$memoId]);
         }
             else
             {
@@ -272,46 +272,52 @@ class Secretary extends BaseController {
 
     }
 
-
     public function viewmemoreport() {
-    if (!isset($_GET['memo'])) {
-        header("Location: " . ROOT . "/secretary/selectmemo");
-        exit;
+        if (!isset($_GET['memo'])) {
+            header("Location: " . ROOT . "/secretary/selectmemo");
+            exit;
+        }
+
+        $memoId = $_GET['memo'];
+        $memo = new Memo();
+        $memoDetails = $memo->getMemoDetails($memoId);
+      
+
+        if (!$memoDetails) {
+            $this->view("memoreportnotfound");
+            return;
+        }
+
+        $this->view("secretary/viewmemoreports", [
+            'memoDetails' => $memoDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
 
-    $memoId = $_GET['memo'];
-    $memo = new Memo();
-    $memoDetails = $memo->getMemoById($memoId);
 
-    if (!$memoDetails) {
-        $_SESSION['flash_error'] = "Memo not found.";
-        redirect("secretary/selectmemo");
-        return;
-    }
 
-    $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
-    }
-
-    
     public function viewminutereports() {
         if (!isset($_GET['minute'])) {
             header("Location: " . ROOT . "/secretary/selectminute");
             exit;
         }
 
-        $minuteId = $_GET['minute'];
+
+        $id = $_GET['minute'];
         $minute = new Minute();
-        $minuteDetails = $minute->getMinuteDetails($minuteId);
+        $minuteDetails = $minute->getMinuteReportDetails($id);
 
         if (!$minuteDetails) {
-            $_SESSION['flash_error'] = "Minute not found.";
-            redirect("secretary/selectminute");
+            $this->view("minutereportnotfound");
             return;
         }
-
-        $this->view("secretary/viewminutereports", ['minuteDetails' => $minuteDetails]);
+       
+        $this->view("secretary/viewminutereports", [
+            'minuteDetails' => $minuteDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
-
+     
 
     public function notifications() {
         $notificationModel=new Notification;
