@@ -546,7 +546,7 @@ function loadAtd(meetingID){
             const hiddenInput = document.createElement("input");
             hiddenInput.type = "hidden";
             hiddenInput.name = "meetingID";
-            hiddenInput.value = meetingID; 
+            hiddenInput.value = meetingID;
             const atdList = document.getElementById('markAtd').getElementsByClassName('modal-body')[0];
             atdList.innerHTML = '';
             atdList.innerHTML = '<ul>'
@@ -561,6 +561,7 @@ function loadAtd(meetingID){
                 `;
                 atdList.appendChild(li);
                 atdList.appendChild(hiddenInput);
+                
             });
             atdList.innerHTML += '</div>';
         }

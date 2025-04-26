@@ -184,16 +184,16 @@ function addContentSection(title = '', content = '') {
     let radioLabels = [];
     switch (meetingType) {
         case 'iud':
-            radioLabels = ["IUD","RHD","BOM", "SYN"];
+            radioLabels = ["IUD", "SYN"];
             break;
         case 'rhd':
-            radioLabels = ["RHD","BOM", "SYN"];
+            radioLabels = ["RHD","SYN"];
             break;
         case 'bom':
-            radioLabels = ["BOM", "SYN"];
+            radioLabels = ["BOM"];
             break;
         case 'syn':
-            radioLabels = ["SYN"];
+            radioLabels = ["SYN","BOM"];
             break;
         default:
             radioLabels = ["IUD","RHD","BOM", "SYN"];

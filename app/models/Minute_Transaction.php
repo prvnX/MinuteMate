@@ -74,6 +74,8 @@ class Minute_Transaction{
 
         /*Accept prev minute*/
         
+        if($data['prevMinuteState']!=null){
+            
 
         $prevMinuteID=$data['prevMinute'];
         $prevMinuteData=[
@@ -85,6 +87,7 @@ class Minute_Transaction{
                 throw new Exception("Failed to update Minute Status.");
             }
         }
+    }
 
 
        
