@@ -27,7 +27,7 @@ class User_edit_requests{
         $query = "SELECT req.*, u.full_name 
                   FROM $this->table req 
                   INNER JOIN user u ON req.username = u.username 
-                  ORDER BY req.created_at DESC";
+                  ORDER BY req.created_at ASC";
         
         return $this->query($query);
     

@@ -97,12 +97,8 @@ class Secretary extends BaseController {
 
             $memo = new Memo();
             $memo->insert($memoData);
-<<<<<<< HEAD
-            $this->view("showsuccessmemo",["user"=>"secretary"]);
-=======
             $memo_id = $memo->getlastmemoid();
             $this->view("showsuccessmemo",["user"=>"secretary", "memoid"=>$memo_id]);
->>>>>>> 180d8c8bcbc0fc904fecf5a1494fecd380f27c96
         }
             else
             {
@@ -360,7 +356,7 @@ public function selectminute() { //this is the page where the secretary selects 
         }
 
         if ($updated) {
-            $_SESSION['flash_message'] = "Memo successfully {$action}ed.";
+            $_SESSION['flash_message'] = `Memo successfully {$action}ed.`;
         } else {
             $_SESSION['flash_error'] = "Failed to {$action} memo.";
         }
@@ -853,19 +849,7 @@ public function selectminute() { //this is the page where the secretary selects 
         else{
             echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
         }
-    }
-    // public function testModels(){
-    //     $notification = new Notification();
-    //     $meeting = new Meeting();
-    //     $meetingID=1;
-    //     $recivers=$meeting->getParticipants($meetingID);
-    //     $message="Minute for the meeting with ID ". $meetingID ."on   has been created. View Now";
-    //     $minuteid=1;
-    //     show($recivers);
-  
-    // }
-                
-
+    }        
     
 }
 

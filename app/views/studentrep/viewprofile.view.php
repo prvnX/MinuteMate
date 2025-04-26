@@ -40,7 +40,7 @@
     <div class="profile-section">
         <div class="left-panel">
             <div class="profile-photo">
-            <img src="<?=ROOT?>/assets/images/profile.png" alt="profile">
+            <img id="update_profile_image" src="<?=ROOT?>/assets/images/profile.png" alt="profile">
 
 
                 <!-- <button class="change-photo-btn">Change Photo</button> -->
