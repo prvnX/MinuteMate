@@ -81,29 +81,15 @@
         > (click here to view the linked minute) </a></span>
     </div>
     </span>
-    </div>
-    
-<!-- 
-    <div class="header">
-        <h3>Flow of the Minute through Different Meetings</h3>
-
-        <div class="timeline">
-        <?php foreach ($data['timeline'] as $step): ?>
-            <div class="timeline-step">
-                <div class="dot-wrapper">
-                    <div class="dot" data-tooltip="<?= htmlspecialchars($step['label'] . ': ' . $step['date']) ?>"></div>
-                </div>
-                <div class="label"><?= htmlspecialchars($step['label']) ?></div>
-                <div class="date"><?= htmlspecialchars($step['date']) ?></div>
-            </div>
-        <?php endforeach; ?>
-        </div>
-    </div> -->
-
-    <!-- Footer -->
-    <div class="footer">
+     <!-- Footer -->
+     <div class="footer">
         <img src="<?=ROOT?>/assets/images/img.png" alt="logo">
     </div>
+    </div>
+    
+ 
+
+    
 </div>
 </body>
 </html>

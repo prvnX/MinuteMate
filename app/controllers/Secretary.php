@@ -117,7 +117,7 @@ class Secretary extends BaseController {
                     'Ref_ID' => $memoId,
                     'link'=>"acceptmemo/?memo_id=$memoId"]);
             }
-            $this->view("showsuccessmemo",["user"=>"lecturer",'memoid'=>$memoId]);
+            $this->view("showsuccessmemo",["user"=>"secretary",'memoid'=>$memoId]);
         }
             else
             {
@@ -274,7 +274,7 @@ class Secretary extends BaseController {
 
     public function viewmemoreport() {
         if (!isset($_GET['memo'])) {
-            header("Location: " . ROOT . "/studentrep/selectmemo");
+            header("Location: " . ROOT . "/secretary/selectmemo");
             exit;
         }
 
@@ -288,7 +288,7 @@ class Secretary extends BaseController {
             return;
         }
 
-        $this->view("studentrep/viewmemoreports", [
+        $this->view("secretary/viewmemoreports", [
             'memoDetails' => $memoDetails,
             'user' => $_SESSION['userDetails']->username
         ]);
@@ -296,26 +296,28 @@ class Secretary extends BaseController {
 
 
 
-    
     public function viewminutereports() {
         if (!isset($_GET['minute'])) {
             header("Location: " . ROOT . "/secretary/selectminute");
             exit;
         }
 
-        $minuteId = $_GET['minute'];
+
+        $id = $_GET['minute'];
         $minute = new Minute();
-        $minuteDetails = $minute->getMinuteDetails($minuteId);
+        $minuteDetails = $minute->getMinuteReportDetails($id);
 
         if (!$minuteDetails) {
-            $_SESSION['flash_error'] = "Minute not found.";
-            redirect("secretary/selectminute");
+            $this->view("minutereportnotfound");
             return;
         }
-
-        $this->view("secretary/viewminutereports", ['minuteDetails' => $minuteDetails]);
+       
+        $this->view("secretary/viewminutereports", [
+            'minuteDetails' => $minuteDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
-
+     
 
     public function notifications() {
         $notificationModel=new Notification;
