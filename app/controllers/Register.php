@@ -68,7 +68,6 @@ class Register extends Controller {
             $adminUsername = $userRoles->getAdminUsername();
             $status = 'pending';
 
-            // Insert the request and check for success
             $result = $userRequest->insertRequest($fullName, $roleString, $lecStuId, $nic, $email, $tpno, $additionalTpno, $status);
 
             if ($result) {
@@ -84,10 +83,7 @@ class Register extends Controller {
                     'link'=>"viewRequestDetails?id=$id"]);
 
                 $this->view("showsuccessregistration"); 
-                // echo "<script>
-                //     alert('Your request has been successfully sent to the admin!');
-                //     window.location.href = '" . ROOT . "/register';
-                // </script>";
+                
                 exit();
             } else {
                 echo "<script>alert('There was an error with your request. Please try again.');</script>";

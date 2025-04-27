@@ -1,4 +1,4 @@
-/* Base Colors */
+
 :root {
     --primary-blue: #182442;
     --light-blue: #e6f0ff;
@@ -8,7 +8,6 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
   }
   
-  /* General Layout Styles */
   .profile-container {
     padding: 20px;
     margin:  -10px auto;
@@ -20,7 +19,6 @@
     border-radius: 20px;
   }
   
-  /* Profile Header */
   .profile-header {
     display: flex;
     align-items: center;
@@ -67,7 +65,6 @@
     color: var(--dark-blue);
   }
   
-  /* Action Button */
   .add-button-wrapper {
     text-align: center;
     margin-top: 30px;
@@ -88,8 +85,7 @@
   .add-btn:hover {
     background-color: var(--hover-blue);
   }
-  
-  /* Base style */
+ 
 input[type="checkbox"] {
     appearance: none;
     width: 20px;
@@ -99,14 +95,12 @@ input[type="checkbox"] {
     background-color: #fff;
     cursor: pointer;
   }
-  
-  /* Checked (selected) style */
+ 
   input[type="checkbox"]:checked {
     background-color: #003366;
   }
   
   
-  /* Label and Checkbox Layout */
   .meeting-options label,
   .role-options label {
     display: flex;
@@ -116,8 +110,7 @@ input[type="checkbox"] {
     color: #222;
     gap: 8px;
   }
-  
-  /* Modal Styles */
+ 
   .modal {
     display: none;
     position: fixed;
@@ -162,11 +155,10 @@ input[type="checkbox"] {
   }
 
   .role-option {
-    margin-bottom: 20px; /* Adjust spacing as needed */
+    margin-bottom: 20px; 
   }
   
   
-  /* Responsive */
   @media (max-width: 768px) {
     .profile-header {
       flex-direction: column;
@@ -192,8 +184,8 @@ input[type="checkbox"] {
 }
 
 .btn-submit {
-  background-color: #3b82f6;  /* Green background */
-  color: white;               /* White text */
+  background-color: #3b82f6;  
+  color: white;               
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -205,7 +197,7 @@ input[type="checkbox"] {
 }
 
 .btn-submit:hover {
-  background-color: #2f5898; /* Slightly darker green on hover */
+  background-color: #2f5898; 
 }
 
 

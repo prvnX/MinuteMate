@@ -7,13 +7,11 @@ class Admin extends BaseController {
     }
 
     public function viewpendingRequests(): void {
-        // Create an instance of the UserRequests model
+        
         $userRequestsModel = $this->model("user_requests");
 
-        // Fetch the list of pending requests
         $pendingRequests = $userRequestsModel->getPendingRequests();
 
-        // Pass the data to the view
         $this->view(name: "admin/viewpendingRequests", data: [
             "pendingRequests" => $pendingRequests
         ]);
@@ -86,17 +84,14 @@ class Admin extends BaseController {
                             ]);
                         }
     
-                        // Insert general meeting types
                         if (!empty($generalMeetingTypes)) {
                             $userMeetingTypesModel->insertMeetingTypes($username, $generalMeetingTypes);
                         }
     
-                        // Insert lecturer meeting types
                         if (!empty($lecturerMeetingTypes)) {
                             $userMeetingTypesModel->insertMeetingTypes($username, $lecturerMeetingTypes);
                         }
     
-                        // If user is a secretary, insert secretary meeting types into both tables
                         if (in_array('secretary', array_map('strtolower', $roles))) {
                             if (!empty($secretaryMeetingTypes)) {
                               
@@ -106,7 +101,6 @@ class Admin extends BaseController {
                             }
                         }
     
-                        // Remove original request
                         $userRequestsModel->deleteRequestById($requestId);
     
                         $mail = new Mail();
@@ -122,7 +116,7 @@ class Admin extends BaseController {
                     }
                 }
             }else{
-                // Update the request status to 'declined'
+
                 $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
                 if ($result !== false) {
                     header('Content-Type: application/json');
@@ -230,10 +224,10 @@ public function viewMemberProfile() {
 
     public function logout() {
         session_start();
-        // Destroy all session data
+     
         session_unset();
         session_destroy();
-        // Redirect to the login page
+    
         redirect("home");
     }
    
@@ -360,7 +354,6 @@ public function viewMemberProfile() {
         'memberId' => $userId
     ];
 
-    // Load the view
     $this->view('admin/pastMemberProfile', $data);
     }
 
@@ -394,7 +387,6 @@ public function viewMemberProfile() {
                         $errors[] = 'New password and confirmation do not match';
                     }
         
-                    //checking if the password has the required strength
                     if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
                         $errors[] = "New password does not meet the required strength.";
                     }
