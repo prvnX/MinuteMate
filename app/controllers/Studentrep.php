@@ -117,11 +117,10 @@ class Studentrep extends BaseController {
             $toBeReviewedBy = htmlspecialchars($_POST['Reviewedby']);
             $submittedBy=$_SESSION['userDetails']->username;
             $meetingId = htmlspecialchars($_POST['meeting']);
-            if(empty($memoTitle)|| empty($memoContent))
-            {
-                // $_SESSION['flash_error'] = "All fields are required.";
-                // redirect("studentrep/entermemo");
-                echo "All fields are required";
+            
+            if (empty($_POST['meeting']) || empty($_POST['memo-subject']) || empty($_POST['memo-content'])) {
+                $_SESSION['flash_error'] = "All fields are required.";
+                redirect('studentrep/entermemo'); // 👈 redirect back to the memo form
                 return;
             }
 

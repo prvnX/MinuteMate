@@ -54,6 +54,14 @@
             <button type="button" class="cancel-btn" onclick="handleCancel()">Cancel</button>
             <button type="submit" class="submit-btn" onclick="submitForm()">Submit</button>
         </div>
+
+        <?php 
+            if (!empty($_SESSION['flash_error'])): ?>
+            <div class="flash-error"><?= $_SESSION['flash_error']; ?></div>
+            <?php 
+                unset($_SESSION['flash_error']); ?>
+            <?php endif; 
+        ?>
     </form>
 </div>
 
@@ -87,6 +95,10 @@
     // Sync CKEditor data to the hidden textarea when submitting the form
     function submitForm(event) {
         // Update the hidden textarea with the CKEditor content
+        const meeting = document.getElementById('meeting').value;
+        const subject = document.getElementById('subject').value.trim();
+        const content = editor.getData().trim();
+
         if (!meeting || !subject || !content) {
             Swal.fire({
                 icon: 'warning',

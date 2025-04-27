@@ -85,9 +85,9 @@ class Secretary extends BaseController {
             $meetingId = htmlspecialchars($_POST['meeting']);
             $submittedBy=$_SESSION['userDetails']->username;
 
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
-            {
-                echo "All fields are required";
+            if (empty($_POST['meeting']) || empty($_POST['memo-subject']) || empty($_POST['memo-content'])) {
+                $_SESSION['flash_error'] = "All fields are required.";
+                redirect('secretary/entermemo'); 
                 return;
             }
 
@@ -395,7 +395,7 @@ public function selectminute() { //this is the page where the secretary selects 
         $action = $_POST['action'] ?? null;
 
         if (!$memo_id || !$action) {
-            $_SESSION['flash_error'] = 'Invalid request. Please provide all required data.';
+            $_SESSION['flash_error'] = "Invalid request. Please provide all required data.";
             redirect("secretary/memocart");
             return;
         }
@@ -422,13 +422,13 @@ public function selectminute() { //this is the page where the secretary selects 
                 'Ref_ID' => $memo_id,
                 'link'=>"viewmemodetails/?memo_id=$memo_id"]);
         } else {
-            $_SESSION['flash_error'] = 'Invalid action.';
+            $_SESSION['flash_error'] = "Invalid action.";
             redirect("secretary/memocart");
             return;
         }
 
         if ($updated) {
-            $_SESSION['flash_message'] = `Memo successfully {$action}ed.`;
+            $_SESSION['flash_message'] = "Memo successfully {$action}ed.";
         } else {
             $_SESSION['flash_error'] = "Failed to {$action} memo.";
         }
