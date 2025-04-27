@@ -682,3 +682,11 @@ body{
     transition: all 0.2s ease-in-out;
     float: right;
 }
+
+.meeting a{
+    margin-top: 0;
+    text-decoration: none;
+    color: var(--secondary-color);
+    color:#555;
+    font-weight: 600;
+}

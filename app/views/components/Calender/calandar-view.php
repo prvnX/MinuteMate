@@ -180,16 +180,20 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             const location = document.getElementById('location').value;
             const additional_note = document.getElementById('note').value;
             const dateObj=new Date();
+            const currentDateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()); // today's date at 00:00
             const currentDate = dateObj;
             // const currentDate=dateObj.toLocaleDateString();
             let insertedDateObj=new Date(date); // Convert to JS Date object
             const insertedDate=insertedDateObj.toLocaleDateString();
+            const insertedDateOnly = new Date(insertedDateObj.getFullYear(), insertedDateObj.getMonth(), insertedDateObj.getDate()); // also at 00:00
             let startT = new Date(`2000-01-01T${start_time}:00`); // Defaulting date to 2000-01-01
             let endT = new Date(`2000-01-01T${end_time}:00`);
             let diffMs = Math.abs(startT - endT); // Absolute difference
             let diffMins = Math.floor((diffMs/1000)/60); // Convert to minutes
             const agendaArray=[];
             const allAgendaInputs = document.getElementsByName("Agenda[]");
+            console.log(insertedDate);
+            console.log(currentDate);
             allAgendaInputs.forEach((input, index) => {
             console.log(`Agenda ${index + 1}: ${input.value}`);
             if(input.value!="" || input.value.trim()!=""){
@@ -201,7 +205,7 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                 showAlert("Please fill all the fields");
                 return;
             }
-            else if(insertedDate<currentDate){
+            else if(insertedDateOnly<currentDateOnly){
                 showAlert("Error:Cannot add an event to a past date");
                 return;
             }

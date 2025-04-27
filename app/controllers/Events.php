@@ -303,6 +303,51 @@ public function  getMemoList(){
     // }
     }
 
+    public function viewMeetingReport(){
+        if($this->isValidRequest()){
+        $meeting = new Meeting;
+        $meetingAtd= new Meeting_attendence;
+        $agenda= new Agenda;
+        $memoDis=new Memo_discussed_meetings;
+        $minute=new Minute;
+        $meetingID=$_GET['meeting_id'];
+        $meetingtypes=[];
+        $meetingDetails[0]=$meeting->select_all(['meeting_id'=>$meetingID]);
+        $meetingDetails[1]=$meetingAtd->getAttendees($meetingID);
+        $meetingDetails[2]=$agenda->selectandproject('agenda_item',['meeting_id'=>$meetingID])??null;
+        $meetingDetails[3]=$memoDis->selectandproject('memo_id',['meeting_id'=>$meetingID])??null;
+        $meetingDetails[4]=$minute->selectandproject('Minute_ID',['MeetingID'=>$meetingID])??null;
+        if($meetingDetails[0][0]!=null){
+            $meetingType=$meetingDetails[0][0]->meeting_type;
+            if($meetingType=='iud'){
+                $meetingType='iod';
+            }
+            else if($meetingType=='rhd'){
+                $meetingType='rhd';
+            }
+            else if($meetingType=='syn'){
+                $meetingType='syn';
+            }
+            else if($meetingType=='bom'){
+                $meetingType='bom';
+            }
+            if(in_array(strtoupper($meetingType),$_SESSION['meetingTypes'])){
+                $this->view('viewmeetingreport',['meetingDetails'=>$meetingDetails,]);
+            }
+            else{
+                $this->view('meetingreportNotaccess');
+            }
+                
+
+        }
+    
+       
+        else{
+            redirect("login");
+        }
+    }
+}
+
 
 }
 

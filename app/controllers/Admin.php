@@ -528,7 +528,6 @@ public function viewMemberProfile() {
         if ($id) {
             $userEditRequests = new User_edit_requests();
             $userEditRequests->deleteRequestById($id);
-            
             echo json_encode(['success' => "Request with ID - $id is Declined"]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Invalid request ID']);
@@ -556,19 +555,13 @@ public function viewMemberProfile() {
 
     // Update user main table
     $userUpdate = new User();
-    if(!($new_nic==null && $new_email==null && $new_fullname==null)){
-        $userUpdate->update($username, $updatedData, 'username');
-        
-    }
-       
-   
+    $userUpdate->update($username, $updatedData, 'username');
 
     // Update contact number in related table
     if (!empty($new_tp_no)) {
         $contactModel = new UserContactNums();
         $contactModel->updateContactNumbers($username, $new_tp_no);  // You'll need to implement this
     }
-
       
      
     // Remove the edit request

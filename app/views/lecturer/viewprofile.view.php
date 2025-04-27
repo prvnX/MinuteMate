@@ -93,6 +93,9 @@
             foreach ($meetingTypes as $typeObj) {
                 $type = $typeObj->meeting_type;
                 $style = isset($colors[$type]) ? $colors[$type] : 'background-color: gray; color: white;';
+                if($type=="IOD"){
+                    $type = "IUD";
+                }
                 echo "<span class='badge' style='$style'>" . htmlspecialchars($type) . "</span> ";
             }
         } else {
