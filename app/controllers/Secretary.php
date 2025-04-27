@@ -364,7 +364,7 @@ public function selectminute() { //this is the page where the secretary selects 
         $user = $_SESSION['userDetails']->username;
         $memo = new Memo();
 
-        $memos = $memo->getMemosForMemocart($user);
+        $memos = $memo->getMemosForMemocart($user) ?? [];
         $this->view('secretary/memocart', ['memos'=>$memos]);
     }
 
