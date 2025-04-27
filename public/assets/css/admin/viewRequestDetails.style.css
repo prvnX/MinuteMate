@@ -110,10 +110,10 @@ p {
     background-color: red;
 }
 
-.iod-option input[type="checkbox"] {
+.iud-option input[type="checkbox"] {
     border-color: yellow;
 }
-.iod-option input[type="checkbox"]:checked {
+.iud-option input[type="checkbox"]:checked {
     background-color: yellow;
 }
 

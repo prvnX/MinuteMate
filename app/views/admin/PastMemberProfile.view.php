@@ -49,7 +49,7 @@ $deletedData = $data['deletedData'] ?? null;
               <p><strong>User Meeting Types</p>
               <?php
               $userMeetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
-              $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+              $meetingTypes = ['RHD', 'IUD', 'SYN', 'BOM'];
 
               foreach ($meetingTypes as $type) {
                 $checked = in_array($type, $userMeetingTypes) ? 'checked' : '';
@@ -77,7 +77,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
         ? array_map(fn($row) => strtoupper($row->meeting_type), $secMeetingsRaw)
         : [];
 
-    $allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+    $allMeetingTypes = ['RHD', 'IUD', 'SYN', 'BOM'];
 
     foreach ($allMeetingTypes as $type) {
         $checked = in_array($type, $secMeetings) ? 'checked' : '';
@@ -152,7 +152,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <div id="secretaryMeetingTypesContainer" style="display: none;">
                 <label><strong>Select Secretary Meeting Type:</strong></label>
                 <div class="meeting-options">
-                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                  <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="secretary<?= $type ?>">
                       <input type="checkbox"
@@ -171,7 +171,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <div id="lecturerMeetingTypesContainer" style="display: none;">
                 <label><strong>Select Lecturer Meeting Type:</strong></label>
                 <div class="meeting-options">
-                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                  <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="lecturer<?= $type ?>">
                       <input type="checkbox"
@@ -190,7 +190,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <div id="meetingTypeContainer" style="display: none;">
                 <label><strong>Select Meeting Type(s):</strong></label>
                 <div class="meeting-options">
-                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                  <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="meeting<?= $type ?>">
                       <input type="checkbox"

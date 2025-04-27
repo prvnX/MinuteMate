@@ -94,10 +94,10 @@ p {
     background-color: #ef4444;
 }
 
-.iod-option input[type="checkbox"] {
+.iud-option input[type="checkbox"] {
     border-color: #facc15;
 }
-.iod-option input[type="checkbox"]:checked {
+.iud-option input[type="checkbox"]:checked {
     background-color: #facc15;
 }
 
