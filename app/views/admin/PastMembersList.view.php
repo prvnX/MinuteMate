@@ -22,6 +22,10 @@
 <body>
 
 <div class="members-list-container">
+<?php if($meetingType=="IOD"){
+    $meetingType="IUD";
+  }
+  ?>
   <h2 class="title">Past Members in <?= htmlspecialchars($meetingType) ?></h2>
   <?php if (!empty($removedMembers)): ?>
     <ul class="members-list">

@@ -33,7 +33,7 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
         <!-- Secretary Meeting Type -->
         <label>Select Secretary Meeting Type:</label>
         <div class="meeting-options">
-            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+            <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                 <div class="meeting-option <?= strtolower($type) ?>-option">
                     <input type="checkbox" id="secretary<?= $type ?>" name="secretaryMeetingType[]" value="<?= $type ?>">
                     <label for="secretary<?= $type ?>"><?= $type ?></label>
@@ -44,7 +44,7 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
         <!-- Lecturer Meeting Type -->
         <label>Select Lecturer Meeting Type:</label>
         <div class="meeting-options">
-            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+            <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                 <div class="meeting-option <?= strtolower($type) ?>-option">
                     <input type="checkbox" id="lecturer<?= $type ?>" name="lecturerMeetingType[]" value="<?= $type ?>">
                     <label for="lecturer<?= $type ?>"><?= $type ?></label>
@@ -56,7 +56,7 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
         <!-- Only Secretary -->
         <label>Select Secretary Meeting Type:</label>
         <div class="meeting-options">
-            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+            <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                 <div class="meeting-option <?= strtolower($type) ?>-option">
                     <input type="checkbox" id="secretary<?= $type ?>" name="secretaryMeetingType[]" value="<?= $type ?>">
                     <label for="secretary<?= $type ?>"><?= $type ?></label>
@@ -68,7 +68,7 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
         <!-- Only Lecturer -->
         <label>Select Lecturer Meeting Type:</label>
         <div class="meeting-options">
-            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+            <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                 <div class="meeting-option <?= strtolower($type) ?>-option">
                     <input type="checkbox" id="lecturer<?= $type ?>" name="lecturerMeetingType[]" value="<?= $type ?>">
                     <label for="lecturer<?= $type ?>"><?= $type ?></label>
@@ -80,7 +80,7 @@ $isSecretary = strpos($userDetails->role, 'secretary') !== false;
         <!-- Other Roles -->
         <label>Select Meeting Type(s):</label>
         <div class="meeting-options">
-            <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+            <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                 <div class="meeting-option <?= strtolower($type) ?>-option">
                     <input type="checkbox" id="meeting<?= $type ?>" name="meetingType[]" value="<?= $type ?>">
                     <label for="meeting<?= $type ?>"><?= $type ?></label>

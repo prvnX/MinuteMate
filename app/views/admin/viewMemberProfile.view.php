@@ -33,7 +33,7 @@ $currentPage = 'viewMembers'; // For navbar highlighting
     <p><strong>User Meeting Type(s):</strong></p>
         <?php
         $userData->meetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
-        $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+        $meetingTypes = ['RHD', 'IUD', 'SYN', 'BOM'];
 
         foreach ($meetingTypes as $type) {
             $checked = in_array($type, $userData->meetingTypes) ? 'checked' : '';
@@ -62,7 +62,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
         ? array_map(fn($row) => strtoupper($row->meeting_type), $secMeetingsRaw)
         : [];
 
-    $allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+    $allMeetingTypes = ['RHD', 'IUD', 'SYN', 'BOM'];
 
     foreach ($allMeetingTypes as $type) {
         $checked = in_array($type, $secMeetings) ? 'checked' : '';
