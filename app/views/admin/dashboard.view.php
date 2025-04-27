@@ -79,7 +79,7 @@
 
             <div class="card" id="profile">
               <div class="icon-bg">
-                <i class="fas fa-building"></i>
+                <i class="fas fa-user"></i>
               </div>
               <h2>Profile</h2>
               <p>View admin profile here</p>
