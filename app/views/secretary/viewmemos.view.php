@@ -38,7 +38,7 @@
     <div class="content-area">
         <div class="memolist" id="memolist">
             <?php foreach ($memoList as $memoitem): ?>
-                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?> data-submitted-by="<?= htmlspecialchars(strtolower($memoitem->submitted_by)) ?>">
+                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?> data-submitted-by=<?= htmlspecialchars(strtolower($memoitem->submitted_by)) ?> data-id=<?= htmlspecialchars($memoitem->memo_id) ?>">
                     <div class="memocontent">
                     <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
                     <div class="memo-meta">
@@ -56,7 +56,7 @@
 
         <div id="empty-state" class="empty-state" style="display: none;">
                 <div class="empty-icon"></div>
-                <h3>No minutes found</h3>
+                <h3>No memos found</h3>
                 <p>Try adjusting the filters</p>
         </div>
      </div>
@@ -64,6 +64,14 @@
     <div class="sidebar">
                 <div class="filter-sidebar">
                     <h2 class="filter-header">Apply Filters Here</h2>
+
+                    <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Minute Id</h3>
+                    <div class="id-inputs">
+                        
+                        <input type="text" id="id-label" class="id-input" placeholder="Id">
+                    </div>
+                    </div>
 
                     <div class="filter-section">
                         <h3 class="filter-section-title">Filter By Meeting Dates</h3>
@@ -116,6 +124,7 @@
             const bomCheckbox = document.getElementById('bom-checkbox');
             const syndicateCheckbox = document.getElementById('syndicate-checkbox');
             const memberSelect = document.getElementById('member-select');
+            const idInserted =  document.getElementById('id-label');
 
 
             const applyButton = document.getElementById('apply-filters');
@@ -133,6 +142,7 @@
                 const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
                 const toDate = dateTo.value ? new Date(dateTo.value) : null;
                 const selectedMember = memberSelect.value;
+                const insertedId = idInserted.value.trim();
   
 
                 const cards = memoList.querySelectorAll('.memoitem');
@@ -142,6 +152,7 @@
                     const type = card.dataset.type;
                     const date = new Date(card.dataset.date);
                     const submitter = card.dataset.submittedBy;
+                    const id = card.dataset.id;
 
                     let isVisible = true;
 
@@ -149,6 +160,7 @@
                     if (fromDate && date < fromDate) isVisible = false;
                     if (toDate && date > toDate) isVisible = false;
                     if (selectedMember && submitter !== selectedMember) isVisible = false;
+                    if(insertedId && !id.includes(insertedId)) isVisible = false;
 
                     if(!isVisible){
                         card.classList.add('hidden');

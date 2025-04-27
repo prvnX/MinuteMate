@@ -36,7 +36,7 @@
         <div class="content-area">
             <div class="minutes-list" id="minutes-list">
                 <?php foreach($minuteList as $minuteCard): ?>
-                <div class="minute-card" data-type=<?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?> data-date=<?=htmlspecialchars($minuteCard->date)?> >
+                <div class="minute-card" data-type=<?=htmlspecialchars(strtoupper($minuteCard->meeting_type))?> data-date=<?=htmlspecialchars($minuteCard->date)?> data-id=<?=htmlspecialchars($minuteCard->Minute_ID)?> >
                     <div class="minute-info">
                         <h2 class="minute-title">Minute - <?=htmlspecialchars($minuteCard->Minute_ID)?></h2>
                         <div class="minute-meta">
@@ -67,6 +67,14 @@
         <div class="sidebar">
             <div class="filter-sidebar">
                 <h2 class="filter-header">Apply Filters Here</h2>
+
+                <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Minute Id</h3>
+                    <div class="id-inputs">
+                        
+                        <input type="text" id="id-label" class="id-input" placeholder="Id">
+                    </div>
+                </div>
 
                 <div class="filter-section">
                     <h3 class="filter-section-title">Filter By Meeting Dates</h3>
@@ -105,11 +113,13 @@
             const rhdCheckbox = document.getElementById('rhd-checkbox');
             const bomCheckbox = document.getElementById('bom-checkbox');
             const syndicateCheckbox = document.getElementById('syndicate-checkbox');
+            const idInserted =  document.getElementById('id-label');
 
             const applyButton = document.getElementById('apply-filters');
             const clearButton = document.getElementById('clear-filters');
             const minutesList = document.getElementById('minutes-list');
             const emptyState = document.getElementById('empty-state');
+            
 
             applyButton.addEventListener('click', () => {
                 const selectedTypes = [];
@@ -120,6 +130,8 @@
 
                 const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
                 const toDate = dateTo.value ? new Date(dateTo.value) : null;
+               const insertedId = idInserted.value.trim();
+                
   
 
                 const cards = minutesList.querySelectorAll('.minute-card');
@@ -129,12 +141,15 @@
                     const type = card.dataset.type;
                     const date = new Date(card.dataset.date);
                     const submitter = card.dataset.submittedBy;
+                    const id = card.dataset.id;
 
                     let isVisible = true;
 
                     if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
                     if (fromDate && date < fromDate) isVisible = false;
                     if (toDate && date > toDate) isVisible = false;
+                    if(insertedId && !id.includes(insertedId)) isVisible = false;
+
                     if(!isVisible){
                         card.classList.add('hidden');
                     }
