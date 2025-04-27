@@ -320,7 +320,7 @@ public function  getMemoList(){
         if($meetingDetails[0][0]!=null){
             $meetingType=$meetingDetails[0][0]->meeting_type;
             if($meetingType=='iud'){
-                $meetingType='iod';
+                $meetingType='iud';
             }
             else if($meetingType=='rhd'){
                 $meetingType='rhd';

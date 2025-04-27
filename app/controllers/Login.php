@@ -14,7 +14,7 @@ class Login extends Controller {
 
             $username = $_POST['username'];
             $password = $_POST['password'];
-            $row = $user->select_all(["username" => $username]);
+            $row = $user->select_all(["username" => $username,"status"=>"Active"]);
 
             if ($row) {                
                 if (password_verify($password, $row[0]->password)) {
@@ -54,8 +54,16 @@ class Login extends Controller {
                     $this->view("login", ["err" => $user->errors]);
                 }
             } else {
-                $user->errors['invalid'] = "Username Not Found";
-                $this->view("login", ["err" => $user->errors]);
+                if($row = $user->select_all(["username" => $username])){
+                    $user->errors['invalid'] = "Account is Not Actived";
+                    $this->view("login", ["err" => $user->errors]);
+                    
+                }
+                else{
+                    $user->errors['invalid'] = "Username Not Found";
+                    $this->view("login", ["err" => $user->errors]);
+                }
+
             }
         } else {
             $this->view("login", ['err' => ['invalid' => '']]);
