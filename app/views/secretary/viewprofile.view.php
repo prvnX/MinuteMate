@@ -87,7 +87,7 @@
         $meetingTypes = $data['userMeetingTypes'];
         if (!empty($meetingTypes) && is_array($meetingTypes)) {
             $colors = [
-                'IOD' => 'background-color: #FBBF24; color: white;',
+                'IUD' => 'background-color: #FBBF24; color: white;',
                 'RHD' => 'background-color: #F87171; color: white;',
                 'SYN' => 'background-color: #4ADE80; color: black;',
                 'BOM' => 'background-color: #60A5FA; color: white;',
@@ -96,9 +96,7 @@
                 $type = $typeObj->meeting_type;
       
                 $style = isset($colors[$type]) ? $colors[$type] : 'background-color: gray; color: white;';
-                if($type=="IOD"){
-                    $type = "IUD";
-                }
+
                 echo "<span class='badge' style='$style'>" . htmlspecialchars($type) . "</span> ";
             }
         } else {
