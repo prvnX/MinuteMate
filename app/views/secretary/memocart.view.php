@@ -55,6 +55,7 @@
     <div class="main-container">
         <div class="content-area">
             <div class="memolist" id="memolist">
+                <?php if(!empty($memoList) && is_array($memoList)) :?>
                 <?php foreach ($memoList as $memoitem): ?>
                     <div class="memoitem" >
                         <div class="memocontent">
@@ -67,6 +68,13 @@
                         </a>
                     </div>
                 <?php endforeach; ?>
+                <?php else: ?>
+                    <!-- if there are no memos in the memo cart -->
+                     <div class="no-memos-message" style="text-align: center; margin-top: 40px">
+                        <h3>No memos in the memo cart.</h3>
+                        <p>Please check back later.</p>
+                    </div>
+                <?php endif; ?>
             </div>
     </div>
 </body>
