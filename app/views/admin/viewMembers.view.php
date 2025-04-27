@@ -17,7 +17,7 @@ include '../app/views/components/admin_sidebar.php'; ?>
 </head>
 <body>
 
-<mian class="main-content">
+<main class="main-content">
   <div class="container">
     <div class="card-grid">
       <div class="card">
