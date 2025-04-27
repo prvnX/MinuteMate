@@ -651,22 +651,22 @@ public function reactivateMember() {
          $additional_tp_no = $_POST['additional_tp_no'] ?? null;
 
          if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-             echo "Invalid email format!";
+            $this->view("adminwarning",['title'=>"Invalid Email",'message'=>"Ensure that valid email is entered."]);
              return; 
          }
  
          if (!preg_match('/^\d{12}$|^\d{10}[Vv]$/', $nic)) {
-             echo "NIC must be 12 digits or 10 digits followed by 'V'.";
+            $this->view("adminwarning",['title'=>"Invalid NIC",'message'=>"Ensure that valid NIC with 12 digits or 10 digits+v is entered."]);
              return;
          }
  
          if (strlen($contact_no) != 10) {
-             echo "Contact No. must be less than 10 digits.";
-             return;
+            $this->view("adminwarning",['title'=>"Invalid Contact number",'message'=>"Ensure that contact number is exactly 10 digits is entered."]);
+            return;
          }
 
          if ($additional_tp_no && strlen($additional_tp_no) != 10) {
-             echo "Additional Contact No. must be less than 10 digits.";
+            $this->view("adminwarning",['title'=>"Invalid Contact number",'message'=>"Ensure that the additional contact number is exactly 10 digits is entered."]);
              return;
          }
 
