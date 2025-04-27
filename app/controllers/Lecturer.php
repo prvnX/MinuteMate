@@ -209,6 +209,12 @@ class Lecturer extends BaseController {
             $meetingId = htmlspecialchars($_POST['meeting']);
             $submittedBy=$_SESSION['userDetails']->username;
 
+            if (empty($_POST['meeting']) || empty($_POST['memo-subject']) || empty($_POST['memo-content'])) {
+                $_SESSION['flash_error'] = "All fields are required.";    
+                redirect('lecturer/entermemo'); 
+                return;
+            }
+
 
             $memoData = [
                 'memo_title' => $memoTitle,
@@ -224,6 +230,8 @@ class Lecturer extends BaseController {
             $sec=$meeting->getSecForMeeting($meetingId);
             $secusername=$sec[0]->username;
             $user=$_SESSION['userDetails']->full_name;
+
+            
 
             $notification = new Notification();
             if($secusername!=$user){
