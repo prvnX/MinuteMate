@@ -422,7 +422,6 @@ public function viewMemberProfile() {
                 'nic' => $_POST['nic'],
             ];
 
-            // Validate NIC
         $nic = $data['nic'];
         if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
             echo "<script>
@@ -438,7 +437,6 @@ public function viewMemberProfile() {
     
             $userModel->updateUserByUsername($username, $data);
     
-            // Optional: Update session to reflect new values
             $_SESSION['userDetails']->full_name = $data['full_name'];
             $_SESSION['userDetails']->email = $data['email'];
             $_SESSION['userDetails']->nic = $data['nic'];
@@ -451,8 +449,7 @@ public function viewMemberProfile() {
     
     public function requestchange(){
         $responseStatus = "";
-    
-        // Handle POST request
+  
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $field = $_POST['field'] ?? [];
             $newValue = $_POST['newValue'] ?? [];
@@ -463,7 +460,6 @@ public function viewMemberProfile() {
             
         }
     
-        // Pass responseStatus to the view
         $this->view("admin/requestchange", [
             "user" => "admin",
             "responseStatus" => $responseStatus
@@ -509,8 +505,7 @@ public function viewMemberProfile() {
 
     public function acceptRequest() {
         $data = json_decode(file_get_contents("php://input"), true);
-    
-        // Extract data from the request
+  
         $username = $data['username'] ?? null;
         $new_fullname = $data['new_fullname'] ?? null;
         $new_nic = $data['new_nic'] ?? null;
@@ -526,7 +521,7 @@ public function viewMemberProfile() {
     if (!empty($new_nic)) $updatedData['nic'] = $new_nic;
     if (!empty($new_email)) $updatedData['email'] = $new_email;
 
-    // Update user main table
+   
     $userUpdate = new User();
     if(!($new_nic==null && $new_email==null && $new_fullname==null)){
         $userUpdate->update($username, $updatedData, 'username');
@@ -534,16 +529,11 @@ public function viewMemberProfile() {
     }
        
    
-
-    // Update contact number in related table
     if (!empty($new_tp_no)) {
         $contactModel = new UserContactNums();
         $contactModel->updateContactNumbers($username, $new_tp_no);  // You'll need to implement this
     }
 
-      
-     
-    // Remove the edit request
     $updateAndDelete = new User_edit_requests();
     $updateAndDelete->deleteRequestById($id);
 
@@ -605,10 +595,9 @@ function saveDepartment() {
 
 
 public function removeMember() {
-    // Ensure the session is started
-    $removedBy = $_SESSION['userDetails']->username;  // Using session username
+  
+    $removedBy = $_SESSION['userDetails']->username;  
 
-    // Check if admin is logged in
     if (!isset($removedBy)) {
         echo json_encode(['error' => 'Admin not logged in.']);
         exit;
@@ -645,8 +634,7 @@ public function reactivateMember() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $errors = [];
-       
-        // Dynamically load models as needed
+
         $userModel = $this->model("user");
         $userRolesModel = $this->model("UserRoles");
         $meetingTypesModel = $this->model("meeting_types");
@@ -657,7 +645,6 @@ public function reactivateMember() {
 
         $username = $_POST['username'];
 
-         // Retrieve POST data
          $email = $_POST['email'];
          $nic = $_POST['nic'];
          $contact_no = $_POST['contact_no'];
