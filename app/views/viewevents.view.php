@@ -55,7 +55,9 @@
 
                 
                     $meeting['meeting_type'] = $meeting['meeting_type'] == 'syn' ? 'syndicate' : $meeting['meeting_type'];
+
                     echo "<h1 class='meetingtitle'>" . ucfirst(htmlspecialchars($meeting['meeting_type']))." Meeting </h1><hr>";
+                    echo "<p class='meetingReprt'><a href='".ROOT."/events/viewMeetingReport?meeting_id=".htmlspecialchars($meeting['meeting_id'])."'>View Meeting Report</a></p>";
                     echo "<table>";
                     echo "<tr><td class='left'>Date</td><td>" . htmlspecialchars($meeting['date']) . "</td></tr>";
                     echo "<tr><td class='left'>Start Time:</td><td>" . htmlspecialchars($meeting['start_time']) . "</td></tr>";
@@ -300,6 +302,7 @@ function handleMeetingReschedule(meetingId) {
         const newDate = document.getElementById('newDate').value;
         const startTime = document.getElementById('startTime').value;
         const endTime = document.getElementById('endTime').value;
+        
 
     if (newDate && startTime && endTime) {
         const url = '<?=ROOT?>/Events/rescheduleMeeting';

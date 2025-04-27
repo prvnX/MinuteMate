@@ -1,0 +1,108 @@
+body {
+    background-color: #f2f5f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    padding: 0;
+}
+
+.report-container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.report-title {
+    text-align: center;
+    font-size: 28px;
+    color: #1A3E8D;
+    margin-bottom: 5px;
+}
+
+.report-subtitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table td {
+    padding: 10px;
+    vertical-align: top;
+    font-size: 16px;
+}
+
+table td strong {
+    color: #333;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 30px 0;
+}
+
+
+h4 {
+    color: #1A3E8D;
+    margin-bottom: 15px;
+    border-left: 5px solid #1A3E8D;
+    padding-left: 10px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 20px;
+    
+}
+
+
+p {
+    color: #555;
+    font-style: italic;
+}
+
+.logo {
+    display: block;
+    margin: 30px auto 0;
+    width: 100px;
+}
+.report-container li a{
+    text-decoration: underline  ;
+    color: #010101;
+}
+
+.back-button {
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    margin-left: 40% ;
+    text-decoration: none;
+    color: #1A3E8D;
+    background-color: #e3e9f7;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+
+}
+
+.back-button:hover {
+    background-color: #1A3E8D;
+    color: #ffffff;
+}
+.report-container li{
+    margin-bottom: 10px;
+}
