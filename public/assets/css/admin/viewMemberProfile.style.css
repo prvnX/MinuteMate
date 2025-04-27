@@ -6,11 +6,10 @@
     background-color: #f0f8ff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
-    max-width: 1200px; /* adjust this value as needed */
+    max-width: 1200px; 
     border-radius: 12px;
 }
 
-/* --- Profile Header --- */
 .profile-header {
     display: flex;
     align-items: center;
@@ -28,7 +27,6 @@
     border: 3px solid #3b82f6;
 }
 
-/* --- Text Info --- */
 h3 {
     font-size: 1.8em;
     color: #1e3a8a;
@@ -41,7 +39,6 @@ p {
     color: #151414;
 }
 
-/* --- Meeting Options --- */
 .meeting-options {
     display: flex;
     gap: 50px;
@@ -66,7 +63,6 @@ p {
     margin-bottom: 10px;
 }
 
-/* --- Custom Checkbox --- */
 .meeting-option {
     display: flex;
     align-items: center;
@@ -86,7 +82,6 @@ p {
     transition: background-color 0.2s ease;
 }
 
-/* Color coded */
 .rhd-option input[type="checkbox"] {
     border-color: #ef4444;
 }
@@ -115,7 +110,6 @@ p {
     background-color: #6366f1;
 }
 
-/* --- Buttons --- */
 .action-buttons {
     margin-top: 30px;
 }
@@ -135,7 +129,6 @@ p {
     background-color: #3b82f6;
 }
 
-/* --- Modal --- */
 .modal {
     display: none;
     position: fixed;
