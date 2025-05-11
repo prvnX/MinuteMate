@@ -176,7 +176,6 @@ class Secretary extends BaseController {
             header("Location: ".ROOT."/secretary/selectmeeting");
         }
         $meetingId = $_GET['meeting'];
-        //check the user has the authority to create the minute for the meeting
         $user=$_SESSION['userDetails']->username;
         $drafts= new Minute_Draft();
         $meeting = new Meeting();

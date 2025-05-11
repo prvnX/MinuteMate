@@ -14,9 +14,10 @@ class Meeting{
         'is_minute',
         'type_id',
         'additional_note',
-        'attendence_mark'
-    ]; //editable columns
-    public function showMeeting(){ //for calendar
+        'attendence_mark',
+        'host'
+    ];
+    public function showMeeting(){ 
         $query="select meeting_id,date,meeting_type from $this->table";
         return $this->query($query);
     }

@@ -209,5 +209,6 @@ public function reactivateStatus($username) {
         return $this->query($query, ['password'=>$newPassword, 'username'=>$username]);
     }
 
+
 }
     

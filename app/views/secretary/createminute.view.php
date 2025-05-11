@@ -293,7 +293,7 @@
             const selected = document.querySelector('input[name="previousMinuteStatus"]:checked');
             if (selected && selected.value === 'reject') {
 
-                document.querySelector('.recorrect-button').style.display = 'inline-block';
+                document.querySelector('.recorrect-button').style.display = 'none';
                 Swal.fire({
                     text: "You have to recorrect the previous minute before proceeding, Your current content will be saved as a draft, and you'll be redirected to the recreation page.",
                     icon: "warning",
