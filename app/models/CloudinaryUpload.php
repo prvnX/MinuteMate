@@ -1,9 +1,9 @@
 <?php
 class CloudinaryUpload{
-    protected $cloud_name = "dbleqzcp4"; // Should replace with env variable
-    protected $api_key = "481695248511879"; // Should replace with env variable
-    protected $api_secret = "C5Ji1A1fv5y1gxPdDEgJicg1Xbw"; // Should replace with env variable
-    protected $upload_preset = "my_present"; // Should replace with env variable
+    protected $cloud_name = ""; // cloudinary cloud name
+    protected $api_key = ""; // api key
+    protected $api_secret = ""; // api secret
+    protected $upload_preset = ""; // upload present
     
     private $uploadedMedia=[]; //store the uploaded media links and data here
 
