@@ -29,9 +29,9 @@ include '../app/views/components/admin_sidebar.php'; ?>
 
       <div class="card">
         <div class="icon-circle yellow"><i class="fas fa-users"></i></div>
-        <h3 class="card-title"> Past IOD Members</h3>
-        <p class="card-description">View Past members of the IOD committee</p>
-        <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=IOD" class="card-btn">IOD</a>
+        <h3 class="card-title"> Past IUD Members</h3>
+        <p class="card-description">View Past members of the IUD committee</p>
+        <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=IUD" class="card-btn">IUD</a>
       </div>
 
       <div class="card">
@@ -43,8 +43,8 @@ include '../app/views/components/admin_sidebar.php'; ?>
 
       <div class="card">
         <div class="icon-circle green"><i class="fas fa-users"></i></div>
-        <h3 class="card-title"> Past SYN Members</h3>
-        <p class="card-description">View Past members of the SYN committee</p>
+        <h3 class="card-title"> Past BOM Members</h3>
+        <p class="card-description">View Past members of the BOM committee</p>
         <a href="<?=ROOT?>/admin/viewPastMembersByType?meetingType=BOM" class="card-btn">BOM</a>
       </div>
   </div>

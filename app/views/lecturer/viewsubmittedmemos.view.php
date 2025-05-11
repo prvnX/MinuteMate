@@ -32,7 +32,7 @@
         <div class="memolist" id="memolist">
         <?php if (!empty($memoList) && is_array($memoList)): ?>
             <?php foreach ($memoList as $memoitem): ?>
-                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?>">
+                <div class="memoitem" data-type=<?= htmlspecialchars(strtoupper($memoitem->meeting_type)) ?> data-date=<?= htmlspecialchars($memoitem->date) ?> data-id=<?= htmlspecialchars($memoitem->memo_id) ?>">
                     <div class="memocontent">
                     <h3><?= htmlspecialchars($memoitem->memo_title) ?></h3>
                     <div class="memo-meta">
@@ -66,7 +66,7 @@
 
         <div id="empty-state" class="empty-state" style="display: none;">
                 <div class="empty-icon"></div>
-                <h3>No minutes found</h3>
+                <h3>No memos found</h3>
                 <p>Try adjusting the filters</p>
         </div>
      </div>
@@ -74,6 +74,14 @@
     <div class="sidebar">
                 <div class="filter-sidebar">
                     <h2 class="filter-header">Apply Filters Here</h2>
+
+                    <div class="filter-section">
+                    <h3 class="filter-section-title">Filter By Minute Id</h3>
+                    <div class="id-inputs">
+                        
+                        <input type="text" id="id-label" class="id-input" placeholder="Id">
+                    </div>
+                    </div>
 
                     <div class="filter-section">
                         <h3 class="filter-section-title">Filter By Meeting Dates</h3>
@@ -112,6 +120,7 @@
             const rhdCheckbox = document.getElementById('rhd-checkbox');
             const bomCheckbox = document.getElementById('bom-checkbox');
             const syndicateCheckbox = document.getElementById('syndicate-checkbox');
+            const idInserted =  document.getElementById('id-label');
 
             const applyButton = document.getElementById('apply-filters');
             const clearButton = document.getElementById('clear-filters');
@@ -127,6 +136,8 @@
 
                 const fromDate = dateFrom.value ? new Date(dateFrom.value) : null;
                 const toDate = dateTo.value ? new Date(dateTo.value) : null;
+                const insertedId = idInserted.value.trim();
+  
   
 
                 const cards = memoList.querySelectorAll('.memoitem');
@@ -136,12 +147,15 @@
                     const type = card.dataset.type;
                     const date = new Date(card.dataset.date);
                     const submitter = card.dataset.submittedBy;
+                    const id = card.dataset.id;
+                    
 
                     let isVisible = true;
 
                     if (selectedTypes.length && !selectedTypes.includes(type)) isVisible = false;
                     if (fromDate && date < fromDate) isVisible = false;
                     if (toDate && date > toDate) isVisible = false;
+                    if(insertedId && !id.includes(insertedId)) isVisible = false;
                     if(!isVisible){
                         card.classList.add('hidden');
                     }

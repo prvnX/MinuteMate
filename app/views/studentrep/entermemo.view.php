@@ -18,7 +18,7 @@
     require_once("../app/views/components/std_sidebar.php"); //call the sidebar component
     ?>
 
-<h1 class="memo-heading">   </h1>
+<h1 class="memo-heading"> Enter a memo </h1>
 <div class="memo-sub-container">
     <form action="<?=ROOT?>/studentrep/submitmemo" method="post" id="memoForm" onsubmit = "return submitForm(event);">
         <div class="field">

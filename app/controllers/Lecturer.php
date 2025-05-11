@@ -127,6 +127,9 @@ class Lecturer extends BaseController {
     
 
     public function notifications() {
+        $notificationModel=new Notification;
+        $Readnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>1]);
+        $Unreadnotifications=$notificationModel->select_all(['reciptient'=>$_SESSION['userDetails']->username, 'is_read'=>0]);
         //these are just placeholders
         $user = "lecturer";
         $memocart = "memocart";   //use memocart-dot if there is a memo in the cart if not drop the -dot part change with db
@@ -136,67 +139,68 @@ class Lecturer extends BaseController {
             $notification => ROOT."/lecturer/notifications",
             "profile" => ROOT."/lecturer/viewprofile"
         ];
-        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification]);
+        $this->view("notifications",[ "user" => $user, "menuItems" => $menuItems,"notification" => $notification, 'Readnotifications'=>$Readnotifications, "Unreadnotifications"=>$Unreadnotifications]);
     }
-    public function viewprofile() {
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
-
+    public function viewprofile(){
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
+        $MeetingAtt = new Meeting_attendence();
+        $attendenceMeetings = $MeetingAtt->selectandproject('Count(*) as attendence_count',['attendee'=>$username]);
             $errors = [];
-            $success = false;
-
-        if($_SERVER['REQUEST_METHOD'] === 'POST')
-        {
-            
-            $users = new User();
-            $username = $_SESSION['userDetails']->username;
-            $currentPassword = $_POST['current_password'];
-            $newPassword = $_POST['new_password'];
-            $confirmPassword = $_POST['confirm_password'];
-
-            $storedPasswordData = $users->getHashedPassword($username);
-            $storedPassword = $storedPasswordData[0] ->password ?? null;
-
-          
-            if(!password_verify($currentPassword,$storedPassword))
+        $success = false;
+            if($_SERVER['REQUEST_METHOD'] === 'POST')
             {
-                $errors[] = 'Current Password is not correct';
-            }
-
-            if($newPassword !== $confirmPassword)
-            {
-                $errors[] = 'New password and confirmation do not match';
-            }
-
-            //checking if the password has the required strength
-            if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
-                $errors[] = "New password does not meet the required strength.";
-            }
-            if(empty($errors))
-            {
-                $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
-                $users->updatePassword($username, $newHashed);
-                $success = true;
-            }
-            echo json_encode([
-                'success' => $success,
-                'errors' => $errors,
-                'state'=> password_verify($currentPassword,$storedPassword)
-            ]);
-            exit;
-        }
-        
-        $this->view("lecturer/viewprofile");
-        //echo($errors);
+                
+                $users = new User();
+                $username = $_SESSION['userDetails']->username;
+                $currentPassword = $_POST['current_password'];
+                $newPassword = $_POST['new_password'];
+                $confirmPassword = $_POST['confirm_password'];
     
-    }
+                $storedPasswordData = $users->getHashedPassword($username);
+                $storedPassword = $storedPasswordData[0] ->password ?? null;
+    
+              
+                if(!password_verify($currentPassword,$storedPassword))
+                {
+                    $errors[] = 'Current Password is not correct';
+                }
+    
+                if($newPassword !== $confirmPassword)
+                {
+                    $errors[] = 'New password and confirmation do not match';
+                }
+    
+                //checking if the password has the required strength
+                if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                    $errors[] = "New password does not meet the required strength.";
+                }
+                if(empty($errors))
+                {
+                    $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                    $users->updatePassword($username, $newHashed);
+                    $success = true;
+                }
+                echo json_encode([
+                    'success' => $success,
+                    'errors' => $errors,
+                    'state'=> password_verify($currentPassword,$storedPassword)
+                ]);
+                exit;
+            }
+            
 
+            $this->view("lecturer/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes,'attendenceMeetings'=>$attendenceMeetings]);
+         
+
+    }
     public function submitmemo() {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
@@ -205,13 +209,12 @@ class Lecturer extends BaseController {
             $meetingId = htmlspecialchars($_POST['meeting']);
             $submittedBy=$_SESSION['userDetails']->username;
 
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
-            {
-                // $_SESSION['flash_error'] = "All fields are required.";
-                // redirect("lecturer/entermemo");
-                echo "All fields are required";
+            if (empty($_POST['meeting']) || empty($_POST['memo-subject']) || empty($_POST['memo-content'])) {
+                $_SESSION['flash_error'] = "All fields are required.";    
+                redirect('lecturer/entermemo'); 
                 return;
             }
+
 
             $memoData = [
                 'memo_title' => $memoTitle,
@@ -228,6 +231,8 @@ class Lecturer extends BaseController {
             $secusername=$sec[0]->username;
             $user=$_SESSION['userDetails']->full_name;
 
+            
+
             $notification = new Notification();
             if($secusername!=$user){
                 $notification->insert([
@@ -239,7 +244,7 @@ class Lecturer extends BaseController {
             }
   
 
-             $this->view("showsuccessmemo",["user"=>"lecturer"]);
+             $this->view("showsuccessmemo",["user"=>"lecturer",'memoid'=>$memoId]);
         }
         else{
             $this->view("showunsuccessmememo", ["user"=> "lecturer"]);
@@ -315,7 +320,6 @@ class Lecturer extends BaseController {
         ]);
     }
      
-    
     public function requestchange(){
         $responseStatus = "";
     
@@ -432,19 +436,25 @@ private function isRestrict($username,$contentID){
     }
 }
 
+
 public function viewminute(){
     $user=$_SESSION['userDetails']->username;
     $minuteID=$_GET['minuteID'];
 
     // get minute details
     $minute = new Minute();
-    $Meeting_attendence=new Meeting_attendence();
-    $Agenda= new Agenda();
     $content= new Content();
     $memo_discussed= new Memo_discussed_meetings();
     $linkedMinutes=new Minutes_linked();
     $linkedMedia=new Linked_Media();
+    $approved_minutes=new Approved_minutes();
+    $recorrect_minute=new Recorrect_Minutes();
+    $cfm=new Content_forward_meeting();
+
+
     $minuteDetails = $minute->getMinuteDetails($minuteID);
+    
+
     $contentrestrict=false;
     
     if(!$minuteDetails) {
@@ -467,16 +477,30 @@ public function viewminute(){
         return;
     }
     else{
-    // show($_SESSION);
+    $approved_recorrect_Meeting=[];
     $user_accessible_content=[];
     $linked_minutes=[];
+    $linked_content_minutes=[];
     $isContentRestricted=false;
-    $attendence = $Meeting_attendence->getAttendees($minuteDetails[0]->meeting_id);
-    $agendaItems=$Agenda->selectandproject('agenda_item',['meeting_id'=>$minuteDetails[0]->meeting_id]);
     $contentDetails=$content->select_all(['minute_id'=>$minuteID]);
     $discussed_memos=$memo_discussed->getMemos($minuteDetails[0]->meeting_id);
     $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
     $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
+    $approveStatus=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$minuteID]);
+    $previousMinute=$minute->getPreviousMinute($minuteDetails[0]->end_time,$minuteDetails[0]->date,$minuteDetails[0]->meeting_type);
+
+
+
+    if($approveStatus[0]->is_approved==1 && $approveStatus[0]->is_recorrect==0){
+        $approved_recorrect_Meeting=$approved_minutes->getApprovedMinute($minuteID);
+    }
+    else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==0){
+        $approved_recorrect_Meeting=$recorrect_minute->selectandproject('recorrected_version',['Minute_ID'=>$minuteID]);
+    }
+    else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==1){
+        $approved_recorrect_Meeting=$recorrect_minute->selectandproject('minute_id',['recorrected_version'=>$minuteID]);
+    }
+    $linked_content_minutes=$cfm->getLinkMinuteIds($minuteDetails[0]->meeting_id);
 
     if($linkedMinutes!= null){
         if(count($linkedMinutes)>0){
@@ -505,61 +529,63 @@ public function viewminute(){
         }
     }
 
-    // show($contentDetails);
-    $minuteDetails[0]->attendence = $attendence;
-    $minuteDetails[0]->agendaItems = $agendaItems;
+
     $minuteDetails[0]->discussed_memos = $discussed_memos;
     $minuteDetails[0]->linked_minutes = $linked_minutes;
     $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
     // show($minuteDetails[0]);
     //  show($minuteDetails);
-    $this->view("lecturer/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted]);
+
+    // show($previousMinute);
+    $this->view("lecturer/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes,'previousMinute'=>$previousMinute]);
     }
 }
-
 }
 
-    public function changePassword()
-    {
-        $errors = [];
-        $success = false;
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST')
-        {
-            $users = new User();
-            $username = $_SESSION['userDetails']->username;
-            $currentPassword = $_POST['current_password'];
-            $newPassword = $_POST['new_password'];
-            $confirmPassword = $_POST['confirm_password'];
+    // public function changePassword()
+    // {
+    //     $errors = [];
+    //     $success = false;
 
-            $storedPassword = getHashedPassword($username);
+    //     if($_SERVER['REQUEST_METHOD'] === 'POST')
+    //     {
+    //         $users = new User();
+    //         $username = $_SESSION['userDetails']->username;
+    //         $currentPassword = $_POST['current_password'];
+    //         $newPassword = $_POST['new_password'];
+    //         $confirmPassword = $_POST['confirm_password'];
 
-            if(!storedPassword || !password_verify($currentPassword,$storedPassword))
-            {
-                $errors[] = 'Current Password is not correct';
-            }
 
-            if($newPassword !== $confirmPassword)
-            {
-                $errors[] = 'New password and confirmation do not match';
-            }
+    //         $storedPassword = getHashedPassword($username);
 
-            //checking if the password has the required strength
-            if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
-                $errors[] = "New password does not meet the required strength.";
-            }
-            if(empty($errors))
-            {
-                $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
-                $users->updatePassword($username, $newHashed);
-                $success = true;
-            }
-        }
-        echo json_encode([
-            'success' => $success,
-            'errors' => $errors
-        ]);
+    //         if(!storedPassword || !password_verify($currentPassword,$storedPassword))
+    //         {
+    //             $errors[] = 'Current Password is not correct';
+    //         }
 
-        echo($errors);
-    }
+    //         if($newPassword !== $confirmPassword)
+    //         {
+    //             $errors[] = 'New password and confirmation do not match';
+    //         }
+
+    //         //checking if the password has the required strength
+    //         if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+    //             $errors[] = "New password does not meet the required strength.";
+    //         }
+    //         if(empty($errors))
+    //         {
+    //             $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+    //             $users->updatePassword($username, $newHashed);
+    //             $success = true;
+    //         }
+    //     }
+    //     echo json_encode([
+    //         'success' => $success,
+    //         'errors' => $errors
+    //     ]);
+
+    //     echo($errors);
+    // }
+
 }

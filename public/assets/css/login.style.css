@@ -108,6 +108,19 @@ form .btn-long{
     text-align: center;
     font-weight: 500;
 }
+ 
+.rotation{
+    animation: rotation 70s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 @media screen and (max-width: 768px){
     .login-container .left-container{

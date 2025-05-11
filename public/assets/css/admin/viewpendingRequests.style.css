@@ -1,31 +1,27 @@
-/* ViewpendingRequests.style.css */
 
-/* General Layout */
 .content {
     margin-left: 50px;
     padding: 20px;
-    background-color: #f7f9fc; /* Light background to contrast the blue tones */
+    background-color: #f7f9fc; 
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
-    width: 80%; /* Limits content width */
-    max-width: 1000px; /* Keeps it centered */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    width: 80%; 
+    max-width: 1000px; 
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Header Style */
 .content h2 {
     color: var(--primary-blue);
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 20px;
-    text-transform: uppercase; /* Gives a more polished look */
+    text-transform: uppercase; 
     border-bottom: 3px solid var(--primary-blue);
     padding-bottom: 10px;
-    text-align: center; /* Centers the title */
+    text-align: center; 
 }
 
-/* Pending Requests Container */
 .pending-request-container {
     background-color: var(--light-blue);
     border-radius: 10px;
@@ -33,7 +29,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* List of Pending Requests */
 .pending-request-list {
     list-style-type: none;
     padding: 0;
@@ -42,7 +37,6 @@
     overflow: hidden;
 }
 
-/* List Items Styling */
 .pending-request-list li {
     margin: 10px 0;
     padding: 15px 20px;
@@ -55,12 +49,7 @@
     border-bottom: 1px solid #e0e0e0;
 }
 
-.pending-request-list li:hover {
-    background-color: var(--hover-blue); /* Hover effect with a darker blue */
-    transform: translateX(5px); /* Subtle slide effect */
-}
-
-/* Styling Links Inside List */
+ 
 .request-link {
     color: var(--primary-blue);
     font-size: 1.1rem;
@@ -76,20 +65,16 @@
 
 .request-link .view-details {
     font-size: 0.9rem;
-    color: var(--primary-blue);
-    background-color: #e6f0ff;
+    color: #ffffff;
+    background-color: #3b82f6;
     border-radius: 8px;
     padding: 5px 10px;
     margin-left: 15px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-.request-link:hover .view-details {
-    opacity: 1;
-}
+ 
 
-/* Empty State */
 .no-request-message {
     text-align: center;
     font-size: 1.2rem;
@@ -98,11 +83,10 @@
     font-weight: 500;
 }
 
-/* Custom Variables for Blue Shades */
 :root {
-    --primary-blue: #1e3a8a;   /* Deep blue */
-    --light-blue: #ebf4ff;     /* Light blue for list background */
-    --hover-blue: #3b82f6;     /* Blue hover effect */
-    --white: #ffffff;          /* White color */
-    --shadow-color: rgba(0, 0, 0, 0.1); /* Light shadow */
+    --primary-blue: #1e3a8a;   
+    --light-blue: #ebf4ff;     
+    --hover-blue: #3b82f6;    
+    --white: #ffffff;          
+    --shadow-color: rgba(0, 0, 0, 0.1); 
 }

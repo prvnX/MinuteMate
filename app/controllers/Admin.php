@@ -7,19 +7,16 @@ class Admin extends BaseController {
     }
 
     public function viewpendingRequests(): void {
-        // Create an instance of the UserRequests model
+        
         $userRequestsModel = $this->model("user_requests");
 
-        // Fetch the list of pending requests
         $pendingRequests = $userRequestsModel->getPendingRequests();
 
-        // Pass the data to the view
         $this->view(name: "admin/viewpendingRequests", data: [
             "pendingRequests" => $pendingRequests
         ]);
     }
-
-
+    
     
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -51,10 +48,7 @@ class Admin extends BaseController {
                     $password = password_hash($userDetails->nic, PASSWORD_DEFAULT);
     
                     try {
-                        // Start transaction
-                        //$userModel->beginTransaction();
-    
-                        // Insert into user table
+                       
                         $userInsertResult = $userModel->insert([
                             'username' => $username,
                             'password' => $password,
@@ -69,7 +63,6 @@ class Admin extends BaseController {
                             throw new Exception("Username already exists.");
                         }
     
-                        // Insert roles
                         $roles = array_map('trim', explode(',', $userDetails->role));
                         
                         foreach ($roles as $role) {
@@ -79,7 +72,6 @@ class Admin extends BaseController {
                             ]);
                         }
     
-                        // Insert contact numbers
                         $userContactNumsModel->insert([
                             'username' => $username,
                             'contact_no' => $userDetails->tp_no
@@ -92,27 +84,23 @@ class Admin extends BaseController {
                             ]);
                         }
     
-                        // Insert general meeting types
                         if (!empty($generalMeetingTypes)) {
                             $userMeetingTypesModel->insertMeetingTypes($username, $generalMeetingTypes);
                         }
     
-                        // Insert lecturer meeting types
                         if (!empty($lecturerMeetingTypes)) {
                             $userMeetingTypesModel->insertMeetingTypes($username, $lecturerMeetingTypes);
                         }
     
-                        // If user is a secretary, insert secretary meeting types into both tables
                         if (in_array('secretary', array_map('strtolower', $roles))) {
                             if (!empty($secretaryMeetingTypes)) {
-                                // Insert into secretary_meeting_type table
+                              
                                 $secretaryMeetingModel->insertSecretaryMeetingTypes($username, $secretaryMeetingTypes);
-                                // Also insert into user_meeting_types table
+                               
                                 $userMeetingTypesModel->insertMeetingTypes($username, $secretaryMeetingTypes);
                             }
                         }
     
-                        // Remove original request
                         $userRequestsModel->deleteRequestById($requestId);
     
                         $mail = new Mail();
@@ -128,7 +116,7 @@ class Admin extends BaseController {
                     }
                 }
             }else{
-                // Update the request status to 'declined'
+
                 $result = $userRequestsModel->updateRequestStatusById($requestId, 'declined');
                 if ($result !== false) {
                     header('Content-Type: application/json');
@@ -150,28 +138,21 @@ class Admin extends BaseController {
     
     
     public function viewRequestDetails() {
-        // Retrieve the request ID from the URL
         $requestId = $_GET['id'] ?? null;
         
         if ($requestId) {
-            // Create an instance of the UserRequests model
             $userRequestsModel = $this->model("user_requests");
 
-            // Fetch the user details based on the request ID
             $userDetails = $userRequestsModel->getRequestById($requestId);
 
-            // Check if data is found
             if ($userDetails) {
-                // Pass the user details to the view
                 $this->view("admin/viewRequestDetails", [
                     "userDetails" => $userDetails
                 ]);
             } else {
-                // Handle if no user found with the given ID
                 $this->view("admin/404");
             }
         } else {
-            // Handle if no ID is passed
             $this->view("admin/404");
         }
     }
@@ -185,35 +166,29 @@ class Admin extends BaseController {
     }
 
     public function viewMembersByMeetingType() {
-        // Get the meeting type from the URL
         $meetingType = $_GET['meetingType'] ?? null;
     
         if ($meetingType) {
-            // Load the required models
             $meetingTypesModel = $this->model("meeting_types");
             $userMeetingTypesModel = $this->model("user_meeting_types");
     
-            // Retrieve the type_id for the given meeting type
             $meetingTypeId = $meetingTypesModel->getTypeIdByMeetingType($meetingType);
     
             if ($meetingTypeId) {
-                // Fetch the usernames of users belonging to this meeting type
+
                 $usernames = $userMeetingTypesModel->getUsernamesByMeetingTypeId($meetingTypeId);
     
-                // Pass the data to the view
                 $this->view("admin/viewMembersList", [
                     "meetingType" => $meetingType,
                     "members" => $usernames
                 ]);
             } else {
-                // Handle invalid meeting type
                 $this->view("admin/viewMembersList", [
                     "meetingType" => $meetingType,
                     "members" => []
                 ]);
             }
         } else {
-            // Handle missing meeting type
             $this->view("admin/viewMembersList", [
                 "meetingType" => "Unknown Meeting Type",
                 "members" => []
@@ -222,26 +197,22 @@ class Admin extends BaseController {
     }
 
 public function viewMemberProfile() {
-    // Get the user ID from the URL
+    
     $userId = $_GET['id'] ?? null;
 
-    // Check if the user ID is provided
+ 
     if ($userId) {
-        // Instantiate the User model
+        
         $userModel = new User();
 
-        // Fetch the user data by username or ID
         $userData = $userModel->getUserById($userId);
 
         if ($userData) {
-            // Pass the user data to the view
             $this->view('admin/viewMemberProfile', ['userData' => $userData]);
         } else {
-            // Handle the case where no user is found
             echo "User not found.";
         }
     } else {
-        // Handle the case where no user ID is provided
         echo "Invalid user ID.";
     }
 }
@@ -253,10 +224,10 @@ public function viewMemberProfile() {
 
     public function logout() {
         session_start();
-        // Destroy all session data
+     
         session_unset();
         session_destroy();
-        // Redirect to the login page
+    
         redirect("home");
     }
    
@@ -344,18 +315,16 @@ public function viewMemberProfile() {
         $meetingType = $_GET['meetingType'] ?? null;
     
         if ($meetingType) {
-            // Load the required models
+            
             $meetingTypesModel = $this->model("meeting_types");
             $userMeetingTypesModel = $this->model("user_meeting_types");
     
-            // Retrieve the type_id for the given meeting type
             $meetingTypeId = $meetingTypesModel->getTypeIdByMeetingType($meetingType);
     
             if ($meetingTypeId) {
-                // Fetch the usernames of users who have been removed for this meeting type
+
                 $removedMembers = $userMeetingTypesModel->getInactiveMembersByMeetingType($meetingTypeId);
-    
-                // Pass the data to the view
+
                 $this->view("admin/PastMembersList", [
                     "meetingType" => $meetingType,
                     "removedMembers" => $removedMembers
@@ -368,7 +337,6 @@ public function viewMemberProfile() {
     $userModel = new User();
     $deletedUserModel = new DeletedUsers();
 
-    // Get the user ID (username) from the query parameter
     $userId = $_GET['id'] ?? null;
 
     if (!$userId) {
@@ -376,20 +344,16 @@ public function viewMemberProfile() {
         return;
     }
 
-    // Fetch user details (from 'user', 'user_roles', 'user_contact_nums', 'user_meeting_types')
     $userData = $userModel->getUserById($userId);
 
-    // Fetch deletion details from 'deleted_users'
     $deletedData = $deletedUserModel->getDeletedInfo($userId);
 
-    // Combine both datasets
     $data = [
         'userData' => $userData,
         'deletedData' => $deletedData,
         'memberId' => $userId
     ];
 
-    // Load the view
     $this->view('admin/pastMemberProfile', $data);
     }
 
@@ -398,6 +362,47 @@ public function viewMemberProfile() {
         $this->view(name: "admin/addPastMember");
     }
     public function viewprofile() {
+        $errors = [];
+            $success = false;
+                if($_SERVER['REQUEST_METHOD'] === 'POST')
+                {
+                    
+                    $users = new User();
+                    $username = $_SESSION['userDetails']->username;
+                    $currentPassword = $_POST['current_password'];
+                    $newPassword = $_POST['new_password'];
+                    $confirmPassword = $_POST['confirm_password'];
+        
+                    $storedPasswordData = $users->getHashedPassword($username);
+                    $storedPassword = $storedPasswordData[0] ->password ?? null;
+        
+                  
+                    if(!password_verify($currentPassword,$storedPassword))
+                    {
+                        $errors[] = 'Current Password is not correct';
+                    }
+        
+                    if($newPassword !== $confirmPassword)
+                    {
+                        $errors[] = 'New password and confirmation do not match';
+                    }
+        
+                    if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                        $errors[] = "New password does not meet the required strength.";
+                    }
+                    if(empty($errors))
+                    {
+                        $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                        $users->updatePassword($username, $newHashed);
+                        $success = true;
+                    }
+                    echo json_encode([
+                        'success' => $success,
+                        'errors' => $errors,
+                        'state'=> password_verify($currentPassword,$storedPassword)
+                    ]);
+                    exit;
+                }
         $this->view("admin/viewprofile");
     }
 
@@ -409,11 +414,10 @@ public function viewMemberProfile() {
                 'nic' => $_POST['nic'],
             ];
 
-            // Validate NIC
         $nic = $data['nic'];
         if (!preg_match('/^(\d{12}|\d{10}[vV])$/', $nic)) {
             echo "<script>
-                alert('❌ Invalid NIC. NIC should be either 12 digits or 10 digits followed by V/v.');
+                alert('Invalid NIC. NIC should be either 12 digits or 10 digits followed by V/v.');
                 window.history.back();
             </script>";
             exit;
@@ -425,7 +429,6 @@ public function viewMemberProfile() {
     
             $userModel->updateUserByUsername($username, $data);
     
-            // Optional: Update session to reflect new values
             $_SESSION['userDetails']->full_name = $data['full_name'];
             $_SESSION['userDetails']->email = $data['email'];
             $_SESSION['userDetails']->nic = $data['nic'];
@@ -438,8 +441,7 @@ public function viewMemberProfile() {
     
     public function requestchange(){
         $responseStatus = "";
-    
-        // Handle POST request
+  
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $field = $_POST['field'] ?? [];
             $newValue = $_POST['newValue'] ?? [];
@@ -450,7 +452,6 @@ public function viewMemberProfile() {
             
         }
     
-        // Pass responseStatus to the view
         $this->view("admin/requestchange", [
             "user" => "admin",
             "responseStatus" => $responseStatus
@@ -495,8 +496,7 @@ public function viewMemberProfile() {
 
     public function acceptRequest() {
         $data = json_decode(file_get_contents("php://input"), true);
-    
-        // Extract data from the request
+  
         $username = $data['username'] ?? null;
         $new_fullname = $data['new_fullname'] ?? null;
         $new_nic = $data['new_nic'] ?? null;
@@ -512,18 +512,24 @@ public function viewMemberProfile() {
     if (!empty($new_nic)) $updatedData['nic'] = $new_nic;
     if (!empty($new_email)) $updatedData['email'] = $new_email;
 
-    // Update user main table
+   
     $userUpdate = new User();
-    $userUpdate->update($username, $updatedData, 'username');
+
+   
 
     // Update contact number in related table
+    if(!($new_nic==null && $new_email==null && $new_fullname==null)){
+        $userUpdate->update($username, $updatedData, 'username');
+        
+    }
+       
+   
+
     if (!empty($new_tp_no)) {
         $contactModel = new UserContactNums();
         $contactModel->updateContactNumbers($username, $new_tp_no);  // You'll need to implement this
     }
-      
-     
-    // Remove the edit request
+
     $updateAndDelete = new User_edit_requests();
     $updateAndDelete->deleteRequestById($id);
 
@@ -548,17 +554,31 @@ function saveDepartment() {
             'dep_email' => $_POST['dep_email']
         ];
 
-        // Instantiate the User model to check if the department head exists
+
         $userModel = $this->model("user");
 
-        // Validate department head existence
-        if (!$userModel->usernameExists($_POST['department_head'])) {
-            echo "<script>alert('Error: Department head \"{$_POST['department_head']}\" does not exist!'); window.history.back();</script>";
-        exit;
+        
+        if (!filter_var($_POST['dep_email'], FILTER_VALIDATE_EMAIL)) {
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Invalid email format for department email!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
         }
 
-
-        // Insert or update
+        
+        if (!$userModel->usernameExists($_POST['department_head'])) {
+            $this->view("admin/department", [
+                "user" => "admin",
+                "errorMessage" => "Department head \"{$_POST['department_head']}\" does not exist!",
+                "formData" => $_POST,
+                "department" => $department->findAll()
+            ]);
+            return;
+        }
+        
         if (!empty($_POST['id'])) {
             $department->update($_POST['id'], $data);
         } else {
@@ -571,23 +591,19 @@ function saveDepartment() {
 
 
 public function removeMember() {
-    // Ensure the session is started
-    $removedBy = $_SESSION['userDetails']->username;  // Using session username
+  
+    $removedBy = $_SESSION['userDetails']->username;  
 
-    // Check if admin is logged in
     if (!isset($removedBy)) {
         echo json_encode(['error' => 'Admin not logged in.']);
         exit;
     }
 
-    // Admin is logged in, proceed with removal
     $username = $_POST['username'] ?? '';
     $fullName = $_POST['full_name'] ?? '';
     $reason = $_POST['reason'] ?? '';
 
 
-
-    // Other logic for removing member
     $userModel = new User();
     if (!$userModel->getUserById($removedBy)) {
         echo json_encode(['error' => 'Invalid admin username.']);
@@ -614,8 +630,7 @@ public function reactivateMember() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $errors = [];
-       
-        // Dynamically load models as needed
+
         $userModel = $this->model("user");
         $userRolesModel = $this->model("UserRoles");
         $meetingTypesModel = $this->model("meeting_types");
@@ -626,44 +641,37 @@ public function reactivateMember() {
 
         $username = $_POST['username'];
 
-         // Retrieve POST data
          $email = $_POST['email'];
          $nic = $_POST['nic'];
          $contact_no = $_POST['contact_no'];
          $additional_tp_no = $_POST['additional_tp_no'] ?? null;
- 
-         // Email Validation (simple format check)
+
          if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-             echo "Invalid email format!";
-             return; // stop execution if validation fails
+            $this->view("adminwarning",['title'=>"Invalid Email",'message'=>"Ensure that valid email is entered."]);
+             return; 
          }
  
-         // NIC Validation (12 digits or 10 digits + 'V')
          if (!preg_match('/^\d{12}$|^\d{10}[Vv]$/', $nic)) {
-             echo "NIC must be 12 digits or 10 digits followed by 'V'.";
+            $this->view("adminwarning",['title'=>"Invalid NIC",'message'=>"Ensure that valid NIC with 12 digits or 10 digits+v is entered."]);
              return;
          }
  
-         // Contact No Validation (must be less than 10 digits)
          if (strlen($contact_no) != 10) {
-             echo "Contact No. must be less than 10 digits.";
-             return;
+            $this->view("adminwarning",['title'=>"Invalid Contact number",'message'=>"Ensure that contact number is exactly 10 digits is entered."]);
+            return;
          }
- 
-         // Additional Contact No Validation (optional, must be less than 10 digits)
+
          if ($additional_tp_no && strlen($additional_tp_no) != 10) {
-             echo "Additional Contact No. must be less than 10 digits.";
+            $this->view("adminwarning",['title'=>"Invalid Contact number",'message'=>"Ensure that the additional contact number is exactly 10 digits is entered."]);
              return;
          }
 
          if (!empty($errors)) {
-            // Optionally, you could pass the old input data back to the view as well
+
             $this->view('admin/pastMemberProfile', ['errors' => $errors, 'userData' => $_POST]);
             return;
         }
         
-
-        // Use models to update data
         $userModel->updateUserByUsername($username, [
             'full_name' => $_POST['full_name'],
             'email' => $_POST['email'],
@@ -676,26 +684,24 @@ public function reactivateMember() {
             $_POST['contact_no'],
             $_POST['additional_tp_no'] ?? null
         );
-        
-        // Update roles
+
         $roles = $_POST['roles'] ?? [];
         $userRolesModel->updateRoles($username, $roles);
 
-        // Update meeting types for lecturer/student rep
+ 
         if (in_array('lecturer', $roles) && isset($_POST['lecturerMeetingType'])) {
             $userMeetingTypesModel->updateMeetingTypes($username, $_POST['lecturerMeetingType']);
         } elseif (in_array('student', $roles) && isset($_POST['meetingType'])) {
             $userMeetingTypesModel->updateMeetingTypes($username, $_POST['meetingType']);
         }
 
-        // Update meeting types for secretary
         if (in_array('secretary', $roles) && isset($_POST['secretaryMeetingType'])) {
             $secretaryMeetingTypesModel->updateMeetingTypes($username, $_POST['secretaryMeetingType']);
         }else{
             $secretaryMeetingTypesModel->deleteMeetingTypesByUsername($username);
         }
         
-        // Reactivate the user
+
         $userModel->reactivateStatus($username);
 
         $deletedUsersModel->deleteByUsername($username);

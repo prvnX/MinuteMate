@@ -10,7 +10,8 @@
 </head>
 <body>
   
-    <?php
+    <?php 
+     
         $user="studentrep";
         $notification="notification"; //use notification-dot if there's a notification
         $menuItems = [ "home" => ROOT."/studentrep", $notification => ROOT."/studentrep/notifications", "profile" => ROOT."/studentrep/viewprofile"]; //pass the menu items here (key is the name of the page, value is the url)
@@ -19,16 +20,14 @@
         require_once("../app/views/components/new_navbar.php");
         echo "</div>";
         require_once("../app/views/components/sec_sidebar.php");
-
+         
+        $profileDetails = $data['userDetails'][0];
+        $ContactDetails = $data['contactNumbers'];
+        $roleDetails = $data['userRole'][0];
+        $meetingTypes = $data['userMeetingTypes'];
+        $attendenceMeetings = $data['attendenceMeetings'];
+ 
         
-        $profileDetails=["name"=>$_SESSION['userDetails'] -> full_name,
-                        "Email"=>$_SESSION['userDetails'] -> email,
-                        "LectureID"=>"102837273",
-                        "NIC"=>$_SESSION['userDetails'] ->nic,
-                        "Role"=>$_SESSION['userDetails']->role,
-                        "Contact_No:"=>"077 283 3685",
-                        "Meeting_types"=>"IUD, RHD, Syndicate"];
-
    
     ?>
 
@@ -39,12 +38,14 @@
     <div class="profile-section">
         <div class="left-panel">
             <div class="profile-photo">
-                <img src="<?= ROOT ?>/assets/img/profilee.png" alt="Profile Photo">
-                <button class="change-photo-btn">Change Photo</button>
+            <img id="update_profile_image" src="<?=ROOT?>/assets/images/profile.png" alt="profile">
+
+
+                <!-- <button class="change-photo-btn">Change Photo</button> -->
             </div>
 
             <div class="stats-box">
-                <div><strong>12</strong><br>Meetings Attended</div>
+                <div ><strong class= "atendence"> <?= $attendenceMeetings[0]->attendence_count ?></strong><br>Meetings Attended</div>
             </div>
         </div>
 
@@ -52,36 +53,60 @@
             <div class="card">
                 <div class="card-header">
                     <span>Personal Information</span>
-                    <span class="verified-badge">Verified</span>
+                    <span class="verified-badge"><?= strtoupper($profileDetails->status)  ?></span>
                 </div>
-                <div class="info-row"><strong>Name:</strong> <?= $profileDetails['name']?></div>
-                <div class="info-row"><strong>Email:</strong> <?= $profileDetails['Email']?></div>
-                <div class="info-row"><strong>NIC:</strong> <?= $profileDetails['NIC']?></div>
-                <div class="info-row"><strong>Role:</strong> <?= $profileDetails['Role']?></div>
+               
+                <p><strong>Name:</strong> <?= $profileDetails->full_name ?></p><br>
+                <p><strong>Email:</strong> <?= $profileDetails->email ?></p><br>
+                <p><strong>NIC:</strong> <?= $profileDetails->nic ?></p><br>
+                <p><strong>Username:</strong> <?= $profileDetails->username ?></p><br>
+                <p><strong>Role:</strong> <?= $roleDetails->role ?></p><br>
+                 
+                <?php $beforenum = 0; ?>
+                <p><strong>Contact No: </strong><?php foreach($ContactDetails as $key=>$contact){
+                    if($beforenum!=$contact->contact_no){
+                        
+                    if($key==0){
+                        $beforenum = $contact->contact_no;
+                        echo $contact->contact_no;
+                    }else{
+                        echo ", ".$contact->contact_no;
+                    }
+                }
+                }?></p>
+                
+
+
             </div>
 
             <div class="card">
-                <div class="card-header">Meeting Access</div>
-                <p>You can attend the following meeting types:</p>
-                <div class="badge-group">
-                    <?php
-                        if (!empty($_SESSION['meeting_type']) && is_array($_SESSION['meeting_type'])) {
-                            $colors = [
-                                'IOD' => 'background-color: #FBBF24; color: white;',
-                                'RHD' => 'background-color: #F87171; color: white;',
-                                'SYN' => 'background-color: #4ADE80; color: black;',
-                                'BOM' => 'background-color: #60A5FA; color: white;',
-                            ];
-                            foreach ($_SESSION['meeting_type'] as $type) {
-                                $style = isset($colors[$type]) ? $colors[$type] : 'background-color: gray; color: white;';
-                                echo "<span class='badge' style='$style'>" . htmlspecialchars($type) . "</span>";
-                            }
-                        } else {
-                            echo "<p style='color: gray;'>No meeting types available</p>";
-                        }
-                    ?>
-                </div>
-            </div>
+    <div class="card-header">Meeting Access</div>
+    <p>You can attend the following meeting types:</p>
+    <div class="badge-group">
+        <?php
+        $meetingTypes = $data['userMeetingTypes'];
+        if (!empty($meetingTypes) && is_array($meetingTypes)) {
+            $colors = [
+                'IUD' => 'background-color: #FBBF24; color: white;',
+                'RHD' => 'background-color: #F87171; color: white;',
+                'SYN' => 'background-color: #4ADE80; color: black;',
+                'BOM' => 'background-color: #60A5FA; color: white;',
+            ];
+            foreach ($meetingTypes as $typeObj) {
+                $type = $typeObj->meeting_type;
+                $style = isset($colors[$type]) ? $colors[$type] : 'background-color: gray; color: white;';
+                if($type=="IOD"){
+                    $type = "IUD";
+                }
+                echo "<span class='badge' style='$style'>" . htmlspecialchars($type) . "</span> ";
+            }
+        } else {
+            echo "<p style='color: gray;'>No meeting types available</p>";
+        }
+        ?>
+    </div>
+</div>
+
 
             <div class="card">
                 <div class="card-header">Account Security

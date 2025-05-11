@@ -17,7 +17,7 @@ include '../app/views/components/admin_sidebar.php'; ?>
 </head>
 <body>
 
-<mian class="main-content">
+<main class="main-content">
   <div class="container">
     <div class="card-grid">
       <div class="card">
@@ -29,9 +29,9 @@ include '../app/views/components/admin_sidebar.php'; ?>
 
       <div class="card">
         <div class="icon-circle yellow"><i class="fas fa-users"></i></div>
-        <h3 class="card=title"> IOD Members</h3>
-        <p clas="card-description">View members of the IOD committee</p>
-        <a href="<?=ROOT?>/admin/viewMembersByMeetingType?meetingType=IOD" class="card-btn">IOD</a>
+        <h3 class="card=title"> IUD Members</h3>
+        <p clas="card-description">View members of the IUD committee</p>
+        <a href="<?=ROOT?>/admin/viewMembersByMeetingType?meetingType=IUD" class="card-btn">IUD</a>
       </div>
 
       <div class="card">

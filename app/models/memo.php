@@ -164,6 +164,12 @@
              
             return $this->query($query, ['memo_id' => $memo_id])[0] ?? null;
         }
+
+        public function getlastmemoid()
+        {
+            $lastMemoId = $this->   getLastInsertID();
+            return $lastMemoId;
+        }
     }
 
 ?>

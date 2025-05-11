@@ -15,7 +15,7 @@ class Approved_minutes{
         $query = "SELECT Approved_Meeting_ID as approvedMeeting, mi.Minute_ID , m.meeting_type, m.date , mi.Minute_ID AS approval FROM $this->table am
                     INNER JOIN meeting m ON am.Approved_Meeting_ID=m.meeting_id
                     INNER JOIN minute mi ON mi.MeetingID=m.meeting_id
-                    WHERE am.Minute_ID = :Minute_ID";
+                    WHERE am.Minute_ID = :Minute_ID LIMIT 1" ;
 
         return $this->query($query, $data);
     }

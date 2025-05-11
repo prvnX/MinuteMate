@@ -49,7 +49,7 @@ $deletedData = $data['deletedData'] ?? null;
               <p><strong>User Meeting Types</p>
               <?php
               $userMeetingTypes = isset($userData->meetingTypes) ? array_map('strtoupper', $userData->meetingTypes) : [];
-              $meetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+              $meetingTypes = ['RHD', 'IUD', 'SYN', 'BOM'];
 
               foreach ($meetingTypes as $type) {
                 $checked = in_array($type, $userMeetingTypes) ? 'checked' : '';
@@ -64,20 +64,19 @@ $deletedData = $data['deletedData'] ?? null;
               ?>
 
 <?php
-// Show Secretary Meeting Types only if user has "Secretary" role
 if (isset($userData->role) && in_array('secretary', $userData->role)) {
     echo "<p><strong>Secretary Meeting Types:</strong></p>";
 
     $secMeetingsRaw = $userData->secMeetings ?? [];
     if (is_object($secMeetingsRaw)) {
-        $secMeetingsRaw = [$secMeetingsRaw]; // handle single object case
+        $secMeetingsRaw = [$secMeetingsRaw]; 
     }
 
     $secMeetings = is_array($secMeetingsRaw)
         ? array_map(fn($row) => strtoupper($row->meeting_type), $secMeetingsRaw)
         : [];
 
-    $allMeetingTypes = ['RHD', 'IOD', 'SYN', 'BOM'];
+    $allMeetingTypes = ['RHD', 'IUD', 'SYN', 'BOM'];
 
     foreach ($allMeetingTypes as $type) {
         $checked = in_array($type, $secMeetings) ? 'checked' : '';
@@ -92,9 +91,9 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
 }
 ?>
            </div>
-          </div> <!-- .profile-info -->
-        </div> <!-- .profile-header -->
-      </div> <!-- .content -->
+          </div> 
+        </div> 
+      </div> 
 
       <div class="add-button-wrapper">
         <button class="add-btn" onclick="editModal()">Add</button>
@@ -152,7 +151,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <div id="secretaryMeetingTypesContainer" style="display: none;">
                 <label><strong>Select Secretary Meeting Type:</strong></label>
                 <div class="meeting-options">
-                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                  <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="secretary<?= $type ?>">
                       <input type="checkbox"
@@ -171,7 +170,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <div id="lecturerMeetingTypesContainer" style="display: none;">
                 <label><strong>Select Lecturer Meeting Type:</strong></label>
                 <div class="meeting-options">
-                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                  <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="lecturer<?= $type ?>">
                       <input type="checkbox"
@@ -190,7 +189,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
               <div id="meetingTypeContainer" style="display: none;">
                 <label><strong>Select Meeting Type(s):</strong></label>
                 <div class="meeting-options">
-                  <?php foreach (['RHD', 'IOD', 'SYN', 'BOM'] as $type): ?>
+                  <?php foreach (['RHD', 'IUD', 'SYN', 'BOM'] as $type): ?>
                     <div class="meeting-option <?= strtolower($type) ?>-option">
                     <label for="meeting<?= $type ?>">
                       <input type="checkbox"
@@ -219,13 +218,13 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
           <?php else: ?>
             <p>Member not found.</p>
           <?php endif; ?>
-        </div> <!-- .modal-content -->
-      </div> <!-- #editModal -->
-    </div> <!-- .profile-details -->
+        </div> 
+      </div> 
+    </div> 
   <?php else: ?>
     <p>Member not found.</p>
   <?php endif; ?>
-</div> <!-- .profile-container -->
+</div> 
 
 </body>
 </html>
@@ -246,7 +245,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
     const checkboxes = document.querySelectorAll('.role-checkbox');
     const selectedRoles = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
 
-    // Role containers
+    
     const secretaryContainer = document.getElementById("secretaryMeetingTypesContainer");
     const lecturerContainer = document.getElementById("lecturerMeetingTypesContainer");
     const studentContainer = document.getElementById("meetingTypeContainer");

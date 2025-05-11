@@ -80,6 +80,31 @@ class Minute{
          
         return $this->query($query, ['Minute_ID' => $id])[0] ?? null;
     }
+
+    public function getPreviousMinute($meeting_time,$meeting_date,$meeting_type){
+        $data['meeting_date'] = $meeting_date;
+        $data['meeting_time'] = $meeting_time;
+        $data['meeting_type'] = $meeting_type;
+        $query="SELECT m.Minute_ID, m.title, mt.meeting_id  
+                FROM $this->table m
+                INNER JOIN meeting mt ON m.MeetingID = mt.meeting_id
+                WHERE 
+                (mt.meeting_type = :meeting_type)
+                AND
+                (
+                mt.date < :meeting_date 
+                OR (mt.date = :meeting_date AND mt.end_time < :meeting_time)
+                )
+                AND (
+                mt.is_minute = 1 
+                AND (
+                (m.is_approved = 1 AND m.is_recorrect = 0)
+                OR 
+                (m.is_approved = 0 AND m.is_recorrect = 1)
+                )
+                ) ORDER BY mt.date DESC LIMIT 1";
+                return $this->query($query, $data)[0] ?? null;
+    }
     
     
     

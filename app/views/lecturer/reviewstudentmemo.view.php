@@ -33,7 +33,7 @@
     <div class="main-container">
             <div class="content-area">
                 <div class="memolist" id="memolist">
-                <?php if (!empty($memoList) && is_array($memoList)): ?>
+      <?php if (!empty($memoList) && is_array($memoList)): ?>
     <?php foreach ($memoList as $memoitem): ?>
         <div class="memoitem">
             <div class="memocontent">

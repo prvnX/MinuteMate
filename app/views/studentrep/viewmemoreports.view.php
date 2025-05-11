@@ -11,7 +11,7 @@
 
  
 <?php
-    
+     
     $user="studentrep";
     $memocart="memocart";   //use memocart-dot if there is a memo in the cart change with db
     $notification="notification"; //use notification-dot if there's a notification
@@ -56,22 +56,7 @@
     <label>Author:</label>
     <span><?= htmlspecialchars($data['memoDetails']->user) ?></span>
 </div>
-    <!-- <div class="header">
-    <h3>Flow of the Memo through Different Meetings</h3>
-
-    <div class="timeline">
-    <?php foreach ($data['timeline'] as $step): ?>
-        <div class="timeline-step">
-            <div class="dot-wrapper">
-                <div class="dot" data-tooltip="<?= htmlspecialchars($step['label'] . ': ' . $step['date']) ?>"></div>
-            </div>
-            <div class="label"><?= htmlspecialchars($step['label']) ?></div>
-            <div class="date"><?= htmlspecialchars($step['date']) ?></div>
-        </div>
-    <?php endforeach; ?>
-</div>
-
-    </div> -->
+    
 
     <!-- Footer -->
     <div class="footer">

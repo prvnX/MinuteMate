@@ -1,83 +1,82 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsuccessful</title>
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/minuteunsuccess.style.css">
     <link rel="icon" href="<?=ROOT?>/img.png" type="image">
 
-    <style>
-        body {
-            font-family: 'Ubuntu', sans-serif;
-        }
-    </style>
-    <title>UnSuccess</title>
-    <style>
-        .state-container {
-            display: flex;
-            margin-top: 50px;
-            flex-direction: column;
-            align-items: center;
-        }
 
-        .state-container img {
-            width: 500px;
-            height: 500px;
-            margin: 0;
-        }
-
-        .state-container h1 {
-            font-size: 4rem;
-            margin: 1rem;
-            color:#65558F;
-        }
-        .state-container p {
-            font-size: 1.5rem;
-            font-weight: 100;
-            margin: 1rem;
-        }
-        .state-container button {
-            width: 200px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            margin: 5px;
-            border: none;
-            background-color: white;
-            border:solid 1px #65558F;
-            color: #65558F;
-            cursor: pointer;
-            border-radius: 15px;
-        }
-        .state-container button:hover {
-            background-color: #65558F;
-            color: white;
-            transition: 0.5s ease;
-
-
-        }
-
-
-    </style>
 </head>
 <body>
-    <div class="state-container">     
-        <img src="<?=ROOT?>/assets/images/unsuccess.png" alt="Success" class="success-image">
-        <h1>UnSuccess</h1>
-        <p>Your memo could not be submitted. Please try again.</p>
-        <button onclick=tryAgain() class="try-again-btn">Try Again</button>
-        <button onclick="" class="dashboard-btn">Go to Dashboard</button>
-
+    <div class="unsuccessful-container">
+        <div class="unsuccessful-icon">
+            <div class="circle">
+                <svg class="x-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <path d="M16 16 36 36 M36 16 16 36" />
+                </svg>
+            </div>
+        </div>
+        <h1 class="unsuccessful-title">Unsuccessful</h1>
+        <p class="unsuccessful-message">We encountered an issue while processing the Memo.</p>
+        
+        <div class="status-list">
+         
+            <div class="status-item">
+                <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="status-text">Your memo could not be created at this time</span>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button class="btn btn-primary" onclick="tryAgain()">Try Again</button>
+            <button class="btn btn-secondary" onclick="gotodashboard()">Go to the Dashboard</button>
+        </div>
     </div>
-    <script>
-        const user= "<?= $user ?>";
-        const root= "<?= ROOT ?>";
-        const goToDashboardBtn = document.querySelector('.dashboard-btn');
 
+    <script>
         function tryAgain() {
            
-           window.history.back();
-       }
+            window.history.back();
+        }
 
-       goToDashboardBtn.addEventListener('click', () => {
-            window.location.href = `${root}/${user}`;
+        function gotodashboard(){
+            window.location.href='dashboard';
+        }
+
+        // Add shake animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.unsuccessful-container');
+            container.style.animation = 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both';
         });
 
+        // Shake animation
+        const keyframes = `
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            
+            20%, 80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%, 50%, 70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%, 60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }`;
+
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = keyframes;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
+</html>

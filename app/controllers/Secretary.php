@@ -85,9 +85,9 @@ class Secretary extends BaseController {
             $meetingId = htmlspecialchars($_POST['meeting']);
             $submittedBy=$_SESSION['userDetails']->username;
 
-            if(empty($memoTitle)|| empty($memoContent) || empty($meetingId))
-            {
-                echo "All fields are required";
+            if (empty($_POST['meeting']) || empty($_POST['memo-subject']) || empty($_POST['memo-content'])) {
+                $_SESSION['flash_error'] = "All fields are required.";
+                redirect('secretary/entermemo'); 
                 return;
             }
 
@@ -101,7 +101,23 @@ class Secretary extends BaseController {
 
             $memo = new Memo();
             $memo->insert($memoData);
-            $this->view("showsuccessmemo",["user"=>"lecturer"]);
+            $memoId = $memo->getLastInsertID();
+            $meeting= new Meeting();
+            $sec=$meeting->getSecForMeeting($meetingId);
+            $secusername=$sec[0]->username;
+            $user=$_SESSION['userDetails']->full_name;
+            $username=$_SESSION['userDetails']->username;
+
+            $notification = new Notification();
+            if($secusername!=$username){
+                $notification->insert([
+                    'reciptient' => $secusername,
+                    'notification_message' => "New memo submitted by $user,Review Now",
+                    'notification_type' => 'memo',
+                    'Ref_ID' => $memoId,
+                    'link'=>"acceptmemo/?memo_id=$memoId"]);
+            }
+            $this->view("showsuccessmemo",["user"=>"secretary",'memoid'=>$memoId]);
         }
             else
             {
@@ -110,10 +126,11 @@ class Secretary extends BaseController {
         
     }
     public function recorrectminute(){
-        if(!isset($_GET['meeting']) ) {
+        if(!isset($_GET['meeting']) && !isset($_GET['prevMin'])) {
             header("Location: ".ROOT."/secretary/selectmeeting");
         }
         $meetingId = $_GET['meeting'];
+        $prevMinID= $_GET['prevMin'];
         //check the user has the authority to create the minute for the meeting
         $user=$_SESSION['userDetails']->username;
         $drafts= new Minute_Draft();
@@ -132,14 +149,20 @@ class Secretary extends BaseController {
         $meetingDetails=$meeting->select_one(['meeting_id'=>$meetingId]);
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $draftStatus=$drafts->isDraftExist($user,$meetingId);
-        $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+        $recentMinute=$minute->getPreviousMinute($meetingDetails[0]->end_time,$meetingDetails[0]->date,$meetingType);
+        $content_forward_meeting=new Content_forward_meeting;
+        $linkedMinutes=$content_forward_meeting->getLinkMinuteIds($meetingId);
+        $recentMinuteState=[];
+        if($recentMinute!=null){
+            $recentMinuteState=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$recentMinute->Minute_ID]);
+        }
+       
         
-        show($recentMinute);
 
         
         $minutes = $minute->getMinuteList();
         if($auth[0]->auth){
-            $this->view("secretary/recreateminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus,'recentMinute'=>$recentMinute]);
+            $this->view("secretary/recreateminute", ['meetingId' => $meetingId, 'departments' => $deparments, 'participants' => $Participants, 'memos' => $memos, 'minutes' => $minutes, 'meetingType' => $meetingType, 'meetingDetails' => $meetingDetails,'agendaItems'=>$agendaItems,'fwdmemos'=>$fwdmemos,'minuteDraft'=>$draftStatus,'recentMinute'=>$recentMinute,'recentMinuteState'=>$recentMinuteState,'linkedMinutes'=>$linkedMinutes,'prevMin'=>$prevMinID]);
         }
         else{
             redirect("secretary/selectmeeting");
@@ -153,7 +176,6 @@ class Secretary extends BaseController {
             header("Location: ".ROOT."/secretary/selectmeeting");
         }
         $meetingId = $_GET['meeting'];
-        //check the user has the authority to create the minute for the meeting
         $user=$_SESSION['userDetails']->username;
         $drafts= new Minute_Draft();
         $meeting = new Meeting();
@@ -174,6 +196,7 @@ class Secretary extends BaseController {
         $memos = $memo->select_all(['meeting_id'=>$meetingId,'status'=>'accepted']);
         $draftStatus=$drafts->isDraftExist($user,$meetingId);
         $recentMinute=$meeting->getMostRecentMinutePending($meetingType,$meetingDetails[0]->date) ?? null;
+       
         
         // show($recentMinute);
 
@@ -185,46 +208,115 @@ class Secretary extends BaseController {
         else{
             redirect("secretary/selectmeeting");
         }
-    }
-    public function viewmemoreport() {
-    if (!isset($_GET['memo'])) {
-        header("Location: " . ROOT . "/secretary/selectmemo");
-        exit;
-    }
+    } 
 
-    $memoId = $_GET['memo'];
-    $memo = new Memo();
-    $memoDetails = $memo->getMemoById($memoId);
-
-    if (!$memoDetails) {
-        $_SESSION['flash_error'] = "Memo not found.";
-        redirect("secretary/selectmemo");
-        return;
-    }
-
-    $this->view("secretary/viewmemoreports", ['memoDetails' => $memoDetails]);
-    }
-
+    public function viewprofile(){
+        $userModel = new User();
+        $username = $_SESSION['userDetails']->username;
+        $userDetails = $userModel-> select_one(['username' => $username]);
+        $contact_no = new UserContactNums();
+        $contactNumbers = $contact_no->select_all(['username' => $username]);
+        $role = new UserRoles();
+        $userRole = $role->select_one(['username' => $username]);
+        $userMeeting = new user_meeting_types();
+        $userMeetingTypes = $userMeeting->getUserMeetingTypes($username);
+        $MeetingAtt = new Meeting_attendence();
+        $attendenceMeetings = $MeetingAtt->selectandproject('Count(*) as attendence_count',['attendee'=>$username]);
+            $errors = [];
+        $success = false;
+            if($_SERVER['REQUEST_METHOD'] === 'POST')
+            {
+                
+                $users = new User();
+                $username = $_SESSION['userDetails']->username;
+                $currentPassword = $_POST['current_password'];
+                $newPassword = $_POST['new_password'];
+                $confirmPassword = $_POST['confirm_password'];
     
+                $storedPasswordData = $users->getHashedPassword($username);
+                $storedPassword = $storedPasswordData[0] ->password ?? null;
+    
+              
+                if(!password_verify($currentPassword,$storedPassword))
+                {
+                    $errors[] = 'Current Password is not correct';
+                }
+    
+                if($newPassword !== $confirmPassword)
+                {
+                    $errors[] = 'New password and confirmation do not match';
+                }
+    
+                //checking if the password has the required strength
+                if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
+                    $errors[] = "New password does not meet the required strength.";
+                }
+                if(empty($errors))
+                {
+                    $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
+                    $users->updatePassword($username, $newHashed);
+                    $success = true;
+                }
+                echo json_encode([
+                    'success' => $success,
+                    'errors' => $errors,
+                    'state'=> password_verify($currentPassword,$storedPassword)
+                ]);
+                exit;
+            }
+            
+
+            $this->view("secretary/viewprofile", ['userDetails' => $userDetails, 'contactNumbers' => $contactNumbers, 'userRole' => $userRole, 'userMeetingTypes' => $userMeetingTypes,'attendenceMeetings'=>$attendenceMeetings]);
+         
+
+    }
+
+    public function viewmemoreport() {
+        if (!isset($_GET['memo'])) {
+            header("Location: " . ROOT . "/secretary/selectmemo");
+            exit;
+        }
+
+        $memoId = $_GET['memo'];
+        $memo = new Memo();
+        $memoDetails = $memo->getMemoDetails($memoId);
+      
+
+        if (!$memoDetails) {
+            $this->view("memoreportnotfound");
+            return;
+        }
+
+        $this->view("secretary/viewmemoreports", [
+            'memoDetails' => $memoDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
+    }
+
+
+
     public function viewminutereports() {
         if (!isset($_GET['minute'])) {
             header("Location: " . ROOT . "/secretary/selectminute");
             exit;
         }
 
-        $minuteId = $_GET['minute'];
+
+        $id = $_GET['minute'];
         $minute = new Minute();
-        $minuteDetails = $minute->getMinuteDetails($minuteId);
+        $minuteDetails = $minute->getMinuteReportDetails($id);
 
         if (!$minuteDetails) {
-            $_SESSION['flash_error'] = "Minute not found.";
-            redirect("secretary/selectminute");
+            $this->view("minutereportnotfound");
             return;
         }
-
-        $this->view("secretary/viewminutereports", ['minuteDetails' => $minuteDetails]);
+       
+        $this->view("secretary/viewminutereports", [
+            'minuteDetails' => $minuteDetails,
+            'user' => $_SESSION['userDetails']->username
+        ]);
     }
-
+     
 
     public function notifications() {
         $notificationModel=new Notification;
@@ -271,7 +363,7 @@ public function selectminute() { //this is the page where the secretary selects 
         $user = $_SESSION['userDetails']->username;
         $memo = new Memo();
 
-        $memos = $memo->getMemosForMemocart($user);
+        $memos = $memo->getMemosForMemocart($user) ?? [];
         $this->view('secretary/memocart', ['memos'=>$memos]);
     }
 
@@ -302,7 +394,7 @@ public function selectminute() { //this is the page where the secretary selects 
         $action = $_POST['action'] ?? null;
 
         if (!$memo_id || !$action) {
-            $_SESSION['flash_error'] = 'Invalid request. Please provide all required data.';
+            $_SESSION['flash_error'] = "Invalid request. Please provide all required data.";
             redirect("secretary/memocart");
             return;
         }
@@ -329,7 +421,7 @@ public function selectminute() { //this is the page where the secretary selects 
                 'Ref_ID' => $memo_id,
                 'link'=>"viewmemodetails/?memo_id=$memo_id"]);
         } else {
-            $_SESSION['flash_error'] = 'Invalid action.';
+            $_SESSION['flash_error'] = "Invalid action.";
             redirect("secretary/memocart");
             return;
         }
@@ -411,6 +503,7 @@ public function selectminute() { //this is the page where the secretary selects 
     
     public function submitminute() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $minute = new minute;
             $success=true;
             $mailstautus=true;
             $secretary=$_SESSION['userDetails']->username;
@@ -424,12 +517,15 @@ public function selectminute() { //this is the page where the secretary selects 
             $keywords = $_POST['keywordlist'] ?? [];
             $prevMinuteState=$_POST['previousMinuteStatus'];
             $prevMinute=$_POST['previousMinute'] ?? null;
+            $prevMinuteRecorrect=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$prevMinute])[0]; 
 
             $meeting = new Meeting();
             $meetingMinuteStatus=$meeting->selectandproject("is_minute",['meeting_id'=>$meetingID])[0]->is_minute;
             $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
             $keywordList=[];
-            if($meetingMinuteStatus==0){ //if the minute is not already created
+        if($meetingMinuteStatus==0){ //if the minute is not already created
+            if($prevMinuteState=='accept' || ($prevMinuteState=='reject' && $prevMinuteRecorrect->is_recorrect==1)){
+                
             $mediaArr=[];
             if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
                 $cloudinaryUpload = new CloudinaryUpload();
@@ -453,7 +549,13 @@ public function selectminute() { //this is the page where the secretary selects 
                 $Minute_Transaction=new Minute_Transaction();
                 // show($_POST);
                 //$Minute_Transaction->testData(['discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos]);
-                $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+                if($prevMinuteState=='accept'){
+                    $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+                }
+                else{
+                    $$prevMinuteState=null;
+                    $dataInsert=$Minute_Transaction->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'discussedMemos'=>$discussedMemos,'underDiscussionMemos'=>$underDiscussionMemos,'parkedMemos'=>$parkedMemos,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteState'=>$prevMinuteState,'prevMinute'=>$prevMinute]);
+                }
 
                 if($dataInsert==1 || $dataInsert==true){
                     $approveMinute= new Approved_minutes();
@@ -612,7 +714,10 @@ public function selectminute() { //this is the page where the secretary selects 
         
         
         
-        
+            }
+            else{
+                $this->view("minutenotrecorrect",["user"=>"secretary"]);
+            }
         }
             else{
                 $this->view("minutecreatedmsg",["user"=>"secretary"]);
@@ -631,67 +736,87 @@ public function selectminute() { //this is the page where the secretary selects 
     //     $this->view("showunsuccessminute",["user"=>"secretary"]);
     // }
     }
+
+    public function submitrecorrectminute(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $success=true;
+            $mailstautus=true;
+            $secretary=$_SESSION['userDetails']->username;
+            $meetingID = $_POST['meetingID'];
+            $discussedMemos = $_POST['discussed'] ?? [];
+            $underDiscussionMemos = $_POST['underdiscussion'] ?? [];
+            $parkedMemos= $_POST['parked'] ?? [];
+            $LinkedMinutes = json_decode($_POST['Linkedminutes']) ?? [];
+            $sections= json_decode($_POST['sections'], true);
+            $minuteTitle = $_POST['minuteTitle'];
+            $keywords = $_POST['keywordlist'] ?? [];
+            $prevMinuteID=$_POST['prevMinuteID'];
+
+            $meeting = new Meeting();
+            $meetingDate=$meeting->selectandproject("date",['meeting_id'=>$meetingID])[0]->date;
+            $keywordList=[];
+            $mediaArr=[];
+            if(isset($_FILES['media']) && !empty($_FILES['media']['name'][0])){
+                $cloudinaryUpload = new CloudinaryUpload();
+                $mediaArr = $cloudinaryUpload->uploadFiles($_FILES['media']);
+                //show($mediaArr);
+                if($mediaArr==null){
+                    $success=false;
+                }
+            }
+            if(isset($keywords) && $keywords[0]!=null){
+                foreach($keywords as $keyword){
+                    if($keyword!=""){
+                        $keywordList[]=$keyword;
+                    }
+                
+                }
+            }
+            if($success){
+                $RecorrectTrans=new minute_Recorrect_Transaction();
+                $Draft= new Minute_Draft();
+                $newminuteID=$RecorrectTrans->insertMinute(['MeetingID'=>$meetingID,'title'=>$minuteTitle,'secretary'=>$secretary,'sections'=>$sections,'LinkedMinutes'=>$LinkedMinutes,'mediaFiles'=>$mediaArr,'keywords'=>$keywordList,'prevMinuteID'=>$prevMinuteID]);
+                if($newminuteID && $newminuteID!=0){
+                    $recorrectMinute= new Recorrect_Minutes();
+                    $recorrectMinute->insert(['Minute_ID'=>$prevMinuteID,'recorrected_version'=>$newminuteID]);
+                    $Draft->delete($meetingID,'meeting_id');
+                    $recivers=$meeting->getParticipants($meetingID);
+                    $notification=new Notification;
+                    foreach($recivers as $reciever){
+                        $reciever=$reciever->username;
+                        $notification->insert(['reciptient'=>$reciever,'notification_type'=>'minute','notification_message'=>"The Minute with ID:".$prevMinuteID." has Recorrected",'Ref_ID'=>$newminuteID,'link'=>'viewminute?minuteID='.$newminuteID]); 
+                    }
+                    $this->view("successrecreate",['minuteid'=>$newminuteID]);
+                }
+            }
+            else{
+                $this->view("showunsuccessminute");
+
+            }
+            }
+            else{
+                echo "Invalid request";
+            }
+        
+
+
+            
+            //show($_POST);
+            
+            // show($mediaArr);
+            // foreach($LinkedMinutes as $Minute){
+            //     show($Minute);
+            // }
+            //show($sections);  
+    }
+
+
+
     public function confirmlogout() {
         $this->view("confirmlogout",[ "user" =>"Secretary"]);
     }
-
-    public function viewprofile() {
-        $user_meeting_types = new user_meeting_types();
-        $meeting_types = $user_meeting_types -> getUserMeetingTypes($_SESSION['userDetails']->username) ;
-      
-
-
-        $MeetingTypeArray = [];
-        foreach ($meeting_types as $MeetingType) {
-                $MeetingTypeArray[] = $MeetingType->meeting_type;
-            }
-            $_SESSION['meeting_type'] = $MeetingTypeArray;
-
-            $errors = [];
-            $success = false;
-                if($_SERVER['REQUEST_METHOD'] === 'POST')
-                {
+ 
                     
-                    $users = new User();
-                    $username = $_SESSION['userDetails']->username;
-                    $currentPassword = $_POST['current_password'];
-                    $newPassword = $_POST['new_password'];
-                    $confirmPassword = $_POST['confirm_password'];
-        
-                    $storedPasswordData = $users->getHashedPassword($username);
-                    $storedPassword = $storedPasswordData[0] ->password ?? null;
-        
-                  
-                    if(!password_verify($currentPassword,$storedPassword))
-                    {
-                        $errors[] = 'Current Password is not correct';
-                    }
-        
-                    if($newPassword !== $confirmPassword)
-                    {
-                        $errors[] = 'New password and confirmation do not match';
-                    }
-        
-                    //checking if the password has the required strength
-                    if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $newPassword)) {
-                        $errors[] = "New password does not meet the required strength.";
-                    }
-                    if(empty($errors))
-                    {
-                        $newHashed = password_hash($newPassword , PASSWORD_DEFAULT);
-                        $users->updatePassword($username, $newHashed);
-                        $success = true;
-                    }
-                    echo json_encode([
-                        'success' => $success,
-                        'errors' => $errors,
-                        'state'=> password_verify($currentPassword,$storedPassword)
-                    ]);
-                    exit;
-                }
-                
-        $this->view("secretary/viewprofile");
-    }
     public function logout() {
         session_start();
         // Destroy all session data
@@ -783,12 +908,18 @@ public function selectminute() { //this is the page where the secretary selects 
         $linkedMinutes=$linkedMinutes->getLinkedMinutes($minuteID);
         $linkedMediaFiles=$linkedMedia->select_all(['minute_id'=>$minuteID]);
         $approveStatus=$minute->selectandproject('is_approved,is_recorrect',['Minute_ID'=>$minuteID]);
+        $previousMinute=$minute->getPreviousMinute($minuteDetails[0]->end_time,$minuteDetails[0]->date,$minuteDetails[0]->meeting_type);
+
+
 
         if($approveStatus[0]->is_approved==1 && $approveStatus[0]->is_recorrect==0){
             $approved_recorrect_Meeting=$approved_minutes->getApprovedMinute($minuteID);
         }
         else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==0){
             $approved_recorrect_Meeting=$recorrect_minute->selectandproject('recorrected_version',['Minute_ID'=>$minuteID]);
+        }
+        else if($approveStatus[0]->is_recorrect==1 && $approveStatus[0]->is_approved==1){
+            $approved_recorrect_Meeting=$recorrect_minute->selectandproject('minute_id',['recorrected_version'=>$minuteID]);
         }
         $linked_content_minutes=$cfm->getLinkMinuteIds($minuteDetails[0]->meeting_id);
 
@@ -825,7 +956,9 @@ public function selectminute() { //this is the page where the secretary selects 
         $minuteDetails[0]->linkedMediaFiles = $linkedMediaFiles;
         // show($minuteDetails[0]);
         //  show($minuteDetails);
-        $this->view("secretary/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes]);
+
+        // show($previousMinute);
+        $this->view("secretary/viewminute",['user'=>$user,'minuteID'=>$minuteID,'minuteDetails'=>$minuteDetails,'contents'=>$user_accessible_content,'isContentRestricted'=>$isContentRestricted,'approvedStatus'=>$approveStatus[0],'approved_recorrect_Meeting'=>$approved_recorrect_Meeting,'linked_content_minutes'=>$linked_content_minutes,'previousMinute'=>$previousMinute]);
         }
     }
 
@@ -881,19 +1014,7 @@ public function selectminute() { //this is the page where the secretary selects 
         else{
             echo json_encode([  'success' => false,'response' => 'authorization error'  ]);
         }
-    }
-    // public function testModels(){
-    //     $notification = new Notification();
-    //     $meeting = new Meeting();
-    //     $meetingID=1;
-    //     $recivers=$meeting->getParticipants($meetingID);
-    //     $message="Minute for the meeting with ID ". $meetingID ."on   has been created. View Now";
-    //     $minuteid=1;
-    //     show($recivers);
-  
-    // }
-                
-
+    }        
     
 }
 

@@ -13,9 +13,8 @@ class User {
         'full_name',
         'email',
         'status'
-    ]; // editable columns
+    ]; 
 
-    // Validation function (placeholder for now)
     public function validate($data) {
         $this->errors = [];
         if (empty($this->errors)) {
@@ -32,9 +31,8 @@ class User {
     }
     
 
-    // Insert user and add to user_meeting_types table
     public function insert($data) {
-        // Check if the username already exists
+       
         $query = "SELECT COUNT(*) AS count FROM user WHERE username = :username";
         $result = $this->query($query, ['username' => $data['username']]);
 
@@ -42,27 +40,24 @@ class User {
             return ['success' => false, 'message' => 'Username already exists.'];
         }
 
-        // Proceed with the insert if no duplicate username
         $query = "INSERT INTO user (username, password, nic, full_name, email, status) 
                   VALUES (:username, :password, :nic, :full_name, :email, :status)";
         $this->query($query, $data);
 
-        // Get the username of the newly inserted user
         $username = $data['username'];
 
         return ['success' => true, 'message' => 'User successfully created and added to meeting types.'];
     }
 
-    // Helper function to get meeting type id based on the role
     public function getMeetingTypeIdByRole($role) {
-        // Here, map roles to meeting type ids
+       
         switch ($role) {
             case 'secretary':
-                return 1; // RHD
+                return 1; 
             case 'lecturer':
-                return 2; // IOD
+                return 2; 
             case 'other':
-                return 3; // SYN
+                return 3; 
             default:
                 return null;
         }
@@ -89,20 +84,16 @@ class User {
             return null;
         }
     
-        // Base user info from the first row
         $userData = $result[0];
     
-        // Extract meeting types into an array
         $userData->meetingTypes = array_map(fn($row) => $row->meeting_type, $result);
 
-        // Fetch secretary meeting types if exists
         $secretaryMeetingModel = new secretary_meeting_type();
         $userData-> secMeetings = $secretaryMeetingModel->getsecMeetingTypes($userId);
 
         $contactModel = new UserContactNums();
         $contacts = $contactModel->getContactByUsername($userId);
 
-        // Ensure contact number and role are present (handle nulls gracefully)
         $userData->contact_no = $contacts[0] ?? null;
         $userData->additional_tp_no = $contacts[1] ?? null;
 
@@ -111,17 +102,7 @@ class User {
         return $userData;
     }
 
-    // public function updateContactInfo($username, $contact_no) {
-    //     require_once __DIR__ . '/UserContactNums.php'; 
-    //     $contactModel = new UserContactNums();
-    
-    //     // Handle single or multiple numbers
-    //     $numbers = is_array($contact_no) ? $contact_no : [$contact_no];
-    
-    //     $contactModel->updateOrInsertContactNumbers($username, $numbers);
-    // }
-
-     
+  
     public function updateContactNumber($username, $newContact) {
         $query = "UPDATE $this->table SET contact_no = :contact_no WHERE username = :username";
         $data = [
@@ -144,10 +125,8 @@ class User {
 
     public function updateMeetingTypes($username, $meetingTypeIds) {
         require 'user_meeting_types.php';
-        // Instantiate the User_Meeting_Types modelz
         $userMeetingTypesModel = new User_Meeting_Types();
         
-        // Call the updateMeetingTypes method from User_Meeting_Types model
         $userMeetingTypesModel->updateMeetingTypes($username, $meetingTypeIds);
     }
     
@@ -210,6 +189,7 @@ public function reactivateStatus($username) {
 
         return $this->query($query, ['password'=>$newPassword, 'username'=>$username]);
     }
+
 
 }
     

@@ -145,10 +145,27 @@ public function rescheduleMeeting() {
     }
 }
 
+public function getUserinsystem(){
+    $input = json_decode(file_get_contents('php://input'), true);
+        $host = $input['host'];
+        $users=new User;
+        $userinsystem=$users->select_all(['full_name'=>$host]);
+        if($userinsystem==null){
+            echo json_encode(["success" => 1]);
+        }
+        else{
+            echo json_encode(["success" => 0]);
+        }
+}
+
    
 public function addMeeting() {
     if ($this->isSecretary()) {
         $meeting = new Meeting();
+        $users= new User();
+       
+
+
         $input = json_decode(file_get_contents('php://input'), true);
         $date = $input['date'];
         $meetingType = $input['meeting_type'];
@@ -156,8 +173,10 @@ public function addMeeting() {
         $endTime = $input['end_time'];
         $location = $input['location'];
         $additionalNote = $input['additional_note']." ";
+        $host=$input['host'];
         $createdBy = $_SESSION['userDetails']->username;
         $agendas=$input['agenda'];
+
         if($meetingType=="rhd"){
             $type_id=1;
         }
@@ -175,11 +194,14 @@ public function addMeeting() {
         }
         if($input){
             $meetingAgenda=new Agenda;
-            $meeting->insert(['date'=>$date,'meeting_type'=>$meetingType,'start_time'=>$startTime,'end_time'=>$endTime,'location'=>$location,'additional_note'=>$additionalNote,'created_by'=>$createdBy,'type_id'=>$type_id]);
+            $meeting->insert(['date'=>$date,'meeting_type'=>$meetingType,'start_time'=>$startTime,'end_time'=>$endTime,'location'=>$location,'additional_note'=>$additionalNote,'created_by'=>$createdBy,'type_id'=>$type_id,'host'=>$host]);
             $meetingid=$meeting->getLastInsertID();
             foreach ($agendas as $agenda) {
                 $meetingAgenda->insert(['meeting_id'=>$meetingid,'agenda_item'=>$agenda]);
             }
+            
+
+
             $cfm=new Content_forward_meeting;
             $meeting_fwd_trans=new Meeting_forward_Transaction;
             $cfdata=$cfm->getforwardedListByType($meetingType);
@@ -269,6 +291,91 @@ public function  getMemoList(){
             echo json_encode(["success" => true, "agendas" => $agendaList,'meetingAgenda'=>$meetingAgenda]);
         }
     }
+    public function getAttendanceList(){
+        $input = json_decode( file_get_contents('php://input'), true);
+        $meeting_id = $input['meeting_id'] ?? null;
+        if($meeting_id){
+            $meeting = new Meeting();
+            $attendanceList = $meeting->getParticipants($meeting_id);
+            echo json_encode(["success" => true, "attendances" => $attendanceList]);
+            
+        }
+    }
+    public function markAttendence(){
+        $meetingAttendence= new Meeting_attendence;
+        $meeting=new Meeting;
+        if(isset($_POST['attendence'])){
+        $attendenceList = $_POST['attendence'];
+        $meetingID=$_POST['meetingID'];
+
+        if($meetingID && $attendenceList!=null){
+            foreach($attendenceList as $attendee){
+                $meetingAttendence->insert(['meeting_id'=>$meetingID,'attendee'=>$attendee]);
+            }
+            $meeting->update($meetingID,['attendence_mark'=>1],'meeting_id');
+
+            $this->view("success");
+            
+        }
+        }
+        else{
+            $this->view("notsuccess");
+        }
+        
+    // }
+    }
+
+    public function viewMeetingReport(){
+        if($this->isValidRequest()){
+        $meeting = new Meeting;
+        $meetingAtd= new Meeting_attendence;
+        $agenda= new Agenda;
+        $memoDis=new Memo_discussed_meetings;
+        $minute=new Minute;
+        $users=new User;
+        $userindb=$users->select_all(['full_name'=>"Kasun de soyza"]);
+        if($userindb==null){
+            echo "null";
+        }
+        show($userindb);
+        $meetingID=$_GET['meeting_id'];
+        $meetingtypes=[];
+        $meetingDetails[0]=$meeting->select_all(['meeting_id'=>$meetingID]);
+        $meetingDetails[1]=$meetingAtd->getAttendees($meetingID);
+        $meetingDetails[2]=$agenda->selectandproject('agenda_item',['meeting_id'=>$meetingID])??null;
+        $meetingDetails[3]=$memoDis->selectandproject('memo_id',['meeting_id'=>$meetingID])??null;
+        $meetingDetails[4]=$minute->selectandproject('Minute_ID',['MeetingID'=>$meetingID])??null;
+        if($meetingDetails[0][0]!=null){
+            $meetingType=$meetingDetails[0][0]->meeting_type;
+            if($meetingType=='iud'){
+                $meetingType='iud';
+            }
+            else if($meetingType=='rhd'){
+                $meetingType='rhd';
+            }
+            else if($meetingType=='syn'){
+                $meetingType='syn';
+            }
+            else if($meetingType=='bom'){
+                $meetingType='bom';
+            }
+            if(in_array(strtoupper($meetingType),$_SESSION['meetingTypes'])){
+                $this->view('viewmeetingreport',['meetingDetails'=>$meetingDetails,]);
+            }
+            else{
+                $this->view('meetingreportNotaccess');
+            }
+                
+
+        }
+    
+       
+        else{
+            redirect("login");
+        }
+    }
+}
+
 
 }
 

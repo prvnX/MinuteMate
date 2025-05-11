@@ -14,7 +14,9 @@
             <img src="<?=ROOT?>/assets/images/login-img.png" alt="minutemate-logo" class="login-img ">
         </div>
         <div class="right-container"><h1>Sign In</h1>
-        <img src="<?=ROOT?>/assets/images/img.png" alt="minutemate-logo" class="minutemate-logo">
+        <!-- <img src="<?=ROOT?>/assets/images/img.png" alt="minutemate-logo" class="minutemate-logo"> -->
+        <img src="<?=ROOT?>/assets/images/img.png" alt="minutemate-logo" class="minutemate-logo rotation">
+
             <form action="<?=ROOT?>/login" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>

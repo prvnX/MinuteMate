@@ -13,9 +13,11 @@ class Meeting{
         'created_by',
         'is_minute',
         'type_id',
-        'additional_note'
-    ]; //editable columns
-    public function showMeeting(){ //for calendar
+        'additional_note',
+        'attendence_mark',
+        'host'
+    ];
+    public function showMeeting(){ 
         $query="select meeting_id,date,meeting_type from $this->table";
         return $this->query($query);
     }
@@ -80,12 +82,13 @@ class Meeting{
     public function getNoMinuteMeetings($user,$date){
         $data['username']=$user;
         $data['date']=$date;
+        $data['time']=date("H:i:s");
         $query = "SELECT 
                     meeting.meeting_id AS id,meeting.meeting_type AS name,meeting.date AS date 
                 FROM
                     $this->table
                 WHERE 
-                    meeting.date<=:date
+                    (meeting.date<:date OR (meeting.date=:date AND meeting.end_time<:time))
                     AND meeting.is_minute=0
                     AND meeting.created_by=:username";
         return $this->query($query,$data);
@@ -190,6 +193,9 @@ class Meeting{
         return $this->query($query,$data);
         
     }
+
+
+
 
 
 }

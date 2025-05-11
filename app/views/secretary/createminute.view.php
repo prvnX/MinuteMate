@@ -21,6 +21,8 @@
     $draftStatus=$data['minuteDraft'][0]->is_present;
     $isPrev=0 ;
     $previousMeetingId=0;
+
+     
     ?>
     <!-- Loading Overlay -->
       <div id="loadingOverlay">
@@ -268,6 +270,7 @@
             </div>
         </form>
 
+
     </div>
     <script >
         const draftStatus = <?= $draftStatus ?>;
@@ -279,11 +282,10 @@
         const meetingType = <?php echo json_encode($data['meetingType']); ?>;
         const form=document.getElementById("minuteForm");
         const users=<?php echo json_encode($meetingMembers); ?>;
-        const isPrev=<?=$isPrev?>;
+        let isPrev=<?=$isPrev?>;
         const previousMeetingId=<?=$previousMeetingId?>;
-        
         if(isPrev===1){
-            
+        const prevMinuteID=<?=$prevMin->Minute_ID?>;
         const rejectRadioBtn = document.getElementById('rejectRadioBtn');
         rejectRadioBtn.addEventListener('click', function() {
              
@@ -291,7 +293,7 @@
             const selected = document.querySelector('input[name="previousMinuteStatus"]:checked');
             if (selected && selected.value === 'reject') {
 
-                document.querySelector('.recorrect-button').style.display = 'inline-block';
+                document.querySelector('.recorrect-button').style.display = 'none';
                 Swal.fire({
                     text: "You have to recorrect the previous minute before proceeding, Your current content will be saved as a draft, and you'll be redirected to the recreation page.",
                     icon: "warning",
@@ -302,7 +304,7 @@
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.open("<?=ROOT.'/'?>secretary/recorrectminute?meeting="+previousMeetingId, "_blank");
+                        window.open("<?=ROOT.'/'?>secretary/recorrectminute?meeting="+previousMeetingId+"&prevMin="+prevMinuteID, "_blank");
                 }
                 });
             }
@@ -364,6 +366,7 @@
             //meeting details
             const meetingID= <?= $meetingId ?>;
             const memoCount= <?=$memoCount ?>;
+    
 
 
             const DiscussedMemos=[]; //discussed memos

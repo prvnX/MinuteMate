@@ -21,7 +21,6 @@ class user_requests {
         $query = "INSERT INTO user_requests (full_name, role, lec_stu_id, nic, email, tp_no, additional_tp_no, status) 
                   VALUES (:full_name, :role, :lec_stu_id, :nic, :email, :tp_no, :additional_tp_no, :status)";
         
-        // Bind the parameters
         $data = [
             'full_name' => $fullName,
             'role' => $roleString,
@@ -32,24 +31,22 @@ class user_requests {
             'additional_tp_no' => $additionalTpno,
             'status' => $status,
         ];
-        
-        // Execute the query
+   
         return $this->queryExec($query, $data);
+        return $this->getLastInsertID();
     }
     
 
-    // Fetch all pending requests
     public function getPendingRequests() {
         $query = "SELECT id, full_name FROM user_requests WHERE status = 'pending'";
         return $this->query($query);
     }
 
     public function getRequestById($requestId) {
-        // Assuming you're using a prepared statement to prevent SQL injection
+      
         $query = "SELECT * FROM user_requests WHERE id = :id";
         $data = ['id' => $requestId];
         
-        // Fetch a single row from the database
         return $this->get_row($query, $data);
     } 
 
@@ -66,9 +63,6 @@ class user_requests {
             'id' => $requestId,
         ];
 
-        // Debug the query
-        //echo("Generated Query: <pre>$query</pre>");
-         //echo(print_r($params, true));
         return $this->queryExec($query, $data);
     }
     

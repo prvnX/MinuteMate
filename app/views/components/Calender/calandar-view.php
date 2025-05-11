@@ -4,10 +4,10 @@ include 'Calendar.php';
 $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
 $month = isset($_GET['month']) ? (int)$_GET['month'] : date('m');
 
-// Initialize the Calendar
+
 $calendar = new Calendar();
 
-// Check if the form is submitted to add a new event
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newEvent = [
         'start' => $_POST['date'],
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $calendar->addEvent($newEvent);
 }
 
-// Adjust month navigation
+
 $prevMonth = $month == 1 ? 12 : $month - 1;
 $nextMonth = $month == 12 ? 1 : $month + 1;
 $prevYear = $month == 1 ? $year - 1 : $year;
@@ -30,13 +30,11 @@ $nextYear = $month == 12 ? $year + 1 : $year;
 </head>
 <body>
     <div class="calendar-container">
-        <!-- Month and Year Header -->
         <div class="cal-heading">
             <h2><?php echo date('F', strtotime("$year-$month-01")); ?> 
                 <span class="year"><?php echo date('Y', strtotime("$year-$month-01")); ?></span>
             </h2>
 
-            <!-- Navigation Buttons -->
             <div class="nav-buttons">
                 <form method="get" style="display: inline;">
                     <input type="hidden" name="month" value="<?php echo $prevMonth; ?>">
@@ -54,7 +52,7 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             </div>
         </div>
 
-        <!-- Display Calendar -->
+    
         <?php echo $calendar->draw($year, $month);?>
         
         <?php if ($showAddEvents==true) : ?>
@@ -63,7 +61,6 @@ $nextYear = $month == 12 ? $year + 1 : $year;
 
     </div>
 
-    <!-- Add Event Modal -->
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -103,6 +100,9 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                 <label for="location">location:</label>
                 <input type="text" id="location" name="Endtime" required>
 
+                <label for="host">Host:</label>
+                <input type="text" id="host" name="host" required>
+
                 <label for="note">Additional Note:</label>
                 <textarea id="note" name="note"></textarea>
                 
@@ -120,7 +120,6 @@ $nextYear = $month == 12 ? $year + 1 : $year;
         </div>
     </div>
 
-    <!-- Alert Modal -->
 
     <div id="alertModal" class="modal">
     <div class="modal-content">
@@ -134,17 +133,14 @@ $nextYear = $month == 12 ? $year + 1 : $year;
     </div>
 
     <script>
-        // Function to open the modal
         function openModal() {
             document.getElementById('eventModal').style.display = "block";
         }
 
-        // Function to close the modal
         function closeModal() {
             document.getElementById('eventModal').style.display = "none";
         }
 
-        // Show tooltip message on event hover
         document.querySelectorAll('.iud, .rhd, .syn, .bom').forEach(element => {
             element.addEventListener('mouseenter', function(event) {
                 let message = document.createElement('div');
@@ -155,7 +151,6 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                 document.body.appendChild(message);
                 setTimeout(() => { message.style.opacity = 1; }, 0);
 
-                // Remove the message when the mouse leaves
                 element.addEventListener('mouseleave', function() {
                     message.style.opacity = 0;
                     setTimeout(() => document.body.removeChild(message), 200);
@@ -163,7 +158,6 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             });
         });
 
-        // Close the modal if the user clicks outside of it
         window.onclick = function(event) {
             var modal = document.getElementById('eventModal');
             if (event.target == modal) {
@@ -171,7 +165,6 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             }
         }
 
-        // Handle form submission
         function handleFormSubmit(){
             const date = document.getElementById('date').value;
             const meeting_type = document.getElementById('class').value;
@@ -179,29 +172,46 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             const end_time = document.getElementById('Endtime').value;
             const location = document.getElementById('location').value;
             const additional_note = document.getElementById('note').value;
+            const host = document.getElementById('host').value;
             const dateObj=new Date();
+            const currentDateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()); 
             const currentDate = dateObj;
             // const currentDate=dateObj.toLocaleDateString();
-            let insertedDateObj=new Date(date); // Convert to JS Date object
+            let insertedDateObj=new Date(date); 
             const insertedDate=insertedDateObj.toLocaleDateString();
-            let startT = new Date(`2000-01-01T${start_time}:00`); // Defaulting date to 2000-01-01
+            const insertedDateOnly = new Date(insertedDateObj.getFullYear(), insertedDateObj.getMonth(), insertedDateObj.getDate()); 
+            let startT = new Date(`2000-01-01T${start_time}:00`); 
             let endT = new Date(`2000-01-01T${end_time}:00`);
-            let diffMs = Math.abs(startT - endT); // Absolute difference
-            let diffMins = Math.floor((diffMs/1000)/60); // Convert to minutes
+            let diffMs = Math.abs(startT - endT); 
+            let diffMins = Math.floor((diffMs/1000)/60); 
             const agendaArray=[];
             const allAgendaInputs = document.getElementsByName("Agenda[]");
-            allAgendaInputs.forEach((input, index) => {
-            console.log(`Agenda ${index + 1}: ${input.value}`);
-            if(input.value!="" || input.value.trim()!=""){
-                agendaArray.push(input.value);
-            }
-            });
-            // console.log(startT,endT);
-            if(date=="" || meeting_type=="" || start_time=="" || end_time=="" || location==""){
+            console.log(insertedDate);
+            console.log(currentDate);
+
+
+            fetch('<?= ROOT ?>/Events/getUserinsystem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    host:host
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    showAlert("Host is not a user in the system");
+                    return;
+                }
+                else{
+                    console.log("User in the table");
+                    if(date=="" || meeting_type=="" || start_time=="" || end_time=="" || location==""){
                 showAlert("Please fill all the fields");
                 return;
             }
-            else if(insertedDate<currentDate){
+            else if(insertedDateOnly<currentDateOnly){
                 showAlert("Error:Cannot add an event to a past date");
                 return;
             }
@@ -217,6 +227,7 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                 showAlert("Error: Meeting duration should be at most 8 hours");
                 return;
             }
+            
             else if(date)
             fetch('<?= ROOT ?>/Events/addMeeting', {
                 method: 'POST',
@@ -230,7 +241,8 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                     end_time: end_time,
                     location: location,
                     additional_note: additional_note,
-                    agenda: agendaArray
+                    agenda: agendaArray,
+                    host:host
                 })
             })
             .then(response => response.json())
@@ -241,8 +253,24 @@ $nextYear = $month == 12 ? $year + 1 : $year;
                 console.error('Error:', error);
 
             });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+            });
+        
+            allAgendaInputs.forEach((input, index) => {
+            console.log(`Agenda ${index + 1}: ${input.value}`);
+            if(input.value!="" || input.value.trim()!=""){
+                agendaArray.push(input.value);
+            }
+            });
+
+
+           
         }
-            //function for handling the alert
+            
     function showAlert(message) {
             const modal = document.getElementById('alertModal');
             const messageElement = document.getElementById('Message');
@@ -250,7 +278,7 @@ $nextYear = $month == 12 ? $year + 1 : $year;
             modal.style.display = 'block';
             document.getElementById('successOk').onclick = function () {
             modal.style.display = 'none';
-            location.reload();  // Refresh the current page
+            location.reload();  
         };
     }
     input=document.querySelector(".agendaItems");
