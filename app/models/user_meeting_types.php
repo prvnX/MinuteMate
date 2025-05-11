@@ -12,12 +12,7 @@ class User_Meeting_Types
         'accessible_user'
     ];
 
-    /**
-     * Inserts meeting types for a given user into the database.
-     *
-     * @param string $username - The username of the accepted user
-     * @param array $meetingTypeIds - An array of selected meeting type IDs
-     */
+
     public function insertMeetingTypes($username, $meetingTypes) {
         foreach ($meetingTypes as $type) {
             $queryx = "SELECT type_id FROM meeting_types WHERE meeting_type = :type";
@@ -38,14 +33,7 @@ class User_Meeting_Types
         }
     }
     
-    
 
-    /**
-     * Get usernames by meeting type ID.
-     *
-     * @param int $meetingTypeId - The ID of the meeting type
-     * @return array - An array of usernames
-     */
     public function getUsernamesByMeetingTypeId(int $meetingTypeId): array
 {
     $query = "SELECT u.username
@@ -61,11 +49,10 @@ class User_Meeting_Types
 
 
     public function updateMeetingTypes($username, $meetingTypes) {
-        // Delete existing records for the user
+        
         $query = "DELETE FROM user_meeting_types WHERE accessible_user = :username";
         $this->query($query, ['username' => $username]);
 
-        // Insert new meeting types
         foreach ($meetingTypes as $type) {
             $queryx="SELECT type_id FROM meeting_types WHERE meeting_type=:type";
             $typeID=($this->query($queryx,['type'=>$type]))[0]->type_id;

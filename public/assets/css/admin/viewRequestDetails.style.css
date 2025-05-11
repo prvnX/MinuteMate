@@ -1,16 +1,15 @@
-/* Main container */
+
 .content {
     max-width: 1000px;
     margin: 40px auto;
     padding: 40px;
-    background-color: #f0f8ff; /* Soft blue background */
+    background-color: #f0f8ff; 
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
    
 }
 
-/* Profile section */
 .profile-header {
     display: flex;
     align-items: center;
@@ -26,7 +25,6 @@
     border: 3px solid #3b82f6;
 }
 
-/* Text styles */
 h3 {
     font-size: 1.8em;
     font-weight: bold;
@@ -40,7 +38,6 @@ p {
     color: #151414;
 }
 
-/* Buttons */
 .btn-accept, .btn-decline {
     padding: 10px 24px;
     border: none;
@@ -62,7 +59,6 @@ p {
     color: white;
 }
 
-/* Hover effect */
 .btn-accept:hover,
 .btn-decline:hover {
     background-color: #3d71c4;
@@ -70,19 +66,17 @@ p {
     transform: scale(1.05);
 }
 
-/* Meeting Options Container */
 .meeting-options {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
     margin-top: 30px;
     padding: 20px;
-    background-color: #dbeeff; /* Soft faded blue */
+    background-color: #dbeeff; 
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* Individual option */
 .meeting-option {
     display: flex;
     align-items: center;
@@ -91,7 +85,6 @@ p {
     color: #333;
 }
 
-/* Styled checkboxes */
 .meeting-option input[type="checkbox"] {
     appearance: none;
     width: 22px;
@@ -102,7 +95,6 @@ p {
     transition: background-color 0.2s ease;
 }
 
-/* Colors by type */
 .rhd-option input[type="checkbox"] {
     border-color: red;
 }

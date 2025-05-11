@@ -2,10 +2,10 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
   }
-  /* General styling */
+ 
 .members-list-container {
   padding: 20px;
-  margin-left: 30px; /* Adjust based on sidebar width */
+  margin-left: 30px; 
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -19,7 +19,6 @@ body {
   padding-bottom: 5px;
 }
 
-/* Members list styling */
 .members-list {
   list-style: none;
   padding: 0;
@@ -37,10 +36,9 @@ body {
 .member-name {
   font-size: 18px;
   color: #333;
-  flex: 1; /* Ensures name takes up available space */
+  flex: 1; 
 }
 
-/* Button styling */
 .view-btn {
   padding: 5px 10px;
   margin-left: 10px;

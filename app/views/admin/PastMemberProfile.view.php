@@ -64,13 +64,12 @@ $deletedData = $data['deletedData'] ?? null;
               ?>
 
 <?php
-// Show Secretary Meeting Types only if user has "Secretary" role
 if (isset($userData->role) && in_array('secretary', $userData->role)) {
     echo "<p><strong>Secretary Meeting Types:</strong></p>";
 
     $secMeetingsRaw = $userData->secMeetings ?? [];
     if (is_object($secMeetingsRaw)) {
-        $secMeetingsRaw = [$secMeetingsRaw]; // handle single object case
+        $secMeetingsRaw = [$secMeetingsRaw]; 
     }
 
     $secMeetings = is_array($secMeetingsRaw)
@@ -92,9 +91,9 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
 }
 ?>
            </div>
-          </div> <!-- .profile-info -->
-        </div> <!-- .profile-header -->
-      </div> <!-- .content -->
+          </div> 
+        </div> 
+      </div> 
 
       <div class="add-button-wrapper">
         <button class="add-btn" onclick="editModal()">Add</button>
@@ -219,13 +218,13 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
           <?php else: ?>
             <p>Member not found.</p>
           <?php endif; ?>
-        </div> <!-- .modal-content -->
-      </div> <!-- #editModal -->
-    </div> <!-- .profile-details -->
+        </div> 
+      </div> 
+    </div> 
   <?php else: ?>
     <p>Member not found.</p>
   <?php endif; ?>
-</div> <!-- .profile-container -->
+</div> 
 
 </body>
 </html>
@@ -246,7 +245,7 @@ if (isset($userData->role) && in_array('secretary', $userData->role)) {
     const checkboxes = document.querySelectorAll('.role-checkbox');
     const selectedRoles = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
 
-    // Role containers
+    
     const secretaryContainer = document.getElementById("secretaryMeetingTypesContainer");
     const lecturerContainer = document.getElementById("lecturerMeetingTypesContainer");
     const studentContainer = document.getElementById("meetingTypeContainer");
