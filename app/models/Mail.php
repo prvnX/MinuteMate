@@ -19,7 +19,7 @@ require __DIR__ . '/../../vendor/autoload.php';
             $this->mail->Host = 'smtp.gmail.com'; // SMTP server
             $this->mail->SMTPAuth = true;
             $this->mail->Username = 'minutemate111@gmail.com'; 
-            $this->mail->Password = 'yyfh xqol ibyq rhue'; // app password
+            $this->mail->Password = ''; // app password
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mail->Port = 587;
         }
